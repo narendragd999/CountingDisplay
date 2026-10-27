@@ -475,7 +475,7 @@
 
       <div style="display:flex; flex-direction:column; gap:12px; text-align:left;">
         <label style="font-size:11px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.5px;">Portal Security Password</label>
-        <input type="password" id="portalPassInput" placeholder="Enter password (default: salumber2026)" 
+        <input type="password" id="portalPassInput" placeholder="Enter access password" 
           style="width:100%; padding:12px 14px; font-size:15px; border:2px solid #cbd5e1; border-radius:8px; outline:none; text-align:center; font-weight:700; background:#ffffff; color:#0f172a;"
           onkeydown="if(event.key==='Enter') unlockPortal()">
         
@@ -679,7 +679,7 @@
       renderCards();
     }
 
-        async function fetchMasterData() {
+    async function fetchMasterData() {
       try {
         const resp = await fetch('/api/all_candidates_master');
         if (resp.ok) {
@@ -692,10 +692,6 @@
       }
       renderCards();
       updateSummaryTallies();
-    }
-      } catch (e) {
-        console.error('Fetch master data error:', e);
-      }
     }
 
     // WebSocket
