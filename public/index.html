@@ -857,14 +857,23 @@
 
       const leader = candTotals[0];
       const runnerUp = candTotals[1];
-      const margin = leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0);
+      const hasVotes = candTotals.some(c => c.totalVotes > 0);
+      const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+      const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
 
       let leaderHtml = '';
       if (isDeclared && leader && leader.totalVotes > 0) {
         leaderHtml = `
           <div class="leader-strip declared-winner">
             <span>🏆 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) WON</span>
-            <span>Margin: +${margin} votes</span>
+            <span>${margin > 0 ? `Margin: +${margin} votes` : 'Decided by Draw of Lots (Lottery)'}</span>
+          </div>
+        `;
+      } else if (isTie) {
+        leaderHtml = `
+          <div class="leader-strip" style="background:#fffbeb; border-color:#f59e0b; color:#b45309;">
+            <span>⚖️ <strong>TIED: ${leader.name_hindi} & ${runnerUp.name_hindi}</strong></span>
+            <span>Equal: ${leader.totalVotes} votes each</span>
           </div>
         `;
       } else if (isCounting && leader && leader.totalVotes > 0) {
@@ -881,9 +890,10 @@
         rowsHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-dim); padding:10px;">Contestants awaiting finalization</td></tr>`;
       } else {
         candTotals.forEach((c, idx) => {
-          const isLeader = idx === 0 && c.totalVotes > 0;
+          const isLeader = !isTie && idx === 0 && c.totalVotes > 0;
+          const isTied = isTie && (c.totalVotes === leader.totalVotes);
           rowsHtml += `
-            <tr class="${isLeader ? 'row-leader' : ''}">
+            <tr class="${isLeader ? 'row-leader' : (isTied ? 'row-tied' : '')}" style="${isTied ? 'background:#fef3c7;' : ''}">
               <td style="font-weight:700; font-family:'Rajdhani',sans-serif; width:30px;">#${c.ballot_no || idx+1}</td>
               <td style="font-weight:${isLeader ? '800' : '600'};">${c.name_hindi}</td>
               <td style="width:60px;"><span class="party-tag pt-${c.party || 'IND'}">${c.party || 'IND'}</span></td>

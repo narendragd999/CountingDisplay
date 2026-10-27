@@ -1123,24 +1123,9 @@
         candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
         const leader = candTotals[0];
         const runnerUp = candTotals[1];
-        const margin = leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0);
         const hasVotes = leader && leader.totalVotes > 0;
-
-        let statusBadge = '<span class="badge" style="background:#f1f5f9; color:#64748b;">⏳ Awaiting</span>';
-        if (isDeclared) {
-          statusBadge = '<span class="badge badge-success">✓ DECLARED</span>';
-        } else if (hasVotes) {
-          statusBadge = `<span class="badge badge-primary">⚡ In Progress (${entryKeys.size} slips)</span>`;
-        }
-
-        let actionBtn = '';
-        if (isDeclared) {
-          actionBtn = `<button onclick="reopenWard('${cat}', '${blk}', ${w})" class="btn btn-outline" style="padding:4px 8px; font-size:11px; color:var(--warning);">🔓 Reopen</button>`;
-        } else if (hasVotes) {
-          actionBtn = `<button onclick="declareWardWinner('${cat}', '${blk}', ${w})" class="btn btn-primary" style="padding:5px 12px; font-size:11px;">🏆 Declare</button>`;
-        } else {
-          actionBtn = `<span style="font-size:11px; color:var(--text-dim);">No votes yet</span>`;
-        }
+        const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
 
         const totalBooths = wInfo ? (wInfo.total_booths || 5) : 5;
         const tables = wInfo ? (wInfo.counting_tables || 5) : 5;
@@ -1148,9 +1133,15 @@
         const completedRounds = entryKeys.size;
         const isComplete = (completedRounds >= maxRounds && maxRounds > 0);
 
+        let statusBadge = '';
+        let actionBtn = '';
+
         if (isDeclared) {
           statusBadge = '<span class="badge badge-success">✓ DECLARED</span>';
           actionBtn = `<button onclick="reopenWard('${cat}', '${blk}', ${w})" class="btn btn-outline" style="padding:4px 8px; font-size:11px; color:var(--warning);">🔓 Reopen</button>`;
+        } else if (isTie) {
+          statusBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #f59e0b; font-weight:800;">⚖️ TIED (${completedRounds}/${maxRounds} Rds)</span>`;
+          actionBtn = `<button onclick="resolveTiePrompt('${cat}', '${blk}', ${w}, '${leader.name_hindi.replace(/'/g, "\\'")}', '${runnerUp.name_hindi.replace(/'/g, "\\'")}', ${leader.totalVotes})" class="btn" style="padding:6px 12px; font-size:11px; background:#d97706; color:#ffffff; font-weight:700;">⚖️ Resolve Tie (Lot)</button>`;
         } else if (isComplete && hasVotes) {
           statusBadge = `<span class="badge badge-success">✓ 100% COMPLETE (${completedRounds}/${maxRounds} Rds)</span>`;
           actionBtn = `<button onclick="declareWardWinner('${cat}', '${blk}', ${w})" class="btn btn-primary" style="padding:6px 14px; font-size:11px; background:#15803d; border-color:#15803d;">🏆 Declare Winner</button>`;
@@ -1162,13 +1153,28 @@
           actionBtn = `<span style="font-size:11px; color:var(--text-dim);">-</span>`;
         }
 
+        let leaderNameHtml = '-';
+        let partyHtml = '-';
+        let marginHtml = '-';
+
+        if (isTie) {
+          leaderNameHtml = `<span style="color:#b45309; font-weight:800;">⚖️ TIED: ${leader.name_hindi} & ${runnerUp.name_hindi}</span>`;
+          partyHtml = `<span class="badge" style="background:#fef3c7; color:#92400e; font-weight:700;">TIED (${leader.party || 'IND'} / ${runnerUp.party || 'IND'})</span>`;
+          marginHtml = `<span style="color:#b45309; font-weight:800;">0 (Tied)</span>`;
+        } else if (hasVotes) {
+          leaderNameHtml = leader.name_hindi;
+          partyHtml = `<span class="party-pill party-${leader.party || 'IND'}">${leader.party || 'IND'}</span>`;
+          marginHtml = `<span style="color:var(--primary); font-weight:800;">+${margin} votes</span>`;
+        }
+
         const tr = document.createElement('tr');
+        if (isTie) tr.style.background = '#fffbeb';
         tr.innerHTML = `
           <td style="font-weight:700;">Ward ${w}<br><span style="font-size:10px; color:var(--text-dim); font-weight:600;">${totalBooths} booths</span></td>
-          <td style="font-weight:700;">${leader && leader.totalVotes > 0 ? leader.name_hindi : '-'}</td>
-          <td>${leader && leader.totalVotes > 0 ? `<span class="party-pill party-${leader.party || 'IND'}">${leader.party || 'IND'}</span>` : '-'}</td>
+          <td style="font-weight:700;">${leaderNameHtml}</td>
+          <td>${partyHtml}</td>
           <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:800;">${leader?.totalVotes || 0}</td>
-          <td style="text-align:right; font-size:12px; font-weight:700; color:${hasVotes ? 'var(--primary)' : 'inherit'};">${hasVotes ? `+${margin} votes` : '-'}</td>
+          <td style="text-align:right; font-size:12px;">${marginHtml}</td>
           <td style="text-align:center;">${statusBadge}</td>
           <td style="text-align:center;">${actionBtn}</td>
         `;
