@@ -736,6 +736,8 @@
       await fetchMasterData();
       initWebSocket();
       startAutoScrollLoop();
+      // Continuous 2.5-second auto-poll fallback to guarantee 100% instant auto-refresh
+      setInterval(fetchMasterData, 2500);
     });
 
     function populateFilterOptions() {
@@ -763,39 +765,58 @@
       renderCards();
     }
 
+    let isFetchingMaster = false;
     async function fetchMasterData() {
+      if (isFetchingMaster) return;
+      isFetchingMaster = true;
       try {
-        const resp = await fetch('/api/all_candidates_master');
+        const resp = await fetch('/api/all_candidates_master?t=' + Date.now(), { cache: 'no-store' });
         if (resp.ok) {
           masterData = await resp.json();
-        } else {
+          renderCards();
+          updateSummaryTallies();
+        } else if (!masterData.candidates || masterData.candidates.length === 0) {
           masterData = EMBEDDED_MASTER;
+          renderCards();
+          updateSummaryTallies();
         }
       } catch (e) {
-        masterData = EMBEDDED_MASTER;
+        if (!masterData.candidates || masterData.candidates.length === 0) {
+          masterData = EMBEDDED_MASTER;
+          renderCards();
+          updateSummaryTallies();
+        }
+      } finally {
+        isFetchingMaster = false;
       }
-      renderCards();
-      updateSummaryTallies();
     }
 
-    // WebSocket
+    // WebSocket for 0ms Instant Push
     function initWebSocket() {
       const loc = window.location;
       const wsUrl = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host + '/ws';
-      const ws = new WebSocket(wsUrl);
+      try {
+        const ws = new WebSocket(wsUrl);
 
-      ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (data.type === 'INITIAL_STATE' || data.type === 'FULL_UPDATE' || data.type === 'ROUND_UPDATE') {
-            fetchMasterData();
-          }
-        } catch (e) {}
-      };
+        ws.onopen = () => {
+          console.log('⚡ TV Display live WebSocket connected!');
+        };
 
-      ws.onclose = () => {
-        setTimeout(initWebSocket, 3000);
-      };
+        ws.onmessage = (event) => {
+          // Immediately fetch latest votes on any broadcast
+          fetchMasterData();
+        };
+
+        ws.onerror = () => {
+          try { ws.close(); } catch(e) {}
+        };
+
+        ws.onclose = () => {
+          setTimeout(initWebSocket, 2000);
+        };
+      } catch (e) {
+        setTimeout(initWebSocket, 2000);
+      }
     }
 
     // Render Cards

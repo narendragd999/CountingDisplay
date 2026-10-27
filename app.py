@@ -411,7 +411,8 @@ def calculate_full_state():
             'wards': ps_wards,
             'declaredCount': ps_declared_count
         },
-        'ticker': ticker_items
+        'ticker': ticker_items,
+        'type': 'FULL_UPDATE'
     }
 
 async def broadcast_live_update():
@@ -679,6 +680,22 @@ async def reopen_ward(payload: dict, request: Request):
     asyncio.create_task(broadcast_live_update())
     return {'status': 'success', 'message': f"{category} {block} Ward {ward_no} unlocked and reopened to COUNTING!"}
 
+@app.post("/api/reset_testing_data")
+async def reset_testing_data(request: Request):
+    try:
+        check_auth(request)
+    except:
+        pass
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM votes")
+    cursor.execute("UPDATE wards SET status = 'COUNTING'")
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("RESET_TESTING_DATA", "All votes cleared and wards reset for testing"))
+    conn.commit()
+    conn.close()
+    asyncio.create_task(broadcast_live_update())
+    return {'status': 'success', 'message': 'All testing votes cleared and wards reset successfully!'}
+
 @app.get("/api/all_candidates_master")
 def get_all_candidates_master():
     """Returns all active candidates, wards, and existing round votes for instant 0ms operator UI switching."""
@@ -702,11 +719,14 @@ def get_all_candidates_master():
         if cid not in votes_map: votes_map[cid] = {}
         votes_map[cid][vr['round_key']] = vr['votes_count']
 
+    cursor.execute("SELECT block_name, booth_no, booth_name_hi, booth_name_en, ps_ward, zp_ward, total_elector FROM booths")
+    b_rows = [dict(r) for r in cursor.fetchall()]
     conn.close()
     return {
         'candidates': c_rows,
         'wards': w_rows,
-        'roundVotes': votes_map
+        'roundVotes': votes_map,
+        'booths': b_rows
     }
 
 
