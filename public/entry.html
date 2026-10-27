@@ -506,7 +506,7 @@
         <div class="form-group">
           <label class="form-label">Polling Station / Booth #</label>
           <div style="display:flex; gap:8px;">
-            <input type="number" id="inputBoothNo" class="form-input" placeholder="Enter Booth # (e.g. 1)" min="1" max="150" value="1" oninput="onBoothInputChanged()" style="width:130px; font-size:16px; font-weight:800;">
+            <input type="text" id="inputBoothNo" class="form-input" placeholder="e.g. 1 or 4A" value="1" oninput="onBoothInputChanged()" style="width:130px; font-size:16px; font-weight:800;" title="Enter Polling Station # or Auxiliary Booth (e.g. 4A)">
             <select id="selectBoothDropdown" class="form-select" style="flex:1;" onchange="onBoothDropdownChanged()"></select>
           </div>
         </div>
@@ -909,8 +909,12 @@
     }
 
     function onBoothInputChanged() {
-      const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
-      document.getElementById('selectBoothDropdown').value = bno;
+      const val = document.getElementById('inputBoothNo').value.trim();
+      const sel = document.getElementById('selectBoothDropdown');
+      // If it matches an option in dropdown, select it
+      if ([...sel.options].some(o => o.value == val)) {
+        sel.value = val;
+      }
       refreshEntryView();
     }
 
@@ -935,7 +939,7 @@
       if (activeEntryMode === 'round') {
         targetWard = parseInt(document.getElementById('entryWard').value) || 1;
       } else {
-        const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
+        const rawBno = document.getElementById('inputBoothNo').value.trim() || '1'; const bno = parseInt(rawBno) || 1;
         if (cat === 'PS') {
           targetWard = Math.min(15, Math.max(1, Math.ceil(bno / 5)));
         } else {
@@ -949,8 +953,8 @@
       const maxRounds = Math.max(1, Math.ceil(totalBooths / (tables || 5)));
 
       if (activeEntryMode === 'booth') {
-        const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
-        roundKey = `B${bno}`;
+        const rawBno = document.getElementById('inputBoothNo').value.trim() || '1'; const bno = parseInt(rawBno) || 1;
+        roundKey = `B${rawBno}`;
         document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bno} • ${blk} (Total Ward Booths: ${totalBooths})`;
         document.getElementById('boothWardBadge').innerText = `Ward ${targetWard}`;
       } else {
@@ -1045,7 +1049,7 @@
       let roundKey = 'R1';
       if (activeEntryMode === 'booth') {
         const bno = document.getElementById('inputBoothNo').value || 1;
-        roundKey = `B${bno}`;
+        roundKey = `B${rawBno}`;
       } else {
         roundKey = document.getElementById('entryRound').value || 'R1';
       }
