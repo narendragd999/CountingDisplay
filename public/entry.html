@@ -396,6 +396,51 @@
       display: none;
       z-index: 10000;
     }
+
+    /* Blinking & Round Tracking Styles */
+    @keyframes badgeBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.97); }
+    }
+    @keyframes alertGlow {
+      0%, 100% { box-shadow: 0 0 10px rgba(22, 163, 74, 0.4); border-color: #16a34a; }
+      50% { box-shadow: 0 0 22px rgba(22, 163, 74, 0.85); border-color: #15803d; }
+    }
+    .blink-badge {
+      background: #dc2626 !important;
+      color: #ffffff !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      padding: 3px 8px !important;
+      border-radius: 20px !important;
+      animation: badgeBlink 1s infinite !important;
+      display: inline-block;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .blink-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #16a34a;
+      display: inline-block;
+      animation: badgeBlink 1s infinite;
+      box-shadow: 0 0 8px #16a34a;
+      flex-shrink: 0;
+    }
+    .ready-declare-alert {
+      background: #f0fdf4;
+      border: 2px solid #16a34a;
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: alertGlow 2s infinite;
+      gap: 12px;
+    }
+
   </style>
 </head>
 <body>
@@ -448,12 +493,23 @@
         🗳️ Direct Vote Entry
       </button>
       <button id="tabBtnDeclare" class="nav-tab-btn" onclick="switchNavTab('declare')">
-        🏆 Declare Ward Winner
+        🏆 Declare Ward Winner <span id="declarePendingBadge" class="blink-badge" style="display:none;">1 READY</span>
       </button>
       <button id="tabBtnContestants" class="nav-tab-btn" onclick="switchNavTab('contestants')">
         👥 Contestants Manager
       </button>
     </nav>
+
+    <!-- Blinking Notification Banner for Completed Wards Awaiting Winner Declaration -->
+    <div id="readyToDeclareAlert" class="ready-declare-alert" style="display:none;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="blink-dot"></span>
+        <span id="readyToDeclareText" style="font-size:13px; font-weight:700; color:#14532d;"></span>
+      </div>
+      <button id="btnAlertDeclareNow" class="btn btn-primary" style="background:#15803d; border-color:#16a34a; font-weight:800; font-size:12px; padding:7px 16px; box-shadow:0 2px 4px rgba(21,128,61,0.3); white-space:nowrap;">
+        🏆 Declare Winner Now
+      </button>
+    </div>
 
     <!-- =====================================================================
          TAB 1: DIRECT VOTE ENTRY (BOOTH-WISE OR ROUND-WISE)
@@ -541,9 +597,12 @@
       </div>
 
       <!-- Live Auto-Mapped Details Banner -->
-      <div id="boothInfoBanner" class="booth-info-banner">
-        <div id="boothInfoText">📍 Loading Polling Station...</div>
-        <div id="boothWardBadge" class="badge badge-primary">Ward -</div>
+      <div id="boothInfoBanner" class="booth-info-banner" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div id="boothInfoText" style="flex:1;">📍 Loading Polling Station...</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div id="boothRoundBadge" class="badge" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; font-weight:800; font-size:12px;">Round 1 Active</div>
+          <div id="boothWardBadge" class="badge badge-primary" style="font-size:12px; font-weight:800;">Ward -</div>
+        </div>
       </div>
 
       <!-- Candidate Vote Entry Table -->
@@ -820,6 +879,7 @@
         const resp = await fetch('/api/all_candidates_master');
         if (resp.ok) {
           masterData = await resp.json();
+          checkCompletedWardsReadyToDeclare();
         }
       } catch (e) {}
     }
@@ -1083,7 +1143,90 @@
       currentRoundKey = roundKey;
       currentBoothObj = boothObj;
 
+      // Calculate Currently Working Round & Booth Progress
+      const tables = (wardInfo && wardInfo.counting_tables) ? wardInfo.counting_tables : 5;
+      let totalB = (wardInfo && wardInfo.total_booths) ? wardInfo.total_booths : (cat === 'ZP' ? 25 : 5);
+      if (masterData.booths && masterData.booths.length > 0) {
+        if (cat === 'ZP') {
+          const cnt = masterData.booths.filter(b => Number(b.zp_ward) === targetWard).length;
+          if (cnt > 0) totalB = cnt;
+        } else {
+          const cnt = masterData.booths.filter(b => b.block_name === blk && Number(b.ps_ward) === targetWard).length;
+          if (cnt > 0) totalB = cnt;
+        }
+      }
+      const maxR = Math.max(1, Math.ceil(totalB / (tables || 5)));
+
+      // How many booths have reported votes so far for this ward?
+      const reportedBooths = new Set();
+      const wardCands = masterData.candidates.filter(c => c.category === cat && c.block_name === targetBlk && c.ward_no === targetWard);
+      wardCands.forEach(c => {
+        const vObj = masterData.roundVotes[c.id] || {};
+        for (const [k, v] of Object.entries(vObj)) {
+          if (v > 0) reportedBooths.add(k.toUpperCase());
+        }
+      });
+      const countedCount = reportedBooths.size;
+
+      // Current active round being worked on
+      const activeRound = Math.min(maxR, Math.floor(countedCount / tables) + 1);
+
+      // What round batch does the selected booth belong to?
+      let currentBoothBatch = activeRound;
+      if (cat === 'ZP') {
+        const zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === targetWard) : [];
+        zpBooths.sort((a, b) => (a.block_name !== b.block_name ? a.block_name.localeCompare(b.block_name) : (parseInt(a.booth_no)||0) - (parseInt(b.booth_no)||0)));
+        const bIdx = zpBooths.findIndex(b => (boothObj ? (b.block_name === boothObj.block_name && String(b.booth_no) === String(boothObj.booth_no)) : String(b.booth_no) === rawBno));
+        if (bIdx >= 0) currentBoothBatch = Math.floor(bIdx / tables) + 1;
+      } else {
+        const bNoNum = parseInt(rawBno) || 1;
+        currentBoothBatch = Math.max(1, Math.ceil(bNoNum / (tables || 5)));
+      }
+
+      const isWardComplete = (countedCount >= totalB && totalB > 0);
+      const isWardDeclared = wardInfo ? wardInfo.status === 'DECLARED' : false;
+
+      // Update booth banner with round info
+      const sName = boothObj ? (boothObj.booth_name_hi || boothObj.booth_name_en || '') : '';
+      if (boothObj) {
+        if (cat === 'ZP') {
+          document.getElementById('boothInfoText').innerHTML = `📍 <strong>${boothObj.block_name} Booth #${boothObj.booth_no}</strong> <span style="color:#0284c7; font-weight:700;">(Table Batch ${currentBoothBatch})</span>: ${sName} • ${boothObj.total_elector} Electors`;
+        } else {
+          document.getElementById('boothInfoText').innerHTML = `📍 <strong>Booth #${rawBno}</strong> <span style="color:#0284c7; font-weight:700;">(Table Batch ${currentBoothBatch})</span>: ${sName} • <span style="color:#0284c7; font-weight:700;">${blk}</span> • ${boothObj.total_elector} Electors`;
+        }
+      }
+
+      // Update Round Progress Badge
+      const roundBadgeEl = document.getElementById('boothRoundBadge');
+      if (roundBadgeEl) {
+        if (isWardDeclared) {
+          roundBadgeEl.className = 'badge badge-success';
+          roundBadgeEl.innerHTML = `🏆 WINNER DECLARED (${totalB} Booths)`;
+        } else if (isWardComplete) {
+          roundBadgeEl.className = 'badge blink-badge';
+          roundBadgeEl.style.cursor = 'pointer';
+          roundBadgeEl.innerHTML = `⚠️ 100% COMPLETE (${totalB}/${totalB} Booths) • CLICK TO DECLARE!`;
+          roundBadgeEl.onclick = () => {
+            switchNavTab('declare');
+            document.getElementById('declareCategory').value = cat;
+            onDeclareScopeChanged();
+            if (cat === 'PS') {
+              document.getElementById('declareBlock').value = blk;
+              onDeclareScopeChanged();
+            }
+          };
+        } else {
+          roundBadgeEl.className = 'badge';
+          roundBadgeEl.style.background = '#e0f2fe';
+          roundBadgeEl.style.color = '#0369a1';
+          roundBadgeEl.style.border = '1px solid #7dd3fc';
+          roundBadgeEl.onclick = null;
+          roundBadgeEl.innerHTML = `🔄 <strong>Round ${activeRound} of ${maxR}</strong> in progress • ⚡ ${countedCount}/${totalB} Booths Counted`;
+        }
+      }
+
       loadCandidateInputs(cat, blk, targetWard, roundKey);
+      checkCompletedWardsReadyToDeclare();
     }
 
     function loadCandidateInputs(cat, blk, wardNo, roundKey) {
