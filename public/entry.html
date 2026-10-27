@@ -524,6 +524,26 @@
         </div>
       </div>
 
+            <!-- ZP Counting Workflow Toggle (Active when Category is ZP) -->
+      <div id="zpModeContainer" style="display:none; margin-bottom:14px; background:#eff6ff; border:1.5px solid #93c5fd; border-radius:8px; padding:10px 14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="font-size:12px; font-weight:800; color:#1e40af; text-transform:uppercase; letter-spacing:0.5px;">
+            ⚡ ZP Counting Mode / जिला परिषद मतगणना क्रम:
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" id="zpModeBtnBlock" onclick="setZpMode('BLOCK')" class="btn btn-primary" style="font-size:13px; font-weight:700; padding:6px 14px; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+              🏢 By RO Center / Block Sequence (EVM क्रम 1 से Max)
+            </button>
+            <button type="button" id="zpModeBtnWard" onclick="setZpMode('WARD')" class="btn btn-outline" style="font-size:13px; font-weight:700; padding:6px 14px; background:#fff; color:#475569;">
+              🗳️ By ZP Ward (वार्ड-वार 1 से 21)
+            </button>
+          </div>
+        </div>
+        <div id="zpModeHelpText" style="font-size:12px; color:#1e3a8a; margin-top:6px; font-weight:600;">
+          💡 <strong>अनुशंसित (Recommended):</strong> RO सेंटर (जैसे: जयसमंद) चुनें और टेबल पर आने वाली EVM 1 से 81 की सीधी एंट्री करें। सिस्टम ऑटोमैटिक संबंधित ZP वार्ड और प्रत्याशियों को मैप कर देगा!
+        </div>
+      </div>
+
       <!-- Scope Selection -->
       <div class="form-grid">
         <div class="form-group">
@@ -535,7 +555,7 @@
         </div>
 
         <div class="form-group" id="blockSelectGroup">
-          <label class="form-label">RO Center / Panchayat Samiti Block</label>
+          <label class="form-label" id="blockSelectLabel">RO Center / Panchayat Samiti Counting Hall (मतगणना कक्ष)</label>
           <select id="entryBlock" class="form-select" onchange="onBlockChanged()">
             <option value="Geengla">Geengla (61 Booths)</option>
             <option value="Jaisamand">Jaisamand (81 Booths)</option>
@@ -928,6 +948,35 @@
       }
     }
 
+    let currentZpMode = 'BLOCK'; // 'BLOCK' (By RO Center Sequence) or 'WARD' (By ZP Ward 1-21)
+
+    function setZpMode(mode) {
+      currentZpMode = mode;
+      const btnBlock = document.getElementById('zpModeBtnBlock');
+      const btnWard = document.getElementById('zpModeBtnWard');
+      const helpText = document.getElementById('zpModeHelpText');
+      const blkGrp = document.getElementById('blockSelectGroup');
+      const zpWardGrp = document.getElementById('zpWardSelectGroup');
+
+      if (mode === 'BLOCK') {
+        if (btnBlock) { btnBlock.className = 'btn btn-primary'; btnBlock.style.background = ''; btnBlock.style.color = ''; }
+        if (btnWard) { btnWard.className = 'btn btn-outline'; btnWard.style.background = '#fff'; btnWard.style.color = '#475569'; }
+        if (helpText) helpText.innerHTML = '💡 <strong>अनुशंसित (Recommended):</strong> RO सेंटर (जैसे: जयसमंद) चुनें और टेबल पर आने वाली EVM 1 से 81 की सीधी एंट्री करें। सिस्टम ऑटोमैटिक संबंधित ZP वार्ड और प्रत्याशियों को मैप कर देगा!';
+        if (blkGrp) blkGrp.style.display = 'flex';
+        if (zpWardGrp) zpWardGrp.style.display = 'none';
+      } else {
+        if (btnBlock) { btnBlock.className = 'btn btn-outline'; btnBlock.style.background = '#fff'; btnBlock.style.color = '#475569'; }
+        if (btnWard) { btnWard.className = 'btn btn-primary'; btnWard.style.background = ''; btnWard.style.color = ''; }
+        if (helpText) helpText.innerHTML = '🔍 <strong>वार्ड-वार फ़िल्टर:</strong> पहले ZP वार्ड (1 से 21) चुनें, फिर केवल उस वार्ड के अंतर्गत आने वाले बूथों की एंट्री करें।';
+        if (blkGrp) blkGrp.style.display = 'none';
+        if (zpWardGrp) zpWardGrp.style.display = 'flex';
+        populateZpWardDropdown();
+      }
+
+      populateBoothDropdown();
+      refreshEntryView();
+    }
+
     function onZpWardChanged() {
       populateBoothDropdown();
       refreshEntryView();
@@ -937,15 +986,23 @@
       const cat = document.getElementById('entryCategory').value;
       const blkGrp = document.getElementById('blockSelectGroup');
       const zpWardGrp = document.getElementById('zpWardSelectGroup');
+      const zpModeContainer = document.getElementById('zpModeContainer');
 
       if (cat === 'PS') {
-        blkGrp.style.display = 'flex';
+        if (zpModeContainer) zpModeContainer.style.display = 'none';
+        if (blkGrp) blkGrp.style.display = 'flex';
         if (zpWardGrp) zpWardGrp.style.display = 'none';
       } else {
-        // ZP MODE: Hide Panchayat Samiti block selector, show Zilla Parishad Ward selector
-        blkGrp.style.display = 'none';
-        if (zpWardGrp) zpWardGrp.style.display = 'flex';
-        populateZpWardDropdown();
+        // ZP MODE: Show ZP mode switcher
+        if (zpModeContainer) zpModeContainer.style.display = 'block';
+        if (currentZpMode === 'BLOCK') {
+          if (blkGrp) blkGrp.style.display = 'flex';
+          if (zpWardGrp) zpWardGrp.style.display = 'none';
+        } else {
+          if (blkGrp) blkGrp.style.display = 'none';
+          if (zpWardGrp) zpWardGrp.style.display = 'flex';
+          populateZpWardDropdown();
+        }
       }
 
       populateBoothDropdown();
@@ -1000,29 +1057,67 @@
           inputBooth.value = sel.value;
         }
       } else {
-        // ZP MODE: Populate with all polling stations belonging to the selected ZP Ward
-        const zpWard = parseInt(document.getElementById('entryZpWard').value) || 1;
-        let zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === zpWard) : [];
+        // ZP MODE
+        if (currentZpMode === 'BLOCK') {
+          // By RO Center / Block Sequence (EVM 1 to Max)
+          const blk = document.getElementById('entryBlock').value || 'Jaisamand';
+          const maxB = BLOCK_TOTAL_BOOTHS[blk] || 81;
+          inputBooth.max = maxB;
+          let curVal = inputBooth.value.trim() || '1';
 
-        zpBooths.sort((a, b) => {
-          if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
-          return (parseInt(a.booth_no) || 0) - (parseInt(b.booth_no) || 0);
-        });
+          let blkBooths = masterData.booths ? masterData.booths.filter(b => b.block_name === blk) : [];
+          blkBooths.sort((a, b) => (parseInt(a.booth_no) || 0) - (parseInt(b.booth_no) || 0));
 
-        zpBooths.forEach((bObj) => {
-          const opt = document.createElement('option');
-          opt.value = `${bObj.block_name}:${bObj.booth_no}`;
-          const sName = bObj.booth_name_hi || bObj.booth_name_en || '';
-          opt.textContent = `[${bObj.block_name}] #${bObj.booth_no} - ${sName} (${bObj.total_elector} Electors)`;
-          sel.appendChild(opt);
-        });
+          if (blkBooths.length > 0) {
+            blkBooths.forEach(bObj => {
+              const opt = document.createElement('option');
+              opt.value = `${bObj.block_name}:${bObj.booth_no}`;
+              const sName = bObj.booth_name_hi || bObj.booth_name_en || '';
+              opt.textContent = `#${bObj.booth_no} - ${sName} ➔ [Auto: ZP Ward ${bObj.zp_ward}]`;
+              sel.appendChild(opt);
+            });
+          } else {
+            for (let b = 1; b <= maxB; b++) {
+              const opt = document.createElement('option');
+              opt.value = `${blk}:${b}`;
+              opt.textContent = `EVM #${b} of ${maxB} (${blk})`;
+              sel.appendChild(opt);
+            }
+          }
 
-        if (sel.options.length > 0) {
-          sel.selectedIndex = 0;
-          const parts = sel.value.split(':');
-          inputBooth.value = parts[1] || '1';
+          const matchOpt = [...sel.options].find(o => o.value === `${blk}:${curVal}` || o.value.endsWith(`:${curVal}`));
+          if (matchOpt) {
+            sel.value = matchOpt.value;
+          } else if (sel.options.length > 0) {
+            sel.selectedIndex = 0;
+            const parts = sel.value.split(':');
+            inputBooth.value = parts[1] || '1';
+          }
         } else {
-          inputBooth.value = '1';
+          // By ZP Ward (1 to 21)
+          const zpWard = parseInt(document.getElementById('entryZpWard').value) || 1;
+          let zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === zpWard) : [];
+
+          zpBooths.sort((a, b) => {
+            if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
+            return (parseInt(a.booth_no) || 0) - (parseInt(b.booth_no) || 0);
+          });
+
+          zpBooths.forEach((bObj) => {
+            const opt = document.createElement('option');
+            opt.value = `${bObj.block_name}:${bObj.booth_no}`;
+            const sName = bObj.booth_name_hi || bObj.booth_name_en || '';
+            opt.textContent = `[${bObj.block_name}] #${bObj.booth_no} - ${sName} (${bObj.total_elector} Electors)`;
+            sel.appendChild(opt);
+          });
+
+          if (sel.options.length > 0) {
+            sel.selectedIndex = 0;
+            const parts = sel.value.split(':');
+            inputBooth.value = parts[1] || '1';
+          } else {
+            inputBooth.value = '1';
+          }
         }
       }
     }
@@ -1108,33 +1203,45 @@
         }
       } else {
         // ZP MODE (District-Wide Election)
-        targetWard = parseInt(document.getElementById('entryZpWard').value) || 1;
         blk = 'Salumber ZP';
-
-        const selVal = document.getElementById('selectBoothDropdown').value || '';
         let bBlk = '', bNo = '';
+        const selVal = document.getElementById('selectBoothDropdown').value || '';
         if (selVal.includes(':')) {
           [bBlk, bNo] = selVal.split(':');
         } else {
           bNo = document.getElementById('inputBoothNo').value.trim() || '1';
         }
 
-        if (masterData.booths && masterData.booths.length > 0) {
-          if (bBlk) {
+        if (currentZpMode === 'BLOCK') {
+          const selectedBlk = document.getElementById('entryBlock').value || 'Jaisamand';
+          if (!bBlk) bBlk = selectedBlk;
+          if (masterData.booths && masterData.booths.length > 0) {
             boothObj = masterData.booths.find(b => b.block_name === bBlk && String(b.booth_no) === bNo);
+          }
+          if (boothObj && boothObj.zp_ward) {
+            targetWard = Number(boothObj.zp_ward);
           } else {
-            boothObj = masterData.booths.find(b => Number(b.zp_ward) === targetWard && String(b.booth_no) === bNo);
+            targetWard = 1;
+          }
+        } else {
+          targetWard = parseInt(document.getElementById('entryZpWard').value) || 1;
+          if (masterData.booths && masterData.booths.length > 0) {
+            if (bBlk) {
+              boothObj = masterData.booths.find(b => b.block_name === bBlk && String(b.booth_no) === bNo);
+            } else {
+              boothObj = masterData.booths.find(b => Number(b.zp_ward) === targetWard && String(b.booth_no) === bNo);
+            }
           }
         }
 
         if (boothObj) {
           roundKey = `B_${boothObj.block_name}_${boothObj.booth_no}`.toUpperCase();
           const sName = boothObj.booth_name_hi || boothObj.booth_name_en || '';
-          document.getElementById('boothInfoText').innerHTML = `📍 <strong>${boothObj.block_name} Booth #${boothObj.booth_no}:</strong> ${sName} • ${boothObj.total_elector} Electors`;
-          document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
+          document.getElementById('boothInfoText').innerHTML = `📍 <strong>${boothObj.block_name} EVM #${boothObj.booth_no}:</strong> ${sName} • ${boothObj.total_elector} Electors`;
+          document.getElementById('boothWardBadge').innerHTML = `🗳️ Auto: <strong>ZP Ward ${targetWard}</strong>`;
         } else {
-          roundKey = `B${bNo}`.toUpperCase();
-          document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bNo} • ZP Ward ${targetWard}`;
+          roundKey = `B_${bBlk || 'ZP'}_${bNo}`.toUpperCase();
+          document.getElementById('boothInfoText').innerText = `📍 EVM #${bNo} • ZP Ward ${targetWard}`;
           document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
         }
       }
