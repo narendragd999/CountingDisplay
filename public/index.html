@@ -1,50 +1,68 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SALUMBER ELECTION LIVE 2026 - Live Counting Portal</title>
+  <title>Salumber District Elections 2026 - Real-Time Live Results</title>
   
-  <!-- Premium Google Fonts for TV Displays: Rajdhani (Numbers), Inter (UI), Noto Sans Devanagari (Hindi) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================================
-       NEXT-GEN TV BROADCAST DESIGN SYSTEM (STRICT 50/50 SPLIT SCREEN)
-       Ultra-crisp 1080p (1920x1080) & 4K (3840x2160) Optimized Layout
+       NEXT-GEN BROADCAST TV DISPLAY (OFFICIAL LIGHT THEME - SALUMBER 2026)
+       Crisp 1080p / 4K / Mobile Responsive 50/50 Split Dashboard
        ========================================================================== */
     :root {
-      /* Official Party Palette */
-      --color-bjp: #ea580c;
-      --color-bjp-glow: rgba(234, 88, 12, 0.4);
-      --color-inc: #0284c7;
-      --color-inc-glow: rgba(2, 132, 199, 0.4);
-      --color-bap: #ca8a04;
-      --color-bap-glow: rgba(202, 138, 4, 0.4);
-      --color-aap: #0d9488;
-      --color-aap-glow: rgba(13, 148, 136, 0.4);
-      --color-ind: #64748b;
-      --color-ind-glow: rgba(100, 116, 139, 0.4);
+      --bg-page: #f1f5f9;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-subtle: #f8fafc;
+      --border-main: #cbd5e1;
+      --border-subtle: #e2e8f0;
 
-      /* Dark Broadcast Palette */
-      --bg-canvas: #060911;
-      --bg-panel: #0b1120;
-      --bg-card: #111a2e;
-      --bg-card-elevated: #16223d;
-      --bg-glass: rgba(17, 26, 46, 0.75);
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(56, 189, 248, 0.25);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-main: #0f172a;
+      --text-muted: #475569;
       --text-dim: #64748b;
 
-      /* Accents */
-      --accent-lead: #10b981;
-      --accent-lead-glow: rgba(16, 185, 129, 0.35);
-      --accent-gold: #f59e0b;
-      --accent-crimson: #dc2626;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-subtle: #e0f2fe;
+
+      --success: #15803d;
+      --success-subtle: #dcfce7;
+      --success-border: #86efac;
+
+      --warning: #b45309;
+      --warning-subtle: #fef3c7;
+
+      --danger: #b91c1c;
+      --danger-subtle: #fee2e2;
+
+      --gold: #d97706;
+      --gold-subtle: #fef3c7;
+      --gold-border: #fcd34d;
+
+      --party-bjp: #c2410c;
+      --party-bjp-bg: #fff7ed;
+      --party-bjp-border: #fed7aa;
+
+      --party-inc: #0369a1;
+      --party-inc-bg: #eff6ff;
+      --party-inc-border: #bfdbfe;
+
+      --party-bap: #a16207;
+      --party-bap-bg: #fefce8;
+      --party-bap-border: #fef08a;
+
+      --party-ind: #475569;
+      --party-ind-bg: #f1f5f9;
+      --party-ind-border: #cbd5e1;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
     }
 
     * {
@@ -55,90 +73,78 @@
     }
 
     body {
-      font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif;
-      background: var(--bg-canvas);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
       color: var(--text-main);
       height: 100vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      line-height: 1.3;
-      -webkit-font-smoothing: antialiased;
     }
 
-    .font-num {
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .font-hindi {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-    }
-
-    /* ==========================================================================
-       1. TOP HEADER BAR (12% Height)
-       ========================================================================== */
-    .broadcast-header {
-      height: 72px;
-      background: linear-gradient(180deg, #0e172a 0%, #080d1a 100%);
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      gap: 14px;
-      flex-shrink: 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-      z-index: 50;
-    }
-
-    /* Left Brand */
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 320px;
-    }
-
-    .brand-emblem {
-      background: linear-gradient(135deg, #ea580c 0%, #ca8a04 100%);
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-weight: 900;
-      font-size: 13px;
-      letter-spacing: 1px;
-      color: #fff;
-      text-transform: uppercase;
-      box-shadow: 0 2px 10px rgba(234, 88, 12, 0.35);
-    }
-
-    .brand-title {
-      font-size: 19px;
-      font-weight: 900;
-      letter-spacing: 0.5px;
+    /* TOP HEADER */
+    .top-header {
+      background: #0f172a;
       color: #ffffff;
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .header-left {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 14px;
     }
 
-    .brand-title span {
-      color: #38bdf8;
+    .district-emblem {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 20px;
     }
 
-    .live-beacon {
+    .header-titles h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-titles p {
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 1px;
+      letter-spacing: 0.3px;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-indicator {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      background: rgba(220, 38, 38, 0.18);
-      border: 1px solid rgba(220, 38, 38, 0.5);
-      color: #ef4444;
-      padding: 2px 7px;
+      gap: 6px;
+      background: rgba(220, 38, 38, 0.2);
+      border: 1px solid #dc2626;
+      color: #fca5a5;
+      padding: 4px 10px;
       border-radius: 20px;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.5px;
     }
 
     .live-dot {
@@ -147,1865 +153,705 @@
       background: #ef4444;
       border-radius: 50%;
       box-shadow: 0 0 8px #ef4444;
-      animation: pulse-dot 1.2s infinite ease-in-out;
+      animation: pulse 1.5s infinite;
     }
 
-    @keyframes pulse-dot {
+    @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
-    .sub-meta {
+    .clock-pill {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* SUMMARY SCOREBOARD */
+    .summary-strip {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tally-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tally-title {
       font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 1px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Scoreboard Cards (ZP & PS) */
-    .scoreboards-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex: 1;
-      justify-content: flex-end;
-    }
-
-    .tally-panel {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      padding: 4px 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .tally-panel-title {
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-      padding-right: 8px;
-      min-width: 115px;
-    }
-
-    .tally-panel-name {
-      font-size: 10px;
       font-weight: 800;
-      color: #94a3b8;
+      color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .tally-panel-status {
-      font-size: 12px;
-      font-weight: 800;
-      color: #38bdf8;
-    }
-
-    .party-chips-row {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .party-chip {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 52px;
-      height: 44px;
-      border-radius: 6px;
-      background: #1e293b;
-      padding: 2px 4px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .party-chip::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-    }
-
-    .party-chip.chip-bjp::before { background: var(--color-bjp); }
-    .party-chip.chip-inc::before { background: var(--color-inc); }
-    .party-chip.chip-bap::before { background: var(--color-bap); }
-    .party-chip.chip-aap::before { background: var(--color-aap); }
-    .party-chip.chip-ind::before { background: var(--color-ind); }
-
-    .chip-code {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: #94a3b8;
-      line-height: 1;
-    }
-
-    .chip-number {
-      font-size: 18px;
-      font-weight: 800;
-      line-height: 1.1;
-      color: #ffffff;
-    }
-
-    .chip-sub {
-      font-size: 8px;
-      color: #64748b;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    /* Actions in header */
-    .header-actions {
-      display: flex;
+    .tally-pill {
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-    }
-
-    .icon-btn {
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-      width: 32px;
-      height: 32px;
+      padding: 3px 10px;
       border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
     }
 
-    .icon-btn:hover {
-      background: #334155;
-      color: #fff;
-    }
-
-    /* ==========================================================================
-       2. MAIN SPLIT SCREEN BODY (Strict 50/50 Split)
-       ========================================================================== */
+    /* MAIN SPLIT VIEW (50/50) */
     .split-container {
       flex: 1;
-      display: flex;
-      width: 100vw;
-      height: calc(100vh - 72px - 36px); /* subtract header and ticker */
-      padding: 8px 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
-      background: radial-gradient(circle at 50% 50%, #0d1527 0%, #060911 100%);
+      padding: 12px;
+      overflow: hidden;
+      background: var(--bg-page);
     }
 
-    .column-half {
-      flex: 1;
-      width: 50%;
-      height: 100%;
+    .column-box {
+      background: #ffffff;
+      border: 1px solid var(--border-main);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
 
-    /* Panel Header Card */
-    .column-title-bar {
-      height: 38px;
-      background: linear-gradient(90deg, #131d33 0%, #0d1627 100%);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 0 12px;
+    .column-head {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 16px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       flex-shrink: 0;
     }
 
-    .col-title-left {
+    .column-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .col-title-left h2 {
+    .filter-ctrls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-select {
+      background: #ffffff;
+      border: 1px solid var(--border-main);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .btn-scroll-toggle {
+      background: #ffffff;
+      border: 1px solid var(--border-main);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .btn-scroll-toggle:hover {
+      background: var(--bg-subtle);
+    }
+
+    .cards-scroll-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .cards-scroll-body::-webkit-scrollbar {
+      width: 5px;
+    }
+    .cards-scroll-body::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    /* WARD DISPLAY CARD */
+    .ward-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .ward-card.declared {
+      border: 2px solid var(--gold-border);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.12);
+    }
+
+    .ward-card.counting {
+      border-left: 4px solid var(--primary);
+    }
+
+    .ward-card-head {
+      background: #f8fafc;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .ward-card.declared .ward-card-head {
+      background: var(--gold-subtle);
+    }
+
+    .ward-name {
       font-size: 13px;
-      font-weight: 900;
-      letter-spacing: 0.8px;
-      color: #fff;
-      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .badge-pill {
+    .status-badge {
       font-size: 10px;
       font-weight: 800;
       padding: 2px 7px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.08);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.2);
-    }
-
-    .col-title-right {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* ==========================================================================
-       3. SPOTLIGHT HERO CARD (Auto-Rotating Ward)
-       ========================================================================== */
-    .spotlight-card {
-      background: linear-gradient(180deg, #131c33 0%, #0e1729 100%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    /* Ward Head */
-    .spotlight-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .ward-name-container h3 {
-      font-size: 19px;
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.2;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-
-    .ward-meta-tags {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 4px;
-      flex-wrap: wrap;
-    }
-
-    .meta-tag {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 3px;
-      background: rgba(255, 255, 255, 0.06);
-      color: #cbd5e1;
-    }
-
-    .status-round-pill {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 6px;
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      white-space: nowrap;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
-    .status-round-pill.declared {
-      background: rgba(16, 185, 129, 0.2);
-      color: #10b981;
-      border-color: rgba(16, 185, 129, 0.5);
-    }
+    .status-DECLARED { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .status-COUNTING { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .status-PENDING { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
 
-    /* Progress bar */
-    .round-progress-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .progress-info {
+    /* LEADER BANNER */
+    .leader-strip {
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      background: #f0fdf4;
+      border-bottom: 1px solid #bbf7d0;
+      color: #166534;
     }
 
-    .progress-info span.pct-val {
-      color: #38bdf8;
+    .leader-strip.declared-winner {
+      background: #fefce8;
+      border-bottom: 1px solid #fef08a;
+      color: #854d0e;
+    }
+
+    /* TABLE IN CARD */
+    .ward-table {
+      width: 100%;
+      border-collapse: collapse;
       font-size: 12px;
     }
 
-    .progress-bar-track {
-      height: 6px;
-      background: #1e293b;
-      border-radius: 3px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%);
-      border-radius: 3px;
-      transition: width 0.4s ease;
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
-    }
-
-    /* CANDIDATE BATTLE FACE-OFF CARDS */
-    .candidates-faceoff-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .cand-battle-card {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      padding: 10px 12px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 86px;
-    }
-
-    .cand-battle-card.rank-1 {
-      border-color: rgba(16, 185, 129, 0.35);
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.06) 0%, rgba(15, 23, 42, 0.8) 100%);
-    }
-
-    .cand-battle-card.rank-2 {
-      border-color: rgba(2, 132, 199, 0.25);
-    }
-
-    .cand-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .rank-badge {
-      font-size: 9px;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 3px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .rank-badge.lead {
-      background: #10b981;
-      color: #000;
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
-    }
-
-    .rank-badge.trail {
-      background: #334155;
-      color: #94a3b8;
-    }
-
-    .cand-party-pill {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 3px;
-      color: #fff;
-    }
-
-    .cand-card-name {
-      font-size: 15px;
-      font-weight: 800;
-      color: #ffffff;
-      margin: 4px 0 2px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .cand-card-bottom {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-top: 2px;
-    }
-
-    .cand-pb-votes {
-      font-size: 10px;
+    .ward-table th {
+      background: #ffffff;
       color: var(--text-dim);
-      font-weight: 600;
-    }
-
-    .cand-total-votes {
-      font-size: 26px;
-      font-weight: 800;
-      line-height: 1;
-      color: #f8fafc;
-    }
-
-    .cand-battle-card.rank-1 .cand-total-votes {
-      color: #34d399;
-      text-shadow: 0 0 12px rgba(52, 211, 153, 0.3);
-    }
-
-    /* ROUND-BY-ROUND PROGRESSION TABLE */
-    .round-matrix-box {
-      background: rgba(10, 16, 30, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-
-    .round-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: center;
-      font-size: 11px;
-    }
-
-    .round-table th {
-      background: #162035;
-      color: #94a3b8;
-      font-weight: 700;
-      padding: 4px 2px;
       font-size: 10px;
-      letter-spacing: 0.5px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .round-table td {
-      padding: 4px 2px;
-      color: #e2e8f0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      font-family: 'Rajdhani', sans-serif;
       font-weight: 700;
-      font-size: 13px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
     }
 
-    .round-table tr:last-child td {
+    .ward-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .ward-table tr.row-leader {
+      background: #f8fafc;
+      font-weight: 700;
+    }
+
+    .ward-table tr:last-child td {
       border-bottom: none;
     }
 
-    .round-table td.cand-col {
-      text-align: left;
-      padding-left: 8px;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: #fff;
-      font-weight: 700;
-      max-width: 90px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .round-table td.active-round-cell {
-      background: rgba(56, 189, 248, 0.12);
-      color: #38bdf8;
-    }
-
-    .round-table td.diff-cell {
-      color: #34d399;
-      font-weight: 800;
-    }
-
-    /* NET LEAD MARGIN BANNER */
-    .net-lead-banner {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      border-radius: 6px;
-      padding: 6px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .margin-left-tag {
-      font-size: 11px;
-      font-weight: 800;
-      color: #10b981;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      letter-spacing: 0.5px;
-    }
-
-    .margin-right-val {
-      font-size: 17px;
-      font-weight: 800;
-      color: #34d399;
-      text-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
-    }
-
-    /* ==========================================================================
-       4. BOTTOM MATRIX GRID (All Wards at a Glance)
-       ========================================================================== */
-    .matrix-section {
-      flex: 1;
-      background: rgba(13, 21, 39, 0.6);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      overflow: hidden;
-    }
-
-    .matrix-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .party-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Rajdhani', sans-serif;
       font-size: 10px;
       font-weight: 800;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 0 2px;
     }
 
-    .matrix-header span.highlight {
-      color: #38bdf8;
-    }
+    .pt-BJP { background: var(--party-bjp-bg); color: var(--party-bjp); border: 1px solid var(--party-bjp-border); }
+    .pt-INC { background: var(--party-inc-bg); color: var(--party-inc); border: 1px solid var(--party-inc-border); }
+    .pt-BAP { background: var(--party-bap-bg); color: var(--party-bap); border: 1px solid var(--party-bap-border); }
+    .pt-IND { background: var(--party-ind-bg); color: var(--party-ind); border: 1px solid var(--party-ind-border); }
 
-    /* 21 ZP Wards Grid: 7 columns x 3 rows */
-    .zp-matrix-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 5px;
-      flex: 1;
-      height: 100%;
-    }
-
-    /* 15 PS Wards Grid: 5 columns x 3 rows */
-    .ps-matrix-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 5px;
-      flex: 1;
-      height: 100%;
-    }
-
-    .mini-ward-card {
-      background: #111a2e;
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 6px;
-      padding: 4px 6px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    .mini-ward-card:hover {
-      background: #1a2744;
-      border-color: rgba(56, 189, 248, 0.4);
-    }
-
-    .mini-ward-card.active-spotlight {
-      border: 1.5px solid #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
-    }
-
-    .mini-ward-card.status-declared {
-      border-color: rgba(16, 185, 129, 0.6);
-      background: rgba(16, 185, 129, 0.08);
-    }
-
-    .mini-ward-card.status-declared::after {
-      content: 'WON';
-      position: absolute;
-      top: 2px;
-      right: 3px;
-      font-size: 7px;
-      font-weight: 900;
-      color: #10b981;
-      background: rgba(16, 185, 129, 0.15);
-      padding: 0 3px;
-      border-radius: 2px;
-    }
-
-    .mini-card-top {
+    /* BOTTOM TICKER */
+    .bottom-ticker {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 7px 20px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 14px;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 600;
     }
 
-    .mini-ward-num {
-      font-size: 11px;
-      font-weight: 800;
-      color: #f8fafc;
-    }
-
-    .mini-party-badge {
-      font-size: 8px;
-      font-weight: 900;
-      padding: 1px 4px;
-      border-radius: 3px;
-      color: #fff;
-    }
-
-    .mini-cand-name {
-      font-size: 9px;
-      font-weight: 700;
-      color: #cbd5e1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 1px 0;
-    }
-
-    .mini-card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 9px;
-    }
-
-    .mini-lead-margin {
-      color: #34d399;
-      font-weight: 800;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 11px;
-    }
-
-    .mini-round-state {
-      color: #64748b;
-      font-weight: 700;
-    }
-
-    /* PS Block Tabs */
-    .ps-block-tabs-row {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    .ps-tab-btn {
-      padding: 3px 8px;
+    .ticker-label {
+      background: #dc2626;
+      color: #ffffff;
+      padding: 2px 8px;
       border-radius: 4px;
       font-size: 10px;
-      font-weight: 800;
-      background: #172138;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #94a3b8;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s;
-    }
-
-    .ps-tab-btn:hover {
-      background: #202d4d;
-      color: #fff;
-    }
-
-    .ps-tab-btn.active {
-      background: var(--color-bap);
-      color: #000;
-      border-color: #facc15;
       font-weight: 900;
-    }
-
-    /* ==========================================================================
-       5. BOTTOM SCROLLING TICKER (36px Height)
-       ========================================================================== */
-    .broadcast-ticker {
-      height: 36px;
-      background: #090e1a;
-      border-top: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      overflow: hidden;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
       flex-shrink: 0;
-      z-index: 40;
     }
 
-    .ticker-label-badge {
-      background: #dc2626;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.8px;
-      padding: 0 14px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      z-index: 10;
-      box-shadow: 2px 0 10px rgba(220, 38, 38, 0.4);
-    }
-
-    .ticker-content-track {
-      flex: 1;
+    .ticker-content {
       overflow: hidden;
       white-space: nowrap;
+      flex: 1;
     }
 
     .ticker-text {
       display: inline-block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #f1f5f9;
-      animation: marquee-scroll 45s linear infinite;
-      padding-left: 100%;
+      animation: tickerMarquee 40s linear infinite;
     }
 
-    @keyframes marquee-scroll {
-      0% { transform: translateX(0); }
+    @keyframes tickerMarquee {
+      0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-
-    /* Settings Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-
-    .modal-card {
-      background: #111a2e;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-    }
-  
-    /* Ward Filter Controls in Title Bars */
-    .filter-controls-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(15, 23, 42, 0.85);
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-    .filter-title {
-      font-size: 11px;
-      font-weight: 800;
-      color: #94a3b8;
-    }
-    .screen-filter-dropdown {
-      background: #090e17;
-      border: 1px solid #334155;
-      color: #38bdf8;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 7px;
-      border-radius: 4px;
-      outline: none;
-      cursor: pointer;
-      max-width: 170px;
-    }
-    .screen-filter-dropdown:focus {
-      border-color: #38bdf8;
-    }
-    .filter-action-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #f8fafc;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .filter-action-btn:hover {
-      background: #0284c7;
-      border-color: #0284c7;
-      color: #fff;
-    }
-    
   </style>
 </head>
 <body>
 
-  <!-- =========================================================================
-       1. BROADCAST TOP HEADER
-       ========================================================================= -->
-  <header class="broadcast-header">
-    <div class="brand-section">
-      <div class="brand-emblem">SALUMBER</div>
-      <div>
-        <div class="brand-title">
-          ELECTION LIVE <span>2026</span>
-          <div class="live-beacon">
-            <span class="live-dot"></span> LIVE
-          </div>
-        </div>
-        <div class="sub-meta">
-          <span id="syncStatus">🔄 Connecting to Sheet API...</span>
-          <span>•</span>
-          <span>522 मतदान केंद्र • 5 टेबल्स</span>
-        </div>
+  <!-- TOP HEADER -->
+  <header class="top-header">
+    <div class="header-left">
+      <div class="district-emblem">🏛️</div>
+      <div class="header-titles">
+        <h1>SALUMBER DISTRICT PANCHAYATI RAJ ELECTIONS 2026</h1>
+        <p>Official Live Counting & Results Portal • Zilla Parishad & 7 Panchayat Samitis</p>
       </div>
     </div>
 
-    <!-- Live Scoreboards -->
-    <div class="scoreboards-wrapper">
-      <!-- ZP Tally Panel -->
-      <div class="tally-panel">
-        <div class="tally-panel-title">
-          <span class="tally-panel-name">जिला परिषद (21)</span>
-          <span id="zpDeclaredHeader" class="tally-panel-status">0/21 DECLARED</span>
-        </div>
-        <div id="zpPartyTallyGrid" class="party-chips-row">
-          <!-- Injected via JS -->
-        </div>
+    <div class="header-badges">
+      <div class="live-indicator">
+        <span class="live-dot"></span>
+        LIVE RESULTS
       </div>
-
-      <!-- PS Tally Panel -->
-      <div class="tally-panel">
-        <div class="tally-panel-title">
-          <span class="tally-panel-name">7 पं. समितियां (105)</span>
-          <span id="psDeclaredHeader" class="tally-panel-status">0/105 DECLARED</span>
-        </div>
-        <div id="psPartyTallyGrid" class="party-chips-row">
-          <!-- Injected via JS -->
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="header-actions">
-        <a href="/entry" target="_blank" class="icon-btn" title="Open Vote Entry Console (मत प्रविष्टि)" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">🗳️</a>
-        <button id="btnFullscreen" class="icon-btn" title="Toggle Fullscreen" onclick="toggleFullscreen()">⛶</button>
-      </div>
+      <div class="clock-pill" id="liveClock">00:00:00 AM</div>
     </div>
   </header>
 
-  <!-- =========================================================================
-       2. STRICT 50/50 SPLIT SCREEN
-       ========================================================================= -->
+  <!-- SUMMARY SCOREBOARD -->
+  <div class="summary-strip">
+    <div class="tally-group">
+      <span class="tally-title">Zilla Parishad (21):</span>
+      <span class="tally-pill pt-BJP" id="zpTallyBJP">BJP: 0</span>
+      <span class="tally-pill pt-INC" id="zpTallyINC">INC: 0</span>
+      <span class="tally-pill pt-BAP" id="zpTallyBAP">BAP: 0</span>
+      <span class="tally-pill pt-IND" id="zpTallyIND">IND: 0</span>
+    </div>
+
+    <div class="tally-group">
+      <span class="tally-title">Panchayat Samiti (105):</span>
+      <span class="tally-pill pt-BJP" id="psTallyBJP">BJP: 0</span>
+      <span class="tally-pill pt-INC" id="psTallyINC">INC: 0</span>
+      <span class="tally-pill pt-BAP" id="psTallyBAP">BAP: 0</span>
+      <span class="tally-pill pt-IND" id="psTallyIND">IND: 0</span>
+    </div>
+  </div>
+
+  <!-- SPLIT SCREEN 50/50 -->
   <main class="split-container">
     
-    <!-- LEFT HALF (50%): ZILLA PARISHAD SALUMBER (21 WARDS) -->
-    <section class="column-half">
-      <!-- Title Bar -->
-      <div class="column-title-bar">
-        <div class="col-title-left">
-          <h2>🏛️ ZILLA PARISHAD SALUMBER</h2>
-          <span class="badge-pill">21 WARDS • 522 BOOTHS</span>
+    <!-- LEFT COLUMN: ZILLA PARISHAD (21 WARDS) -->
+    <section class="column-box">
+      <div class="column-head">
+        <div class="column-title">
+          <span>🏛️</span> Zilla Parishad (21 Wards)
         </div>
-        <div class="col-title-right">
-          <div class="filter-controls-group">
-            <span class="filter-title">वार्ड:</span>
-            <select id="zpWardSelectFilter" class="screen-filter-dropdown" onchange="onZpFilterChange(this.value)">
-              <option value="auto">[auto] Auto-Rotate (स्वयं घूमें)</option>
-            </select>
-            <button id="zpPauseBtn" class="filter-action-btn" title="Pause / Play Rotation" onclick="toggleZpRotation()">[pause]</button>
-          </div>
+
+        <div class="filter-ctrls">
+          <select id="zpWardFilter" class="filter-select" onchange="renderCards()">
+            <option value="ALL">All 21 Wards</option>
+          </select>
+          <button id="btnZpScroll" class="btn-scroll-toggle" onclick="toggleScroll('zp')">
+            ⏸ Pause Scroll
+          </button>
         </div>
       </div>
 
-      <!-- ZP Spotlight Hero Card -->
-      <div id="zpSpotlightCard" class="spotlight-card">
-        <div class="spotlight-head">
-          <div class="ward-name-container">
-            <h3 id="zpSpotlightTitle" class="font-hindi">वार्ड 1: ओडा / पाल सरसिया</h3>
-            <div class="ward-meta-tags">
-              <span id="zpSpotlightBlock" class="meta-tag">Jaisamand PS</span>
-              <span id="zpSpotlightReservation" class="meta-tag">ST</span>
-              <span id="zpSpotlightBooths" class="meta-tag">27 Booths (5 Tables)</span>
-            </div>
-          </div>
-          <div id="zpSpotlightStatusPill" class="status-round-pill">ROUND 1 OF 6</div>
-        </div>
-
-        <!-- Round Progress -->
-        <div class="round-progress-wrapper">
-          <div class="progress-info">
-            <span id="zpProgressLabel">ROUND PROGRESS: 1 OF 6 COMPLETED</span>
-            <span id="zpProgressPct" class="pct-val font-num">17%</span>
-          </div>
-          <div class="progress-bar-track">
-            <div id="zpProgressBarFill" class="progress-bar-fill" style="width: 17%;"></div>
-          </div>
-        </div>
-
-        <!-- Leading vs Trailing Face-Off -->
-        <div class="candidates-faceoff-grid">
-          <!-- Leading #1 -->
-          <div class="cand-battle-card rank-1">
-            <div class="cand-card-top">
-              <span id="zpRank1Label" class="rank-badge trail">CONTESTANT</span>
-              <span id="zpCand1Party" class="cand-party-pill" style="background:var(--color-ind);">—</span>
-            </div>
-            <div id="zpCand1Name" class="cand-card-name font-hindi">प्रतीक्षारत...</div>
-            <div class="cand-card-bottom">
-              <span id="zpCand1Pb" class="cand-pb-votes">PB: -</span>
-              <span id="zpCand1Votes" class="cand-total-votes font-num">-</span>
-            </div>
-          </div>
-
-          <!-- Trailing #2 -->
-          <div class="cand-battle-card rank-2">
-            <div class="cand-card-top">
-              <span class="rank-badge trail">CONTESTANT</span>
-              <span id="zpCand2Party" class="cand-party-pill" style="background:var(--color-ind);">—</span>
-            </div>
-            <div id="zpCand2Name" class="cand-card-name font-hindi">प्रतीक्षारत...</div>
-            <div class="cand-card-bottom">
-              <span id="zpCand2Pb" class="cand-pb-votes">PB: -</span>
-              <span id="zpCand2Votes" class="cand-total-votes font-num">-</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Round Progression Matrix Table -->
-        <div class="round-matrix-box">
-          <table class="round-table">
-            <thead>
-              <tr id="zpRoundTableHead">
-                <th>CANDIDATE</th>
-                <th>PB</th>
-                <th>R1</th>
-                <th>R2</th>
-                <th>R3</th>
-                <th>R4</th>
-                <th>R5</th>
-                <th>DIFF</th>
-              </tr>
-            </thead>
-            <tbody id="zpRoundTableBody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Net Lead Bar -->
-        <div id="zpMarginBar" class="net-lead-banner">
-          <div class="margin-left-tag">
-            <span>⚡ NET LEAD MARGIN:</span>
-            <span id="zpMarginLeadParty">BAP LEAD</span>
-          </div>
-          <div id="zpMarginValue" class="margin-right-val font-num">+240 VOTES</div>
-        </div>
-      </div>
-
-      <!-- Bottom Matrix Grid: All 21 ZP Wards -->
-      <div class="matrix-section">
-        <div class="matrix-header">
-          <span>ALL 21 ZILLA PARISHAD WARDS MATRIX</span>
-          <span class="highlight">LIVE STATUS GRID</span>
-        </div>
-        <div id="zpMatrixGrid" class="zp-matrix-grid">
-          <!-- 21 Ward mini cards injected here -->
-        </div>
+      <div class="cards-scroll-body" id="zpCardsContainer">
+        <!-- Rendered dynamically -->
       </div>
     </section>
 
-
-    <!-- RIGHT HALF (50%): 7 PANCHAYAT SAMITIS (~105 WARDS) -->
-    <section class="column-half">
-      <!-- Title Bar -->
-      <div class="column-title-bar">
-        <div class="col-title-left">
-          <h2>🌾 PANCHAYAT SAMITIS</h2>
-          <span id="psActiveBlockLabel" class="badge-pill" style="background:rgba(202,138,4,0.15); color:#facc15; border-color:rgba(202,138,4,0.4);">SALUMBAR PS</span>
+    <!-- RIGHT COLUMN: PANCHAYAT SAMITI (105 WARDS) -->
+    <section class="column-box">
+      <div class="column-head">
+        <div class="column-title">
+          <span>🏘️</span> Panchayat Samiti (105 Wards - 7 Blocks)
         </div>
-        <div class="col-title-right">
-          <div class="filter-controls-group">
-            <span class="filter-title">ब्लॉक:</span>
-            <select id="psBlockSelectFilter" class="screen-filter-dropdown" onchange="onPsBlockFilterChange(this.value)">
-              <option value="Semari">Semari</option>
-              <option value="Salumbar">Salumbar</option>
-              <option value="Lasadiya">Lasadiya</option>
-              <option value="Geengla">Geengla</option>
-              <option value="Jaisamand">Jaisamand</option>
-              <option value="Sarada">Sarada</option>
-              <option value="Jhallara">Jhallara</option>
-            </select>
-            <span class="filter-title">वार्ड:</span>
-            <select id="psWardSelectFilter" class="screen-filter-dropdown" onchange="onPsWardFilterChange(this.value)">
-              <option value="auto">[auto] Auto-Rotate</option>
-            </select>
-            <button id="psPauseBtn" class="filter-action-btn" title="Pause / Play Rotation" onclick="togglePsRotation()">[pause]</button>
-          </div>
+
+        <div class="filter-ctrls">
+          <select id="psBlockFilter" class="filter-select" onchange="onPsBlockFilterChanged()">
+            <option value="ALL">All 7 Blocks</option>
+            <option value="Semari">Semari</option>
+            <option value="Salumbar">Salumbar</option>
+            <option value="Lasadiya">Lasadiya</option>
+            <option value="Geengla">Geengla</option>
+            <option value="Jaisamand">Jaisamand</option>
+            <option value="Sarada">Sarada</option>
+            <option value="Jhallara">Jhallara</option>
+          </select>
+
+          <select id="psWardFilter" class="filter-select" onchange="renderCards()">
+            <option value="ALL">All Wards</option>
+          </select>
+
+          <button id="btnPsScroll" class="btn-scroll-toggle" onclick="toggleScroll('ps')">
+            ⏸ Pause Scroll
+          </button>
         </div>
       </div>
 
-      <!-- PS Spotlight Hero Card -->
-      <div id="psSpotlightCard" class="spotlight-card">
-        <div class="spotlight-head">
-          <div class="ward-name-container">
-            <h3 id="psSpotlightTitle" class="font-hindi">SALUMBAR PS — वार्ड 1</h3>
-            <div class="ward-meta-tags">
-              <span id="psSpotlightBlock" class="meta-tag">Salumbar Block</span>
-              <span id="psSpotlightReservation" class="meta-tag">ST (Woman)</span>
-              <span id="psSpotlightBooths" class="meta-tag">5 Booths (5 Tables)</span>
-            </div>
-          </div>
-          <div id="psSpotlightStatusPill" class="status-round-pill">ROUND 1 OF 2</div>
-        </div>
-
-        <!-- Round Progress -->
-        <div class="round-progress-wrapper">
-          <div class="progress-info">
-            <span id="psProgressLabel">ROUND PROGRESS: 1 OF 2 COMPLETED</span>
-            <span id="psProgressPct" class="pct-val font-num">50%</span>
-          </div>
-          <div class="progress-bar-track">
-            <div id="psProgressBarFill" class="progress-bar-fill" style="width: 50%;"></div>
-          </div>
-        </div>
-
-        <!-- Leading vs Trailing Face-Off -->
-        <div class="candidates-faceoff-grid">
-          <!-- Leading #1 -->
-          <div class="cand-battle-card rank-1">
-            <div class="cand-card-top">
-              <span id="psRank1Label" class="rank-badge trail">CONTESTANT</span>
-              <span id="psCand1Party" class="cand-party-pill" style="background:var(--color-ind);">—</span>
-            </div>
-            <div id="psCand1Name" class="cand-card-name font-hindi">प्रतीक्षारत...</div>
-            <div class="cand-card-bottom">
-              <span id="psCand1Pb" class="cand-pb-votes">PB: -</span>
-              <span id="psCand1Votes" class="cand-total-votes font-num">-</span>
-            </div>
-          </div>
-
-          <!-- Trailing #2 -->
-          <div class="cand-battle-card rank-2">
-            <div class="cand-card-top">
-              <span class="rank-badge trail">CONTESTANT</span>
-              <span id="psCand2Party" class="cand-party-pill" style="background:var(--color-ind);">—</span>
-            </div>
-            <div id="psCand2Name" class="cand-card-name font-hindi">प्रतीक्षारत...</div>
-            <div class="cand-card-bottom">
-              <span id="psCand2Pb" class="cand-pb-votes">PB: -</span>
-              <span id="psCand2Votes" class="cand-total-votes font-num">-</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Round Progression Matrix Table -->
-        <div class="round-matrix-box">
-          <table class="round-table">
-            <thead>
-              <tr id="psRoundTableHead">
-                <th>CANDIDATE</th>
-                <th>PB</th>
-                <th>R1</th>
-                <th>R2</th>
-                <th>DIFF</th>
-              </tr>
-            </thead>
-            <tbody id="psRoundTableBody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Net Lead Bar -->
-        <div id="psMarginBar" class="net-lead-banner">
-          <div class="margin-left-tag">
-            <span>⚡ NET LEAD MARGIN:</span>
-            <span id="psMarginLeadParty">BAP LEAD</span>
-          </div>
-          <div id="psMarginValue" class="margin-right-val font-num">+140 VOTES</div>
-        </div>
-      </div>
-
-      <!-- Bottom Matrix Grid: Active PS Block Wards -->
-      <div class="matrix-section">
-        <div class="matrix-header">
-          <span>ACTIVE BLOCK WARDS MATRIX</span>
-          <div id="psBlockTabs" class="ps-block-tabs-row">
-            <!-- Injected via JS -->
-          </div>
-        </div>
-        <div id="psMatrixGrid" class="ps-matrix-grid">
-          <!-- 15 Ward mini cards for selected block injected here -->
-        </div>
+      <div class="cards-scroll-body" id="psCardsContainer">
+        <!-- Rendered dynamically -->
       </div>
     </section>
 
   </main>
 
-  <!-- =========================================================================
-       3. BOTTOM BREAKING NEWS TICKER
-       ========================================================================= -->
-  <footer class="broadcast-ticker">
-    <div class="ticker-label-badge">
-      <span>🔴</span> BREAKING NEWS
-    </div>
-    <div class="ticker-content-track">
-      <div id="tickerMarquee" class="ticker-text font-hindi">
-        ★ सलूंबर जिला परिषद एवं 7 पंचायत समितियों के मतगणना परिणाम लाइव • प्रत्येक वार्ड में 5 काउंटिंग टेबल्स पर मतों की गिनती जारी...
+  <!-- BOTTOM TICKER -->
+  <footer class="bottom-ticker">
+    <div class="ticker-label">LATEST UPDATES</div>
+    <div class="ticker-content">
+      <div class="ticker-text" id="tickerText">
+        Election counting in progress • Real-time vote tallies updated after each round verification • Salumber District Election Office 2026.
       </div>
     </div>
   </footer>
 
-  
-  </div>
-
-  <!-- =========================================================================
-       5. JAVASCRIPT BROADCAST CONTROLLER
-       ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    // Standalone local SQLite backend active
+    let masterData = { candidates: [], wards: [], roundVotes: {} };
+    let zpAutoScroll = true;
+    let psAutoScroll = true;
 
-    const PARTY_COLORS = {
-      BJP: '#ea580c',
-      INC: '#0284c7',
-      BAP: '#ca8a04',
-      AAP: '#0d9488',
-      IND: '#64748b'
-    };
+    // Clock
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('liveClock').innerText = now.toLocaleTimeString('en-US', { hour12: true });
+    }, 1000);
 
-    const PS_BLOCKS_LIST = ['Semari', 'Salumbar', 'Lasadiya', 'Geengla', 'Jaisamand', 'Sarada', 'Jhallara'];
-
-    // Official Candidate Registries (For seamless rendering if sheet cells are awaiting votes)
-    const OFFICIAL_ZP_CANDS = {"1": [{"name": "गोविंद कलासुआ", "party": "AAP", "gender": "M", "age": "65", "category": "ST", "wardReservation": "ST"}, {"name": "सुरेश कुमार मीणा", "party": "BAP", "gender": "M", "age": "34", "category": "ST", "wardReservation": "ST"}, {"name": "वाल चन्द्र", "party": "BJP", "gender": "M", "age": "49", "category": "ST", "wardReservation": "ST"}, {"name": "विजय कुमार मीणा", "party": "INC", "gender": "M", "age": "27", "category": "ST", "wardReservation": "ST"}], "2": [{"name": "मनीष कुमार मीणा", "party": "BJP", "gender": "M", "age": "48", "category": "ST", "wardReservation": "ST"}, {"name": "गंगाराम", "party": "INC", "gender": "M", "age": "65", "category": "ST", "wardReservation": "ST"}, {"name": "रंजीत कुमार मीणा", "party": "BAP", "gender": "M", "age": "30", "category": "ST", "wardReservation": "ST"}, {"name": "शंकरलाल मीणा", "party": "AAP", "gender": "M", "age": "32", "category": "ST", "wardReservation": "ST"}, {"name": "रमेश मीणा", "party": "IND", "gender": "M", "age": "49", "category": "ST", "wardReservation": "ST"}], "3": [{"name": "राधा कुमारी मीणा", "party": "BAP", "gender": "F", "age": "32", "category": "ST (Woman)", "wardReservation": "General (Woman)"}, {"name": "मनीता पटेल", "party": "INC", "gender": "F", "age": "29", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "सुशीला", "party": "IND", "gender": "F", "age": "58", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "नर्बदा", "party": "IND", "gender": "F", "age": "34", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "केशु", "party": "BJP", "gender": "F", "age": "37", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}], "4": [{"name": "सोनल", "party": "BJP", "gender": "F", "age": "34", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "अनीता मीणा", "party": "INC", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कल्पना कुमारी मीणा", "party": "BAP", "gender": "F", "age": "29", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "हेमलता मीणा", "party": "IND", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "5": [{"name": "करीना कुमारी मीणा", "party": "BAP", "gender": "F", "age": "27", "category": "ST (Woman)", "wardReservation": "General (Woman)"}, {"name": "रतनी", "party": "BJP", "gender": "F", "age": "41", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "जमना", "party": "INC", "gender": "F", "age": "30", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "बंसती कुमारी पटेल", "party": "IND", "gender": "F", "age": "25", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}], "6": [{"name": "बसन्ती", "party": "INC", "gender": "F", "age": "62", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "रेखादेवी", "party": "BJP", "gender": "F", "age": "27", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "अनुराधा मीणा", "party": "BAP", "gender": "F", "age": "26", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "7": [{"name": "लक्ष्मी", "party": "BAP", "gender": "F", "age": "27", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "बसंती मीणा", "party": "BJP", "gender": "F", "age": "37", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "पुष्पा देवी", "party": "INC", "gender": "F", "age": "39", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "8": [{"name": "कालुलाल", "party": "INC", "gender": "M", "age": "60", "category": "ST", "wardReservation": "ST"}, {"name": "हरिराम", "party": "BJP", "gender": "M", "age": "53", "category": "ST", "wardReservation": "ST"}, {"name": "मोहनलाल", "party": "BAP", "gender": "M", "age": "35", "category": "ST", "wardReservation": "ST"}], "9": [{"name": "गौरांग", "party": "BAP", "gender": "M", "age": "52", "category": "ST", "wardReservation": "ST"}, {"name": "मणीलाल मीणा", "party": "AAP", "gender": "M", "age": "24", "category": "ST", "wardReservation": "ST"}, {"name": "श्रवण कुमार", "party": "BJP", "gender": "M", "age": "45", "category": "ST", "wardReservation": "ST"}, {"name": "लछुलाल", "party": "INC", "gender": "M", "age": "65", "category": "ST", "wardReservation": "ST"}], "10": [{"name": "देवेन्द्र सिंह", "party": "INC", "gender": "M", "age": "53", "category": "General", "wardReservation": "General"}, {"name": "हितेश कुमार सेवक", "party": "BJP", "gender": "M", "age": "34", "category": "General", "wardReservation": "General"}, {"name": "मेगालाल", "party": "IND", "gender": "M", "age": "40", "category": "OBC", "wardReservation": "General"}, {"name": "सुरेन्द्र सिंह चौहान", "party": "IND", "gender": "M", "age": "25", "category": "General", "wardReservation": "General"}, {"name": "रतनलाल", "party": "IND", "gender": "M", "age": "41", "category": "General", "wardReservation": "General"}, {"name": "नरेश कुमार", "party": "BAP", "gender": "M", "age": "35", "category": "ST", "wardReservation": "General"}], "11": [{"name": "रमेश चौधरी", "party": "BAP", "gender": "M", "age": "45", "category": "OBC", "wardReservation": "OBC"}, {"name": "दिनेश कुमार पटेल", "party": "IND", "gender": "M", "age": "34", "category": "OBC", "wardReservation": "OBC"}, {"name": "गोविन्द", "party": "BJP", "gender": "M", "age": "44", "category": "OBC", "wardReservation": "OBC"}, {"name": "दिनेश कुमार", "party": "INC", "gender": "M", "age": "37", "category": "OBC", "wardReservation": "OBC"}, {"name": "अनिल", "party": "IND", "gender": "M", "age": "43", "category": "OBC", "wardReservation": "OBC"}], "12": [{"name": "गेबीलाल दमावत", "party": "INC", "gender": "M", "age": "54", "category": "General", "wardReservation": "General"}, {"name": "देवेन्द्र सिंह", "party": "BJP", "gender": "M", "age": "31", "category": "General", "wardReservation": "General"}, {"name": "लक्ष्मीलाल सालवी", "party": "BAP", "gender": "M", "age": "50", "category": "SC", "wardReservation": "General"}], "13": [{"name": "किशनलाल", "party": "AAP", "gender": "M", "age": "56", "category": "ST", "wardReservation": "ST"}, {"name": "रूपी देवी", "party": "BAP", "gender": "F", "age": "32", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "जया मीणा", "party": "BJP", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "उमेश", "party": "INC", "gender": "M", "age": "41", "category": "ST", "wardReservation": "ST"}, {"name": "जगदीश कुमार मीणा", "party": "IND", "gender": "M", "age": "30", "category": "ST", "wardReservation": "ST"}], "14": [{"name": "निर्मला कुंवर सिसोदिया", "party": "INC", "gender": "F", "age": "25", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "पदमा कुंवर", "party": "BJP", "gender": "F", "age": "44", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "रेखा भील", "party": "BAP", "gender": "F", "age": "26", "category": "ST (Woman)", "wardReservation": "General (Woman)"}], "15": [{"name": "धीरज सालवी", "party": "BAP", "gender": "M", "age": "27", "category": "SC", "wardReservation": "SC"}, {"name": "लोगरलाल", "party": "BJP", "gender": "M", "age": "47", "category": "SC", "wardReservation": "SC"}, {"name": "नाथुलाल", "party": "INC", "gender": "M", "age": "44", "category": "SC", "wardReservation": "SC"}], "16": [{"name": "धुली कुमारी", "party": "INC", "gender": "F", "age": "24", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "केसर कुमारी मीणा", "party": "BJP", "gender": "F", "age": "22", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "विमला", "party": "BAP", "gender": "F", "age": "36", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "17": [{"name": "कालकी", "party": "BAP", "gender": "F", "age": "44", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "गुड्‌डी मीणा", "party": "BJP", "gender": "F", "age": "24", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "लाली कुमारी मीणा", "party": "INC", "gender": "F", "age": "22", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "18": [{"name": "रामलाल", "party": "INC", "gender": "M", "age": "48", "category": "ST", "wardReservation": "ST"}, {"name": "लीला मीणा", "party": "BJP", "gender": "F", "age": "37", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "अणदी लाल", "party": "BAP", "gender": "M", "age": "38", "category": "ST", "wardReservation": "ST"}, {"name": "गौतम लाल मीणा", "party": "AAP", "gender": "M", "age": "33", "category": "ST", "wardReservation": "ST"}], "19": [{"name": "मोगी", "party": "BAP", "gender": "F", "age": "55", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "मोहनी कुमारी मीणा", "party": "INC", "gender": "F", "age": "26", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "सुखना", "party": "BJP", "gender": "F", "age": "31", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "20": [{"name": "हिम्मती मीणा", "party": "BJP", "gender": "F", "age": "21", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "पुष्पा कुमारी मीणा", "party": "INC", "gender": "F", "age": "32", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "रम्बा मीणा", "party": "BAP", "gender": "F", "age": "34", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "21": [{"name": "रमेशचन्द्र मीणा", "party": "BAP", "gender": "M", "age": "33", "category": "ST", "wardReservation": "ST"}, {"name": "रामलाल", "party": "INC", "gender": "M", "age": "50", "category": "ST", "wardReservation": "ST"}, {"name": "नागेन्द्र", "party": "BJP", "gender": "M", "age": "48", "category": "ST", "wardReservation": "ST"}]};
-    const OFFICIAL_PS_CANDS = {"Semari": {"1": [{"name": "बालुराम मीणा", "party": "BAP", "gender": "M", "age": "35", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "विरमल", "party": "BJP", "gender": "M", "age": "39", "category": "ST", "wardReservation": "ST"}, {"name": "धुलेश्वर", "party": "INC", "gender": "M", "age": "63", "category": "ST", "wardReservation": "ST"}, {"name": "मांगीलाल मीणा", "party": "IND", "gender": "M", "age": "36", "category": "ST", "wardReservation": "ST"}, {"name": "नारायणलाल मीणा", "party": "IND", "gender": "M", "age": "56", "category": "ST", "wardReservation": "ST"}], "2": [{"name": "लक्ष्मन सिंह", "party": "INC", "gender": "M", "age": "73", "category": "ST", "wardReservation": "ST"}, {"name": "अमर सिंह", "party": "BJP", "gender": "M", "age": "34", "category": "ST", "wardReservation": "ST"}, {"name": "संजय मीणा", "party": "BAP", "gender": "M", "age": "24", "category": "ST", "wardReservation": "ST"}], "3": [{"name": "माया मीना", "party": "BAP", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "प्रीती मीणा", "party": "BJP", "gender": "F", "age": "39", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "बबली", "party": "INC", "gender": "F", "age": "56", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "4": [{"name": "रेखा मीणा", "party": "IND", "gender": "F", "age": "33", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "कुसुमलता मीणा", "party": "IND", "gender": "F", "age": "33", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "ओम प्रकाश मीणा", "party": "BAP", "gender": "M", "age": "27", "category": "ST", "wardReservation": "ST"}, {"name": "अरुणा रोत", "party": "BJP", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "कालूराम", "party": "INC", "gender": "M", "age": "59", "category": "ST", "wardReservation": "ST"}], "5": [{"name": "गौतम लाल पटेल", "party": "BJP", "gender": "M", "age": "31", "category": "OBC", "wardReservation": "General"}, {"name": "धनपाल मीणा", "party": "BAP", "gender": "M", "age": "34", "category": "ST", "wardReservation": "General"}, {"name": "मोडीलाल", "party": "IND", "gender": "M", "age": "71", "category": "OBC", "wardReservation": "General"}, {"name": "रमेश कुमार", "party": "INC", "gender": "M", "age": "33", "category": "OBC", "wardReservation": "General"}], "6": [{"name": "योगेश", "party": "INC", "gender": "M", "age": "27", "category": "General", "wardReservation": "General"}, {"name": "महेन्द्र कुमार भाम्बी", "party": "IND", "gender": "M", "age": "29", "category": "SC", "wardReservation": "General"}, {"name": "प्रकाश मीणा", "party": "BAP", "gender": "M", "age": "27", "category": "ST", "wardReservation": "General"}, {"name": "निर्भय सिंह राठौड", "party": "BJP", "gender": "M", "age": "43", "category": "General", "wardReservation": "General"}], "7": [{"name": "ललिता पटेल", "party": "BJP", "gender": "F", "age": "27", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "वेलु", "party": "IND", "gender": "F", "age": "49", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "दुर्गा", "party": "INC", "gender": "F", "age": "35", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}], "8": [{"name": "तारा देवी पटेल", "party": "IND", "gender": "F", "age": "34", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "रवीना सुथार", "party": "INC", "gender": "F", "age": "23", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "लता", "party": "IND", "gender": "F", "age": "52", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "लता जैन", "party": "BJP", "gender": "F", "age": "57", "category": "General (Woman)", "wardReservation": "General (Woman)"}], "9": [{"name": "कौशल्या", "party": "BAP", "gender": "F", "age": "30", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "हिना कुमारी डिन्डोर", "party": "BJP", "gender": "F", "age": "25", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "प्रियंका", "party": "INC", "gender": "F", "age": "31", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "10": [{"name": "पार्वती देवी", "party": "BJP", "gender": "F", "age": "64", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "सेजन मीना", "party": "BAP", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "राधा देवी", "party": "INC", "gender": "F", "age": "33", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "11": [{"name": "वनराज सिंह", "party": "IND", "gender": "M", "age": "28", "category": "General", "wardReservation": "General"}, {"name": "विजय कुमार मीणा", "party": "BAP", "gender": "M", "age": "30", "category": "ST", "wardReservation": "General"}, {"name": "रतन सिह", "party": "BJP", "gender": "M", "age": "60", "category": "General", "wardReservation": "General"}, {"name": "पंकज", "party": "INC", "gender": "M", "age": "41", "category": "General", "wardReservation": "General"}], "12": [{"name": "हीरालाल मीना", "party": "BJP", "gender": "M", "age": "43", "category": "ST", "wardReservation": "ST"}, {"name": "धन्नु", "party": "BAP", "gender": "F", "age": "27", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "शान्तिलाल", "party": "IND", "gender": "M", "age": "39", "category": "ST", "wardReservation": "ST"}, {"name": "बाबुलाल", "party": "INC", "gender": "M", "age": "43", "category": "ST", "wardReservation": "ST"}], "13": [{"name": "गीता कुमारी मीना", "party": "BAP", "gender": "F", "age": "21", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "लक्ष्मण", "party": "BJP", "gender": "M", "age": "48", "category": "ST", "wardReservation": "ST"}, {"name": "किरण मीणा", "party": "INC", "gender": "M", "age": "37", "category": "ST", "wardReservation": "ST"}], "14": [{"name": "लीला देवी", "party": "BJP", "gender": "F", "age": "38", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "शान्ती देवी मीणा", "party": "BAP", "gender": "F", "age": "31", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "पानू", "party": "INC", "gender": "F", "age": "43", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "15": [{"name": "रीना देवी", "party": "BAP", "gender": "F", "age": "35", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "राजु देवी", "party": "BJP", "gender": "F", "age": "34", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "करुणा", "party": "INC", "gender": "F", "age": "42", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}]}, "Salumbar": {"1": [{"name": "केसर कुमारी मीणा", "party": "BAP", "gender": "F", "age": "26", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "नन्दू देवी", "party": "BJP", "gender": "F", "age": "31", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "दीपिका मीना", "party": "INC", "gender": "F", "age": "31", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "2": [{"name": "गोपाल सिंह", "party": "BJP", "gender": "M", "age": "29", "category": "General", "wardReservation": "General"}, {"name": "हितेश कुमार मीणा", "party": "BAP", "gender": "M", "age": "29", "category": "ST", "wardReservation": "General"}, {"name": "नाहर सिंह", "party": "INC", "gender": "M", "age": "58", "category": "General", "wardReservation": "General"}], "3": [{"name": "भगवती लाल सुथार", "party": "INC", "gender": "M", "age": "43", "category": "OBC", "wardReservation": "OBC"}, {"name": "लीना सुथार", "party": "BAP", "gender": "F", "age": "32", "category": "OBC (Woman)", "wardReservation": "OBC"}, {"name": "प्रकाश", "party": "BJP", "gender": "M", "age": "37", "category": "OBC", "wardReservation": "OBC"}], "4": [{"name": "रूपी मीणा", "party": "BAP", "gender": "F", "age": "45", "category": "ST (Woman)", "wardReservation": "General (Woman)"}, {"name": "लीला कुंवर", "party": "BJP", "gender": "F", "age": "54", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "रंजना कुंवर", "party": "INC", "gender": "F", "age": "47", "category": "General (Woman)", "wardReservation": "General (Woman)"}], "5": [{"name": "प्रताप सिंह", "party": "INC", "gender": "M", "age": "42", "category": "General", "wardReservation": "General"}, {"name": "प्रदीप कुमार मेहता", "party": "IND", "gender": "M", "age": "33", "category": "General", "wardReservation": "General"}, {"name": "विजयमाला", "party": "AAP", "gender": "F", "age": "65", "category": "General", "wardReservation": "General"}, {"name": "जगदीश कुमार मीणा", "party": "BAP", "gender": "M", "age": "31", "category": "ST", "wardReservation": "General"}, {"name": "अर्जुन मेहता", "party": "BJP", "gender": "M", "age": "36", "category": "General", "wardReservation": "General"}], "6": [{"name": "बंशती कुमारी मीणा", "party": "BAP", "gender": "F", "age": "27", "category": "ST (Woman)", "wardReservation": "General (Woman)"}, {"name": "भमरी", "party": "BJP", "gender": "F", "age": "42", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "लाली", "party": "INC", "gender": "F", "age": "41", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "नाथी कंवर", "party": "IND", "gender": "F", "age": "33", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "कंकू", "party": "IND", "gender": "F", "age": "63", "category": "General (Woman)", "wardReservation": "General (Woman)"}], "7": [{"name": "नर्बदा", "party": "INC", "gender": "F", "age": "33", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "सविता", "party": "BJP", "gender": "F", "age": "38", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "मोती", "party": "BAP", "gender": "F", "age": "38", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "8": [{"name": "जितेन्द्र कुमार मीणा", "party": "BAP", "gender": "M", "age": "22", "category": "ST", "wardReservation": "ST"}, {"name": "भेरा", "party": "BJP", "gender": "M", "age": "58", "category": "ST", "wardReservation": "ST"}, {"name": "मेघराज मीणा", "party": "INC", "gender": "M", "age": "26", "category": "ST", "wardReservation": "ST"}], "9": [{"name": "कमला कुमारी", "party": "BJP", "gender": "F", "age": "25", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "केसरी", "party": "BAP", "gender": "F", "age": "39", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कूरकी", "party": "INC", "gender": "F", "age": "52", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "10": [{"name": "भैरुलाल", "party": "INC", "gender": "M", "age": "63", "category": "SC", "wardReservation": "SC"}, {"name": "कमलेश", "party": "BAP", "gender": "M", "age": "28", "category": "SC", "wardReservation": "SC"}, {"name": "नारायण", "party": "BJP", "gender": "M", "age": "58", "category": "SC", "wardReservation": "SC"}], "11": [{"name": "निर्मला", "party": "BJP", "gender": "F", "age": "40", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "रेखा सुथार", "party": "BAP", "gender": "F", "age": "36", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "कनकलता", "party": "INC", "gender": "F", "age": "41", "category": "General (Woman)", "wardReservation": "General (Woman)"}], "12": [{"name": "कोदरलाल", "party": "INC", "gender": "M", "age": "65", "category": "ST", "wardReservation": "ST"}, {"name": "हेमराज", "party": "BAP", "gender": "M", "age": "30", "category": "ST", "wardReservation": "ST"}, {"name": "पन्नालाल", "party": "BJP", "gender": "M", "age": "40", "category": "ST", "wardReservation": "ST"}], "13": [{"name": "गोतम लाल", "party": "BJP", "gender": "M", "age": "36", "category": "ST", "wardReservation": "ST"}, {"name": "गौतमलाल मीणा", "party": "BAP", "gender": "M", "age": "28", "category": "ST", "wardReservation": "ST"}, {"name": "अशोक कुमार मीणा", "party": "INC", "gender": "M", "age": "56", "category": "ST", "wardReservation": "ST"}], "14": [{"name": "हेमलता कटारा", "party": "BAP", "gender": "F", "age": "27", "category": "ST (Woman)", "wardReservation": "General (Woman)"}, {"name": "केशी", "party": "BJP", "gender": "F", "age": "42", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "दीपिका कुंवर चुन्डावत", "party": "INC", "gender": "F", "age": "27", "category": "General (Woman)", "wardReservation": "General (Woman)"}], "15": [{"name": "मोहित", "party": "BJP", "gender": "M", "age": "35", "category": "ST", "wardReservation": "ST"}, {"name": "नाथूलाल  मीणा", "party": "BAP", "gender": "M", "age": "26", "category": "ST", "wardReservation": "ST"}, {"name": "मन्‍ना लाल", "party": "INC", "gender": "M", "age": "56", "category": "ST", "wardReservation": "ST"}]}, "Lasadiya": {"1": [{"name": "दुर्गा कुमारी मीणा", "party": "BAP", "gender": "F", "age": "21", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "शंकरी  मीणा", "party": "BJP", "gender": "F", "age": "43", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "भंवरी", "party": "INC", "gender": "F", "age": "36", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "2": [{"name": "धापु देवी डाँगी", "party": "BJP", "gender": "F", "age": "38", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "लच्छु", "party": "INC", "gender": "F", "age": "69", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "प्रेमी", "party": "BAP", "gender": "F", "age": "32", "category": "ST (Woman)", "wardReservation": "General (Woman)"}], "3": [{"name": "आछूडी कुमारी मीणा", "party": "BAP", "gender": "F", "age": "21", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "शांति कुमारी मीणा", "party": "BJP", "gender": "F", "age": "26", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कानकी", "party": "INC", "gender": "F", "age": "33", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "4": [{"name": "भगवान लाल", "party": "INC", "gender": "M", "age": "55", "category": "ST", "wardReservation": "ST"}, {"name": "लोगर लाल मीणा", "party": "IND", "gender": "M", "age": "59", "category": "ST", "wardReservation": "ST"}, {"name": "डाया  मीणा", "party": "BJP", "gender": "M", "age": "38", "category": "ST", "wardReservation": "ST"}, {"name": "हिरा", "party": "BAP", "gender": "M", "age": "36", "category": "ST", "wardReservation": "ST"}], "5": [{"name": "भेरू लाल", "party": "BAP", "gender": "M", "age": "27", "category": "ST", "wardReservation": "ST"}, {"name": "भेरा उर्फ़ भेरुलाल मीणा", "party": "BJP", "gender": "M", "age": "48", "category": "ST", "wardReservation": "ST"}, {"name": "खेमा", "party": "INC", "gender": "M", "age": "41", "category": "ST", "wardReservation": "ST"}], "6": [{"name": "लक्ष्मी", "party": "INC", "gender": "F", "age": "40", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "चोखली मीणा", "party": "BJP", "gender": "F", "age": "43", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कमली", "party": "BAP", "gender": "F", "age": "43", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कमली", "party": "BAP", "gender": "F", "age": "43", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "7": [{"name": "गंगा देवी मीणा", "party": "BAP", "gender": "F", "age": "30", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "मीरा", "party": "BJP", "gender": "F", "age": "26", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "भगली", "party": "INC", "gender": "F", "age": "51", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "8": [{"name": "नारायणी", "party": "INC", "gender": "F", "age": "38", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कमली मीणा", "party": "BJP", "gender": "F", "age": "49", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "रामकन्या", "party": "BAP", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "9": [{"name": "हीराबाई मीणा", "party": "BJP", "gender": "F", "age": "57", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "देवी लाल", "party": "BAP", "gender": "M", "age": "56", "category": "ST", "wardReservation": "ST"}, {"name": "लक्ष्मण", "party": "INC", "gender": "M", "age": "55", "category": "ST", "wardReservation": "ST"}], "10": [{"name": "केशरी", "party": "BJP", "gender": "F", "age": "53", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "रामा", "party": "BAP", "gender": "M", "age": "44", "category": "ST", "wardReservation": "ST"}, {"name": "प्रभु", "party": "INC", "gender": "M", "age": "53", "category": "ST", "wardReservation": "ST"}], "11": [{"name": "हेमला", "party": "INC", "gender": "M", "age": "48", "category": "ST", "wardReservation": "ST"}, {"name": "वरदीचंद", "party": "IND", "gender": "M", "age": "57", "category": "ST", "wardReservation": "ST"}, {"name": "ऊंकार लाल मीणा", "party": "BAP", "gender": "M", "age": "26", "category": "ST", "wardReservation": "ST"}, {"name": "प्रकाश उर्फ़ प्रकाश चंद मीणा", "party": "BJP", "gender": "M", "age": "34", "category": "ST", "wardReservation": "ST"}], "12": [{"name": "हकरी बाई", "party": "BJP", "gender": "F", "age": "40", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "चुनकी", "party": "INC", "gender": "F", "age": "35", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "लोगरी कुमार मीणा", "party": "BAP", "gender": "F", "age": "28", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "13": [{"name": "कालु लाल", "party": "BAP", "gender": "M", "age": "29", "category": "ST", "wardReservation": "ST"}, {"name": "उदेलाल  उर्फ  उदयलाल", "party": "BJP", "gender": "M", "age": "39", "category": "ST", "wardReservation": "ST"}, {"name": "श्रवण", "party": "INC", "gender": "M", "age": "35", "category": "ST", "wardReservation": "ST"}], "14": [{"name": "प्रदीप कुमार जैन", "party": "INC", "gender": "M", "age": "48", "category": "General", "wardReservation": "General"}, {"name": "प्रदीप कुमार जैन", "party": "INC", "gender": "M", "age": "48", "category": "General", "wardReservation": "General"}, {"name": "धनराज पटेल", "party": "BJP", "gender": "M", "age": "43", "category": "OBC (Woman)", "wardReservation": "General"}, {"name": "लिम्बा राम", "party": "BAP", "gender": "M", "age": "32", "category": "ST", "wardReservation": "General"}], "15": [{"name": "वालचन्द", "party": "BAP", "gender": "M", "age": "32", "category": "ST", "wardReservation": "ST"}, {"name": "नारायण उर्फ़ नारायण लाल मीणा", "party": "BJP", "gender": "M", "age": "37", "category": "ST", "wardReservation": "ST"}, {"name": "कालू", "party": "IND", "gender": "M", "age": "43", "category": "ST", "wardReservation": "ST"}, {"name": "रामा", "party": "INC", "gender": "M", "age": "58", "category": "ST", "wardReservation": "ST"}]}, "Geengla": {"1": [{"name": "मीनादेवी", "party": "BJP", "gender": "F", "age": "33", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "प्रतापी बाई", "party": "INC", "gender": "F", "age": "69", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "2": [{"name": "मोती", "party": "BJP", "gender": "F", "age": "51", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "प्रेमी बाई", "party": "INC", "gender": "F", "age": "32", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}], "3": [{"name": "गौतम लाल", "party": "BJP", "gender": "M", "age": "32", "category": "ST", "wardReservation": "ST"}, {"name": "सुरेश कुमार भील", "party": "BAP", "gender": "M", "age": "24", "category": "ST", "wardReservation": "ST"}, {"name": "वालाराम तावड", "party": "INC", "gender": "M", "age": "79", "category": "ST", "wardReservation": "ST"}], "4": [{"name": "महेंद्र कुमार पटेल", "party": "BJP", "gender": "M", "age": "30", "category": "OBC", "wardReservation": "OBC"}, {"name": "भेरू लाल", "party": "IND", "gender": "M", "age": "39", "category": "OBC", "wardReservation": "OBC"}, {"name": "ललित पटेल", "party": "INC", "gender": "M", "age": "45", "category": "OBC", "wardReservation": "OBC"}], "5": [{"name": "लक्ष्मी कुंवर", "party": "INC", "gender": "F", "age": "53", "category": "General (Woman)", "wardReservation": "General (Woman)"}, {"name": "अनिता कुमारी मीना", "party": "BAP", "gender": "F", "age": "23", "category": "ST (Woman)", "wardReservation": "General (Woman)"}, {"name": "गुलाब कुंवर", "party": "BJP", "gender": "F", "age": "54", "category": "General (Woman)", "wardReservation": "General (Woman)"}], "6": [{"name": "गोपाल सिंह", "party": "INC", "gender": "M", "age": "36", "category": "General", "wardReservation": "General"}, {"name": "रघुवीर सिंह सिसोदिया", "party": "BJP", "gender": "M", "age": "43", "category": "General", "wardReservation": "General"}], "7": [{"name": "रतन लाल", "party": "BJP", "gender": "M", "age": "46", "category": "SC", "wardReservation": "SC"}, {"name": "प्रकाश चन्द्र मेघवाल", "party": "BAP", "gender": "M", "age": "49", "category": "SC", "wardReservation": "SC"}, {"name": "गणपत लाल", "party": "INC", "gender": "M", "age": "38", "category": "SC", "wardReservation": "SC"}], "8": [{"name": "शान्ता बाई", "party": "BJP", "gender": "F", "age": "36", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "शान्ति", "party": "INC", "gender": "F", "age": "32", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "शंकरी", "party": "BAP", "gender": "F", "age": "40", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "संगीता मीणा", "party": "IND", "gender": "F", "age": "32", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "9": [{"name": "रमेश लाल", "party": "BAP", "gender": "M", "age": "40", "category": "ST", "wardReservation": "ST"}, {"name": "देवा", "party": "BJP", "gender": "M", "age": "65", "category": "ST", "wardReservation": "ST"}, {"name": "गंगा देवी", "party": "INC", "gender": "F", "age": "58", "category": "ST (Woman)", "wardReservation": "ST"}], "10": [{"name": "पन्ना लाल", "party": "INC", "gender": "M", "age": "42", "category": "General", "wardReservation": "General"}, {"name": "खुशपाल सिंह", "party": "BAP", "gender": "M", "age": "33", "category": "General", "wardReservation": "General"}, {"name": "प्रकाशचन्द", "party": "BJP", "gender": "M", "age": "34", "category": "OBC", "wardReservation": "General"}], "11": [{"name": "गंगा मीणा", "party": "BAP", "gender": "F", "age": "22", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कैलाशी देवी", "party": "INC", "gender": "F", "age": "41", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कुरी", "party": "BJP", "gender": "F", "age": "53", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "12": [{"name": "रूपा", "party": "BJP", "gender": "M", "age": "45", "category": "ST", "wardReservation": "ST"}, {"name": "किशन लाल", "party": "INC", "gender": "M", "age": "53", "category": "ST", "wardReservation": "ST"}, {"name": "प्रकाश चन्द्र मीणा", "party": "BAP", "gender": "M", "age": "40", "category": "ST", "wardReservation": "ST"}], "13": [{"name": "रमेश लाल मीणा", "party": "BAP", "gender": "M", "age": "22", "category": "ST", "wardReservation": "ST"}, {"name": "प्रेमलता", "party": "BJP", "gender": "F", "age": "30", "category": "ST (Woman)", "wardReservation": "ST"}, {"name": "मोड़ीलाल", "party": "INC", "gender": "M", "age": "44", "category": "ST", "wardReservation": "ST"}], "14": [{"name": "उषा कुमारी मीणा", "party": "INC", "gender": "F", "age": "23", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "पार्वती", "party": "BJP", "gender": "F", "age": "41", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}, {"name": "कमला कुमारी मीणा", "party": "BAP", "gender": "F", "age": "21", "category": "ST (Woman)", "wardReservation": "ST (Woman)"}], "15": [{"name": "हीरकी", "party": "BAP", "gender": "F", "age": "56", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "वेलू बाई", "party": "BJP", "gender": "F", "age": "41", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}, {"name": "शंकरी पटेल", "party": "INC", "gender": "F", "age": "30", "category": "OBC (Woman)", "wardReservation": "General (Woman)"}]}, "Jaisamand": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": [], "11": [], "12": [], "13": [], "14": [], "15": []}, "Sarada": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": [], "11": [], "12": [], "13": [], "14": [], "15": []}, "Jhallara": {"1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [], "8": [], "9": [], "10": [], "11": [], "12": [], "13": [], "14": [], "15": []}};
-
-    let electionState = null;
-    let currentZpIndex = 0;
-    let currentPsBlock = 'Semari';
-    let currentPsWardIndex = 0;
-    let audioCtx = null;
-    let lastDeclaredCount = 0;
-
-    // Initialize Real-time WebSocket + Auto-fallback Poller
-    window.addEventListener('DOMContentLoaded', () => {
-      buildDefaultState();
-      renderBroadcastDashboard();
-      initFilterDropdowns();
-
-      initRealtimeConnection();
-
-      // Auto-rotation every 7 seconds
-      setInterval(rotateSpotlights, 7000);
+    // Initial Load
+    window.addEventListener('DOMContentLoaded', async () => {
+      populateFilterOptions();
+      await fetchMasterData();
+      initWebSocket();
+      startAutoScrollLoop();
     });
 
-    let ws = null;
-    function initRealtimeConnection() {
-      // Connect to fast local WebSocket if hosted, otherwise poll /api/state
-      if (window.location.protocol.startsWith('http')) {
-        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
-
-        try {
-          ws = new WebSocket(wsUrl);
-          ws.onopen = () => {
-            document.getElementById('syncStatus').innerText = '● Live (WebSocket Connected)';
-            document.getElementById('syncStatus').style.color = '#10b981';
-          };
-          ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data && data.status === 'success') {
-              handleNewState(data);
-            }
-          };
-          ws.onerror = () => { fallbackPolling(); };
-          ws.onclose = () => {
-            setTimeout(initRealtimeConnection, 3000);
-          };
-        } catch (e) {
-          fallbackPolling();
-        }
-      } else if (API_URL) {
-        fetchFromGoogleSheet();
-        setInterval(fetchFromGoogleSheet, 3000);
-      } else {
-        document.getElementById('syncStatus').innerText = '● Standalone Preview';
-      }
-    }
-
-    function fallbackPolling() {
-      document.getElementById('syncStatus').innerText = '● Live (HTTP Fallback)';
-      fetch('/api/state')
-        .then(r => r.json())
-        .then(data => handleNewState(data))
-        .catch(() => {});
-      setInterval(() => {
-        fetch('/api/state')
-          .then(r => r.json())
-          .then(data => handleNewState(data))
-          .catch(() => {});
-      }, 2500);
-    }
-
-    function handleNewState(data) {
-      const curDeclared = (data.summary ? data.summary.zpDeclaredWards : 0) + (data.summary ? data.summary.psDeclaredWards : 0);
-      if (lastDeclaredCount > 0 && curDeclared > lastDeclaredCount) {
-        playVictoryChime();
-      }
-      lastDeclaredCount = curDeclared;
-
-      electionState = data;
-      document.getElementById('syncStatus').innerText = '● Live • Updated ' + (data.timestamp || '');
-      renderBroadcastDashboard();
-      initFilterDropdowns();
-    }
-
-    function playVictoryChime() {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const now = audioCtx.currentTime;
-        [523.25, 659.25, 783.99, 1046.50].forEach((f, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(f, now + (idx * 0.12));
-          gain.gain.setValueAtTime(0.25, now + (idx * 0.12));
-          gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.12) + 0.6);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now + (idx * 0.12));
-          osc.stop(now + (idx * 0.12) + 0.65);
-        });
-      } catch (e) {}
-    }
-
-    async function fetchFromGoogleSheet() {
-      if (!API_URL) return;
-      try {
-        const resp = await fetch(API_URL + (API_URL.includes('?') ? '&' : '?') + 'nocache=' + Date.now());
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        const data = await resp.json();
-        
-        if (data && data.status === 'success') {
-          const curDeclared = (data.summary ? data.summary.zpDeclaredWards : 0) + (data.summary ? data.summary.psDeclaredWards : 0);
-          if (lastDeclaredCount > 0 && curDeclared > lastDeclaredCount) {
-            playVictoryChime();
-          }
-          lastDeclaredCount = curDeclared;
-
-          // Merge live data with official master ensuring all 21 ZP and all PS wards exist!
-          mergeLiveDataWithMaster(data);
-          document.getElementById('syncStatus').innerText = '● Live • Updated ' + (data.timestamp || '');
-          renderBroadcastDashboard();
-      initFilterDropdowns();
-        }
-      } catch (err) {
-        document.getElementById('syncStatus').innerText = '⚠️ Reconnecting to Sheet...';
-      }
-    }
-
-    function buildDefaultState() {
-      const zpWards = [];
+    function populateFilterOptions() {
+      const zpSel = document.getElementById('zpWardFilter');
       for (let i = 1; i <= 21; i++) {
-        const cands = OFFICIAL_ZP_CANDS[String(i)] || [
-          { name: `प्रत्याशी 1 (वार्ड ${i})`, party: 'BAP' },
-          { name: `प्रत्याशी 2 (वार्ड ${i})`, party: 'BJP' }
-        ];
-        const c1 = cands[0];
-        const c2 = cands[1] || { name: 'निर्दलीय', party: 'IND' };
-        zpWards.push({
-          wardNo: i,
-          wardNameHindi: `वार्ड ${i}`,
-          blockName: getBlockForZPWard(i),
-          reservation: 'ST',
-          totalBooths: 25,
-          countingTables: 5,
-          maxRounds: 5,
-          currentRound: 0,
-          roundProgressPct: 0,
-          status: 'AWAITING',
-          winner: { name: c1.name, party: c1.party, totalVotes: 0, pbVotes: 0 },
-          runnerUp: { name: c2.name, party: c2.party, totalVotes: 0, pbVotes: 0 },
-          margin: 0,
-          roundTable: [],
-          candidates: cands
-        });
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `Ward ${i}`;
+        zpSel.appendChild(opt);
       }
+    }
 
-      const psWards = [];
-      PS_BLOCKS_LIST.forEach(b => {
-        for (let w = 1; w <= 15; w++) {
-          const cands = (OFFICIAL_PS_CANDS[b] && OFFICIAL_PS_CANDS[b][String(w)] && OFFICIAL_PS_CANDS[b][String(w)].length >= 1)
-            ? OFFICIAL_PS_CANDS[b][String(w)]
-            : [
-                { name: `${b} प्रत्याशी 1`, party: 'BAP' },
-                { name: `${b} प्रत्याशी 2`, party: 'BJP' }
-              ];
-          const c1 = cands[0];
-          const c2 = cands[1] || { name: 'निर्दलीय', party: 'IND' };
-          psWards.push({
-            blockName: b,
-            wardNo: w,
-            wardNameHindi: `${b} वार्ड ${w}`,
-            reservation: 'ST',
-            totalBooths: 5,
-            countingTables: 5,
-            maxRounds: 2,
-            currentRound: 0,
-            roundProgressPct: 0,
-            status: 'AWAITING',
-            winner: { name: c1.name, party: c1.party, totalVotes: 0 },
-            runnerUp: { name: c2.name, party: c2.party, totalVotes: 0 },
-            margin: 0,
-            roundTable: [],
-            candidates: cands
-          });
+    function onPsBlockFilterChanged() {
+      const blk = document.getElementById('psBlockFilter').value;
+      const psWSel = document.getElementById('psWardFilter');
+      psWSel.innerHTML = '<option value="ALL">All Wards</option>';
+      if (blk !== 'ALL') {
+        for (let i = 1; i <= 15; i++) {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = `Ward ${i}`;
+          psWSel.appendChild(opt);
         }
-      });
+      }
+      renderCards();
+    }
 
-      electionState = {
-        tallies: {
-          zp: { BJP: { lead: 0, won: 0 }, INC: { lead: 0, won: 0 }, BAP: { lead: 0, won: 0 }, AAP: { lead: 0, won: 0 }, IND: { lead: 0, won: 0 } },
-          ps: { BJP: { lead: 0, won: 0 }, INC: { lead: 0, won: 0 }, BAP: { lead: 0, won: 0 }, AAP: { lead: 0, won: 0 }, IND: { lead: 0, won: 0 } }
-        },
-        zp: { wards: zpWards, declaredCount: 0 },
-        ps: { wards: psWards, declaredCount: 0 },
-        ticker: ['सलूंबर जिला परिषद एवं 7 पंचायत समितियों के मतगणना परिणाम लाइव • मतगणना जारी...']
+    async function fetchMasterData() {
+      try {
+        const resp = await fetch('/api/all_candidates_master');
+        if (resp.ok) {
+          masterData = await resp.json();
+          renderCards();
+          updateSummaryTallies();
+        }
+      } catch (e) {
+        console.error('Fetch master data error:', e);
+      }
+    }
+
+    // WebSocket
+    function initWebSocket() {
+      const loc = window.location;
+      const wsUrl = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host + '/ws';
+      const ws = new WebSocket(wsUrl);
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'INITIAL_STATE' || data.type === 'FULL_UPDATE' || data.type === 'ROUND_UPDATE') {
+            fetchMasterData();
+          }
+        } catch (e) {}
+      };
+
+      ws.onclose = () => {
+        setTimeout(initWebSocket, 3000);
       };
     }
 
-    function mergeLiveDataWithMaster(liveData) {
-      if (!liveData) return;
-      if (liveData.tallies) electionState.tallies = liveData.tallies;
-      if (liveData.ticker) electionState.ticker = liveData.ticker;
+    // Render Cards
+    function renderCards() {
+      const zpContainer = document.getElementById('zpCardsContainer');
+      const psContainer = document.getElementById('psCardsContainer');
 
-      // Merge ZP Wards
-      if (liveData.zp && liveData.zp.wards) {
-        const liveMap = {};
-        liveData.zp.wards.forEach(w => { liveMap[w.wardNo] = w; });
-        electionState.zp.wards.forEach((w, idx) => {
-          if (liveMap[w.wardNo]) {
-            // Recover official party if live data party was blank/IND
-            const lw = liveMap[w.wardNo];
-            if ((!lw.winner.party || lw.winner.party === 'IND') && w.candidates && w.candidates[0]) {
-              const matched = w.candidates.find(c => c.name === lw.winner.name);
-              if (matched) lw.winner.party = matched.party;
-            }
-            electionState.zp.wards[idx] = lw;
-          }
-        });
-        electionState.zp.declaredCount = liveData.zp.declaredCount || 0;
-      }
+      const zpFilter = document.getElementById('zpWardFilter').value;
+      const psBlkFilter = document.getElementById('psBlockFilter').value;
+      const psWFilter = document.getElementById('psWardFilter').value;
 
-      // Merge PS Wards
-      if (liveData.ps && liveData.ps.wards) {
-        const livePsMap = {};
-        liveData.ps.wards.forEach(w => { livePsMap[`${w.blockName}_${w.wardNo}`] = w; });
-        electionState.ps.wards.forEach((w, idx) => {
-          const key = `${w.blockName}_${w.wardNo}`;
-          if (livePsMap[key]) {
-            electionState.ps.wards[idx] = livePsMap[key];
-          }
-        });
-        electionState.ps.declaredCount = liveData.ps.declaredCount || 0;
-      }
+      // Render ZP
+      const zpWards = masterData.wards.filter(w => w.category === 'ZP' && (zpFilter === 'ALL' || w.ward_no == zpFilter));
+      zpWards.sort((a, b) => a.ward_no - b.ward_no);
+
+      zpContainer.innerHTML = '';
+      zpWards.forEach(w => {
+        zpContainer.appendChild(createWardCardElement(w));
+      });
+
+      // Render PS
+      const psWards = masterData.wards.filter(w => {
+        if (w.category !== 'PS') return false;
+        if (psBlkFilter !== 'ALL' && w.block_name !== psBlkFilter) return false;
+        if (psWFilter !== 'ALL' && w.ward_no != psWFilter) return false;
+        return true;
+      });
+      psWards.sort((a, b) => a.block_name.localeCompare(b.block_name) || a.ward_no - b.ward_no);
+
+      psContainer.innerHTML = '';
+      psWards.forEach(w => {
+        psContainer.appendChild(createWardCardElement(w));
+      });
     }
 
-    function renderBroadcastDashboard() {
-      if (!electionState) return;
+    function createWardCardElement(ward) {
+      const isDeclared = ward.status === 'DECLARED';
+      const cands = masterData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
 
-      renderScoreboards();
-      renderZpSpotlight();
-      renderZpMatrix();
-      renderPsBlockTabs();
-      renderPsSpotlight();
-      renderPsMatrix();
-      renderTicker();
-    }
+      // Compute votes
+      const roundsSet = new Set();
+      const candTotals = cands.map(c => {
+        let sum = 0;
+        let lastRoundVotes = 0;
+        const vObj = masterData.roundVotes[c.id] || {};
+        for (const [rKey, count] of Object.entries(vObj)) {
+          if (rKey.startsWith('R')) {
+            sum += (count || 0);
+            roundsSet.add(rKey);
+            lastRoundVotes = count || 0;
+          }
+        }
+        return { ...c, totalVotes: sum, lastRoundVotes };
+      });
 
-    function renderScoreboards() {
-      const zpT = electionState.tallies.zp || {};
-      const psT = electionState.tallies.ps || {};
+      candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
 
-      document.getElementById('zpDeclaredHeader').innerText = `${electionState.zp.declaredCount || 0}/21 DECLARED`;
-      document.getElementById('psDeclaredHeader').innerText = `${electionState.ps.declaredCount || 0}/105 DECLARED`;
+      const hasVotes = candTotals.some(c => c.totalVotes > 0);
+      const isCounting = hasVotes && !isDeclared;
+      const statusKey = isDeclared ? 'DECLARED' : (isCounting ? 'COUNTING' : 'PENDING');
+      const statusLabel = isDeclared ? 'WINNER DECLARED' : (isCounting ? `ROUND ${roundsSet.size} OF ${ward.max_rounds}` : 'AWAITING VOTES');
 
-      function renderChips(tally) {
-        const pList = ['BJP', 'INC', 'BAP', 'AAP', 'IND'];
-        return pList.map(p => {
-          const d = tally[p] || { won: 0, lead: 0 };
-          const total = (d.won || 0) + (d.lead || 0);
-          return `
-            <div class="party-chip chip-${p.toLowerCase()}">
-              <span class="chip-code">${p}</span>
-              <span class="chip-number font-num">${total}</span>
-              <span class="chip-sub">${d.won || 0}W + ${d.lead || 0}L</span>
-            </div>
+      const card = document.createElement('div');
+      card.className = `ward-card ${isDeclared ? 'declared' : (isCounting ? 'counting' : '')}`;
+
+      const leader = candTotals[0];
+      const runnerUp = candTotals[1];
+      const margin = leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0);
+
+      let leaderHtml = '';
+      if (isDeclared && leader && leader.totalVotes > 0) {
+        leaderHtml = `
+          <div class="leader-strip declared-winner">
+            <span>🏆 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) WON</span>
+            <span>Margin: +${margin} votes</span>
+          </div>
+        `;
+      } else if (isCounting && leader && leader.totalVotes > 0) {
+        leaderHtml = `
+          <div class="leader-strip">
+            <span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) Leading</span>
+            <span>Margin: +${margin} votes</span>
+          </div>
+        `;
+      }
+
+      let rowsHtml = '';
+      if (candTotals.length === 0) {
+        rowsHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-dim); padding:10px;">Contestants awaiting finalization</td></tr>`;
+      } else {
+        candTotals.forEach((c, idx) => {
+          const isLeader = idx === 0 && c.totalVotes > 0;
+          rowsHtml += `
+            <tr class="${isLeader ? 'row-leader' : ''}">
+              <td style="font-weight:700; font-family:'Rajdhani',sans-serif; width:30px;">#${c.ballot_no || idx+1}</td>
+              <td style="font-weight:${isLeader ? '800' : '600'};">${c.name_hindi}</td>
+              <td style="width:60px;"><span class="party-tag pt-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
+              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:800; color:${isLeader ? 'var(--primary)' : 'inherit'}; width:80px;">${c.totalVotes}</td>
+            </tr>
           `;
-        }).join('');
+        });
       }
 
-      document.getElementById('zpPartyTallyGrid').innerHTML = renderChips(zpT);
-      document.getElementById('psPartyTallyGrid').innerHTML = renderChips(psT);
-    }
+      const displayName = ward.category === 'ZP' ? `ZP Ward ${ward.ward_no}` : `${ward.block_name} - Ward ${ward.ward_no}`;
 
-    function renderZpSpotlight() {
-      const wards = electionState.zp.wards;
-      if (!wards || !wards.length) return;
-      const w = wards[currentZpIndex] || wards[0];
-
-      document.getElementById('zpSpotlightTitle').innerText = w.wardNameHindi || `वार्ड ${w.wardNo}`;
-      document.getElementById('zpSpotlightBlock').innerText = `${w.blockName || 'Salumber'} PS`;
-      document.getElementById('zpSpotlightReservation').innerText = w.reservation || 'ST';
-      document.getElementById('zpSpotlightBooths').innerText = `${w.totalBooths || 25} Booths (${w.countingTables || 5} Tables)`;
-
-      const sPill = document.getElementById('zpSpotlightStatusPill');
-      if (w.status === 'DECLARED') {
-        sPill.className = 'status-round-pill declared';
-        sPill.innerText = '🏆 WINNER DECLARED';
-      } else {
-        sPill.className = 'status-round-pill';
-        sPill.innerText = `ROUND ${w.currentRound || 0} OF ${w.maxRounds || 5}`;
-      }
-
-      const pct = w.roundProgressPct !== undefined ? w.roundProgressPct : Math.round(((w.currentRound || 0) / (w.maxRounds || 5)) * 100);
-      document.getElementById('zpProgressLabel').innerText = `ROUND PROGRESS: ${w.currentRound || 0} OF ${w.maxRounds || 5} COMPLETED`;
-      document.getElementById('zpProgressPct').innerText = `${pct}%`;
-      document.getElementById('zpProgressBarFill').style.width = `${pct}%`;
-
-      const c1 = w.winner || { name: 'TBD', party: 'BAP', totalVotes: 0, pbVotes: 0 };
-      const c2 = w.runnerUp || { name: 'TBD', party: 'BJP', totalVotes: 0, pbVotes: 0 };
-
-      const hasVotes = (c1.totalVotes || 0) > 0 || (c2.totalVotes || 0) > 0;
-      const margin = w.margin || Math.max(0, (c1.totalVotes || 0) - (c2.totalVotes || 0));
-
-      const r1Badge = document.getElementById('zpRank1Label');
-      const r2Badge = document.querySelector('#zpSpotlightCard .cand-battle-card.rank-2 .rank-badge');
-      const mBar = document.getElementById('zpMarginBar');
-
-      document.getElementById('zpCand1Name').innerText = c1.name;
-      document.getElementById('zpCand1Party').innerText = c1.party;
-      document.getElementById('zpCand1Party').style.background = PARTY_COLORS[c1.party] || PARTY_COLORS.IND;
-      document.getElementById('zpCand1Pb').innerText = `PB: ${c1.pbVotes || 0}`;
-      document.getElementById('zpCand1Votes').innerText = (c1.totalVotes || 0).toLocaleString('en-IN');
-
-      document.getElementById('zpCand2Name').innerText = c2.name;
-      document.getElementById('zpCand2Party').innerText = c2.party;
-      document.getElementById('zpCand2Party').style.background = PARTY_COLORS[c2.party] || PARTY_COLORS.IND;
-      document.getElementById('zpCand2Pb').innerText = `PB: ${c2.pbVotes || 0}`;
-      document.getElementById('zpCand2Votes').innerText = (c2.totalVotes || 0).toLocaleString('en-IN');
-
-      // Round Table
-      renderProgressionTable('zp', w, c1, c2);
-
-      if (!hasVotes) {
-        // Zero votes entered yet
-        if (r1Badge) { r1Badge.innerText = 'CONTESTANT'; r1Badge.className = 'rank-badge trail'; }
-        if (r2Badge) { r2Badge.innerText = 'CONTESTANT'; r2Badge.className = 'rank-badge trail'; }
-        document.getElementById('zpMarginLeadParty').innerText = 'COUNTING YET TO BEGIN';
-        document.getElementById('zpMarginLeadParty').style.color = '#94a3b8';
-        document.getElementById('zpMarginValue').innerText = 'AWAITING ROUND 1';
-        document.getElementById('zpMarginValue').style.color = '#94a3b8';
-        mBar.style.background = 'rgba(15, 23, 42, 0.6)';
-        mBar.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-      } else if (w.status === 'DECLARED') {
-        if (r1Badge) { r1Badge.innerText = '🏆 WINNER'; r1Badge.className = 'rank-badge lead'; }
-        if (r2Badge) { r2Badge.innerText = 'RUNNER-UP'; r2Badge.className = 'rank-badge trail'; }
-        document.getElementById('zpMarginLeadParty').innerText = `${c1.party} DECLARED WON`;
-        document.getElementById('zpMarginLeadParty').style.color = '#10b981';
-        document.getElementById('zpMarginValue').innerText = `+${margin.toLocaleString('en-IN')} FINAL MARGIN`;
-        document.getElementById('zpMarginValue').style.color = '#34d399';
-        mBar.style.background = 'linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%)';
-        mBar.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-      } else {
-        if (r1Badge) { r1Badge.innerText = '#1 LEADING'; r1Badge.className = 'rank-badge lead'; }
-        if (r2Badge) { r2Badge.innerText = '#2 TRAILING'; r2Badge.className = 'rank-badge trail'; }
-        document.getElementById('zpMarginLeadParty').innerText = `${c1.party} LEADS BY`;
-        document.getElementById('zpMarginLeadParty').style.color = '#10b981';
-        document.getElementById('zpMarginValue').innerText = `+${margin.toLocaleString('en-IN')} VOTES`;
-        document.getElementById('zpMarginValue').style.color = '#34d399';
-        mBar.style.background = 'linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%)';
-        mBar.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-      }
-    }
-
-    function renderPsSpotlight() {
-      const blockWards = electionState.ps.wards.filter(w => w.blockName.toLowerCase() === currentPsBlock.toLowerCase());
-      if (!blockWards.length) return;
-      const w = blockWards[currentPsWardIndex % blockWards.length] || blockWards[0];
-
-      document.getElementById('psActiveBlockLabel').innerText = `${w.blockName.toUpperCase()} PS`;
-      document.getElementById('psSpotlightTitle').innerText = `${w.blockName} PS — वार्ड ${w.wardNo}`;
-      document.getElementById('psSpotlightBlock').innerText = `${w.blockName} Block`;
-      document.getElementById('psSpotlightReservation').innerText = w.reservation || 'ST';
-      document.getElementById('psSpotlightBooths').innerText = `${w.totalBooths || 5} Booths (${w.countingTables || 5} Tables)`;
-
-      const sPill = document.getElementById('psSpotlightStatusPill');
-      if (w.status === 'DECLARED') {
-        sPill.className = 'status-round-pill declared';
-        sPill.innerText = '🏆 WINNER DECLARED';
-      } else {
-        sPill.className = 'status-round-pill';
-        sPill.innerText = `ROUND ${w.currentRound || 0} OF ${w.maxRounds || 2}`;
-      }
-
-      const pct = w.roundProgressPct !== undefined ? w.roundProgressPct : Math.round(((w.currentRound || 0) / (w.maxRounds || 2)) * 100);
-      document.getElementById('psProgressLabel').innerText = `ROUND PROGRESS: ${w.currentRound || 0} OF ${w.maxRounds || 2} COMPLETED`;
-      document.getElementById('psProgressPct').innerText = `${pct}%`;
-      document.getElementById('psProgressBarFill').style.width = `${pct}%`;
-
-      const c1 = w.winner || { name: 'TBD', party: 'BAP', totalVotes: 0 };
-      const c2 = w.runnerUp || { name: 'TBD', party: 'BJP', totalVotes: 0 };
-
-      const hasVotes = (c1.totalVotes || 0) > 0 || (c2.totalVotes || 0) > 0;
-      const margin = w.margin || Math.max(0, (c1.totalVotes || 0) - (c2.totalVotes || 0));
-
-      const r1Badge = document.getElementById('psRank1Label');
-      const r2Badge = document.querySelector('#psSpotlightCard .cand-battle-card.rank-2 .rank-badge');
-      const mBar = document.getElementById('psMarginBar');
-
-      document.getElementById('psCand1Name').innerText = c1.name;
-      document.getElementById('psCand1Party').innerText = c1.party;
-      document.getElementById('psCand1Party').style.background = PARTY_COLORS[c1.party] || PARTY_COLORS.IND;
-      document.getElementById('psCand1Pb').innerText = `PB: ${c1.pbVotes || 0}`;
-      document.getElementById('psCand1Votes').innerText = (c1.totalVotes || 0).toLocaleString('en-IN');
-
-      document.getElementById('psCand2Name').innerText = c2.name;
-      document.getElementById('psCand2Party').innerText = c2.party;
-      document.getElementById('psCand2Party').style.background = PARTY_COLORS[c2.party] || PARTY_COLORS.IND;
-      document.getElementById('psCand2Pb').innerText = `PB: ${c2.pbVotes || 0}`;
-      document.getElementById('psCand2Votes').innerText = (c2.totalVotes || 0).toLocaleString('en-IN');
-
-      renderProgressionTable('ps', w, c1, c2);
-
-      if (!hasVotes) {
-        if (r1Badge) { r1Badge.innerText = 'CONTESTANT'; r1Badge.className = 'rank-badge trail'; }
-        if (r2Badge) { r2Badge.innerText = 'CONTESTANT'; r2Badge.className = 'rank-badge trail'; }
-        document.getElementById('psMarginLeadParty').innerText = 'COUNTING YET TO BEGIN';
-        document.getElementById('psMarginLeadParty').style.color = '#94a3b8';
-        document.getElementById('psMarginValue').innerText = 'AWAITING ROUND 1';
-        document.getElementById('psMarginValue').style.color = '#94a3b8';
-        mBar.style.background = 'rgba(15, 23, 42, 0.6)';
-        mBar.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-      } else if (w.status === 'DECLARED') {
-        if (r1Badge) { r1Badge.innerText = '🏆 WINNER'; r1Badge.className = 'rank-badge lead'; }
-        if (r2Badge) { r2Badge.innerText = 'RUNNER-UP'; r2Badge.className = 'rank-badge trail'; }
-        document.getElementById('psMarginLeadParty').innerText = `${c1.party} DECLARED WON`;
-        document.getElementById('psMarginLeadParty').style.color = '#10b981';
-        document.getElementById('psMarginValue').innerText = `+${margin.toLocaleString('en-IN')} FINAL MARGIN`;
-        document.getElementById('psMarginValue').style.color = '#34d399';
-        mBar.style.background = 'linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%)';
-        mBar.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-      } else {
-        if (r1Badge) { r1Badge.innerText = '#1 LEADING'; r1Badge.className = 'rank-badge lead'; }
-        if (r2Badge) { r2Badge.innerText = '#2 TRAILING'; r2Badge.className = 'rank-badge trail'; }
-        document.getElementById('psMarginLeadParty').innerText = `${c1.party} LEADS BY`;
-        document.getElementById('psMarginLeadParty').style.color = '#10b981';
-        document.getElementById('psMarginValue').innerText = `+${margin.toLocaleString('en-IN')} VOTES`;
-        document.getElementById('psMarginValue').style.color = '#34d399';
-        mBar.style.background = 'linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%)';
-        mBar.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-      }
-    }
-
-    function renderProgressionTable(prefix, ward, c1, c2) {
-      const maxR = ward.maxRounds || (prefix === 'zp' ? 5 : 2);
-      const headEl = document.getElementById(`${prefix}RoundTableHead`);
-      const bodyEl = document.getElementById(`${prefix}RoundTableBody`);
-
-      let thHtml = '<th>CANDIDATE</th><th>PB</th>';
-      for (let r = 1; r <= maxR; r++) {
-        thHtml += `<th>R${r}</th>`;
-      }
-      thHtml += '<th>DIFF</th>';
-      headEl.innerHTML = thHtml;
-
-      const rVotes1 = (c1.roundVotes) || {};
-      const rVotes2 = (c2.roundVotes) || {};
-
-      let r1Html = `<td class="cand-col">${c1.name}</td><td>${c1.pbVotes || 0}</td>`;
-      let r2Html = `<td class="cand-col">${c2.name}</td><td>${c2.pbVotes || 0}</td>`;
-
-      for (let r = 1; r <= maxR; r++) {
-        const v1 = rVotes1[`R${r}`] !== undefined && rVotes1[`R${r}`] !== null ? rVotes1[`R${r}`] : '-';
-        const v2 = rVotes2[`R${r}`] !== undefined && rVotes2[`R${r}`] !== null ? rVotes2[`R${r}`] : '-';
-        const isActive = r === ward.currentRound;
-        r1Html += `<td class="${isActive ? 'active-round-cell' : ''}">${v1}</td>`;
-        r2Html += `<td class="${isActive ? 'active-round-cell' : ''}">${v2}</td>`;
-      }
-
-      const hasProgVotes = ((c1.totalVotes || 0) > 0) || ((c2.totalVotes || 0) > 0);
-      const diff = Math.max(0, (c1.totalVotes || 0) - (c2.totalVotes || 0));
-      r1Html += `<td class="diff-cell">${hasProgVotes ? `+${diff}` : '-'}</td>`;
-      r2Html += `<td>-</td>`;
-
-      bodyEl.innerHTML = `<tr>${r1Html}</tr><tr>${r2Html}</tr>`;
-    }
-
-    function renderZpMatrix() {
-      const grid = document.getElementById('zpMatrixGrid');
-      const wards = electionState.zp.wards || [];
-      if (!grid) return;
-
-      grid.innerHTML = wards.map((w, idx) => {
-        const isCurrent = idx === currentZpIndex;
-        const isDeclared = w.status === 'DECLARED';
-        const hasVotes = ((w.winner && w.winner.totalVotes) || 0) > 0;
-        const party = hasVotes ? (w.winner ? w.winner.party : 'IND') : '—';
-        const pColor = hasVotes ? (PARTY_COLORS[party] || PARTY_COLORS.IND) : 'rgba(255,255,255,0.1)';
-        const leadMargin = hasVotes ? (w.margin ? `+${w.margin}` : '0') : '-';
-        const candShort = hasVotes ? (w.winner ? w.winner.name.split(' ')[0] : 'प्रत्याशी') : 'प्रतीक्षारत';
-
-        return `
-          <div class="mini-ward-card ${isCurrent ? 'active-spotlight' : ''} ${isDeclared ? 'status-declared' : ''}"
-               onclick="selectZpWard(${idx})">
-            <div class="mini-card-top">
-              <span class="mini-ward-num">W${w.wardNo}</span>
-              <span class="mini-party-badge" style="background:${pColor};">${party}</span>
-            </div>
-            <div class="mini-cand-name font-hindi">${candShort}</div>
-            <div class="mini-card-bottom">
-              <span class="mini-lead-margin font-num">${leadMargin}</span>
-              <span class="mini-round-state">R${w.currentRound || 0}</span>
-            </div>
+      card.innerHTML = `
+        <div class="ward-card-head">
+          <div class="ward-name">
+            <span>${ward.category === 'ZP' ? '🏛️' : '🏘️'}</span>
+            <span>${displayName}</span>
+            <span style="font-size:10px; color:var(--text-dim); font-weight:700; background:#f1f5f9; padding:1px 5px; border-radius:3px;">${ward.reservation || 'GEN'}</span>
           </div>
-        `;
-      }).join('');
+          <span class="status-badge status-${statusKey}">${statusLabel}</span>
+        </div>
+        ${leaderHtml}
+        <table class="ward-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Candidate</th>
+              <th>Party</th>
+              <th style="text-align:right;">Votes</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+      `;
+
+      return card;
     }
 
-    function renderPsBlockTabs() {
-      const tabs = document.getElementById('psBlockTabs');
-      if (!tabs) return;
+    // Tally update
+    function updateSummaryTallies() {
+      const tally = {
+        ZP: { BJP: 0, INC: 0, BAP: 0, IND: 0 },
+        PS: { BJP: 0, INC: 0, BAP: 0, IND: 0 }
+      };
 
-      tabs.innerHTML = PS_BLOCKS_LIST.map(b => {
-        const isActive = b.toLowerCase() === currentPsBlock.toLowerCase();
-        return `
-          <button class="ps-tab-btn ${isActive ? 'active' : ''}" onclick="selectPsBlock('${b}')">${b}</button>
-        `;
-      }).join('');
-    }
-
-    function renderPsMatrix() {
-      const grid = document.getElementById('psMatrixGrid');
-      if (!grid) return;
-
-      const blockWards = electionState.ps.wards.filter(w => w.blockName.toLowerCase() === currentPsBlock.toLowerCase());
-
-      grid.innerHTML = blockWards.map((w, idx) => {
-        const isCurrent = idx === (currentPsWardIndex % blockWards.length);
-        const isDeclared = w.status === 'DECLARED';
-        const hasVotes = ((w.winner && w.winner.totalVotes) || 0) > 0;
-        const party = hasVotes ? (w.winner ? w.winner.party : 'IND') : '—';
-        const pColor = hasVotes ? (PARTY_COLORS[party] || PARTY_COLORS.IND) : 'rgba(255,255,255,0.1)';
-        const leadMargin = hasVotes ? (w.margin ? `+${w.margin}` : '0') : '-';
-        const candShort = hasVotes ? (w.winner ? w.winner.name.split(' ')[0] : 'प्रत्याशी') : 'प्रतीक्षारत';
-
-        return `
-          <div class="mini-ward-card ${isCurrent ? 'active-spotlight' : ''} ${isDeclared ? 'status-declared' : ''}"
-               onclick="selectPsWard(${idx})">
-            <div class="mini-card-top">
-              <span class="mini-ward-num">W${w.wardNo}</span>
-              <span class="mini-party-badge" style="background:${pColor};">${party}</span>
-            </div>
-            <div class="mini-cand-name font-hindi">${candShort}</div>
-            <div class="mini-card-bottom">
-              <span class="mini-lead-margin font-num">${leadMargin}</span>
-              <span class="mini-round-state">R${w.currentRound || 0}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function renderTicker() {
-      const marquee = document.getElementById('tickerMarquee');
-      if (!marquee) return;
-      const items = electionState.ticker || [];
-      if (items.length) {
-        marquee.innerHTML = items.map(t => `★ ${t}`).join(' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ');
-      }
-    }
-
-    
-    // =========================================================================
-    // WARD FILTER & INTERACTIVE ROTATION CONTROLLERS
-    // =========================================================================
-    let isZpPaused = false;
-    let isPsPaused = false;
-
-    function initFilterDropdowns() {
-      // 1. ZP Ward Filter Dropdown
-      const zpSel = document.getElementById('zpWardSelectFilter');
-      if (zpSel) {
-        let opts = '<option value="auto">[auto] Auto-Rotate (सभी 21 वार्ड)</option>';
-        for (let i = 1; i <= 21; i++) {
-          opts += `<option value="${i}">वार्ड ${i}</option>`;
+      masterData.wards.forEach(w => {
+        const cands = masterData.candidates.filter(c => c.category === w.category && c.block_name === w.block_name && c.ward_no === w.ward_no);
+        const totals = cands.map(c => {
+          let sum = 0;
+          const vObj = masterData.roundVotes[c.id] || {};
+          for (const [r, cnt] of Object.entries(vObj)) sum += (cnt || 0);
+          return { ...c, sum };
+        });
+        totals.sort((a, b) => b.sum - a.sum);
+        if (totals.length > 0 && totals[0].sum > 0) {
+          const topParty = totals[0].party || 'IND';
+          if (tally[w.category][topParty] !== undefined) {
+            tally[w.category][topParty]++;
+          } else {
+            tally[w.category].IND++;
+          }
         }
-        zpSel.innerHTML = opts;
-      }
+      });
 
-      // 2. PS Block & Ward Filter Dropdowns
-      updatePsWardFilterDropdown();
+      document.getElementById('zpTallyBJP').innerText = `BJP: ${tally.ZP.BJP}`;
+      document.getElementById('zpTallyINC').innerText = `INC: ${tally.ZP.INC}`;
+      document.getElementById('zpTallyBAP').innerText = `BAP: ${tally.ZP.BAP}`;
+      document.getElementById('zpTallyIND').innerText = `IND: ${tally.ZP.IND}`;
+
+      document.getElementById('psTallyBJP').innerText = `BJP: ${tally.PS.BJP}`;
+      document.getElementById('psTallyINC').innerText = `INC: ${tally.PS.INC}`;
+      document.getElementById('psTallyBAP').innerText = `BAP: ${tally.PS.BAP}`;
+      document.getElementById('psTallyIND').innerText = `IND: ${tally.PS.IND}`;
     }
 
-    function updatePsWardFilterDropdown() {
-      const psSel = document.getElementById('psWardSelectFilter');
-      if (psSel) {
-        let opts = '<option value="auto">[auto] Auto-Rotate (सभी वार्ड)</option>';
-        for (let i = 1; i <= 15; i++) {
-          opts += `<option value="${i}">वार्ड ${i}</option>`;
+    // Auto-Scroll Loop
+    function toggleScroll(col) {
+      if (col === 'zp') {
+        zpAutoScroll = !zpAutoScroll;
+        document.getElementById('btnZpScroll').innerText = zpAutoScroll ? '⏸ Pause Scroll' : '▶ Resume Scroll';
+      } else {
+        psAutoScroll = !psAutoScroll;
+        document.getElementById('btnPsScroll').innerText = psAutoScroll ? '⏸ Pause Scroll' : '▶ Resume Scroll';
+      }
+    }
+
+    function startAutoScrollLoop() {
+      const zpEl = document.getElementById('zpCardsContainer');
+      const psEl = document.getElementById('psCardsContainer');
+
+      setInterval(() => {
+        if (zpAutoScroll && zpEl) {
+          if (zpEl.scrollTop + zpEl.clientHeight >= zpEl.scrollHeight - 10) {
+            zpEl.scrollTop = 0;
+          } else {
+            zpEl.scrollTop += 1.2;
+          }
         }
-        psSel.innerHTML = opts;
-      }
-    }
+      }, 50);
 
-    function onZpFilterChange(val) {
-      if (val === 'auto') {
-        isZpPaused = false;
-        document.getElementById('zpPauseBtn').innerText = '[pause]';
-      } else {
-        isZpPaused = true;
-        currentZpIndex = parseInt(val) - 1;
-        document.getElementById('zpPauseBtn').innerText = '[play]';
-        renderZpSpotlight();
-        renderZpMatrix();
-      }
-    }
-
-    function toggleZpRotation() {
-      isZpPaused = !isZpPaused;
-      const btn = document.getElementById('zpPauseBtn');
-      const sel = document.getElementById('zpWardSelectFilter');
-      if (isZpPaused) {
-        btn.innerText = '[play]';
-        if (sel) sel.value = (currentZpIndex + 1);
-      } else {
-        btn.innerText = '[pause]';
-        if (sel) sel.value = 'auto';
-      }
-    }
-
-    function onPsBlockFilterChange(blockName) {
-      currentPsBlock = blockName;
-      currentPsWardIndex = 0;
-      updatePsWardFilterDropdown();
-      const bSel = document.getElementById('psBlockSelectFilter');
-      if (bSel) bSel.value = blockName;
-      renderPsBlockTabs();
-      renderPsSpotlight();
-      renderPsMatrix();
-    }
-
-    function onPsWardFilterChange(val) {
-      if (val === 'auto') {
-        isPsPaused = false;
-        document.getElementById('psPauseBtn').innerText = '[pause]';
-      } else {
-        isPsPaused = true;
-        currentPsWardIndex = parseInt(val) - 1;
-        document.getElementById('psPauseBtn').innerText = '[play]';
-        renderPsSpotlight();
-        renderPsMatrix();
-      }
-    }
-
-    function togglePsRotation() {
-      isPsPaused = !isPsPaused;
-      const btn = document.getElementById('psPauseBtn');
-      const sel = document.getElementById('psWardSelectFilter');
-      if (isPsPaused) {
-        btn.innerText = '[play]';
-        if (sel) sel.value = (currentPsWardIndex + 1);
-      } else {
-        btn.innerText = '[pause]';
-        if (sel) sel.value = 'auto';
-      }
-    }
-    
-    function rotateSpotlights() {
-      // Rotate ZP
-      const zpWards = electionState.zp.wards || [];
-      if (zpWards.length) {
-        currentZpIndex = (currentZpIndex + 1) % zpWards.length;
-        renderZpSpotlight();
-        renderZpMatrix();
-      }
-
-      // Rotate PS
-      const blockWards = electionState.ps.wards.filter(w => w.blockName.toLowerCase() === currentPsBlock.toLowerCase());
-      if (blockWards.length) {
-        currentPsWardIndex = (currentPsWardIndex + 1) % blockWards.length;
-        renderPsSpotlight();
-        renderPsMatrix();
-      }
-    }
-
-    function selectZpWard(idx) {
-      currentZpIndex = idx;
-      isZpPaused = true;
-      const zpSel = document.getElementById('zpWardSelectFilter');
-      if (zpSel) zpSel.value = (idx + 1);
-      const btn = document.getElementById('zpPauseBtn');
-      if (btn) btn.innerText = '[play]';
-      renderZpSpotlight();
-      renderZpMatrix();
-    }
-
-    function selectPsWard(idx) {
-      currentPsWardIndex = idx;
-      isPsPaused = true;
-      const psSel = document.getElementById('psWardSelectFilter');
-      if (psSel) psSel.value = (idx + 1);
-      const btn = document.getElementById('psPauseBtn');
-      if (btn) btn.innerText = '[play]';
-      renderPsSpotlight();
-      renderPsMatrix();
-    }
-
-    function selectPsBlock(blockName) {
-      currentPsBlock = blockName;
-      currentPsWardIndex = 0;
-      renderPsBlockTabs();
-      renderPsSpotlight();
-      renderPsMatrix();
-    }
-
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {});
-      } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-      }
-    }
-
-
-
-    function getBlockForZPWard(w) {
-      if (w >= 1 && w <= 3) return 'Jaisamand';
-      if (w >= 4 && w <= 6) return 'Sarada';
-      if (w >= 7 && w <= 9) return 'Semari';
-      if (w >= 10 && w <= 12) return 'Salumbar';
-      if (w >= 13 && w <= 15) return 'Geengla';
-      if (w >= 16 && w <= 18) return 'Lasadiya';
-      return 'Jhallara';
+      setInterval(() => {
+        if (psAutoScroll && psEl) {
+          if (psEl.scrollTop + psEl.clientHeight >= psEl.scrollHeight - 10) {
+            psEl.scrollTop = 0;
+          } else {
+            psEl.scrollTop += 1.2;
+          }
+        }
+      }, 50);
     }
   </script>
 </body>

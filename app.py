@@ -20,6 +20,18 @@ import uvicorn
 
 DB_FILE = "election_salumber_2026.db"
 
+PORTAL_PASSWORD = os.getenv("PORTAL_PASSWORD", "salumber2026")
+
+def get_auth_token():
+    import hashlib
+    return hashlib.sha256(f"salumber_salt_{PORTAL_PASSWORD}".encode()).hexdigest()
+
+def check_auth(request: Request):
+    token = request.headers.get("X-Auth-Token") or request.query_params.get("token") or request.cookies.get("salumber_auth")
+    if token != get_auth_token():
+        raise HTTPException(status_code=401, detail="Authentication required. Please enter password.")
+
+
 PS_BLOCKS = [
     'Semari', 'Salumbar', 'Lasadiya', 'Geengla', 'Jaisamand', 'Sarada', 'Jhallara'
 ]
@@ -450,6 +462,28 @@ async def websocket_endpoint(websocket: WebSocket):
 # ==============================================================================
 # REST API ENDPOINTS
 # ==============================================================================
+
+@app.post("/api/auth/login")
+async def auth_login(payload: dict):
+    """Authenticates operator or viewer with password."""
+    pwd = (payload.get("password") or "").strip()
+    if pwd == PORTAL_PASSWORD:
+        token = get_auth_token()
+        resp = JSONResponse({"status": "success", "token": token, "message": "Authentication successful!"})
+        resp.set_cookie(key="salumber_auth", value=token, max_age=86400, httponly=False)
+        return resp
+    else:
+        raise HTTPException(status_code=401, detail="Invalid password! Please try again.")
+
+@app.get("/api/auth/check")
+async def auth_check(request: Request):
+    """Checks if current session has valid authentication."""
+    try:
+        check_auth(request)
+        return {"authenticated": True}
+    except HTTPException:
+        return {"authenticated": False}
+
 @app.get("/api/state")
 def get_state():
     return calculate_full_state()
@@ -491,7 +525,8 @@ def get_candidates(category: str, block: str, ward_no: int):
     return {'candidates': c_list, 'status': ward_status}
 
 @app.post("/api/save_votes")
-async def save_votes(payload: dict):
+async def save_votes(payload: dict, request: Request):
+    check_auth(request)
     """
     Saves round votes atomically into SQLite and broadcasts immediately to TV!
     payload: { category, block, ward_no, round_key, votes: { cand_id: count }, declare: bool }
@@ -586,7 +621,8 @@ async def save_votes(payload: dict):
     }
 
 @app.post("/api/declare_ward")
-async def declare_ward(payload: dict):
+async def declare_ward(payload: dict, request: Request):
+    check_auth(request)
     category = payload.get('category')
     block = payload.get('block')
     ward_no = int(payload.get('ward_no'))
@@ -634,7 +670,8 @@ async def declare_ward(payload: dict):
     return {'status': 'success', 'message': f"{category} {block} Ward {ward_no} finalized as DECLARED!"}
 
 @app.post("/api/reopen_ward")
-async def reopen_ward(payload: dict):
+async def reopen_ward(payload: dict, request: Request):
+    check_auth(request)
     """Unlocks a declared ward back to COUNTING for recount or correction."""
     category = payload.get('category')
     block = payload.get('block')
@@ -688,8 +725,165 @@ def get_all_candidates_master():
         'roundVotes': votes_map
     }
 
+
+@app.post("/api/candidates/bulk_import")
+async def bulk_import_candidates(payload: dict, request: Request):
+    """
+    Bulk import candidates from text lines or array for Jhallara, Sarada, Jaisamand, etc.
+    Format of each line:
+    Ward No, Candidate Name, Party, [Optional Ballot No]
+    """
+    check_auth(request)
+    category = payload.get('category', 'PS')
+    block = payload.get('block')
+    raw_lines = payload.get('raw_text', '').strip().split('\n')
+    items = payload.get('candidates', [])
+
+    if not block:
+        raise HTTPException(status_code=400, detail="Block name is required for import.")
+
+    parsed = []
+    if items:
+        for it in items:
+            parsed.append({
+                'ward_no': int(it['ward_no']),
+                'name': it['name'].strip(),
+                'party': (it.get('party') or 'IND').strip().upper(),
+                'ballot_no': int(it.get('ballot_no', 0))
+            })
+    elif raw_lines:
+        for line in raw_lines:
+            line = line.strip()
+            if not line or line.startswith('#') or line.lower().startswith('ward'):
+                continue
+            if '	' in line:
+                parts = [p.strip() for p in line.split('	')]
+            elif '|' in line:
+                parts = [p.strip() for p in line.split('|')]
+            else:
+                parts = [p.strip() for p in line.split(',')]
+            
+            if len(parts) >= 2:
+                w_str = parts[0].lower().replace('ward', '').replace('w', '').strip()
+                try:
+                    w_no = int(w_str)
+                except:
+                    continue
+                c_name = parts[1]
+                party = parts[2].upper() if len(parts) > 2 and parts[2] else 'IND'
+                b_no = 0
+                if len(parts) > 3:
+                    try:
+                        b_no = int(parts[3])
+                    except:
+                        b_no = 0
+                parsed.append({'ward_no': w_no, 'name': c_name, 'party': party, 'ballot_no': b_no})
+
+    if not parsed:
+        raise HTTPException(status_code=400, detail="No valid candidate lines found. Example: 1, Ramesh Patel, BJP")
+
+    conn = get_db()
+    cursor = conn.cursor()
+    count_inserted = 0
+    from collections import defaultdict
+    by_ward = defaultdict(list)
+    for p in parsed:
+        by_ward[p['ward_no']].append(p)
+
+    for w_no, cand_list in by_ward.items():
+        cursor.execute("SELECT MAX(ballot_no) FROM candidates WHERE category=? AND block_name=? AND ward_no=?", (category, block, w_no))
+        cur_max = cursor.fetchone()[0] or 0
+
+        for c_entry in cand_list:
+            if c_entry['ballot_no'] > 0:
+                b_num = c_entry['ballot_no']
+            else:
+                cur_max += 1
+                b_num = cur_max
+
+            cursor.execute("""
+            INSERT INTO candidates (category, block_name, ward_no, name_hindi, party, symbol, ballot_no)
+            VALUES (?, ?, ?, ?, ?, 'Official', ?)
+            """, (category, block, w_no, c_entry['name'], c_entry['party'], b_num))
+            count_inserted += 1
+
+    cursor.execute("""
+    INSERT INTO audit_log (action, details)
+    VALUES (?, ?)
+    """, ("BULK_CANDIDATE_IMPORT", f"Imported {count_inserted} candidates for {category} {block}"))
+
+    conn.commit()
+    conn.close()
+
+    asyncio.create_task(broadcast_live_update())
+    return {
+        'status': 'success',
+        'message': f"Successfully imported {count_inserted} contestants for {category} {block}!"
+    }
+
+@app.post("/api/candidates/delete")
+async def delete_candidate(payload: dict, request: Request):
+    """Delete a single candidate and re-index ballot order."""
+    check_auth(request)
+    cid = int(payload.get('candidate_id'))
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT category, block_name, ward_no, name_hindi FROM candidates WHERE id = ?", (cid,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Candidate not found.")
+    
+    cat, blk, wno, cname = row[0], row[1], row[2], row[3]
+    cursor.execute("DELETE FROM votes WHERE candidate_id = ?", (cid,))
+    cursor.execute("DELETE FROM candidates WHERE id = ?", (cid,))
+
+    cursor.execute("SELECT id FROM candidates WHERE category=? AND block_name=? AND ward_no=? ORDER BY ballot_no, name_hindi", (cat, blk, wno))
+    re_rows = cursor.fetchall()
+    for seq, r in enumerate(re_rows, start=1):
+        cursor.execute("UPDATE candidates SET ballot_no = ? WHERE id = ?", (seq, r[0]))
+
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("DELETE_CANDIDATE", f"Deleted {cname} from {cat} {blk} W{wno}"))
+    conn.commit()
+    conn.close()
+
+    asyncio.create_task(broadcast_live_update())
+    return {'status': 'success', 'message': f"Deleted contestant {cname} successfully."}
+
+@app.post("/api/wards/update_booths_bulk")
+async def update_booths_bulk(payload: dict, request: Request):
+    """Update booth counts dynamically for a block or ward list."""
+    check_auth(request)
+    import math
+    category = payload.get('category', 'PS')
+    block = payload.get('block')
+    booths_map = payload.get('booths', {})
+    conn = get_db()
+    cursor = conn.cursor()
+
+    updated = 0
+    for w_str, b_count in booths_map.items():
+        try:
+            w_no = int(w_str)
+            b_val = max(1, int(b_count))
+            cursor.execute("SELECT id, counting_tables FROM wards WHERE category = ? AND block_name = ? AND ward_no = ?", (category, block, w_no))
+            w_row = cursor.fetchone()
+            if w_row:
+                wid, tables = w_row[0], max(1, int(w_row[1] or 5))
+                m_rounds = math.ceil(b_val / tables)
+                cursor.execute("UPDATE wards SET total_booths = ?, max_rounds = ? WHERE id = ?", (b_val, m_rounds, wid))
+                updated += 1
+        except Exception:
+            continue
+
+    conn.commit()
+    conn.close()
+    asyncio.create_task(broadcast_live_update())
+    return {'status': 'success', 'message': f"Updated dynamic booths and recalculated rounds for {updated} wards."}
+
 @app.post("/api/add_candidate")
-async def add_candidate(payload: dict):
+async def add_candidate(payload: dict, request: Request):
+    check_auth(request)
     """Allows adding candidates anytime for future blocks (Jaisamand, Sarada, Jhallara)."""
     category = payload.get('category')
     block = payload.get('block')
@@ -740,7 +934,8 @@ def get_ward_configs(category: Optional[str] = None, block: Optional[str] = None
     return {'status': 'success', 'wards': rows}
 
 @app.post("/api/save_ward_config")
-async def save_ward_config(payload: dict):
+async def save_ward_config(payload: dict, request: Request):
+    check_auth(request)
     """Updates booths, counting tables, and recalculates max rounds for a specific ward."""
     import math
     category = payload.get('category')
@@ -781,17 +976,21 @@ async def save_ward_config(payload: dict):
     }
 
 @app.post("/api/bulk_apply_hall_config")
-async def bulk_apply_hall_config(payload: dict):
-    """Bulk sets counting tables across an entire category or block and updates max_rounds."""
+async def bulk_apply_hall_config(payload: dict, request: Request):
+    """Bulk sets counting tables across entire district, category or block and updates max_rounds."""
+    check_auth(request)
     import math
     category = payload.get('category')
     block = payload.get('block')
     tables = max(1, int(payload.get('counting_tables', 5)))
+    default_booths = payload.get('default_booths')
 
     conn = get_db()
     cursor = conn.cursor()
 
-    if category == 'ZP':
+    if category == 'ALL':
+        cursor.execute("SELECT id, total_booths FROM wards")
+    elif category == 'ZP':
         cursor.execute("SELECT id, total_booths FROM wards WHERE category = 'ZP'")
     elif block:
         cursor.execute("SELECT id, total_booths FROM wards WHERE category = 'PS' AND block_name = ?", (block,))
@@ -801,9 +1000,12 @@ async def bulk_apply_hall_config(payload: dict):
     rows = cursor.fetchall()
     for r in rows:
         wid = r['id']
-        b_count = max(1, int(r['total_booths'] or 25))
+        if default_booths and int(default_booths) > 0:
+            b_count = int(default_booths)
+        else:
+            b_count = max(1, int(r['total_booths'] or 15))
         m_rounds = math.ceil(b_count / tables)
-        cursor.execute("UPDATE wards SET counting_tables = ?, max_rounds = ?, is_setup_done = 1 WHERE id = ?", (tables, m_rounds, wid))
+        cursor.execute("UPDATE wards SET counting_tables = ?, total_booths = ?, max_rounds = ?, is_setup_done = 1 WHERE id = ?", (tables, b_count, m_rounds, wid))
 
     cursor.execute("""
     INSERT INTO audit_log (action, details)
