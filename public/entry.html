@@ -861,19 +861,20 @@
     }
 
     const BLOCK_TOTAL_BOOTHS = {
-      'Geengla': 68,
-      'Semari': 69,
-      'Salumbar': 77,
-      'Lasadiya': 73,
-      'Sarada': 78,
+      'Geengla': 61,
+      'Jaisamand': 81,
       'Jhallara': 83,
-      'Jaisamand': 84
+      'Lasadiya': 73,
+      'Salumbar': 77,
+      'Sarada': 78,
+      'Semari': 69
     };
 
     function populateBoothDropdown() {
       const cat = document.getElementById('entryCategory').value;
       const blk = document.getElementById('entryBlock').value || 'Semari';
-      const maxB = cat === 'ZP' ? 522 : (BLOCK_TOTAL_BOOTHS[blk] || 70);
+      // Polling stations at the RO center are numbered 1 to block max
+      const maxB = BLOCK_TOTAL_BOOTHS[blk] || 69;
 
       const inputBooth = document.getElementById('inputBoothNo');
       inputBooth.max = maxB;
@@ -888,9 +889,10 @@
       for (let b = 1; b <= maxB; b++) {
         const opt = document.createElement('option');
         opt.value = b;
-                let bObj = masterData.booths ? masterData.booths.find(x => x.block_name === blk && String(x.booth_no) === String(b)) : null;
+        let bObj = masterData.booths ? masterData.booths.find(x => x.block_name === blk && String(x.booth_no) === String(b)) : null;
         if (bObj && bObj.booth_name_hi) {
-          opt.textContent = `#${b} - ${bObj.booth_name_hi} (Ward ${cat === 'PS' ? bObj.ps_ward : bObj.zp_ward})`;
+          const wardLabel = cat === 'PS' ? `PS Ward ${bObj.ps_ward}` : `ZP Ward ${bObj.zp_ward}`;
+          opt.textContent = `#${b} - ${bObj.booth_name_hi} (${wardLabel})`;
         } else {
           opt.textContent = `Polling Station #${b} of ${maxB} (${blk})`;
         }
