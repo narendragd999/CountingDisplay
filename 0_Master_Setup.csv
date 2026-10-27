@@ -1,0 +1,127 @@
+﻿Type (ZP/PS),Ward No,Ward Name (Hindi),Block Name,Reservation,Total Booths,Counting Tables,Total Electorate
+ZP,1,वार्ड 1: ओडा / पाल सरसिया / देवपुरा,Jaisamand,ST,25,5,22000
+ZP,2,वार्ड 2: केवड़ा खुर्द / सिंघाटवाड़ा / जावर माइन्स / पिलादर,Jaisamand,ST,25,5,22000
+ZP,3,वार्ड 3: पहाड़ी / वीरपुरा / झाड़ोल / सल्लादा / बड़गांव,Jaisamand,ST,25,5,22000
+ZP,4,वार्ड 4: पाल सराड़ा / केजड़ / सगतड़ा / डिगरी / बानाकला,Sarada,ST,25,5,22000
+ZP,5,वार्ड 5: चावंड / सेपुर / थाना / बांडोली / निंबोदा / सराड़ा,Sarada,ST,25,5,22000
+ZP,6,वार्ड 6: डेलवास / नथारा / परसाद / बलुआ / खोड़ीमहुड़ी,Sarada,ST,25,5,22000
+ZP,7,वार्ड 7: तुम्बड़ा तालाब / पाल ढांकावाड़ा / कुण्डा / कुराड़िया,Semari,ST,25,5,22000
+ZP,8,वार्ड 8: सेमारी / सेडातफला / टोकर / कानपूर / भोराई,Semari,ST,25,5,22000
+ZP,9,वार्ड 9: सुरखण्ड का खेड़ा / सीपुर / मल्लादा / बड़ावली / ईंटाली,Semari,ST,25,5,22000
+ZP,10,वार्ड 10: अमलोदा / बरोदा / डागर / ईंटालीखेड़ा / नोली,Salumbar,ST,25,5,22000
+ZP,11,वार्ड 11: बामनिया / बनोडा / डाल / डांगीवाड़ा / धरोद / तोडा,Salumbar,ST,25,5,22000
+ZP,12,वार्ड 12: बस्सी / बस्सी सिंघावत / बस्सी झुंझारवत / खैराड़ / ठाड़ा,Salumbar,ST,25,5,22000
+ZP,13,वार्ड 13: कडुणी / कांत / गावड़ापाल / ओरवाड़िया / लाकापा,Geengla,ST,25,5,22000
+ZP,14,वार्ड 14: छीबोदा / ईडाणा / जाम्बुड़ा / करावली / खरका / सराड़ी,Geengla,ST,25,5,22000
+ZP,15,वार्ड 15: बंसा / गींगला / गुदेल / जैतपुरा / जावड़दा / उथरदा,Geengla,ST,25,5,22000
+ZP,16,वार्ड 16: धावड़ी / अरणिया / ढोलिया / अगड़ / अंजणी / टेकन,Lasadiya,ST,25,5,22000
+ZP,17,वार्ड 17: शोभजी का गुड़ा / बलीचा / कालीभीत / सारेड़ी / धमाणिया,Lasadiya,ST,25,5,22000
+ZP,18,वार्ड 18: खजूरी / बेड़ावल / लसाड़िया / देवलिया / ओवरा / टाटकिया,Lasadiya,ST,25,5,22000
+ZP,19,वार्ड 19: बरोलिया / भाभराणा / भानोर / बोरी / बोराज / शेषपुर,Jhallara,ST,25,5,22000
+ZP,20,वार्ड 20: देवगांव / जेताना / झल्लारा / कराकला / मांडली / मोरीला,Jhallara,ST,25,5,22000
+ZP,21,वार्ड 21: अमलवा / बड़ातालाब / बुदेल / देवला कलां / हड़मतिया / मानपुर,Jhallara,ST,25,5,22000
+PS,1,Semari वार्ड 1,Semari,ST,20,5,18000
+PS,2,Semari वार्ड 2,Semari,ST,20,5,18000
+PS,3,Semari वार्ड 3,Semari,ST,20,5,18000
+PS,4,Semari वार्ड 4,Semari,ST,20,5,18000
+PS,5,Semari वार्ड 5,Semari,ST,20,5,18000
+PS,6,Semari वार्ड 6,Semari,ST,20,5,18000
+PS,7,Semari वार्ड 7,Semari,ST,20,5,18000
+PS,8,Semari वार्ड 8,Semari,ST,20,5,18000
+PS,9,Semari वार्ड 9,Semari,ST,20,5,18000
+PS,10,Semari वार्ड 10,Semari,ST,20,5,18000
+PS,11,Semari वार्ड 11,Semari,ST,20,5,18000
+PS,12,Semari वार्ड 12,Semari,ST,20,5,18000
+PS,13,Semari वार्ड 13,Semari,ST,20,5,18000
+PS,14,Semari वार्ड 14,Semari,ST,20,5,18000
+PS,15,Semari वार्ड 15,Semari,ST,20,5,18000
+PS,1,Salumbar वार्ड 1,Salumbar,ST,20,5,18000
+PS,2,Salumbar वार्ड 2,Salumbar,ST,20,5,18000
+PS,3,Salumbar वार्ड 3,Salumbar,ST,20,5,18000
+PS,4,Salumbar वार्ड 4,Salumbar,ST,20,5,18000
+PS,5,Salumbar वार्ड 5,Salumbar,ST,20,5,18000
+PS,6,Salumbar वार्ड 6,Salumbar,ST,20,5,18000
+PS,7,Salumbar वार्ड 7,Salumbar,ST,20,5,18000
+PS,8,Salumbar वार्ड 8,Salumbar,ST,20,5,18000
+PS,9,Salumbar वार्ड 9,Salumbar,ST,20,5,18000
+PS,10,Salumbar वार्ड 10,Salumbar,ST,20,5,18000
+PS,11,Salumbar वार्ड 11,Salumbar,ST,20,5,18000
+PS,12,Salumbar वार्ड 12,Salumbar,ST,20,5,18000
+PS,13,Salumbar वार्ड 13,Salumbar,ST,20,5,18000
+PS,14,Salumbar वार्ड 14,Salumbar,ST,20,5,18000
+PS,15,Salumbar वार्ड 15,Salumbar,ST,20,5,18000
+PS,1,Lasadiya वार्ड 1,Lasadiya,ST,20,5,18000
+PS,2,Lasadiya वार्ड 2,Lasadiya,ST,20,5,18000
+PS,3,Lasadiya वार्ड 3,Lasadiya,ST,20,5,18000
+PS,4,Lasadiya वार्ड 4,Lasadiya,ST,20,5,18000
+PS,5,Lasadiya वार्ड 5,Lasadiya,ST,20,5,18000
+PS,6,Lasadiya वार्ड 6,Lasadiya,ST,20,5,18000
+PS,7,Lasadiya वार्ड 7,Lasadiya,ST,20,5,18000
+PS,8,Lasadiya वार्ड 8,Lasadiya,ST,20,5,18000
+PS,9,Lasadiya वार्ड 9,Lasadiya,ST,20,5,18000
+PS,10,Lasadiya वार्ड 10,Lasadiya,ST,20,5,18000
+PS,11,Lasadiya वार्ड 11,Lasadiya,ST,20,5,18000
+PS,12,Lasadiya वार्ड 12,Lasadiya,ST,20,5,18000
+PS,13,Lasadiya वार्ड 13,Lasadiya,ST,20,5,18000
+PS,14,Lasadiya वार्ड 14,Lasadiya,ST,20,5,18000
+PS,15,Lasadiya वार्ड 15,Lasadiya,ST,20,5,18000
+PS,1,Geengla वार्ड 1,Geengla,ST,20,5,18000
+PS,2,Geengla वार्ड 2,Geengla,ST,20,5,18000
+PS,3,Geengla वार्ड 3,Geengla,ST,20,5,18000
+PS,4,Geengla वार्ड 4,Geengla,ST,20,5,18000
+PS,5,Geengla वार्ड 5,Geengla,ST,20,5,18000
+PS,6,Geengla वार्ड 6,Geengla,ST,20,5,18000
+PS,7,Geengla वार्ड 7,Geengla,ST,20,5,18000
+PS,8,Geengla वार्ड 8,Geengla,ST,20,5,18000
+PS,9,Geengla वार्ड 9,Geengla,ST,20,5,18000
+PS,10,Geengla वार्ड 10,Geengla,ST,20,5,18000
+PS,11,Geengla वार्ड 11,Geengla,ST,20,5,18000
+PS,12,Geengla वार्ड 12,Geengla,ST,20,5,18000
+PS,13,Geengla वार्ड 13,Geengla,ST,20,5,18000
+PS,14,Geengla वार्ड 14,Geengla,ST,20,5,18000
+PS,15,Geengla वार्ड 15,Geengla,ST,20,5,18000
+PS,1,Jaisamand वार्ड 1,Jaisamand,ST,20,5,18000
+PS,2,Jaisamand वार्ड 2,Jaisamand,ST,20,5,18000
+PS,3,Jaisamand वार्ड 3,Jaisamand,ST,20,5,18000
+PS,4,Jaisamand वार्ड 4,Jaisamand,ST,20,5,18000
+PS,5,Jaisamand वार्ड 5,Jaisamand,ST,20,5,18000
+PS,6,Jaisamand वार्ड 6,Jaisamand,ST,20,5,18000
+PS,7,Jaisamand वार्ड 7,Jaisamand,ST,20,5,18000
+PS,8,Jaisamand वार्ड 8,Jaisamand,ST,20,5,18000
+PS,9,Jaisamand वार्ड 9,Jaisamand,ST,20,5,18000
+PS,10,Jaisamand वार्ड 10,Jaisamand,ST,20,5,18000
+PS,11,Jaisamand वार्ड 11,Jaisamand,ST,20,5,18000
+PS,12,Jaisamand वार्ड 12,Jaisamand,ST,20,5,18000
+PS,13,Jaisamand वार्ड 13,Jaisamand,ST,20,5,18000
+PS,14,Jaisamand वार्ड 14,Jaisamand,ST,20,5,18000
+PS,15,Jaisamand वार्ड 15,Jaisamand,ST,20,5,18000
+PS,1,Sarada वार्ड 1,Sarada,ST,20,5,18000
+PS,2,Sarada वार्ड 2,Sarada,ST,20,5,18000
+PS,3,Sarada वार्ड 3,Sarada,ST,20,5,18000
+PS,4,Sarada वार्ड 4,Sarada,ST,20,5,18000
+PS,5,Sarada वार्ड 5,Sarada,ST,20,5,18000
+PS,6,Sarada वार्ड 6,Sarada,ST,20,5,18000
+PS,7,Sarada वार्ड 7,Sarada,ST,20,5,18000
+PS,8,Sarada वार्ड 8,Sarada,ST,20,5,18000
+PS,9,Sarada वार्ड 9,Sarada,ST,20,5,18000
+PS,10,Sarada वार्ड 10,Sarada,ST,20,5,18000
+PS,11,Sarada वार्ड 11,Sarada,ST,20,5,18000
+PS,12,Sarada वार्ड 12,Sarada,ST,20,5,18000
+PS,13,Sarada वार्ड 13,Sarada,ST,20,5,18000
+PS,14,Sarada वार्ड 14,Sarada,ST,20,5,18000
+PS,15,Sarada वार्ड 15,Sarada,ST,20,5,18000
+PS,1,Jhallara वार्ड 1,Jhallara,ST,20,5,18000
+PS,2,Jhallara वार्ड 2,Jhallara,ST,20,5,18000
+PS,3,Jhallara वार्ड 3,Jhallara,ST,20,5,18000
+PS,4,Jhallara वार्ड 4,Jhallara,ST,20,5,18000
+PS,5,Jhallara वार्ड 5,Jhallara,ST,20,5,18000
+PS,6,Jhallara वार्ड 6,Jhallara,ST,20,5,18000
+PS,7,Jhallara वार्ड 7,Jhallara,ST,20,5,18000
+PS,8,Jhallara वार्ड 8,Jhallara,ST,20,5,18000
+PS,9,Jhallara वार्ड 9,Jhallara,ST,20,5,18000
+PS,10,Jhallara वार्ड 10,Jhallara,ST,20,5,18000
+PS,11,Jhallara वार्ड 11,Jhallara,ST,20,5,18000
+PS,12,Jhallara वार्ड 12,Jhallara,ST,20,5,18000
+PS,13,Jhallara वार्ड 13,Jhallara,ST,20,5,18000
+PS,14,Jhallara वार्ड 14,Jhallara,ST,20,5,18000
+PS,15,Jhallara वार्ड 15,Jhallara,ST,20,5,18000

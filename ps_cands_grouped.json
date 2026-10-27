@@ -1,0 +1,1749 @@
+{
+  "Semari": {
+    "1": [
+      {
+        "name": "बालुराम मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "35",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "विरमल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "39",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "धुलेश्वर",
+        "party": "INC",
+        "gender": "M",
+        "age": "63",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "मांगीलाल मीणा",
+        "party": "IND",
+        "gender": "M",
+        "age": "36",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "नारायणलाल मीणा",
+        "party": "IND",
+        "gender": "M",
+        "age": "56",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "2": [
+      {
+        "name": "लक्ष्मन सिंह",
+        "party": "INC",
+        "gender": "M",
+        "age": "73",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "अमर सिंह",
+        "party": "BJP",
+        "gender": "M",
+        "age": "34",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "संजय मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "24",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "3": [
+      {
+        "name": "माया मीना",
+        "party": "BAP",
+        "gender": "F",
+        "age": "28",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "प्रीती मीणा",
+        "party": "BJP",
+        "gender": "F",
+        "age": "39",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "बबली",
+        "party": "INC",
+        "gender": "F",
+        "age": "56",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "4": [
+      {
+        "name": "रेखा मीणा",
+        "party": "IND",
+        "gender": "F",
+        "age": "33",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "कुसुमलता मीणा",
+        "party": "IND",
+        "gender": "F",
+        "age": "33",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "ओम प्रकाश मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "27",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "अरुणा रोत",
+        "party": "BJP",
+        "gender": "F",
+        "age": "28",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "कालूराम",
+        "party": "INC",
+        "gender": "M",
+        "age": "59",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "5": [
+      {
+        "name": "गौतम लाल पटेल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "31",
+        "category": "OBC",
+        "wardReservation": "General"
+      },
+      {
+        "name": "धनपाल मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "34",
+        "category": "ST",
+        "wardReservation": "General"
+      },
+      {
+        "name": "मोडीलाल",
+        "party": "IND",
+        "gender": "M",
+        "age": "71",
+        "category": "OBC",
+        "wardReservation": "General"
+      },
+      {
+        "name": "रमेश कुमार",
+        "party": "INC",
+        "gender": "M",
+        "age": "33",
+        "category": "OBC",
+        "wardReservation": "General"
+      }
+    ],
+    "6": [
+      {
+        "name": "योगेश",
+        "party": "INC",
+        "gender": "M",
+        "age": "27",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "महेन्द्र कुमार भाम्बी",
+        "party": "IND",
+        "gender": "M",
+        "age": "29",
+        "category": "SC",
+        "wardReservation": "General"
+      },
+      {
+        "name": "प्रकाश मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "27",
+        "category": "ST",
+        "wardReservation": "General"
+      },
+      {
+        "name": "निर्भय सिंह राठौड",
+        "party": "BJP",
+        "gender": "M",
+        "age": "43",
+        "category": "General",
+        "wardReservation": "General"
+      }
+    ],
+    "7": [
+      {
+        "name": "ललिता पटेल",
+        "party": "BJP",
+        "gender": "F",
+        "age": "27",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "वेलु",
+        "party": "IND",
+        "gender": "F",
+        "age": "49",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "दुर्गा",
+        "party": "INC",
+        "gender": "F",
+        "age": "35",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "8": [
+      {
+        "name": "तारा देवी पटेल",
+        "party": "IND",
+        "gender": "F",
+        "age": "34",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "रवीना सुथार",
+        "party": "INC",
+        "gender": "F",
+        "age": "23",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "लता",
+        "party": "IND",
+        "gender": "F",
+        "age": "52",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "लता जैन",
+        "party": "BJP",
+        "gender": "F",
+        "age": "57",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "9": [
+      {
+        "name": "कौशल्या",
+        "party": "BAP",
+        "gender": "F",
+        "age": "30",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "हिना कुमारी डिन्डोर",
+        "party": "BJP",
+        "gender": "F",
+        "age": "25",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "प्रियंका",
+        "party": "INC",
+        "gender": "F",
+        "age": "31",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "10": [
+      {
+        "name": "पार्वती देवी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "64",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "सेजन मीना",
+        "party": "BAP",
+        "gender": "F",
+        "age": "28",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "राधा देवी",
+        "party": "INC",
+        "gender": "F",
+        "age": "33",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "11": [
+      {
+        "name": "वनराज सिंह",
+        "party": "IND",
+        "gender": "M",
+        "age": "28",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "विजय कुमार मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "30",
+        "category": "ST",
+        "wardReservation": "General"
+      },
+      {
+        "name": "रतन सिह",
+        "party": "BJP",
+        "gender": "M",
+        "age": "60",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "पंकज",
+        "party": "INC",
+        "gender": "M",
+        "age": "41",
+        "category": "General",
+        "wardReservation": "General"
+      }
+    ],
+    "12": [
+      {
+        "name": "हीरालाल मीना",
+        "party": "BJP",
+        "gender": "M",
+        "age": "43",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "धन्नु",
+        "party": "BAP",
+        "gender": "F",
+        "age": "27",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "शान्तिलाल",
+        "party": "IND",
+        "gender": "M",
+        "age": "39",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "बाबुलाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "43",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "13": [
+      {
+        "name": "गीता कुमारी मीना",
+        "party": "BAP",
+        "gender": "F",
+        "age": "21",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "लक्ष्मण",
+        "party": "BJP",
+        "gender": "M",
+        "age": "48",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "किरण मीणा",
+        "party": "INC",
+        "gender": "M",
+        "age": "37",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "14": [
+      {
+        "name": "लीला देवी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "38",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "शान्ती देवी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "31",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "पानू",
+        "party": "INC",
+        "gender": "F",
+        "age": "43",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "15": [
+      {
+        "name": "रीना देवी",
+        "party": "BAP",
+        "gender": "F",
+        "age": "35",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "राजु देवी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "34",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "करुणा",
+        "party": "INC",
+        "gender": "F",
+        "age": "42",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ]
+  },
+  "Salumbar": {
+    "1": [
+      {
+        "name": "केसर कुमारी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "26",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "नन्दू देवी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "31",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "दीपिका मीना",
+        "party": "INC",
+        "gender": "F",
+        "age": "31",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "2": [
+      {
+        "name": "गोपाल सिंह",
+        "party": "BJP",
+        "gender": "M",
+        "age": "29",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "हितेश कुमार मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "29",
+        "category": "ST",
+        "wardReservation": "General"
+      },
+      {
+        "name": "नाहर सिंह",
+        "party": "INC",
+        "gender": "M",
+        "age": "58",
+        "category": "General",
+        "wardReservation": "General"
+      }
+    ],
+    "3": [
+      {
+        "name": "भगवती लाल सुथार",
+        "party": "INC",
+        "gender": "M",
+        "age": "43",
+        "category": "OBC",
+        "wardReservation": "OBC"
+      },
+      {
+        "name": "लीना सुथार",
+        "party": "BAP",
+        "gender": "F",
+        "age": "32",
+        "category": "OBC (Woman)",
+        "wardReservation": "OBC"
+      },
+      {
+        "name": "प्रकाश",
+        "party": "BJP",
+        "gender": "M",
+        "age": "37",
+        "category": "OBC",
+        "wardReservation": "OBC"
+      }
+    ],
+    "4": [
+      {
+        "name": "रूपी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "45",
+        "category": "ST (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "लीला कुंवर",
+        "party": "BJP",
+        "gender": "F",
+        "age": "54",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "रंजना कुंवर",
+        "party": "INC",
+        "gender": "F",
+        "age": "47",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "5": [
+      {
+        "name": "प्रताप सिंह",
+        "party": "INC",
+        "gender": "M",
+        "age": "42",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "प्रदीप कुमार मेहता",
+        "party": "IND",
+        "gender": "M",
+        "age": "33",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "विजयमाला",
+        "party": "AAP",
+        "gender": "F",
+        "age": "65",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "जगदीश कुमार मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "31",
+        "category": "ST",
+        "wardReservation": "General"
+      },
+      {
+        "name": "अर्जुन मेहता",
+        "party": "BJP",
+        "gender": "M",
+        "age": "36",
+        "category": "General",
+        "wardReservation": "General"
+      }
+    ],
+    "6": [
+      {
+        "name": "बंशती कुमारी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "27",
+        "category": "ST (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "भमरी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "42",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "लाली",
+        "party": "INC",
+        "gender": "F",
+        "age": "41",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "नाथी कंवर",
+        "party": "IND",
+        "gender": "F",
+        "age": "33",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "कंकू",
+        "party": "IND",
+        "gender": "F",
+        "age": "63",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "7": [
+      {
+        "name": "नर्बदा",
+        "party": "INC",
+        "gender": "F",
+        "age": "33",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "सविता",
+        "party": "BJP",
+        "gender": "F",
+        "age": "38",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "मोती",
+        "party": "BAP",
+        "gender": "F",
+        "age": "38",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "8": [
+      {
+        "name": "जितेन्द्र कुमार मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "22",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "भेरा",
+        "party": "BJP",
+        "gender": "M",
+        "age": "58",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "मेघराज मीणा",
+        "party": "INC",
+        "gender": "M",
+        "age": "26",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "9": [
+      {
+        "name": "कमला कुमारी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "25",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "केसरी",
+        "party": "BAP",
+        "gender": "F",
+        "age": "39",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कूरकी",
+        "party": "INC",
+        "gender": "F",
+        "age": "52",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "10": [
+      {
+        "name": "भैरुलाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "63",
+        "category": "SC",
+        "wardReservation": "SC"
+      },
+      {
+        "name": "कमलेश",
+        "party": "BAP",
+        "gender": "M",
+        "age": "28",
+        "category": "SC",
+        "wardReservation": "SC"
+      },
+      {
+        "name": "नारायण",
+        "party": "BJP",
+        "gender": "M",
+        "age": "58",
+        "category": "SC",
+        "wardReservation": "SC"
+      }
+    ],
+    "11": [
+      {
+        "name": "निर्मला",
+        "party": "BJP",
+        "gender": "F",
+        "age": "40",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "रेखा सुथार",
+        "party": "BAP",
+        "gender": "F",
+        "age": "36",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "कनकलता",
+        "party": "INC",
+        "gender": "F",
+        "age": "41",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "12": [
+      {
+        "name": "कोदरलाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "65",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "हेमराज",
+        "party": "BAP",
+        "gender": "M",
+        "age": "30",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "पन्नालाल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "40",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "13": [
+      {
+        "name": "गोतम लाल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "36",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "गौतमलाल मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "28",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "अशोक कुमार मीणा",
+        "party": "INC",
+        "gender": "M",
+        "age": "56",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "14": [
+      {
+        "name": "हेमलता कटारा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "27",
+        "category": "ST (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "केशी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "42",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "दीपिका कुंवर चुन्डावत",
+        "party": "INC",
+        "gender": "F",
+        "age": "27",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "15": [
+      {
+        "name": "मोहित",
+        "party": "BJP",
+        "gender": "M",
+        "age": "35",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "नाथूलाल  मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "26",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "मन्‍ना लाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "56",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ]
+  },
+  "Lasadiya": {
+    "1": [
+      {
+        "name": "दुर्गा कुमारी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "21",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "शंकरी  मीणा",
+        "party": "BJP",
+        "gender": "F",
+        "age": "43",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "भंवरी",
+        "party": "INC",
+        "gender": "F",
+        "age": "36",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "2": [
+      {
+        "name": "धापु देवी डाँगी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "38",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "लच्छु",
+        "party": "INC",
+        "gender": "F",
+        "age": "69",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "प्रेमी",
+        "party": "BAP",
+        "gender": "F",
+        "age": "32",
+        "category": "ST (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "3": [
+      {
+        "name": "आछूडी कुमारी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "21",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "शांति कुमारी मीणा",
+        "party": "BJP",
+        "gender": "F",
+        "age": "26",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कानकी",
+        "party": "INC",
+        "gender": "F",
+        "age": "33",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "4": [
+      {
+        "name": "भगवान लाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "55",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "लोगर लाल मीणा",
+        "party": "IND",
+        "gender": "M",
+        "age": "59",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "डाया  मीणा",
+        "party": "BJP",
+        "gender": "M",
+        "age": "38",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "हिरा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "36",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "5": [
+      {
+        "name": "भेरू लाल",
+        "party": "BAP",
+        "gender": "M",
+        "age": "27",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "भेरा उर्फ़ भेरुलाल मीणा",
+        "party": "BJP",
+        "gender": "M",
+        "age": "48",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "खेमा",
+        "party": "INC",
+        "gender": "M",
+        "age": "41",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "6": [
+      {
+        "name": "लक्ष्मी",
+        "party": "INC",
+        "gender": "F",
+        "age": "40",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "चोखली मीणा",
+        "party": "BJP",
+        "gender": "F",
+        "age": "43",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कमली",
+        "party": "BAP",
+        "gender": "F",
+        "age": "43",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कमली",
+        "party": "BAP",
+        "gender": "F",
+        "age": "43",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "7": [
+      {
+        "name": "गंगा देवी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "30",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "मीरा",
+        "party": "BJP",
+        "gender": "F",
+        "age": "26",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "भगली",
+        "party": "INC",
+        "gender": "F",
+        "age": "51",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "8": [
+      {
+        "name": "नारायणी",
+        "party": "INC",
+        "gender": "F",
+        "age": "38",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कमली मीणा",
+        "party": "BJP",
+        "gender": "F",
+        "age": "49",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "रामकन्या",
+        "party": "BAP",
+        "gender": "F",
+        "age": "28",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "9": [
+      {
+        "name": "हीराबाई मीणा",
+        "party": "BJP",
+        "gender": "F",
+        "age": "57",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "देवी लाल",
+        "party": "BAP",
+        "gender": "M",
+        "age": "56",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "लक्ष्मण",
+        "party": "INC",
+        "gender": "M",
+        "age": "55",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "10": [
+      {
+        "name": "केशरी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "53",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "रामा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "44",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "प्रभु",
+        "party": "INC",
+        "gender": "M",
+        "age": "53",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "11": [
+      {
+        "name": "हेमला",
+        "party": "INC",
+        "gender": "M",
+        "age": "48",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "वरदीचंद",
+        "party": "IND",
+        "gender": "M",
+        "age": "57",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "ऊंकार लाल मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "26",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "प्रकाश उर्फ़ प्रकाश चंद मीणा",
+        "party": "BJP",
+        "gender": "M",
+        "age": "34",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "12": [
+      {
+        "name": "हकरी बाई",
+        "party": "BJP",
+        "gender": "F",
+        "age": "40",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "चुनकी",
+        "party": "INC",
+        "gender": "F",
+        "age": "35",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "लोगरी कुमार मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "28",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "13": [
+      {
+        "name": "कालु लाल",
+        "party": "BAP",
+        "gender": "M",
+        "age": "29",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "उदेलाल  उर्फ  उदयलाल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "39",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "श्रवण",
+        "party": "INC",
+        "gender": "M",
+        "age": "35",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "14": [
+      {
+        "name": "प्रदीप कुमार जैन",
+        "party": "INC",
+        "gender": "M",
+        "age": "48",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "प्रदीप कुमार जैन",
+        "party": "INC",
+        "gender": "M",
+        "age": "48",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "धनराज पटेल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "43",
+        "category": "OBC (Woman)",
+        "wardReservation": "General"
+      },
+      {
+        "name": "लिम्बा राम",
+        "party": "BAP",
+        "gender": "M",
+        "age": "32",
+        "category": "ST",
+        "wardReservation": "General"
+      }
+    ],
+    "15": [
+      {
+        "name": "वालचन्द",
+        "party": "BAP",
+        "gender": "M",
+        "age": "32",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "नारायण उर्फ़ नारायण लाल मीणा",
+        "party": "BJP",
+        "gender": "M",
+        "age": "37",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "कालू",
+        "party": "IND",
+        "gender": "M",
+        "age": "43",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "रामा",
+        "party": "INC",
+        "gender": "M",
+        "age": "58",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ]
+  },
+  "Geengla": {
+    "1": [
+      {
+        "name": "मीनादेवी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "33",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "प्रतापी बाई",
+        "party": "INC",
+        "gender": "F",
+        "age": "69",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "2": [
+      {
+        "name": "मोती",
+        "party": "BJP",
+        "gender": "F",
+        "age": "51",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "प्रेमी बाई",
+        "party": "INC",
+        "gender": "F",
+        "age": "32",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "3": [
+      {
+        "name": "गौतम लाल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "32",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "सुरेश कुमार भील",
+        "party": "BAP",
+        "gender": "M",
+        "age": "24",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "वालाराम तावड",
+        "party": "INC",
+        "gender": "M",
+        "age": "79",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "4": [
+      {
+        "name": "महेंद्र कुमार पटेल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "30",
+        "category": "OBC",
+        "wardReservation": "OBC"
+      },
+      {
+        "name": "भेरू लाल",
+        "party": "IND",
+        "gender": "M",
+        "age": "39",
+        "category": "OBC",
+        "wardReservation": "OBC"
+      },
+      {
+        "name": "ललित पटेल",
+        "party": "INC",
+        "gender": "M",
+        "age": "45",
+        "category": "OBC",
+        "wardReservation": "OBC"
+      }
+    ],
+    "5": [
+      {
+        "name": "लक्ष्मी कुंवर",
+        "party": "INC",
+        "gender": "F",
+        "age": "53",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "अनिता कुमारी मीना",
+        "party": "BAP",
+        "gender": "F",
+        "age": "23",
+        "category": "ST (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "गुलाब कुंवर",
+        "party": "BJP",
+        "gender": "F",
+        "age": "54",
+        "category": "General (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ],
+    "6": [
+      {
+        "name": "गोपाल सिंह",
+        "party": "INC",
+        "gender": "M",
+        "age": "36",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "रघुवीर सिंह सिसोदिया",
+        "party": "BJP",
+        "gender": "M",
+        "age": "43",
+        "category": "General",
+        "wardReservation": "General"
+      }
+    ],
+    "7": [
+      {
+        "name": "रतन लाल",
+        "party": "BJP",
+        "gender": "M",
+        "age": "46",
+        "category": "SC",
+        "wardReservation": "SC"
+      },
+      {
+        "name": "प्रकाश चन्द्र मेघवाल",
+        "party": "BAP",
+        "gender": "M",
+        "age": "49",
+        "category": "SC",
+        "wardReservation": "SC"
+      },
+      {
+        "name": "गणपत लाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "38",
+        "category": "SC",
+        "wardReservation": "SC"
+      }
+    ],
+    "8": [
+      {
+        "name": "शान्ता बाई",
+        "party": "BJP",
+        "gender": "F",
+        "age": "36",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "शान्ति",
+        "party": "INC",
+        "gender": "F",
+        "age": "32",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "शंकरी",
+        "party": "BAP",
+        "gender": "F",
+        "age": "40",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "संगीता मीणा",
+        "party": "IND",
+        "gender": "F",
+        "age": "32",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "9": [
+      {
+        "name": "रमेश लाल",
+        "party": "BAP",
+        "gender": "M",
+        "age": "40",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "देवा",
+        "party": "BJP",
+        "gender": "M",
+        "age": "65",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "गंगा देवी",
+        "party": "INC",
+        "gender": "F",
+        "age": "58",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      }
+    ],
+    "10": [
+      {
+        "name": "पन्ना लाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "42",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "खुशपाल सिंह",
+        "party": "BAP",
+        "gender": "M",
+        "age": "33",
+        "category": "General",
+        "wardReservation": "General"
+      },
+      {
+        "name": "प्रकाशचन्द",
+        "party": "BJP",
+        "gender": "M",
+        "age": "34",
+        "category": "OBC",
+        "wardReservation": "General"
+      }
+    ],
+    "11": [
+      {
+        "name": "गंगा मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "22",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कैलाशी देवी",
+        "party": "INC",
+        "gender": "F",
+        "age": "41",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कुरी",
+        "party": "BJP",
+        "gender": "F",
+        "age": "53",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "12": [
+      {
+        "name": "रूपा",
+        "party": "BJP",
+        "gender": "M",
+        "age": "45",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "किशन लाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "53",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "प्रकाश चन्द्र मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "40",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "13": [
+      {
+        "name": "रमेश लाल मीणा",
+        "party": "BAP",
+        "gender": "M",
+        "age": "22",
+        "category": "ST",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "प्रेमलता",
+        "party": "BJP",
+        "gender": "F",
+        "age": "30",
+        "category": "ST (Woman)",
+        "wardReservation": "ST"
+      },
+      {
+        "name": "मोड़ीलाल",
+        "party": "INC",
+        "gender": "M",
+        "age": "44",
+        "category": "ST",
+        "wardReservation": "ST"
+      }
+    ],
+    "14": [
+      {
+        "name": "उषा कुमारी मीणा",
+        "party": "INC",
+        "gender": "F",
+        "age": "23",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "पार्वती",
+        "party": "BJP",
+        "gender": "F",
+        "age": "41",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      },
+      {
+        "name": "कमला कुमारी मीणा",
+        "party": "BAP",
+        "gender": "F",
+        "age": "21",
+        "category": "ST (Woman)",
+        "wardReservation": "ST (Woman)"
+      }
+    ],
+    "15": [
+      {
+        "name": "हीरकी",
+        "party": "BAP",
+        "gender": "F",
+        "age": "56",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "वेलू बाई",
+        "party": "BJP",
+        "gender": "F",
+        "age": "41",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      },
+      {
+        "name": "शंकरी पटेल",
+        "party": "INC",
+        "gender": "F",
+        "age": "30",
+        "category": "OBC (Woman)",
+        "wardReservation": "General (Woman)"
+      }
+    ]
+  },
+  "Jaisamand": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [],
+    "9": [],
+    "10": [],
+    "11": [],
+    "12": [],
+    "13": [],
+    "14": [],
+    "15": []
+  },
+  "Sarada": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [],
+    "9": [],
+    "10": [],
+    "11": [],
+    "12": [],
+    "13": [],
+    "14": [],
+    "15": []
+  },
+  "Jhallara": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [],
+    "9": [],
+    "10": [],
+    "11": [],
+    "12": [],
+    "13": [],
+    "14": [],
+    "15": []
+  }
+}
