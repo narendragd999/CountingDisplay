@@ -11,8 +11,8 @@
 
   <style>
     /* ==========================================================================
-       MODERN LIGHT-THEMED BROADCAST OPERATOR SYSTEM (OFFICIAL SALUMBER 2026)
-       Streamlined, Intuitive, Zero-Confusion Election Workflow
+       SUPER-SIMPLE LIGHT OPERATOR CONSOLE (SALUMBER ELECTIONS 2026)
+       Direct Booth & Round Entry • Auto-Mapped Wards • Zero Confusion
        ========================================================================== */
     :root {
       --bg-page: #f1f5f9;
@@ -138,7 +138,7 @@
     .btn-danger { background: var(--danger); color: #ffffff; }
     .btn-danger:hover { background: #991b1b; }
 
-    /* 3 CLEAN TABS */
+    /* 3 NAVIGATION TABS */
     .nav-tabs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -253,6 +253,41 @@
       box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
     }
 
+    /* ENTRY MODE TOGGLE */
+    .mode-toggle-bar {
+      display: flex;
+      gap: 12px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      border-radius: 8px;
+      align-items: center;
+    }
+
+    .mode-radio-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* BOOTH INFO BANNER */
+    .booth-info-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e40af;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     /* TABLE */
     .table-container {
       overflow-x: auto;
@@ -304,7 +339,7 @@
 
     /* VOTE INPUT */
     .vote-input {
-      width: 100px;
+      width: 110px;
       background: #ffffff;
       border: 2px solid var(--border-main);
       border-radius: 6px;
@@ -372,7 +407,7 @@
         <div style="font-size:38px; margin-bottom:8px;">🔒</div>
         <h2 style="font-size:17px; font-weight:800; color:#0f172a;">Operator Console Security</h2>
         <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-          Salumber Panchayati Raj Elections 2026<br>Please enter access password to manage data.
+          Salumber Panchayati Raj Elections 2026<br>Please enter access password to manage counting data.
         </p>
       </div>
 
@@ -395,7 +430,7 @@
     <header class="header-card">
       <div class="header-left">
         <h1><span>🏛️</span> Salumber District Elections 2026</h1>
-        <p>Live Election Operator Console • Direct Round-Wise Vote Entry</p>
+        <p>Live Election Operator Console • Direct Booth & Round Vote Entry</p>
       </div>
 
       <div class="header-actions">
@@ -404,10 +439,10 @@
       </div>
     </header>
 
-    <!-- 3 SIMPLE NAVIGATION TABS -->
+    <!-- 3 SIMPLE TABS -->
     <nav class="nav-tabs">
       <button id="tabBtnEntry" class="nav-tab-btn active" onclick="switchNavTab('entry')">
-        🗳️ Round Vote Entry
+        🗳️ Direct Vote Entry
       </button>
       <button id="tabBtnDeclare" class="nav-tab-btn" onclick="switchNavTab('declare')">
         🏆 Declare Ward Winner
@@ -418,51 +453,75 @@
     </nav>
 
     <!-- =====================================================================
-         TAB 1: ROUND VOTE ENTRY (SIMPLE & DIRECT)
+         TAB 1: DIRECT VOTE ENTRY (BOOTH-WISE OR ROUND-WISE)
          ===================================================================== -->
     <section id="panelEntry" class="card">
       <div class="card-head">
         <div class="card-title">
-          <span>🗳️</span> Direct Round Vote Entry
+          <span>🗳️</span> Direct Vote Entry Console
         </div>
-        <div id="wardStatusBadge" class="badge badge-primary">
+        <div id="entryStatusBadge" class="badge badge-primary">
           Ready for Entry
         </div>
       </div>
 
-      <!-- Filters: Category, Block, Ward, Round -->
+      <!-- Scope Selection -->
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Category</label>
           <select id="entryCategory" class="form-select" onchange="onCategoryChanged()">
-            <option value="ZP">Zilla Parishad (21 Wards)</option>
             <option value="PS">Panchayat Samiti (7 Blocks)</option>
+            <option value="ZP">Zilla Parishad (21 Wards)</option>
           </select>
         </div>
 
-        <div class="form-group" id="blockSelectGroup" style="display:none;">
-          <label class="form-label">Block</label>
+        <div class="form-group" id="blockSelectGroup">
+          <label class="form-label">Panchayat Samiti Block</label>
           <select id="entryBlock" class="form-select" onchange="onBlockChanged()">
-            <option value="Semari">Semari (15 Wards)</option>
-            <option value="Salumbar">Salumbar (15 Wards)</option>
-            <option value="Lasadiya">Lasadiya (15 Wards)</option>
-            <option value="Geengla">Geengla (15 Wards)</option>
-            <option value="Jaisamand">Jaisamand (15 Wards)</option>
-            <option value="Sarada">Sarada (15 Wards)</option>
-            <option value="Jhallara">Jhallara (15 Wards)</option>
+            <option value="Semari">Semari (69 Booths)</option>
+            <option value="Salumbar">Salumbar (70 Booths)</option>
+            <option value="Lasadiya">Lasadiya (73 Booths)</option>
+            <option value="Geengla">Geengla (68 Booths)</option>
+            <option value="Jaisamand">Jaisamand (84 Booths)</option>
+            <option value="Sarada">Sarada (75 Booths)</option>
+            <option value="Jhallara">Jhallara (83 Booths)</option>
           </select>
         </div>
+      </div>
 
+      <!-- Entry Mode Radio Toggle -->
+      <div class="mode-toggle-bar">
+        <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Entry Method:</span>
+        <label class="mode-radio-label">
+          <input type="radio" name="entryMode" value="booth" checked onchange="toggleEntryMode('booth')">
+          <span>📍 By Polling Station / Booth # (Recommended for Tables 1-5)</span>
+        </label>
+        <label class="mode-radio-label">
+          <input type="radio" name="entryMode" value="round" onchange="toggleEntryMode('round')">
+          <span>📑 By Ward & Round (Summary Sheet)</span>
+        </label>
+      </div>
+
+      <!-- Sub-Selector A: Booth Number Entry -->
+      <div id="boothSelectorBox" class="form-grid">
         <div class="form-group">
-          <label class="form-label">Ward</label>
-          <select id="entryWard" class="form-select" onchange="onWardChanged()">
-            <!-- Loaded dynamically -->
-          </select>
+          <label class="form-label">Polling Station / Booth #</label>
+          <div style="display:flex; gap:8px;">
+            <input type="number" id="inputBoothNo" class="form-input" placeholder="Enter Booth # (e.g. 1)" min="1" max="150" value="1" oninput="onBoothInputChanged()" style="width:130px; font-size:16px; font-weight:800;">
+            <select id="selectBoothDropdown" class="form-select" style="flex:1;" onchange="onBoothDropdownChanged()"></select>
+          </div>
         </div>
+      </div>
 
+      <!-- Sub-Selector B: Ward & Round Entry -->
+      <div id="roundSelectorBox" class="form-grid" style="display:none;">
         <div class="form-group">
-          <label class="form-label">Counting Round</label>
-          <select id="entryRound" class="form-select" onchange="onRoundChanged()">
+          <label class="form-label">Select Ward</label>
+          <select id="entryWard" class="form-select" onchange="onWardRoundChanged()"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Select Counting Round</label>
+          <select id="entryRound" class="form-select" onchange="onWardRoundChanged()">
             <option value="R1">Round 1</option>
             <option value="R2">Round 2</option>
             <option value="R3">Round 3</option>
@@ -477,7 +536,13 @@
         </div>
       </div>
 
-      <!-- Candidate Entry Table -->
+      <!-- Live Auto-Mapped Details Banner -->
+      <div id="boothInfoBanner" class="booth-info-banner">
+        <div id="boothInfoText">📍 Loading Polling Station...</div>
+        <div id="boothWardBadge" class="badge badge-primary">Ward -</div>
+      </div>
+
+      <!-- Candidate Vote Entry Table -->
       <div class="table-container">
         <table class="data-table">
           <thead>
@@ -485,52 +550,54 @@
               <th style="width:60px;">Ballot #</th>
               <th>Candidate Name</th>
               <th>Party</th>
-              <th style="width:130px; text-align:right;">Votes This Round</th>
+              <th style="width:140px; text-align:right;">Votes (This Slip)</th>
               <th style="width:110px; text-align:right;">Prev. Total</th>
               <th style="width:120px; text-align:right;">Cumulative</th>
             </tr>
           </thead>
-          <tbody id="candidatesTableBody">
-            <!-- Loaded dynamically -->
-          </tbody>
+          <tbody id="candidatesTableBody"></tbody>
         </table>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Save & Next Buttons -->
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button onclick="clearCurrentRoundInputs()" class="btn btn-outline" style="color:var(--text-dim);">
+        <button onclick="clearCurrentInputs()" class="btn btn-outline" style="color:var(--text-dim);">
           ✕ Clear Current Inputs
         </button>
 
-        <button id="btnSaveVotes" onclick="submitRoundVotes()" class="btn btn-success" style="padding:12px 24px; font-size:14px;">
-          💾 SAVE ROUND VOTES
+        <button id="btnSaveVotes" onclick="submitVotes()" class="btn btn-success" style="padding:12px 28px; font-size:14px;">
+          💾 SAVE VOTES & PROCEED
         </button>
       </div>
     </section>
 
     <!-- =====================================================================
-         TAB 2: DECLARE WARD WINNER
+         TAB 2: DECLARE WARD WINNER (LIVE STANDINGS & FINALIZATION)
          ===================================================================== -->
     <section id="panelDeclare" class="card" style="display:none;">
       <div class="card-head">
         <div class="card-title">
-          <span>🏆</span> Official Ward Winner Declaration
+          <span>🏆</span> Official Ward Winner Declaration & Status
         </div>
-        <span class="badge badge-primary">Final Action</span>
+        <span class="badge badge-primary">Final Declaration Action</span>
       </div>
+
+      <p style="font-size:12px; color:var(--text-muted);">
+        Review counted booths and vote standings. When all polling stations for a ward are counted, click <strong>Declare Ward Winner</strong> to finalize.
+      </p>
 
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Category</label>
-          <select id="declareCategory" class="form-select" onchange="onDeclareCategoryChanged()">
-            <option value="ZP">Zilla Parishad (21 Wards)</option>
-            <option value="PS">Panchayat Samiti (7 Blocks)</option>
+          <select id="declareCategory" class="form-select" onchange="onDeclareScopeChanged()">
+            <option value="PS">Panchayat Samiti</option>
+            <option value="ZP">Zilla Parishad</option>
           </select>
         </div>
 
-        <div class="form-group" id="declareBlockGroup" style="display:none;">
+        <div class="form-group" id="declareBlockGroup">
           <label class="form-label">Block</label>
-          <select id="declareBlock" class="form-select" onchange="onDeclareBlockChanged()">
+          <select id="declareBlock" class="form-select" onchange="onDeclareScopeChanged()">
             <option value="Semari">Semari</option>
             <option value="Salumbar">Salumbar</option>
             <option value="Lasadiya">Lasadiya</option>
@@ -540,66 +607,37 @@
             <option value="Jhallara">Jhallara</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label class="form-label">Ward</label>
-          <select id="declareWard" class="form-select" onchange="loadDeclareWardStandings()">
-            <!-- Loaded dynamically -->
-          </select>
-        </div>
       </div>
 
-      <!-- Standings Preview -->
-      <div style="background:var(--bg-subtle); border:1px solid var(--border-subtle); border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:12px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:13px; font-weight:700;">Final Vote Standings</span>
-          <span id="declareRoundsProgressBadge" class="badge badge-primary">Rounds Counted: 0</span>
-        </div>
-
-        <div class="table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Candidate</th>
-                <th>Party</th>
-                <th style="text-align:right;">Total Votes</th>
-                <th style="text-align:right;">Status / Margin</th>
-              </tr>
-            </thead>
-            <tbody id="declareStandingsBody">
-              <!-- Loaded dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Declaration Action Buttons -->
-      <div style="display:flex; gap:12px; justify-content:flex-end;">
-        <button id="btnReopenWard" onclick="reopenWard()" class="btn btn-outline" style="display:none; color:var(--warning); border-color:#fde68a;">
-          🔓 Re-Open Ward for Recount
-        </button>
-
-        <button id="btnDeclareWinner" onclick="declareWardWinner()" class="btn btn-primary" style="padding:12px 24px; font-size:14px;">
-          🏆 DECLARE WARD WINNER & FINALIZE
-        </button>
+      <!-- Wards Standings Table -->
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:70px;">Ward #</th>
+              <th>Leading Candidate</th>
+              <th>Party</th>
+              <th style="text-align:right;">Votes</th>
+              <th style="text-align:right;">Lead Margin</th>
+              <th style="text-align:center;">Status</th>
+              <th style="width:140px; text-align:center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="declareWardsTableBody"></tbody>
+        </table>
       </div>
     </section>
 
     <!-- =====================================================================
-         TAB 3: CONTESTANTS MANAGER (JHALLARA, SARADA, JAISAMAND, ETC.)
+         TAB 3: CONTESTANTS MANAGER
          ===================================================================== -->
     <section id="panelContestants" class="card" style="display:none;">
       <div class="card-head">
         <div class="card-title">
           <span>👥</span> Contestants Management
         </div>
-        <span class="badge badge-success">Add / Edit Pending Blocks</span>
+        <span class="badge badge-success">For Pending Blocks</span>
       </div>
-
-      <p style="font-size:12px; color:var(--text-muted);">
-        Manage candidates for any block. When nominations finalize for Jhallara, Sarada, or Jaisamand, paste the list below to import immediately.
-      </p>
 
       <div class="form-grid">
         <div class="form-group">
@@ -613,73 +651,39 @@
         <div class="form-group" id="manageBlockGroup">
           <label class="form-label">Block</label>
           <select id="manageBlock" class="form-select" onchange="loadManageBlockContestants()">
-            <option value="Jhallara">Jhallara (15 Wards)</option>
-            <option value="Sarada">Sarada (15 Wards)</option>
-            <option value="Jaisamand">Jaisamand (15 Wards)</option>
-            <option value="Semari">Semari (15 Wards)</option>
-            <option value="Salumbar">Salumbar (15 Wards)</option>
-            <option value="Lasadiya">Lasadiya (15 Wards)</option>
-            <option value="Geengla">Geengla (15 Wards)</option>
+            <option value="Jhallara">Jhallara</option>
+            <option value="Sarada">Sarada</option>
+            <option value="Jaisamand">Jaisamand</option>
+            <option value="Semari">Semari</option>
+            <option value="Salumbar">Salumbar</option>
+            <option value="Lasadiya">Lasadiya</option>
+            <option value="Geengla">Geengla</option>
           </select>
         </div>
       </div>
 
-      <!-- Bulk Import Card -->
+      <!-- Bulk Import -->
       <div style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:10px;">
         <div style="font-size:13px; font-weight:800; color:var(--primary);">
-          📋 Quick Bulk Import from Excel / Google Sheets
+          📋 Bulk Import from Excel / Google Sheets
         </div>
         <div style="font-size:12px; color:var(--text-muted);">
-          Copy and paste rows directly from Excel. Format: <code>Ward No, Candidate Name, Party, [Optional Ballot No]</code>
+          Paste rows from Form 5 / RO nomination list. Format: <code>Ward No, Candidate Name, Party, [Optional Ballot No]</code>
         </div>
-        <textarea id="bulkImportText" class="form-input" style="height:110px; font-family:monospace; font-size:12px;" placeholder="Example:
+        <textarea id="bulkImportText" class="form-input" style="height:100px; font-family:monospace; font-size:12px;" placeholder="Example:
 1, Ramesh Patel, BJP, 1
 1, Suresh Meena, INC, 2
 1, Anita Sharma, IND, 3
-2, Vikram Singh, BJP, 1
-2, Maya Devi, BAP, 2"></textarea>
+2, Vikram Singh, BJP, 1"></textarea>
         <button onclick="submitBulkImport()" class="btn btn-primary" style="align-self:flex-start; padding:9px 16px;">
-          🚀 Import All Contestants
+          🚀 Import Contestants
         </button>
       </div>
 
-      <!-- Add Single Candidate Form -->
-      <div style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:10px;">
-        <div style="font-size:13px; font-weight:800; color:var(--text-main);">
-          ➕ Add Single Contestant
-        </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Ward No.</label>
-            <select id="singleWard" class="form-select"></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Candidate Name</label>
-            <input type="text" id="singleName" class="form-input" placeholder="Full candidate name">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Party</label>
-            <select id="singleParty" class="form-select">
-              <option value="BJP">BJP</option>
-              <option value="INC">INC</option>
-              <option value="BAP">BAP</option>
-              <option value="IND">IND</option>
-              <option value="BSP">BSP</option>
-              <option value="CPM">CPM</option>
-              <option value="AAP">AAP</option>
-              <option value="RLP">RLP</option>
-            </select>
-          </div>
-        </div>
-        <button onclick="submitSingleCandidate()" class="btn btn-success" style="align-self:flex-start; padding:9px 16px;">
-          ➕ Add Contestant
-        </button>
-      </div>
-
-      <!-- Current Contestants in Block -->
+      <!-- Candidate List -->
       <div>
         <div style="font-size:13px; font-weight:800; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-          <span>Current Contestants in Selected Block</span>
+          <span>Registered Contestants</span>
           <span id="manageCountBadge" class="badge badge-primary">0 Contestants</span>
         </div>
         <div class="table-container" style="max-height:280px; overflow-y:auto;">
@@ -707,7 +711,10 @@
     let authToken = localStorage.getItem('salumber_auth_token') || '';
     let masterData = { candidates: [], wards: [], roundVotes: {} };
     let currentCandidates = [];
+    let activeEntryMode = 'booth'; // 'booth' or 'round'
+    let currentMappedWard = 1;
 
+    // Initialization
     window.addEventListener('DOMContentLoaded', async () => {
       checkAuthentication();
     });
@@ -781,7 +788,8 @@
 
     async function initApp() {
       await loadMasterData();
-      populateWardDropdowns();
+      populateBoothDropdown();
+      populateWardDropdown();
       onCategoryChanged();
       initWebSocket();
     }
@@ -817,11 +825,11 @@
       if (tab === 'entry') {
         document.getElementById('tabBtnEntry').classList.add('active');
         document.getElementById('panelEntry').style.display = 'flex';
-        onWardChanged();
+        refreshEntryView();
       } else if (tab === 'declare') {
         document.getElementById('tabBtnDeclare').classList.add('active');
         document.getElementById('panelDeclare').style.display = 'flex';
-        onDeclareCategoryChanged();
+        loadDeclareWardsTable();
       } else if (tab === 'contestants') {
         document.getElementById('tabBtnContestants').classList.add('active');
         document.getElementById('panelContestants').style.display = 'flex';
@@ -829,69 +837,131 @@
       }
     }
 
-    // TAB 1: VOTE ENTRY
+    // ENTRY MODE TOGGLE (BOOTH VS ROUND)
+    function toggleEntryMode(mode) {
+      activeEntryMode = mode;
+      document.getElementById('boothSelectorBox').style.display = mode === 'booth' ? 'grid' : 'none';
+      document.getElementById('roundSelectorBox').style.display = mode === 'round' ? 'grid' : 'none';
+      refreshEntryView();
+    }
+
     function onCategoryChanged() {
       const cat = document.getElementById('entryCategory').value;
       const blkGrp = document.getElementById('blockSelectGroup');
       if (cat === 'PS') blkGrp.style.display = 'flex';
       else blkGrp.style.display = 'none';
 
-      populateWardDropdowns();
-      onWardChanged();
+      populateBoothDropdown();
+      populateWardDropdown();
+      refreshEntryView();
     }
 
     function onBlockChanged() {
-      populateWardDropdowns();
-      onWardChanged();
+      populateBoothDropdown();
+      populateWardDropdown();
+      refreshEntryView();
     }
 
-    function populateWardDropdowns() {
+    function populateBoothDropdown() {
       const cat = document.getElementById('entryCategory').value;
-      const maxW = cat === 'ZP' ? 21 : 15;
-      const wardSelect = document.getElementById('entryWard');
-      wardSelect.innerHTML = '';
-      for (let i = 1; i <= maxW; i++) {
+      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+
+      // Filter booths for this block/ZP
+      const maxB = cat === 'ZP' ? 522 : 85;
+      const sel = document.getElementById('selectBoothDropdown');
+      sel.innerHTML = '';
+      for (let b = 1; b <= maxB; b++) {
         const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = `Ward ${i}`;
-        wardSelect.appendChild(opt);
+        opt.value = b;
+        opt.textContent = `Polling Station #${b}`;
+        sel.appendChild(opt);
       }
     }
 
-    function onWardChanged() {
-      loadWardCandidates();
+    function populateWardDropdown() {
+      const cat = document.getElementById('entryCategory').value;
+      const maxW = cat === 'ZP' ? 21 : 15;
+      const sel = document.getElementById('entryWard');
+      sel.innerHTML = '';
+      for (let w = 1; w <= maxW; w++) {
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = `Ward ${w}`;
+        sel.appendChild(opt);
+      }
     }
 
-    function onRoundChanged() {
-      loadWardCandidates();
+    function onBoothInputChanged() {
+      const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
+      document.getElementById('selectBoothDropdown').value = bno;
+      refreshEntryView();
     }
 
-    function loadWardCandidates() {
+    function onBoothDropdownChanged() {
+      const bno = document.getElementById('selectBoothDropdown').value;
+      document.getElementById('inputBoothNo').value = bno;
+      refreshEntryView();
+    }
+
+    function onWardRoundChanged() {
+      refreshEntryView();
+    }
+
+    function refreshEntryView() {
       const cat = document.getElementById('entryCategory').value;
       const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
-      const wno = parseInt(document.getElementById('entryWard').value) || 1;
-      const curRound = document.getElementById('entryRound').value || 'R1';
 
-      currentCandidates = masterData.candidates.filter(c => c.category === cat && c.block_name === blk && c.ward_no === wno);
+      let targetWard = 1;
+      let roundKey = 'R1';
+
+      if (activeEntryMode === 'booth') {
+        const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
+        
+        // Auto-calculate mapped ward:
+        // In PS: 15 wards, booths distributed approx 5 booths per ward (e.g. booths 1-5 = W1, 6-10 = W2...)
+        if (cat === 'PS') {
+          targetWard = Math.min(15, Math.max(1, Math.ceil(bno / 5)));
+        } else {
+          // ZP: 21 wards across 522 booths
+          targetWard = Math.min(21, Math.max(1, Math.ceil(bno / 25)));
+        }
+        roundKey = `B${bno}`;
+
+        document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bno} • ${blk}`;
+        document.getElementById('boothWardBadge').innerText = `Mapped to Ward ${targetWard}`;
+      } else {
+        targetWard = parseInt(document.getElementById('entryWard').value) || 1;
+        roundKey = document.getElementById('entryRound').value || 'R1';
+        document.getElementById('boothInfoText').innerText = `📑 Summary Mode • ${blk} Ward ${targetWard}`;
+        document.getElementById('boothWardBadge').innerText = `${roundKey}`;
+      }
+
+      currentMappedWard = targetWard;
+      loadCandidateInputs(cat, blk, targetWard, roundKey);
+    }
+
+    function loadCandidateInputs(cat, blk, wardNo, roundKey) {
+      currentCandidates = masterData.candidates.filter(c => c.category === cat && c.block_name === blk && c.ward_no === wardNo);
       currentCandidates.sort((a, b) => (a.ballot_no || 999) - (b.ballot_no || 999));
 
       const tbody = document.getElementById('candidatesTableBody');
       tbody.innerHTML = '';
 
       if (currentCandidates.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-dim); padding:20px;">No contestants registered for this ward yet. Use the <strong>Contestants Manager</strong> tab to add candidates.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-dim); padding:20px;">No contestants registered for Ward ${wardNo} yet. Use <strong>Contestants Manager</strong> to add.</td></tr>`;
         return;
       }
 
       currentCandidates.forEach(cand => {
         const cVotes = masterData.roundVotes[cand.id] || {};
+        
+        // Calculate cumulative previous votes
         let prevSum = 0;
-        const roundNum = parseInt(curRound.replace('R', '')) || 1;
-        for (let r = 1; r < roundNum; r++) {
-          prevSum += (cVotes[`R${r}`] || 0);
+        for (const [k, v] of Object.entries(cVotes)) {
+          if (k !== roundKey) prevSum += (v || 0);
         }
 
-        const curVal = cVotes[curRound] !== undefined ? cVotes[curRound] : '';
+        const curVal = cVotes[roundKey] !== undefined ? cVotes[roundKey] : '';
         const initialTotal = prevSum + (Number(curVal) || 0);
 
         const tr = document.createElement('tr');
@@ -920,7 +990,7 @@
       document.getElementById(`liveTotal_${candId}`).innerText = prevSum + val;
     }
 
-    function clearCurrentRoundInputs() {
+    function clearCurrentInputs() {
       currentCandidates.forEach(cand => {
         const inp = document.getElementById(`voteInput_${cand.id}`);
         if (inp) {
@@ -931,11 +1001,18 @@
       });
     }
 
-    async function submitRoundVotes() {
+    async function submitVotes() {
       const cat = document.getElementById('entryCategory').value;
       const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
-      const wno = parseInt(document.getElementById('entryWard').value) || 1;
-      const roundKey = document.getElementById('entryRound').value;
+      const wardNo = currentMappedWard;
+
+      let roundKey = 'R1';
+      if (activeEntryMode === 'booth') {
+        const bno = document.getElementById('inputBoothNo').value || 1;
+        roundKey = `B${bno}`;
+      } else {
+        roundKey = document.getElementById('entryRound').value || 'R1';
+      }
 
       const votesMap = {};
       let hasValue = false;
@@ -955,14 +1032,11 @@
       try {
         const resp = await fetch('/api/save_votes', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Auth-Token': authToken
-          },
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
           body: JSON.stringify({
             category: cat,
             block: blk,
-            ward_no: wno,
+            ward_no: wardNo,
             round_key: roundKey,
             votes: votesMap
           })
@@ -970,131 +1044,101 @@
 
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
-          showToast(`✅ Saved ${roundKey} votes for Ward ${wno}!`);
+          showToast(`✅ Saved votes for ${roundKey} (Ward ${wardNo})!`);
           await loadMasterData();
-          onWardChanged();
+
+          // Auto-advance to next booth if in booth mode
+          if (activeEntryMode === 'booth') {
+            const nextB = (parseInt(document.getElementById('inputBoothNo').value) || 1) + 1;
+            document.getElementById('inputBoothNo').value = nextB;
+            document.getElementById('selectBoothDropdown').value = nextB;
+            refreshEntryView();
+          } else {
+            refreshEntryView();
+          }
         } else {
-          alert('❌ Error: ' + (res.detail || 'Could not save votes.'));
+          alert('Error: ' + (res.detail || 'Could not save votes.'));
         }
       } catch (e) {
         alert('Network connection error: ' + e);
       }
     }
 
-    // TAB 2: DECLARE WINNER
-    function onDeclareCategoryChanged() {
+    // TAB 2: DECLARE WARD WINNER
+    function onDeclareScopeChanged() {
       const cat = document.getElementById('declareCategory').value;
       const blkGrp = document.getElementById('declareBlockGroup');
       if (cat === 'PS') blkGrp.style.display = 'flex';
       else blkGrp.style.display = 'none';
-
-      populateDeclareWardSelect();
-      loadDeclareWardStandings();
+      loadDeclareWardsTable();
     }
 
-    function onDeclareBlockChanged() {
-      populateDeclareWardSelect();
-      loadDeclareWardStandings();
-    }
-
-    function populateDeclareWardSelect() {
-      const cat = document.getElementById('declareCategory').value;
-      const maxW = cat === 'ZP' ? 21 : 15;
-      const sel = document.getElementById('declareWard');
-      sel.innerHTML = '';
-      for (let i = 1; i <= maxW; i++) {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = `Ward ${i}`;
-        sel.appendChild(opt);
-      }
-    }
-
-    function loadDeclareWardStandings() {
+    function loadDeclareWardsTable() {
       const cat = document.getElementById('declareCategory').value;
       const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('declareBlock').value;
-      const wno = parseInt(document.getElementById('declareWard').value) || 1;
+      const maxW = cat === 'ZP' ? 21 : 15;
 
-      const wardInfo = masterData.wards.find(w => w.category === cat && w.block_name === blk && w.ward_no === wno);
-      const isDeclared = wardInfo ? wardInfo.status === 'DECLARED' : false;
-
-      const cands = masterData.candidates.filter(c => c.category === cat && c.block_name === blk && c.ward_no === wno);
-
-      const roundsSet = new Set();
-      const candTotals = cands.map(c => {
-        let sum = 0;
-        const vObj = masterData.roundVotes[c.id] || {};
-        for (const [rKey, count] of Object.entries(vObj)) {
-          if (rKey.startsWith('R') && count > 0) {
-            sum += count;
-            roundsSet.add(rKey);
-          }
-        }
-        return { ...c, totalVotes: sum };
-      });
-
-      candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
-
-      document.getElementById('declareRoundsProgressBadge').innerText = `Rounds Counted: ${roundsSet.size}`;
-
-      const tbody = document.getElementById('declareStandingsBody');
+      const tbody = document.getElementById('declareWardsTableBody');
       tbody.innerHTML = '';
 
-      if (candTotals.length === 0 || candTotals[0].totalVotes === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:16px;">No round votes recorded yet for this ward.</td></tr>`;
-      } else {
+      for (let w = 1; w <= maxW; w++) {
+        const wInfo = masterData.wards.find(x => x.category === cat && x.block_name === blk && x.ward_no === w);
+        const isDeclared = wInfo ? wInfo.status === 'DECLARED' : false;
+
+        const cands = masterData.candidates.filter(c => c.category === cat && c.block_name === blk && c.ward_no === w);
+        
+        // Count votes and active entries
+        const entryKeys = new Set();
+        const candTotals = cands.map(c => {
+          let sum = 0;
+          const vObj = masterData.roundVotes[c.id] || {};
+          for (const [k, v] of Object.entries(vObj)) {
+            if (v > 0) {
+              sum += v;
+              entryKeys.add(k);
+            }
+          }
+          return { ...c, totalVotes: sum };
+        });
+
+        candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
         const leader = candTotals[0];
         const runnerUp = candTotals[1];
-        const margin = runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : leader.totalVotes;
+        const margin = leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0);
+        const hasVotes = leader && leader.totalVotes > 0;
 
-        candTotals.forEach((c, idx) => {
-          const rank = idx + 1;
-          let statusText = '-';
-          if (rank === 1 && c.totalVotes > 0) {
-            statusText = isDeclared ? `<strong style="color:var(--success);">🏆 WON by ${margin} votes</strong>` : `<span style="color:var(--primary);">Leading by ${margin}</span>`;
-          } else if (c.totalVotes > 0) {
-            statusText = `<span style="color:var(--text-dim);">Trailing by ${leader.totalVotes - c.totalVotes}</span>`;
-          }
-
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td style="font-weight:700;">#${rank}</td>
-            <td style="font-weight:700;">${c.name_hindi}</td>
-            <td><span class="party-pill party-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
-            <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:800;">${c.totalVotes}</td>
-            <td style="text-align:right; font-size:12px;">${statusText}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-
-      const btnDeclare = document.getElementById('btnDeclareWinner');
-      const btnReopen = document.getElementById('btnReopenWard');
-
-      if (isDeclared) {
-        btnDeclare.disabled = true;
-        btnDeclare.innerText = '🏆 Ward Winner Finalized';
-        btnReopen.style.display = 'inline-flex';
-      } else {
-        btnReopen.style.display = 'none';
-        if (candTotals.length > 0 && candTotals[0].totalVotes > 0) {
-          btnDeclare.disabled = false;
-          btnDeclare.innerText = '🏆 DECLARE WARD WINNER & FINALIZE';
-        } else {
-          btnDeclare.disabled = true;
-          btnDeclare.innerText = 'Enter votes first before declaring';
+        let statusBadge = '<span class="badge" style="background:#f1f5f9; color:#64748b;">⏳ Awaiting</span>';
+        if (isDeclared) {
+          statusBadge = '<span class="badge badge-success">✓ DECLARED</span>';
+        } else if (hasVotes) {
+          statusBadge = `<span class="badge badge-primary">⚡ In Progress (${entryKeys.size} slips)</span>`;
         }
+
+        let actionBtn = '';
+        if (isDeclared) {
+          actionBtn = `<button onclick="reopenWard('${cat}', '${blk}', ${w})" class="btn btn-outline" style="padding:4px 8px; font-size:11px; color:var(--warning);">🔓 Reopen</button>`;
+        } else if (hasVotes) {
+          actionBtn = `<button onclick="declareWardWinner('${cat}', '${blk}', ${w})" class="btn btn-primary" style="padding:5px 12px; font-size:11px;">🏆 Declare</button>`;
+        } else {
+          actionBtn = `<span style="font-size:11px; color:var(--text-dim);">No votes yet</span>`;
+        }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight:700;">Ward ${w}</td>
+          <td style="font-weight:700;">${leader && leader.totalVotes > 0 ? leader.name_hindi : '-'}</td>
+          <td>${leader && leader.totalVotes > 0 ? `<span class="party-pill party-${leader.party || 'IND'}">${leader.party || 'IND'}</span>` : '-'}</td>
+          <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:800;">${leader?.totalVotes || 0}</td>
+          <td style="text-align:right; font-size:12px; font-weight:700; color:${hasVotes ? 'var(--primary)' : 'inherit'};">${hasVotes ? `+${margin} votes` : '-'}</td>
+          <td style="text-align:center;">${statusBadge}</td>
+          <td style="text-align:center;">${actionBtn}</td>
+        `;
+        tbody.appendChild(tr);
       }
     }
 
-    async function declareWardWinner() {
-      const cat = document.getElementById('declareCategory').value;
-      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('declareBlock').value;
-      const wno = parseInt(document.getElementById('declareWard').value) || 1;
-
-      if (!confirm(`Are you sure you want to officially DECLARE the winner for ${cat} ${blk} Ward ${wno}?`)) {
-        return;
-      }
+    async function declareWardWinner(cat, blk, wno) {
+      if (!confirm(`Officially DECLARE and finalize winner for ${cat} ${blk} Ward ${wno}?`)) return;
 
       try {
         const resp = await fetch('/api/declare_ward', {
@@ -1104,9 +1148,9 @@
         });
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
-          showToast(`🏆 Official Winner Declared for Ward ${wno}!`);
+          showToast(`🏆 Ward ${wno} Winner Declared!`);
           await loadMasterData();
-          loadDeclareWardStandings();
+          loadDeclareWardsTable();
         } else {
           alert('Error: ' + (res.detail || 'Could not declare ward.'));
         }
@@ -1115,12 +1159,8 @@
       }
     }
 
-    async function reopenWard() {
-      const cat = document.getElementById('declareCategory').value;
-      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('declareBlock').value;
-      const wno = parseInt(document.getElementById('declareWard').value) || 1;
-
-      if (!confirm(`Do you want to re-open Ward ${wno} for recounts/edits?`)) return;
+    async function reopenWard(cat, blk, wno) {
+      if (!confirm(`Re-open Ward ${wno} for corrections?`)) return;
 
       try {
         const resp = await fetch('/api/reopen_ward', {
@@ -1132,7 +1172,7 @@
         if (resp.ok && res.status === 'success') {
           showToast(`🔓 Ward ${wno} reopened.`);
           await loadMasterData();
-          loadDeclareWardStandings();
+          loadDeclareWardsTable();
         }
       } catch (e) {
         alert('Error: ' + e);
@@ -1147,16 +1187,6 @@
       else blkGrp.style.display = 'none';
 
       const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('manageBlock').value;
-      const maxW = cat === 'ZP' ? 21 : 15;
-
-      const wSel = document.getElementById('singleWard');
-      wSel.innerHTML = '';
-      for (let i = 1; i <= maxW; i++) {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = `Ward ${i}`;
-        wSel.appendChild(opt);
-      }
 
       const cands = masterData.candidates.filter(c => c.category === cat && c.block_name === blk);
       cands.sort((a, b) => a.ward_no - b.ward_no || (a.ballot_no || 0) - (b.ballot_no || 0));
@@ -1167,7 +1197,7 @@
       tbody.innerHTML = '';
 
       if (cands.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:20px;">No contestants added for ${cat} ${blk} yet. Paste list from Excel above.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:20px;">No contestants registered for ${cat} ${blk} yet. Paste list from Excel above.</td></tr>`;
       } else {
         cands.forEach(c => {
           const tr = document.createElement('tr');
@@ -1217,38 +1247,6 @@
       }
     }
 
-    async function submitSingleCandidate() {
-      const cat = document.getElementById('manageCategory').value;
-      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('manageBlock').value;
-      const wno = parseInt(document.getElementById('singleWard').value) || 1;
-      const name = document.getElementById('singleName').value.trim();
-      const party = document.getElementById('singleParty').value;
-
-      if (!name) {
-        alert('Please enter candidate name.');
-        return;
-      }
-
-      try {
-        const resp = await fetch('/api/add_candidate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
-          body: JSON.stringify({ category: cat, block: blk, ward_no: wno, name: name, party: party })
-        });
-        const res = await resp.json();
-        if (resp.ok && res.status === 'success') {
-          showToast(`✓ Added candidate ${name}!`);
-          document.getElementById('singleName').value = '';
-          await loadMasterData();
-          loadManageBlockContestants();
-        } else {
-          alert('Error: ' + (res.detail || 'Could not add candidate.'));
-        }
-      } catch (e) {
-        alert('Network error: ' + e);
-      }
-    }
-
     async function deleteContestant(cid, name) {
       if (!confirm(`Delete contestant "${name}"?`)) return;
 
@@ -1263,8 +1261,6 @@
           showToast(`✓ Deleted candidate ${name}`);
           await loadMasterData();
           loadManageBlockContestants();
-        } else {
-          alert('Error: ' + (res.detail || 'Could not delete.'));
         }
       } catch (e) {
         alert('Network error: ' + e);
