@@ -1165,17 +1165,12 @@
       let tableNo = 1;
       const bNoNum = parseInt(rawBno) || 1;
       if (cat === 'ZP') {
-        if (currentZpMode === 'BLOCK') {
-          currentBoothBatch = Math.floor((bNoNum - 1) / tables) + 1;
-          tableNo = ((bNoNum - 1) % tables) + 1;
-        } else {
-          const zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === targetWard) : [];
-          zpBooths.sort((a, b) => (a.block_name !== b.block_name ? a.block_name.localeCompare(b.block_name) : (parseInt(a.booth_no)||0) - (parseInt(b.booth_no)||0)));
-          const bIdx = zpBooths.findIndex(b => (boothObj ? (b.block_name === boothObj.block_name && String(b.booth_no) === String(boothObj.booth_no)) : String(b.booth_no) === rawBno));
-          if (bIdx >= 0) {
-            currentBoothBatch = Math.floor(bIdx / tables) + 1;
-            tableNo = (bIdx % tables) + 1;
-          }
+        const zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === targetWard) : [];
+        zpBooths.sort((a, b) => (a.block_name !== b.block_name ? a.block_name.localeCompare(b.block_name) : (parseInt(a.booth_no)||0) - (parseInt(b.booth_no)||0)));
+        const bIdx = zpBooths.findIndex(b => (boothObj ? (b.block_name === boothObj.block_name && String(b.booth_no) === String(boothObj.booth_no)) : String(b.booth_no) === rawBno));
+        if (bIdx >= 0) {
+          currentBoothBatch = Math.floor(bIdx / tables) + 1;
+          tableNo = (bIdx % tables) + 1;
         }
       } else {
         currentBoothBatch = Math.max(1, Math.ceil(bNoNum / tables));
