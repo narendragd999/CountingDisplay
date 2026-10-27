@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operator Vote Entry Console - Salumber Elections 2026</title>
+  <title>Operator Console - Salumber Elections 2026</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@
 
     .container {
       width: 100%;
-      max-width: 650px;
+      max-width: 680px;
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -88,7 +88,7 @@
     }
 
     .link-btn {
-      padding: 6px 10px;
+      padding: 6px 12px;
       font-size: 11px;
       font-weight: 700;
       border-radius: 6px;
@@ -98,11 +98,48 @@
       text-decoration: none;
       cursor: pointer;
       transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .link-btn:hover {
       background: #334155;
       color: #fff;
+    }
+
+    /* Mode Navigation Tabs (Vote Entry vs Declare Winner) */
+    .mode-nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: #0d1527;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .mode-tab-btn {
+      flex: 1;
+      padding: 9px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-tab-btn.active {
+      background: #1e293b;
+      color: #38bdf8;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .mode-tab-btn.active.declare-mode {
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.3);
     }
 
     /* Level Selector */
@@ -131,6 +168,83 @@
       background: var(--accent);
       color: #fff;
       box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Counting Guide Banner */
+    .counting-rules-guide {
+      background: rgba(14, 165, 233, 0.08);
+      border: 1px solid rgba(14, 165, 233, 0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .guide-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .guide-desc {
+      font-size: 11px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    /* Setup Required Lock Banner */
+    .setup-locked-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1.5px solid rgba(245, 158, 11, 0.5);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+    .setup-locked-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #f59e0b;
+    }
+    .setup-locked-desc {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.4;
+      max-width: 520px;
+    }
+    .btn-setup-unlock {
+      margin-top: 4px;
+      padding: 9px 16px;
+      background: #f59e0b;
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-weight: 900;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-setup-unlock:hover {
+      background: #fbbf24;
+      transform: translateY(-1px);
+    }
+
+    .setup-confirmed-badge {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     /* Form Card */
@@ -276,9 +390,23 @@
       color: #fff;
     }
 
-    .cand-sub-votes {
+    .cand-live-summary {
       font-size: 11px;
-      color: var(--text-muted);
+      color: #94a3b8;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cand-live-summary .cum-total {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: #38bdf8;
+    }
+    .cand-live-summary .round-tag {
+      font-size: 10px;
+      color: #64748b;
     }
 
     .vote-input-box {
@@ -317,7 +445,7 @@
 
     .btn-submit {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       border: none;
       border-radius: 8px;
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
@@ -340,23 +468,31 @@
 
     .btn-declare {
       width: 100%;
-      padding: 11px;
-      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 13px;
+      border: 1px solid rgba(245, 158, 11, 0.6);
       border-radius: 8px;
-      background: rgba(245, 158, 11, 0.15);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(202, 138, 4, 0.25) 100%);
       color: #f59e0b;
-      font-weight: 800;
-      font-size: 13px;
+      font-weight: 900;
+      font-size: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       transition: all 0.2s;
     }
 
-    .btn-declare:hover {
-      background: rgba(245, 158, 11, 0.25);
+    .btn-declare:hover:not(:disabled) {
+      background: rgba(245, 158, 11, 0.4);
+      color: #fff;
+    }
+
+    .btn-declare:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: #475569;
+      color: #94a3b8;
     }
 
     .btn-unlock {
@@ -382,11 +518,11 @@
       color: #fff;
     }
 
-    /* Modal for Quick Add Candidate */
+    /* Modal Styling */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -415,50 +551,6 @@
       color: #fff;
       font-size: 13px;
     }
-  
-    /* Counting Guide Banner */
-    .counting-rules-guide {
-      background: rgba(14, 165, 233, 0.08);
-      border: 1px solid rgba(14, 165, 233, 0.3);
-      border-radius: 8px;
-      padding: 10px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .guide-title {
-      font-size: 12px;
-      font-weight: 800;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .guide-desc {
-      font-size: 11px;
-      color: #cbd5e1;
-      line-height: 1.45;
-    }
-
-    /* Live Candidate Summary */
-    .cand-live-summary {
-      font-size: 11px;
-      color: #94a3b8;
-      margin-top: 2px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .cand-live-summary .cum-total {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 14px;
-      font-weight: 800;
-      color: #38bdf8;
-    }
-    .cand-live-summary .round-tag {
-      font-size: 10px;
-      color: #64748b;
-    }
 
     /* Hall Config Modal Table */
     .hall-config-modal-card {
@@ -466,7 +558,7 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       width: 95%;
-      max-width: 780px;
+      max-width: 820px;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
@@ -508,8 +600,8 @@
       vertical-align: middle;
     }
     .hall-input {
-      width: 60px;
-      padding: 4px 6px;
+      width: 65px;
+      padding: 5px 8px;
       background: #090e17;
       border: 1px solid #334155;
       border-radius: 4px;
@@ -520,7 +612,7 @@
       text-align: center;
     }
     .hall-btn-sm {
-      padding: 4px 8px;
+      padding: 5px 10px;
       font-size: 11px;
       font-weight: 700;
       border-radius: 4px;
@@ -530,7 +622,29 @@
       cursor: pointer;
     }
     .hall-btn-sm:hover { background: #0369a1; }
-    
+
+    /* Final Declaration Cards */
+    .dec-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .dec-cand-box {
+      background: #090e17;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dec-cand-box.winner-box {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .dec-cand-box.runner-box {
+      border-color: rgba(148, 163, 184, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -539,7 +653,7 @@
     <!-- Top Bar -->
     <header class="header-box">
       <div class="header-title">
-        <h1>🗳️ SALUMBER VOTE ENTRY</h1>
+        <h1>🗳️ SALUMBER ELECTION CONSOLE</h1>
         <div class="header-sub">
           <span class="status-dot"></span>
           <span id="connState">Real-Time Database Connected</span>
@@ -547,11 +661,20 @@
       </div>
       <div class="quick-links">
         <a href="/" target="_blank" class="link-btn" title="Open TV Live Display">📺 TV Screen</a>
-        <a href="/api/export_csv" class="link-btn" title="Download Excel CSV">📥 Export CSV</a>
         <button class="link-btn" style="background:#1e3a5f; color:#38bdf8; border-color:#0284c7;" onclick="openHallConfigModal()">⚙️ Hall & Rounds Setup</button>
         <button class="link-btn" onclick="openAddCandModal()">➕ Add Candidate</button>
       </div>
     </header>
+
+    <!-- Top Mode Switcher (Vote Entry vs Declare Winner) -->
+    <div class="mode-nav-tabs">
+      <div id="tabVoteEntry" class="mode-tab-btn active" onclick="switchMode('ENTRY')">
+        🗳️ Vote Entry (राउंड-वार मत प्रविष्टि)
+      </div>
+      <div id="tabDeclareWinner" class="mode-tab-btn declare-mode" onclick="switchMode('DECLARE')">
+        🏆 Declare Ward Winner (अंतिम परिणाम घोषणा)
+      </div>
+    </div>
 
     <!-- Level Selector -->
     <div class="level-toggle">
@@ -559,26 +682,157 @@
       <div id="btnPS" class="toggle-btn" onclick="setLevel('PS')">🌾 Panchayat Samiti (7 Blocks)</div>
     </div>
 
-    <!-- Counting Instructions Guide Banner -->
-    <div class="counting-rules-guide">
-      <div class="guide-title">
-        <span>💡</span>
-        <span>मत प्रविष्टि निर्देश (Round vs Cumulative Votes)</span>
+    <!-- ===================================================================
+         PANEL 1: VOTE ENTRY (मत प्रविष्टि)
+         =================================================================== -->
+    <div id="panelVoteEntry" style="display:flex; flex-direction:column; gap:14px;">
+      <!-- Counting Instructions Guide Banner -->
+      <div class="counting-rules-guide">
+        <div class="guide-title">
+          <span>💡</span>
+          <span>मत प्रविष्टि निर्देश (Round-wise vs Cumulative Votes)</span>
+        </div>
+        <div class="guide-desc">
+          • <strong>केवल राउंड-वार मत दर्ज करें:</strong> प्रत्येक राउंड में <u>केवल उस राउंड में टेबल 1-5 पर मिले नए मत</u> ही भरें।<br>
+          • <strong>सिस्टम स्वतः जोड़ेगा:</strong> पूर्व राउंड्स + वर्तमान राउंड को <strong>सिस्टम स्वतः जोड़कर कुल संचयी योग</strong> बनाता है।<br>
+          • <strong>लाइव योग:</strong> नीचे प्रत्येक प्रत्याशी के नाम के साथ <em>कुल संचयी योग (Cumulative Total)</em> रियल-टाइम में दिखेगा।
+        </div>
       </div>
-      <div class="guide-desc">
-        • <strong>राउंड-वार प्रविष्टि:</strong> प्रत्येक राउंड में <u>केवल उस राउंड में टेबल 1-5 पर मिले नए मत (Round Votes)</u> ही दर्ज करें।<br>
-        • <strong>कुल संचयी योग (Cumulative Total):</strong> सिस्टम द्वारा पूर्व राउंड्स + वर्तमान राउंड को <strong>स्वतः जोड़कर कुल योग</strong> निकाला जाता है।<br>
-        • <strong>लाइव पूर्वावलोकन:</strong> नीचे प्रत्येक प्रत्याशी के आगे <em>कुल संचयी योग (Cumulative Total)</em> रियल-टाइम में दिखेगा।
+
+      <!-- Main Entry Form Card -->
+      <div class="form-card">
+        <div class="input-row">
+          <!-- PS Block Select (Hidden for ZP) -->
+          <div id="psBlockWrapper" class="input-group" style="display:none;">
+            <label>Panchayat Samiti Block</label>
+            <select id="blockSelect" onchange="loadWardCandidates()">
+              <option value="Semari">Semari</option>
+              <option value="Salumbar">Salumbar</option>
+              <option value="Lasadiya">Lasadiya</option>
+              <option value="Geengla">Geengla</option>
+              <option value="Jaisamand">Jaisamand</option>
+              <option value="Sarada">Sarada</option>
+              <option value="Jhallara">Jhallara</option>
+            </select>
+          </div>
+
+          <!-- Ward Select -->
+          <div class="input-group">
+            <label id="wardLabel">Zilla Parishad Ward</label>
+            <select id="wardSelect" onchange="loadWardCandidates()">
+              <!-- Injected via JS -->
+            </select>
+          </div>
+
+          <!-- Round Select -->
+          <div class="input-group">
+            <label>Counting Round</label>
+            <select id="roundSelect" onchange="updateInputsWithRound()">
+              <!-- Populated dynamically based on ward's max_rounds -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Setup Status Pill -->
+        <div id="wardSetupStatusContainer"></div>
+
+        <!-- Candidate Input Cards (Locked if setup not confirmed) -->
+        <div id="wardEntryActiveArea">
+          <label>Enter Candidate Votes for Selected Round</label>
+          <div id="candidatesContainer" class="candidates-container">
+            <!-- Candidate rows injected via JS -->
+          </div>
+
+          <!-- Action Buttons (ONLY SAVE ROUND VOTES HERE - NO ACCIDENTAL DECLARE) -->
+          <div class="action-btn-row">
+            <button class="btn-submit" onclick="submitVotes()">
+              <span>💾</span> SAVE ROUND VOTES (Instant TV Update)
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Main Entry Form -->
-    <div class="form-card">
-      <div class="input-row">
-        <!-- PS Block Select (Hidden for ZP) -->
-        <div id="psBlockWrapper" class="input-group" style="display:none;">
-          <label>Panchayat Samiti Block</label>
-          <select id="blockSelect" onchange="loadWardCandidates()">
+
+    <!-- ===================================================================
+         PANEL 2: DECLARE WARD WINNER (परिणाम घोषणा - पृथक सुरक्षित पैनल)
+         =================================================================== -->
+    <div id="panelDeclareWinner" style="display:none; flex-direction:column; gap:14px;">
+      <div class="form-card">
+        <div style="border-bottom:1px solid #334155; padding-bottom:10px;">
+          <h2 style="font-size:16px; font-weight:900; color:#f59e0b; display:flex; align-items:center; gap:8px;">
+            <span>🏆</span> OFFICIAL WARD WINNER DECLARATION (आधिकारिक परिणाम घोषणा)
+          </h2>
+          <p style="font-size:11px; color:#94a3b8; margin-top:3px;">
+            यह पैनल केवल सभी राउंड्स की मतगणना पूर्ण होने के उपरांत अधिकृत विजेता घोषित करने हेतु है।
+          </p>
+        </div>
+
+        <div class="input-row">
+          <div id="decPsBlockWrapper" class="input-group" style="display:none;">
+            <label>Panchayat Samiti Block</label>
+            <select id="decBlockSelect" onchange="loadDeclareWardView()">
+              <option value="Semari">Semari</option>
+              <option value="Salumbar">Salumbar</option>
+              <option value="Lasadiya">Lasadiya</option>
+              <option value="Geengla">Geengla</option>
+              <option value="Jaisamand">Jaisamand</option>
+              <option value="Sarada">Sarada</option>
+              <option value="Jhallara">Jhallara</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label id="decWardLabel">Zilla Parishad Ward</label>
+            <select id="decWardSelect" onchange="loadDeclareWardView()">
+              <!-- Injected via JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Ward Progress & Declaration Status Details -->
+        <div id="decWardDetailsContainer">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================================
+       COUNTING HALL & ROUNDS SETUP MODAL
+       =================================================================== -->
+  <div id="hallModal" class="modal-overlay" style="display:none;">
+    <div class="hall-config-modal-card">
+      <div class="hall-modal-head">
+        <div>
+          <h3 style="color:#38bdf8; font-size:15px; font-weight:800;">⚙️ Counting Hall & Rounds Setup (कक्ष एवं राउंड विन्यास)</h3>
+          <p style="font-size:11px; color:#94a3b8; margin-top:2px;">मत प्रविष्टि से पूर्व प्रत्येक वार्ड के टेबल एवं राउंड्स की पुष्टि अनिवार्य है (Max Rounds = Booths ÷ Tables)</p>
+        </div>
+        <button onclick="closeHallConfigModal()" class="link-btn" style="background:#334155; color:#fff;">✕ बंद करें</button>
+      </div>
+
+      <div class="hall-modal-body">
+        <!-- Quick Bulk Setup -->
+        <div style="display:flex; align-items:center; justify-content:space-between; background:#090e17; padding:10px 14px; border-radius:6px; border:1px solid #334155; flex-wrap:wrap; gap:8px;">
+          <div style="font-size:12px; font-weight:800; color:#f8fafc;">
+            ⚡ त्वरित एकमुश्त विन्यास (Bulk Setup):
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button onclick="bulkApplyTables('ZP', null, 5)" class="link-btn" style="background:#0284c7; color:#fff;">⚡ सभी जिला परिषद = 5 टेबल्स (पुष्ट करें)</button>
+            <button onclick="bulkApplyTables('PS', null, 5)" class="link-btn" style="background:#ca8a04; color:#fff;">⚡ सभी पं. समितियां = 5 टेबल्स (पुष्ट करें)</button>
+          </div>
+        </div>
+
+        <!-- Filter for Hall Table -->
+        <div style="display:flex; gap:10px; align-items:center;">
+          <label style="font-size:11px; color:#94a3b8; font-weight:800;">फिल्टर:</label>
+          <select id="hallFilterCat" class="modal-input" style="width:150px; padding:6px;" onchange="loadHallConfigTable()">
+            <option value="ZP">Zilla Parishad (21)</option>
+            <option value="PS">Panchayat Samiti</option>
+          </select>
+          <select id="hallFilterBlock" class="modal-input" style="width:150px; padding:6px; display:none;" onchange="loadHallConfigTable()">
             <option value="Semari">Semari</option>
             <option value="Salumbar">Salumbar</option>
             <option value="Lasadiya">Lasadiya</option>
@@ -589,55 +843,34 @@
           </select>
         </div>
 
-        <!-- Ward Select -->
-        <div class="input-group">
-          <label id="wardLabel">Zilla Parishad Ward</label>
-          <select id="wardSelect" onchange="loadWardCandidates()">
-            <!-- Injected via JS -->
-          </select>
+        <!-- Wards Config Table -->
+        <div style="overflow-x:auto;">
+          <table class="hall-table">
+            <thead>
+              <tr>
+                <th>वार्ड</th>
+                <th>वार्ड नाम</th>
+                <th>आरक्षण</th>
+                <th>कुल बूथ</th>
+                <th>काउंटिंग टेबल</th>
+                <th>राउंड्स</th>
+                <th>स्थिति</th>
+                <th>एक्शन</th>
+              </tr>
+            </thead>
+            <tbody id="hallTableBody">
+              <!-- Loaded via JS -->
+            </tbody>
+          </table>
         </div>
-
-        <!-- Round Select -->
-        <div class="input-group">
-          <label>Counting Round</label>
-          <select id="roundSelect" onchange="updateInputsWithRound()">
-            <option value="PB">Postal Ballot (PB)</option>
-            <option value="R1">Round 1 (Tables 1-5)</option>
-            <option value="R2">Round 2 (Tables 1-5)</option>
-            <option value="R3">Round 3 (Tables 1-5)</option>
-            <option value="R4">Round 4 (Tables 1-5)</option>
-            <option value="R5">Round 5 (Tables 1-5)</option>
-            <option value="R6">Round 6 (Tables 1-5)</option>
-            <option value="R7">Round 7 (Tables 1-5)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Ward Status -->
-      <div id="wardStatusBanner" class="ward-status-pill counting">STATUS: COUNTING IN PROGRESS</div>
-
-      <!-- Candidate Input Cards -->
-      <label>Enter Candidate Votes for Selected Round</label>
-      <div id="candidatesContainer" class="candidates-container">
-        <!-- Candidate rows injected via JS -->
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="action-btn-row">
-        <button class="btn-submit" onclick="submitVotes(false)">
-          <span>💾</span> SAVE ROUND VOTES (Instant TV Update)
-        </button>
-        <button id="btnDeclare" class="btn-declare" onclick="submitVotes(true)">
-          <span>🏆</span> DECLARE WARD WINNER & FINALIZE
-        </button>
-        <button id="btnReopenWard" class="btn-unlock" style="display:none;" onclick="reopenCurrentWard()">
-          <span>🔓</span> UNLOCK / REOPEN WARD FOR EDITING (पुनः मतगणना / सुधार)
-        </button>
       </div>
     </div>
   </div>
 
-  <!-- Add Candidate Modal -->
+
+  <!-- ===================================================================
+       ADD CANDIDATE MODAL
+       =================================================================== -->
   <div id="addModal" class="modal-overlay" style="display:none;">
     <div class="modal-card">
       <h3 style="color:#38bdf8; font-size:15px;">➕ Add Candidate to Ward</h3>
@@ -661,17 +894,39 @@
     </div>
   </div>
 
+
+  <!-- ===================================================================
+       APPLICATION LOGIC & DATA CONTROLLER
+       =================================================================== -->
   <script>
+    let currentMode = 'ENTRY'; // 'ENTRY' or 'DECLARE'
     let currentLevel = 'ZP';
     let currentCandidates = [];
     let masterData = { candidates: [], wards: [], roundVotes: {} };
     let candsByWardMap = {};
     let wardStatusMap = {};
+    let allWardConfigs = [];
 
     window.addEventListener('DOMContentLoaded', async () => {
       setLevel('ZP');
       await initMasterCache();
     });
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.getElementById('tabVoteEntry').className = 'mode-tab-btn ' + (mode === 'ENTRY' ? 'active' : '');
+      document.getElementById('tabDeclareWinner').className = 'mode-tab-btn declare-mode ' + (mode === 'DECLARE' ? 'active' : '');
+
+      document.getElementById('panelVoteEntry').style.display = (mode === 'ENTRY') ? 'flex' : 'none';
+      document.getElementById('panelDeclareWinner').style.display = (mode === 'DECLARE') ? 'flex' : 'none';
+
+      if (mode === 'DECLARE') {
+        syncDeclareWardDropdowns();
+        loadDeclareWardView();
+      } else {
+        loadWardCandidates();
+      }
+    }
 
     async function initMasterCache() {
       try {
@@ -708,7 +963,7 @@
 
       (masterData.wards || []).forEach(w => {
         const key = `${w.category}_${w.block_name}_${w.ward_no}`;
-        wardStatusMap[key] = w.status || 'COUNTING';
+        wardStatusMap[key] = w;
       });
     }
 
@@ -724,7 +979,27 @@
       const wSel = document.getElementById('wardSelect');
       wSel.innerHTML = Array.from({length: maxWards}, (_, i) => `<option value="${i+1}">Ward ${i+1}</option>`).join('');
 
-      loadWardCandidates();
+      syncDeclareWardDropdowns();
+
+      if (currentMode === 'DECLARE') {
+        loadDeclareWardView();
+      } else {
+        loadWardCandidates();
+      }
+    }
+
+    function syncDeclareWardDropdowns() {
+      const decPsWrapper = document.getElementById('decPsBlockWrapper');
+      if (decPsWrapper) decPsWrapper.style.display = currentLevel === 'PS' ? 'flex' : 'none';
+
+      const decLabel = document.getElementById('decWardLabel');
+      if (decLabel) decLabel.innerText = currentLevel === 'ZP' ? 'Zilla Parishad Ward' : 'Panchayat Samiti Ward';
+
+      const maxWards = currentLevel === 'ZP' ? 21 : 15;
+      const decWSel = document.getElementById('decWardSelect');
+      if (decWSel) {
+        decWSel.innerHTML = Array.from({length: maxWards}, (_, i) => `<option value="${i+1}">Ward ${i+1}</option>`).join('');
+      }
     }
 
     async function loadWardCandidates() {
@@ -732,79 +1007,63 @@
       const block = currentLevel === 'ZP' ? 'Salumber ZP' : document.getElementById('blockSelect').value;
       const key = `${currentLevel}_${block}_${wardNo}`;
 
-      // Instant 0ms load from in-memory cache if available!
-      if (candsByWardMap[key]) {
-        currentCandidates = candsByWardMap[key];
-        const status = wardStatusMap[key] || 'COUNTING';
-        updateWardStatusUI(status);
-        const wardObj = (masterData.wards || []).find(x => x.category === currentLevel && x.block_name === block && x.ward_no === wardNo);
-        updateRoundSelectOptions(wardObj ? wardObj.max_rounds : 5);
-        renderCandidateInputs();
-        return;
-      }
+      const wardObj = (masterData.wards || []).find(x => x.category === currentLevel && x.block_name === block && x.ward_no === wardNo) || {};
+      const isSetupDone = (wardObj.is_setup_done === 1);
+      const status = wardObj.status || 'COUNTING';
 
-      // Fallback network fetch if cache not yet populated
-      try {
-        const resp = await fetch(`/api/candidates?category=${currentLevel}&block=${encodeURIComponent(block)}&ward_no=${wardNo}`);
-        const data = await resp.json();
+      const setupContainer = document.getElementById('wardSetupStatusContainer');
+      const activeArea = document.getElementById('wardEntryActiveArea');
 
-        currentCandidates = data.candidates || [];
-        const status = data.status || 'COUNTING';
-        wardStatusMap[key] = status;
-        updateWardStatusUI(status);
-        renderCandidateInputs();
-      } catch (err) {
-        console.error('Error loading candidates:', err);
-      }
-    }
-
-    function updateWardStatusUI(status) {
-      const sBanner = document.getElementById('wardStatusBanner');
-      const btnUnlock = document.getElementById('btnReopenWard');
-      const btnDeclare = document.getElementById('btnDeclare');
-
-      if (status === 'DECLARED') {
-        sBanner.className = 'ward-status-pill declared';
-        sBanner.innerText = 'STATUS: DECLARED (WINNER ANNOUNCED)';
-        if (btnUnlock) btnUnlock.style.display = 'flex';
-        if (btnDeclare) btnDeclare.style.display = 'none';
+      if (!isSetupDone) {
+        // LOCK VOTE ENTRY IF SETUP IS NOT CONFIRMED
+        setupContainer.innerHTML = `
+          <div class="setup-locked-box">
+            <div class="setup-locked-title">🔒 कक्ष एवं राउंड विन्यास लंबित (Hall Setup Pending)</div>
+            <div class="setup-locked-desc">
+              वार्ड ${wardNo} के लिए मतगणना टेबल एवं राउंड्स की पुष्टि अभी तक नहीं की गई है। 
+              <strong>चुनावी नियमों के अनुसार सेटअप की पुष्टि किए बिना मत प्रविष्टि वर्जित है।</strong>
+            </div>
+            <button class="btn-setup-unlock" onclick="openHallConfigForCurrentWard()">⚙️ अभी विन्यास पुष्ट करें (Confirm Setup Now)</button>
+          </div>
+        `;
+        activeArea.style.opacity = '0.3';
+        activeArea.style.pointerEvents = 'none';
       } else {
-        sBanner.className = 'ward-status-pill counting';
-        sBanner.innerText = 'STATUS: COUNTING IN PROGRESS';
-        if (btnUnlock) btnUnlock.style.display = 'none';
-        if (btnDeclare) btnDeclare.style.display = 'flex';
+        // SETUP CONFIRMED - UNLOCK ENTRY
+        setupContainer.innerHTML = `
+          <div class="setup-confirmed-badge">
+            <span>✅ कक्ष विन्यास पुष्ट: <strong>${wardObj.counting_tables || 5} टेबल्स</strong> • <strong>${wardObj.max_rounds || 5} राउंड्स</strong> • कुल मतदान केंद्र: ${wardObj.total_booths || 25}</span>
+            <button onclick="openHallConfigForCurrentWard()" style="background:#1e293b; color:#38bdf8; border:1px solid #334155; border-radius:4px; padding:3px 8px; font-size:10px; cursor:pointer;">संशोधित करें</button>
+          </div>
+        `;
+        activeArea.style.opacity = '1';
+        activeArea.style.pointerEvents = 'auto';
       }
+
+      // Update rounds dropdown dynamically
+      updateRoundSelectOptions(wardObj.max_rounds || 5);
+
+      // Instant candidates load from cache
+      currentCandidates = candsByWardMap[key] || [];
+      renderCandidateInputs();
     }
 
-    async function reopenCurrentWard() {
-      const wardNo = parseInt(document.getElementById('wardSelect').value);
-      const block = currentLevel === 'ZP' ? 'Salumber ZP' : document.getElementById('blockSelect').value;
-      const key = `${currentLevel}_${block}_${wardNo}`;
+    function updateRoundSelectOptions(maxRounds) {
+      const rSel = document.getElementById('roundSelect');
+      const currentSelected = rSel.value || 'R1';
+      const maxR = Math.max(1, maxRounds || 5);
 
-      if (!confirm(`Are you sure you want to UNLOCK / REOPEN ${currentLevel} ${block} Ward ${wardNo}?\n\nThis will reset its status back to COUNTING and allow modifying or recounting votes.`)) {
-        return;
+      let opts = '<option value="PB">Postal Ballot (डाक मतपत्र - PB)</option>';
+      for (let r = 1; r <= maxR; r++) {
+        opts += `<option value="R${r}">Round ${r} (राउंड ${r})</option>`;
       }
+      opts += '<option value="AUX">Faulty EVM Resolved / Aux Display (दोषपूर्ण EVM निवारण)</option>';
+      rSel.innerHTML = opts;
 
-      try {
-        const resp = await fetch('/api/reopen_ward', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            category: currentLevel,
-            block: block,
-            ward_no: wardNo
-          })
-        });
-        const res = await resp.json();
-        if (res.status === 'success') {
-          wardStatusMap[key] = 'COUNTING';
-          updateWardStatusUI('COUNTING');
-          alert(`🔓 ${res.message}`);
-        } else {
-          alert(`❌ Error: ${res.detail || 'Could not reopen ward'}`);
-        }
-      } catch (err) {
-        alert('❌ Network error: ' + err);
+      if (currentSelected === 'PB' || currentSelected === 'AUX' || (currentSelected.startsWith('R') && parseInt(currentSelected.substring(1)) <= maxR)) {
+        rSel.value = currentSelected;
+      } else {
+        rSel.value = 'R1';
       }
     }
 
@@ -846,30 +1105,6 @@
       }).join('');
 
       updateInputsWithRound();
-    }
-
-    
-    // =========================================================================
-    // DYNAMIC ROUNDS & LIVE CUMULATIVE RECALCULATION
-    // =========================================================================
-    function updateRoundSelectOptions(maxRounds) {
-      const rSel = document.getElementById('roundSelect');
-      const currentSelected = rSel.value || 'R1';
-      const maxR = Math.max(1, maxRounds || 5);
-
-      let opts = '<option value="PB">Postal Ballot (डाक मतपत्र - PB)</option>';
-      for (let r = 1; r <= maxR; r++) {
-        opts += `<option value="R${r}">Round ${r} (राउंड ${r})</option>`;
-      }
-      opts += '<option value="AUX">Faulty EVM Resolved / Aux Display (दोषपूर्ण EVM निवारण / अतिरिक्त गणना)</option>';
-      rSel.innerHTML = opts;
-
-      // Keep selection if within valid range
-      if (currentSelected === 'PB' || (currentSelected.startsWith('R') && parseInt(currentSelected.substring(1)) <= maxR)) {
-        rSel.value = currentSelected;
-      } else {
-        rSel.value = 'R1';
-      }
     }
 
     function recalcCandidateLiveTotal(cid) {
@@ -914,10 +1149,252 @@
       });
     }
 
-    // =========================================================================
-    // HALL & ROUNDS CONFIGURATION MODAL CONTROLLERS
-    // =========================================================================
-    let allWardConfigs = [];
+    async function submitVotes() {
+      const wardNo = parseInt(document.getElementById('wardSelect').value);
+      const block = currentLevel === 'ZP' ? 'Salumber ZP' : document.getElementById('blockSelect').value;
+      const roundKey = document.getElementById('roundSelect').value;
+      const key = `${currentLevel}_${block}_${wardNo}`;
+
+      const wardObj = (masterData.wards || []).find(x => x.category === currentLevel && x.block_name === block && x.ward_no === wardNo) || {};
+      if (wardObj.is_setup_done !== 1) {
+        alert('❌ Error: Counting Hall & Rounds Setup must be confirmed before saving votes for this ward!');
+        return;
+      }
+
+      const votesMap = {};
+      for (const c of currentCandidates) {
+        const input = document.getElementById(`cand_${c.id}`);
+        if (input && input.value.trim() !== '') {
+          const val = parseInt(input.value);
+          if (isNaN(val) || val < 0) {
+            alert(`❌ Invalid vote: ${c.name} cannot have negative or invalid votes!`);
+            input.focus();
+            return;
+          }
+          votesMap[c.id] = val;
+        } else {
+          votesMap[c.id] = null; // Cleared input
+        }
+      }
+
+      try {
+        const resp = await fetch('/api/save_votes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            category: currentLevel,
+            block: block,
+            ward_no: wardNo,
+            round_key: roundKey,
+            votes: votesMap,
+            declare: false
+          })
+        });
+
+        const res = await resp.json();
+        if (res.status === 'success') {
+          // Update in-memory candidate round votes
+          currentCandidates.forEach(c => {
+            if (!c.roundVotes) c.roundVotes = {};
+            if (votesMap[c.id] !== null && votesMap[c.id] !== undefined) {
+              c.roundVotes[roundKey] = votesMap[c.id];
+              if (!masterData.roundVotes[c.id]) masterData.roundVotes[c.id] = {};
+              masterData.roundVotes[c.id][roundKey] = votesMap[c.id];
+            } else {
+              delete c.roundVotes[roundKey];
+              if (masterData.roundVotes[c.id]) delete masterData.roundVotes[c.id][roundKey];
+            }
+          });
+          alert(`✅ ${res.message}`);
+        } else {
+          alert(`❌ Error: ${res.detail || 'Could not save'}`);
+        }
+      } catch (err) {
+        alert('❌ Network connection error: ' + err);
+      }
+    }
+
+
+    // ===================================================================
+    // PANEL 2: WARD WINNER DECLARATION CONTROLLER
+    // ===================================================================
+    async function loadDeclareWardView() {
+      const wardNo = parseInt(document.getElementById('decWardSelect').value || 1);
+      const block = currentLevel === 'ZP' ? 'Salumber ZP' : document.getElementById('decBlockSelect').value;
+      const key = `${currentLevel}_${block}_${wardNo}`;
+      const container = document.getElementById('decWardDetailsContainer');
+
+      const wardObj = (masterData.wards || []).find(x => x.category === currentLevel && x.block_name === block && x.ward_no === wardNo) || {};
+      const maxR = wardObj.max_rounds || 5;
+      const isDeclared = (wardObj.status === 'DECLARED');
+
+      const cands = candsByWardMap[key] || [];
+
+      // Calculate total votes and completed rounds
+      let totalWardVotes = 0;
+      let completedRoundsSet = new Set();
+
+      const candidateTotals = cands.map(c => {
+        let tot = 0;
+        const rv = c.roundVotes || {};
+        for (const rk in rv) {
+          if (rv[rk] !== null && rv[rk] !== undefined) {
+            tot += parseInt(rv[rk]) || 0;
+            if (rk.startsWith('R')) completedRoundsSet.add(rk);
+          }
+        }
+        totalWardVotes += tot;
+        return { ...c, totalVotes: tot };
+      });
+
+      // Sort descending by totalVotes
+      candidateTotals.sort((a, b) => b.totalVotes - a.totalVotes);
+
+      const completedRounds = completedRoundsSet.size;
+      const allRoundsCompleted = (completedRounds >= maxR);
+      const hasVotes = totalWardVotes > 0;
+
+      const c1 = candidateTotals[0] || { name: 'प्रत्याशी 1', party: 'IND', totalVotes: 0 };
+      const c2 = candidateTotals[1] || { name: 'प्रत्याशी 2', party: 'IND', totalVotes: 0 };
+      const margin = Math.max(0, c1.totalVotes - c2.totalVotes);
+
+      let html = '';
+
+      if (isDeclared) {
+        // ALREADY DECLARED
+        html = `
+          <div style="background:rgba(16, 185, 129, 0.15); border:1.5px solid #10b981; border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-weight:900; font-size:15px; color:#10b981;">🏆 परिणाम घोषित (WINNER ANNOUNCED)</div>
+            <div style="font-size:13px; color:#f8fafc;">
+              विजेता: <strong>${c1.name}</strong> (${c1.party}) — कुल मत: <strong>${c1.totalVotes.toLocaleString('en-IN')}</strong> (+${margin.toLocaleString('en-IN')} मत बढ़त)
+            </div>
+            <div style="font-size:11px; color:#94a3b8;">
+              यदि परिणाम में कोई त्रुटि हो अथवा पुनर्मतगणना करवानी हो तो नीचे दिए गए बटन से वार्ड को पुनः अनलॉक करें।
+            </div>
+            <button class="btn-unlock" style="margin-top:8px;" onclick="reopenCurrentWardInDeclare(${wardNo}, '${block}')">
+              🔓 UNLOCK / REOPEN WARD (पुनर्मतगणना / संशोधन हेतु अनलॉक करें)
+            </button>
+          </div>
+        `;
+      } else if (!allRoundsCompleted || !hasVotes) {
+        // CANNOT DECLARE - ROUNDS INCOMPLETE
+        html = `
+          <div style="background:rgba(245, 158, 11, 0.1); border:1.5px solid rgba(245, 158, 11, 0.4); border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-weight:900; font-size:14px; color:#f59e0b;">
+              ⚠️ घोषणा प्रतिबंधित: राउंड अपूर्ण हैं (${completedRounds}/${maxR} Rounds Completed)
+            </div>
+            <div style="font-size:12px; color:#cbd5e1; line-height:1.4;">
+              इस वार्ड के कुल <strong>${maxR} राउंड्स</strong> निर्धारित हैं, जिनमें से अभी केवल <strong>${completedRounds} राउंड्स</strong> की प्रविष्टि हुई है।<br>
+              <strong>चुनावी नियमों के अनुसार परिणाम घोषणा केवल सभी ${maxR} राउंड्स पूर्ण होने के पश्चात् ही की जा सकती है।</strong>
+            </div>
+            <button class="btn-declare" disabled style="margin-top:6px;">
+              🏆 DECLARE WARD WINNER (अनलॉक होने की प्रतीक्षा...)
+            </button>
+          </div>
+        `;
+      } else {
+        // READY TO DECLARE
+        html = `
+          <div style="background:rgba(16, 185, 129, 0.08); border:1.5px solid rgba(16, 185, 129, 0.4); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-weight:900; font-size:13px; color:#10b981; display:flex; align-items:center; gap:6px;">
+              <span>✅</span> सभी ${maxR} राउंड्स पूर्ण • कुल गिने गए मत: ${totalWardVotes.toLocaleString('en-IN')}
+            </div>
+
+            <div class="dec-summary-grid">
+              <div class="dec-cand-box winner-box">
+                <span style="font-size:10px; font-weight:900; color:#10b981;">🏆 संभावित विजयी (#1)</span>
+                <span style="font-size:16px; font-weight:800; color:#fff;">${c1.name}</span>
+                <span style="font-size:11px; color:#94a3b8;">दल: ${c1.party}</span>
+                <span style="font-size:18px; font-weight:900; font-family:'Rajdhani'; color:#10b981; margin-top:4px;">${c1.totalVotes.toLocaleString('en-IN')} मत</span>
+              </div>
+
+              <div class="dec-cand-box runner-box">
+                <span style="font-size:10px; font-weight:900; color:#94a3b8;">द्वितीय प्रत्याशी (#2)</span>
+                <span style="font-size:16px; font-weight:800; color:#fff;">${c2.name}</span>
+                <span style="font-size:11px; color:#94a3b8;">दल: ${c2.party}</span>
+                <span style="font-size:18px; font-weight:900; font-family:'Rajdhani'; color:#cbd5e1; margin-top:4px;">${c2.totalVotes.toLocaleString('en-IN')} मत</span>
+              </div>
+            </div>
+
+            <div style="text-align:center; padding:8px; background:#090e17; border-radius:6px; font-size:13px; font-weight:800; color:#38bdf8;">
+              विजयी बढ़त (Winning Margin): +${margin.toLocaleString('en-IN')} मत
+            </div>
+
+            <button class="btn-declare" onclick="confirmAndDeclareWard(${wardNo}, '${block}', '${c1.name}', '${c1.party}', ${margin}, ${totalWardVotes})">
+              🏆 आधिकारिक रूप से विजयी घोषित करें (Declare Winner Now)
+            </button>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    async function confirmAndDeclareWard(wardNo, block, winnerName, winnerParty, margin, totalVotes) {
+      if (!confirm(`⚠️ अंतिम चेतावनी - परिणाम घोषणा:\n\nक्या आप ${currentLevel} ${block} वार्ड ${wardNo} का परिणाम आधिकारिक घोषित करना चाहते हैं?\n\nविजेता: ${winnerName} (${winnerParty})\nबढ़त: +${margin.toLocaleString('en-IN')} मत\nकुल मत: ${totalVotes.toLocaleString('en-IN')}\n\nघोषणा के तुरंत पश्चात यह परिणाम लाइव टीवी प्रसारण पर विजयी रूप में प्रदर्शित होगा।`)) {
+        return;
+      }
+
+      try {
+        const resp = await fetch('/api/declare_ward', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            category: currentLevel,
+            block: block,
+            ward_no: wardNo
+          })
+        });
+
+        const res = await resp.json();
+        if (res.status === 'success') {
+          const wardObj = (masterData.wards || []).find(x => x.category === currentLevel && x.block_name === block && x.ward_no === wardNo);
+          if (wardObj) wardObj.status = 'DECLARED';
+          loadDeclareWardView();
+          alert(`🏆 ${res.message}`);
+        } else {
+          alert(`❌ Error: ${res.detail || 'Could not declare'}`);
+        }
+      } catch (e) {
+        alert('❌ Network error: ' + e);
+      }
+    }
+
+    async function reopenCurrentWardInDeclare(wardNo, block) {
+      if (!confirm(`Are you sure you want to REOPEN ${currentLevel} ${block} Ward ${wardNo}?\n\nThis will reset status back to COUNTING for recounting or corrections.`)) {
+        return;
+      }
+      try {
+        const resp = await fetch('/api/reopen_ward', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: currentLevel, block: block, ward_no: wardNo })
+        });
+        const res = await resp.json();
+        if (res.status === 'success') {
+          const wardObj = (masterData.wards || []).find(x => x.category === currentLevel && x.block_name === block && x.ward_no === wardNo);
+          if (wardObj) wardObj.status = 'COUNTING';
+          loadDeclareWardView();
+          alert(`🔓 ${res.message}`);
+        }
+      } catch (e) {
+        alert('Error: ' + e);
+      }
+    }
+
+
+    // ===================================================================
+    // HALL CONFIGURATION MODAL CONTROLLERS
+    // ===================================================================
+    function openHallConfigForCurrentWard() {
+      openHallConfigModal();
+      document.getElementById('hallFilterCat').value = currentLevel;
+      if (currentLevel === 'PS') {
+        const b = document.getElementById('blockSelect').value;
+        document.getElementById('hallFilterBlock').value = b;
+      }
+      loadHallConfigTable();
+    }
 
     async function openHallConfigModal() {
       document.getElementById('hallModal').style.display = 'flex';
@@ -926,6 +1403,7 @@
 
     function closeHallConfigModal() {
       document.getElementById('hallModal').style.display = 'none';
+      initMasterCache();
     }
 
     async function loadHallConfigTable() {
@@ -943,6 +1421,7 @@
 
         const tbody = document.getElementById('hallTableBody');
         tbody.innerHTML = allWardConfigs.map(w => {
+          const isDone = (w.is_setup_done === 1);
           return `
             <tr>
               <td style="font-weight:800; color:#38bdf8;">W${w.ward_no}</td>
@@ -960,7 +1439,14 @@
                 ${w.max_rounds || 5}
               </td>
               <td>
-                <button class="hall-btn-sm" onclick="saveSingleWardConfig(${w.id}, '${w.category}', '${w.block_name}', ${w.ward_no})">💾 Save</button>
+                <span style="font-size:10px; font-weight:800; color:${isDone ? '#10b981' : '#f59e0b'};">
+                  ${isDone ? '✅ पुष्ट' : '⏳ लंबित'}
+                </span>
+              </td>
+              <td>
+                <button class="hall-btn-sm" onclick="saveSingleWardConfig(${w.id}, '${w.category}', '${w.block_name}', ${w.ward_no})">
+                  ${isDone ? '💾 अपडेट' : '✅ पुष्ट करें'}
+                </button>
               </td>
             </tr>
           `;
@@ -1000,19 +1486,15 @@
         });
         const res = await resp.json();
         if (res.status === 'success') {
-          // Update masterData cache
           const cachedWard = (masterData.wards || []).find(x => x.category === cat && x.block_name === blk && x.ward_no === wardNo);
           if (cachedWard) {
             cachedWard.max_rounds = rounds;
             cachedWard.counting_tables = tables;
             cachedWard.total_booths = booths;
+            cachedWard.is_setup_done = 1;
           }
-          // If this ward is currently selected, update rounds dropdown immediately
-          const activeWardNo = parseInt(document.getElementById('wardSelect').value);
-          const activeBlock = currentLevel === 'ZP' ? 'Salumber ZP' : document.getElementById('blockSelect').value;
-          if (cat === currentLevel && blk === activeBlock && wardNo === activeWardNo) {
-            updateRoundSelectOptions(rounds);
-          }
+          await loadHallConfigTable();
+          loadWardCandidates();
           alert(`✅ ${res.message}`);
         } else {
           alert(`❌ Error: ${res.detail || 'Could not save'}`);
@@ -1023,7 +1505,7 @@
     }
 
     async function bulkApplyTables(cat, blk, tables) {
-      if (!confirm(`Are you sure you want to configure ${tables} counting tables for all ${cat} wards?`)) {
+      if (!confirm(`क्या आप सभी ${cat} वार्डों के लिए ${tables} मतगणना टेबल्स सेट कर सेटअप की पुष्टि (Confirm) करना चाहते हैं?`)) {
         return;
       }
       try {
@@ -1045,108 +1527,6 @@
         }
       } catch (e) {
         alert('❌ Error: ' + e);
-      }
-    }
-    
-      const roundKey = document.getElementById('roundSelect').value;
-      currentCandidates.forEach(c => {
-        const input = document.getElementById(`cand_${c.id}`);
-        if (input) {
-          const val = c.roundVotes ? c.roundVotes[roundKey] : null;
-          input.value = (val !== null && val !== undefined) ? val : '';
-        }
-      });
-    }
-
-    async function submitVotes(declare) {
-      const wardNo = parseInt(document.getElementById('wardSelect').value);
-      const block = currentLevel === 'ZP' ? 'Salumber ZP' : document.getElementById('blockSelect').value;
-      const roundKey = document.getElementById('roundSelect').value;
-      const key = `${currentLevel}_${block}_${wardNo}`;
-
-      const votesMap = {};
-      let roundEnteredVotes = 0;
-
-      for (const c of currentCandidates) {
-        const input = document.getElementById(`cand_${c.id}`);
-        if (input && input.value.trim() !== '') {
-          const val = parseInt(input.value);
-          if (isNaN(val) || val < 0) {
-            alert(`❌ Invalid vote: ${c.name} cannot have negative or invalid votes!`);
-            input.focus();
-            return;
-          }
-          votesMap[c.id] = val;
-          roundEnteredVotes += val;
-        } else {
-          votesMap[c.id] = null; // Cleared input to delete or unset
-        }
-      }
-
-      // Check cumulative votes across all rounds
-      let cumulativeVotes = 0;
-      currentCandidates.forEach(c => {
-        const rMap = c.roundVotes || {};
-        for (const rk in rMap) {
-          if (rk !== roundKey && rMap[rk] !== null && rMap[rk] !== undefined) {
-            cumulativeVotes += parseInt(rMap[rk]) || 0;
-          }
-        }
-        if (votesMap[c.id] !== null && votesMap[c.id] !== undefined) {
-          cumulativeVotes += parseInt(votesMap[c.id]) || 0;
-        }
-      });
-
-      if (declare) {
-        if (cumulativeVotes <= 0) {
-          alert('❌ Cannot declare ward: Total votes are 0!\n\nPlease enter at least one round of votes before declaring.');
-          return;
-        }
-        if (!confirm(`Are you sure you want to mark ${currentLevel} ${block} Ward ${wardNo} as DECLARED / FINALIZED?\n\nTotal votes counted: ${cumulativeVotes.toLocaleString('en-IN')}\nThe winner will be announced live on the TV display.`)) {
-          return;
-        }
-      }
-
-      try {
-        const resp = await fetch('/api/save_votes', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            category: currentLevel,
-            block: block,
-            ward_no: wardNo,
-            round_key: roundKey,
-            votes: votesMap,
-            declare: declare
-          })
-        });
-
-        const res = await resp.json();
-        if (res.status === 'success') {
-          // Update in-memory candidate round votes
-          currentCandidates.forEach(c => {
-            if (!c.roundVotes) c.roundVotes = {};
-            if (votesMap[c.id] !== null && votesMap[c.id] !== undefined) {
-              c.roundVotes[roundKey] = votesMap[c.id];
-              if (!masterData.roundVotes[c.id]) masterData.roundVotes[c.id] = {};
-              masterData.roundVotes[c.id][roundKey] = votesMap[c.id];
-            } else {
-              delete c.roundVotes[roundKey];
-              if (masterData.roundVotes[c.id]) delete masterData.roundVotes[c.id][roundKey];
-            }
-          });
-
-          if (declare) {
-            wardStatusMap[key] = 'DECLARED';
-            updateWardStatusUI('DECLARED');
-          }
-
-          alert(`✅ ${res.message}`);
-        } else {
-          alert(`❌ Error: ${res.detail || 'Could not save'}`);
-        }
-      } catch (err) {
-        alert('❌ Network connection error: ' + err);
       }
     }
 
@@ -1184,77 +1564,12 @@
         });
         const res = await resp.json();
         closeAddCandModal();
-        loadWardCandidates();
+        await initMasterCache();
         alert(`✅ ${res.message}`);
       } catch (e) {
         alert('Error adding candidate: ' + e);
       }
     }
   </script>
-
-  <!-- Counting Hall & Rounds Setup Modal -->
-  <div id="hallModal" class="modal-overlay" style="display:none;">
-    <div class="hall-config-modal-card">
-      <div class="hall-modal-head">
-        <div>
-          <h3 style="color:#38bdf8; font-size:15px; font-weight:800;">⚙️ Counting Hall & Rounds Setup (कक्ष एवं राउंड विन्यास)</h3>
-          <p style="font-size:11px; color:#94a3b8; margin-top:2px;">प्रत्येक वार्ड के लिए टेबल संख्या व कुल राउंड्स सेट करें (Max Rounds = Booths ÷ Tables)</p>
-        </div>
-        <button onclick="closeHallConfigModal()" class="link-btn" style="background:#334155; color:#fff;">✕ बंद करें</button>
-      </div>
-
-      <div class="hall-modal-body">
-        <!-- Quick Bulk Setup -->
-        <div style="display:flex; align-items:center; justify-content:space-between; background:#090e17; padding:8px 12px; border-radius:6px; border:1px solid #334155;">
-          <div style="font-size:12px; font-weight:800; color:#f8fafc;">
-            ⚡ त्वरित विन्यास (Quick Setup):
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button onclick="bulkApplyTables('ZP', null, 5)" class="link-btn" style="background:#0284c7; color:#fff;">सभी जिला परिषद वार्ड = 5 टेबल्स</button>
-            <button onclick="bulkApplyTables('PS', null, 5)" class="link-btn" style="background:#ca8a04; color:#fff;">सभी पं. समिति वार्ड = 5 टेबल्स</button>
-          </div>
-        </div>
-
-        <!-- Filter for Hall Table -->
-        <div style="display:flex; gap:10px; align-items:center;">
-          <label style="font-size:11px; color:#94a3b8; font-weight:800;">फिल्टर:</label>
-          <select id="hallFilterCat" class="modal-input" style="width:140px; padding:6px;" onchange="loadHallConfigTable()">
-            <option value="ZP">Zilla Parishad (21)</option>
-            <option value="PS">Panchayat Samiti</option>
-          </select>
-          <select id="hallFilterBlock" class="modal-input" style="width:140px; padding:6px; display:none;" onchange="loadHallConfigTable()">
-            <option value="Semari">Semari</option>
-            <option value="Salumbar">Salumbar</option>
-            <option value="Lasadiya">Lasadiya</option>
-            <option value="Geengla">Geengla</option>
-            <option value="Jaisamand">Jaisamand</option>
-            <option value="Sarada">Sarada</option>
-            <option value="Jhallara">Jhallara</option>
-          </select>
-        </div>
-
-        <!-- Wards Config Table -->
-        <div style="overflow-x:auto;">
-          <table class="hall-table">
-            <thead>
-              <tr>
-                <th>वार्ड नं.</th>
-                <th>वार्ड नाम</th>
-                <th>आरक्षण</th>
-                <th>कुल बूथ</th>
-                <th>काउंटिंग टेबल</th>
-                <th>कुल राउंड्स</th>
-                <th>एक्शन</th>
-              </tr>
-            </thead>
-            <tbody id="hallTableBody">
-              <!-- Loaded via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </body>
 </html>

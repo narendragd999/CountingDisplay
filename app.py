@@ -507,6 +507,12 @@ async def save_votes(payload: dict):
     cursor = conn.cursor()
 
     try:
+        # Check that hall setup is confirmed for this ward
+        cursor.execute("SELECT is_setup_done, max_rounds FROM wards WHERE category = ? AND block_name = ? AND ward_no = ?", (category, block, ward_no))
+        w_cfg = cursor.fetchone()
+        if not w_cfg or w_cfg[0] != 1:
+            raise HTTPException(status_code=400, detail="Cannot enter votes: Counting Hall & Rounds setup must be confirmed for this ward before entering votes.")
+
         # Validate votes non-negative
         for cid_str, v_count in votes_dict.items():
             if v_count is not None and str(v_count).strip() != '':
@@ -599,6 +605,20 @@ async def declare_ward(payload: dict):
         conn.close()
         raise HTTPException(status_code=400, detail="Cannot declare ward without entered votes! At least one round of votes must be counted.")
 
+    # Verify that all rounds are completed
+    cursor.execute("SELECT max_rounds FROM wards WHERE category = ? AND block_name = ? AND ward_no = ?", (category, block, ward_no))
+    max_r = cursor.fetchone()[0]
+    cursor.execute("""
+    SELECT COUNT(DISTINCT v.round_key)
+    FROM candidates c
+    JOIN votes v ON c.id = v.candidate_id
+    WHERE c.category = ? AND c.block_name = ? AND c.ward_no = ? AND v.round_key LIKE 'R%'
+    """, (category, block, ward_no))
+    completed_r = cursor.fetchone()[0]
+    if completed_r < max_r:
+        conn.close()
+        raise HTTPException(status_code=400, detail=f"Cannot declare winner: All rounds must be completed! (Completed: {completed_r}/{max_r} rounds)")
+
     cursor.execute("""
     UPDATE wards SET status = 'DECLARED'
     WHERE category = ? AND block_name = ? AND ward_no = ?
@@ -651,7 +671,7 @@ def get_all_candidates_master():
     """)
     c_rows = [dict(r) for r in cursor.fetchall()]
 
-    cursor.execute("SELECT category, block_name, ward_no, status, max_rounds FROM wards")
+    cursor.execute("SELECT category, block_name, ward_no, status, max_rounds, is_setup_done, total_booths, counting_tables FROM wards")
     w_rows = [dict(r) for r in cursor.fetchall()]
 
     cursor.execute("SELECT candidate_id, round_key, votes_count FROM votes")
@@ -740,7 +760,8 @@ async def save_ward_config(payload: dict):
         total_booths = ?,
         max_rounds = ?,
         reservation = ?,
-        total_electorate = ?
+        total_electorate = ?,
+        is_setup_done = 1
     WHERE category = ? AND block_name = ? AND ward_no = ?
     """, (tables, booths, max_rounds, reservation, electorate, category, block, ward_no))
 
@@ -782,7 +803,7 @@ async def bulk_apply_hall_config(payload: dict):
         wid = r['id']
         b_count = max(1, int(r['total_booths'] or 25))
         m_rounds = math.ceil(b_count / tables)
-        cursor.execute("UPDATE wards SET counting_tables = ?, max_rounds = ? WHERE id = ?", (tables, m_rounds, wid))
+        cursor.execute("UPDATE wards SET counting_tables = ?, max_rounds = ?, is_setup_done = 1 WHERE id = ?", (tables, m_rounds, wid))
 
     cursor.execute("""
     INSERT INTO audit_log (action, details)
