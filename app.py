@@ -280,8 +280,10 @@ def calculate_full_state():
         # Sort candidates: by total_votes DESC; on tie or 0 votes, by ballot_no ASC (Hindi alphabetical)
         cands.sort(key=lambda x: (x['total_votes'], -(x.get('ballot_no') or 99)), reverse=True)
 
-        c1 = cands[0] if len(cands) > 0 else {'name_hindi': 'प्रत्याशी 1', 'party': 'BAP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}}
-        c2 = cands[1] if len(cands) > 1 else {'name_hindi': 'प्रत्याशी 2', 'party': 'BJP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}}
+        # Pick valid candidates (excluding NOTA) for winner & runner-up determination
+        valid_cands = [c for c in cands if c.get('party') != 'NOTA' and 'नोटा' not in (c.get('name_hindi') or '')]
+        c1 = valid_cands[0] if len(valid_cands) > 0 else (cands[0] if len(cands) > 0 else {'name_hindi': 'प्रत्याशी 1', 'party': 'BAP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}})
+        c2 = valid_cands[1] if len(valid_cands) > 1 else (cands[1] if len(cands) > 1 else {'name_hindi': 'प्रत्याशी 2', 'party': 'BJP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}})
 
         c1_tot = c1['total_votes']
         c2_tot = c2['total_votes']

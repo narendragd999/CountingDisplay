@@ -336,6 +336,7 @@
     .party-INC { background: var(--party-inc-bg); color: var(--party-inc); border: 1px solid #bfdbfe; }
     .party-BAP { background: var(--party-bap-bg); color: var(--party-bap); border: 1px solid #fef08a; }
     .party-IND { background: var(--party-ind-bg); color: var(--party-ind); border: 1px solid #cbd5e1; }
+    .party-NOTA { background: #f1f5f9; color: #64748b; border: 1.5px solid #cbd5e1; font-weight: 800; }
 
     /* VOTE INPUT */
     .vote-input {
@@ -1386,10 +1387,12 @@
           }
         }
         const initialTotal = prevSum + (Number(curVal) || 0);
+        const isNota = (cand.party === 'NOTA' || (cand.name_hindi || '').includes('नोटा'));
         const tr = document.createElement('tr');
+        if (isNota) tr.style.background = '#f8fafc';
         tr.innerHTML = `
-          <td style="font-weight:700; font-family:'Rajdhani',sans-serif; font-size:15px;">#${cand.ballot_no || '-'}</td>
-          <td style="font-weight:700; font-size:14px;">${cand.name_hindi}</td>
+          <td style="font-weight:800; font-family:'Rajdhani',sans-serif; font-size:15px; color:${isNota ? '#64748b' : 'inherit'};">${isNota ? 'नोटा' : '#' + (cand.ballot_no || '-')}</td>
+          <td style="font-weight:700; font-size:14px; color:${isNota ? '#334155' : 'inherit'};">${cand.name_hindi}</td>
           <td><span class="party-pill party-${cand.party || 'IND'}">${cand.party || 'IND'}</span></td>
           <td style="text-align:right;">
             <input type="number" id="voteInput_${cand.id}" class="vote-input" value="${curVal}" min="0" placeholder="0"

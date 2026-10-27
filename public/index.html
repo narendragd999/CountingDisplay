@@ -444,6 +444,7 @@
     .pt-INC { background: var(--party-inc-bg); color: var(--party-inc); border: 1px solid var(--party-inc-border); }
     .pt-BAP { background: var(--party-bap-bg); color: var(--party-bap); border: 1px solid var(--party-bap-border); }
     .pt-IND { background: var(--party-ind-bg); color: var(--party-ind); border: 1px solid var(--party-ind-border); }
+    .pt-NOTA { background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; }
 
     /* BOTTOM TICKER */
     .bottom-ticker {
@@ -891,8 +892,9 @@
       const card = document.createElement('div');
       card.className = `ward-card ${isDeclared ? 'declared' : (isCounting ? 'counting' : '')}`;
 
-      const leader = candTotals[0];
-      const runnerUp = candTotals[1];
+      const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+      const leader = validCands[0] || candTotals[0];
+      const runnerUp = validCands[1] || candTotals[1];
       const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
       const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
 
@@ -990,9 +992,10 @@
           for (const [r, cnt] of Object.entries(vObj)) sum += (cnt || 0);
           return { ...c, sum };
         });
-        totals.sort((a, b) => b.sum - a.sum);
-        if (totals.length > 0 && totals[0].sum > 0) {
-          const topParty = totals[0].party || 'IND';
+        const validTotals = totals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+        validTotals.sort((a, b) => b.sum - a.sum);
+        if (validTotals.length > 0 && validTotals[0].sum > 0) {
+          const topParty = validTotals[0].party || 'IND';
           if (tally[w.category][topParty] !== undefined) {
             tally[w.category][topParty]++;
           } else {
