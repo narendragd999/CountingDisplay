@@ -929,7 +929,7 @@
       const wardInfo = masterData.wards.find(w => w.category === cat && w.block_name === blk && w.ward_no === targetWard);
       const totalBooths = wardInfo ? (wardInfo.total_booths || (cat === 'ZP' ? 25 : 5)) : 5;
       const tables = wardInfo ? (wardInfo.counting_tables || 5) : 5;
-      const maxRounds = wardInfo ? (wardInfo.max_rounds || Math.ceil(totalBooths / tables)) : Math.ceil(totalBooths / tables);
+      const maxRounds = Math.max(1, Math.ceil(totalBooths / (tables || 5)));
 
       if (activeEntryMode === 'booth') {
         const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
@@ -1144,7 +1144,7 @@
 
         const totalBooths = wInfo ? (wInfo.total_booths || 5) : 5;
         const tables = wInfo ? (wInfo.counting_tables || 5) : 5;
-        const maxRounds = wInfo ? (wInfo.max_rounds || Math.ceil(totalBooths / tables)) : Math.ceil(totalBooths / tables);
+        const maxRounds = Math.max(1, Math.ceil(totalBooths / (tables || 5)));
         const completedRounds = entryKeys.size;
         const isComplete = (completedRounds >= maxRounds && maxRounds > 0);
 
