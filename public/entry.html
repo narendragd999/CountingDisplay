@@ -490,6 +490,11 @@
             <option value="Semari">Semari (69 Booths)</option>
           </select>
         </div>
+
+        <div class="form-group" id="zpWardSelectGroup" style="display:none;">
+          <label class="form-label">Zilla Parishad Ward</label>
+          <select id="entryZpWard" class="form-select" onchange="onZpWardChanged()"></select>
+        </div>
       </div>
 
       <!-- Entry Mode Radio Toggle (Hidden for clean Polling Station workflow) -->
@@ -710,6 +715,8 @@
     let authToken = localStorage.getItem('salumber_auth_token') || '';
     let masterData = { candidates: [], wards: [], roundVotes: {}, booths: [] };
     let currentCandidates = [];
+    let currentRoundKey = 'R1';
+    let currentBoothObj = null;
     let activeEntryMode = 'booth'; // 'booth' or 'round'
     let currentMappedWard = 1;
 
@@ -844,10 +851,42 @@
       refreshEntryView();
     }
 
+    function populateZpWardDropdown() {
+      const sel = document.getElementById('entryZpWard');
+      if (!sel) return;
+      const prevVal = sel.value;
+      sel.innerHTML = '';
+      for (let w = 1; w <= 21; w++) {
+        const count = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === w).length : 0;
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = `ZP Ward ${w} (${count || 25} Booths)`;
+        sel.appendChild(opt);
+      }
+      if (prevVal && [...sel.options].some(o => o.value == prevVal)) {
+        sel.value = prevVal;
+      }
+    }
+
+    function onZpWardChanged() {
+      populateBoothDropdown();
+      refreshEntryView();
+    }
+
     function onCategoryChanged() {
-      // Keep block selector visible for both PS and ZP (EVMs are sorted by RO Center / Block)
+      const cat = document.getElementById('entryCategory').value;
       const blkGrp = document.getElementById('blockSelectGroup');
-      blkGrp.style.display = 'flex';
+      const zpWardGrp = document.getElementById('zpWardSelectGroup');
+
+      if (cat === 'PS') {
+        blkGrp.style.display = 'flex';
+        if (zpWardGrp) zpWardGrp.style.display = 'none';
+      } else {
+        // ZP MODE: Hide Panchayat Samiti block selector, show Zilla Parishad Ward selector
+        blkGrp.style.display = 'none';
+        if (zpWardGrp) zpWardGrp.style.display = 'flex';
+        populateZpWardDropdown();
+      }
 
       populateBoothDropdown();
       populateWardDropdown();
@@ -872,33 +911,60 @@
 
     function populateBoothDropdown() {
       const cat = document.getElementById('entryCategory').value;
-      const blk = document.getElementById('entryBlock').value || 'Semari';
-      // Polling stations at the RO center are numbered 1 to block max
-      const maxB = BLOCK_TOTAL_BOOTHS[blk] || 69;
-
-      const inputBooth = document.getElementById('inputBoothNo');
-      inputBooth.max = maxB;
-      let curVal = parseInt(inputBooth.value) || 1;
-      if (curVal > maxB) {
-        curVal = 1;
-        inputBooth.value = 1;
-      }
-
       const sel = document.getElementById('selectBoothDropdown');
+      const inputBooth = document.getElementById('inputBoothNo');
       sel.innerHTML = '';
-      for (let b = 1; b <= maxB; b++) {
-        const opt = document.createElement('option');
-        opt.value = b;
-        let bObj = masterData.booths ? masterData.booths.find(x => x.block_name === blk && String(x.booth_no) === String(b)) : null;
-        if (bObj && bObj.booth_name_hi) {
-          const wardLabel = cat === 'PS' ? `PS Ward ${bObj.ps_ward}` : `ZP Ward ${bObj.zp_ward}`;
-          opt.textContent = `#${b} - ${bObj.booth_name_hi} (${wardLabel})`;
-        } else {
-          opt.textContent = `Polling Station #${b} of ${maxB} (${blk})`;
+
+      if (cat === 'PS') {
+        const blk = document.getElementById('entryBlock').value || 'Semari';
+        const maxB = BLOCK_TOTAL_BOOTHS[blk] || 69;
+        inputBooth.max = maxB;
+        let curVal = inputBooth.value.trim() || '1';
+
+        for (let b = 1; b <= maxB; b++) {
+          const opt = document.createElement('option');
+          opt.value = String(b);
+          let bObj = masterData.booths ? masterData.booths.find(x => x.block_name === blk && String(x.booth_no) === String(b)) : null;
+          if (bObj && bObj.booth_name_hi) {
+            opt.textContent = `#${b} - ${bObj.booth_name_hi} (PS Ward ${bObj.ps_ward})`;
+          } else {
+            opt.textContent = `Polling Station #${b} of ${maxB} (${blk})`;
+          }
+          sel.appendChild(opt);
         }
-        sel.appendChild(opt);
+
+        if ([...sel.options].some(o => o.value == curVal)) {
+          sel.value = curVal;
+        } else if (sel.options.length > 0) {
+          sel.selectedIndex = 0;
+          inputBooth.value = sel.value;
+        }
+      } else {
+        // ZP MODE: Populate with all polling stations belonging to the selected ZP Ward
+        const zpWard = parseInt(document.getElementById('entryZpWard').value) || 1;
+        let zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === zpWard) : [];
+
+        zpBooths.sort((a, b) => {
+          if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
+          return (parseInt(a.booth_no) || 0) - (parseInt(b.booth_no) || 0);
+        });
+
+        zpBooths.forEach((bObj) => {
+          const opt = document.createElement('option');
+          opt.value = `${bObj.block_name}:${bObj.booth_no}`;
+          const sName = bObj.booth_name_hi || bObj.booth_name_en || '';
+          opt.textContent = `[${bObj.block_name}] #${bObj.booth_no} - ${sName} (${bObj.total_elector} Electors)`;
+          sel.appendChild(opt);
+        });
+
+        if (sel.options.length > 0) {
+          sel.selectedIndex = 0;
+          const parts = sel.value.split(':');
+          inputBooth.value = parts[1] || '1';
+        } else {
+          inputBooth.value = '1';
+        }
       }
-      sel.value = curVal;
     }
 
     function populateWardDropdown() {
@@ -915,18 +981,35 @@
     }
 
     function onBoothInputChanged() {
+      const cat = document.getElementById('entryCategory').value;
       const val = document.getElementById('inputBoothNo').value.trim();
       const sel = document.getElementById('selectBoothDropdown');
-      // If it matches an option in dropdown, select it
-      if ([...sel.options].some(o => o.value == val)) {
-        sel.value = val;
+
+      if (cat === 'ZP') {
+        const matchingOpt = [...sel.options].find(o => {
+          const parts = o.value.split(':');
+          return parts[1] === val;
+        });
+        if (matchingOpt) {
+          sel.value = matchingOpt.value;
+        }
+      } else {
+        if ([...sel.options].some(o => o.value == val)) {
+          sel.value = val;
+        }
       }
       refreshEntryView();
     }
 
     function onBoothDropdownChanged() {
-      const bno = document.getElementById('selectBoothDropdown').value;
-      document.getElementById('inputBoothNo').value = bno;
+      const cat = document.getElementById('entryCategory').value;
+      const selVal = document.getElementById('selectBoothDropdown').value;
+      if (cat === 'ZP') {
+        const parts = selVal.split(':');
+        document.getElementById('inputBoothNo').value = parts[1] || '1';
+      } else {
+        document.getElementById('inputBoothNo').value = selVal;
+      }
       refreshEntryView();
     }
 
@@ -936,68 +1019,70 @@
 
     function refreshEntryView() {
       const cat = document.getElementById('entryCategory').value;
-      const blk = document.getElementById('entryBlock').value || 'Semari';
-
       let targetWard = 1;
       let roundKey = 'R1';
-
-      // Look up ward configuration (total booths & max rounds)
-      const rawBno = document.getElementById('inputBoothNo').value.trim() || '1';
-      const bnoStr = rawBno;
       let boothObj = null;
+      let blk = '';
 
-      if (masterData.booths && masterData.booths.length > 0) {
-        boothObj = masterData.booths.find(b => b.block_name === blk && String(b.booth_no) === bnoStr);
-      }
-
-      if (activeEntryMode === 'round') {
-        targetWard = parseInt(document.getElementById('entryWard').value) || 1;
-      } else {
+      if (cat === 'PS') {
+        blk = document.getElementById('entryBlock').value || 'Semari';
+        const rawBno = document.getElementById('inputBoothNo').value.trim() || '1';
+        if (masterData.booths && masterData.booths.length > 0) {
+          boothObj = masterData.booths.find(b => b.block_name === blk && String(b.booth_no) === rawBno);
+        }
         if (boothObj) {
-          targetWard = cat === 'PS' ? boothObj.ps_ward : boothObj.zp_ward;
+          targetWard = boothObj.ps_ward;
         } else {
           const bno = parseInt(rawBno) || 1;
-          targetWard = cat === 'PS' ? Math.min(15, Math.max(1, Math.ceil(bno / 5))) : Math.min(21, Math.max(1, Math.ceil(bno / 25)));
+          targetWard = Math.min(15, Math.max(1, Math.ceil(bno / 5)));
         }
-      }
-
-      const targetBlk = cat === 'ZP' ? 'Salumber ZP' : blk;
-      const wardInfo = masterData.wards.find(w => w.category === cat && w.block_name === targetBlk && w.ward_no === targetWard);
-      const totalBooths = wardInfo ? (wardInfo.total_booths || (cat === 'ZP' ? 25 : 5)) : 5;
-      const tables = wardInfo ? (wardInfo.counting_tables || 5) : 5;
-      const maxRounds = Math.max(1, Math.ceil(totalBooths / (tables || 5)));
-
-      if (activeEntryMode === 'booth') {
-        const rawBno = document.getElementById('inputBoothNo').value.trim() || '1'; const bno = parseInt(rawBno) || 1;
         roundKey = `B${rawBno}`;
+        
         if (boothObj) {
           const sName = boothObj.booth_name_hi || boothObj.booth_name_en || '';
           document.getElementById('boothInfoText').innerHTML = `📍 <strong>Booth #${rawBno}:</strong> ${sName} • <span style="color:#0284c7; font-weight:700;">${blk}</span> • ${boothObj.total_elector} Electors`;
-          document.getElementById('boothWardBadge').innerText = `${cat} Ward ${targetWard}`;
+          document.getElementById('boothWardBadge').innerText = `PS Ward ${targetWard}`;
         } else {
-          document.getElementById('boothInfoText').innerText = `📍 Polling Station #${rawBno} • ${blk} (Total Ward Booths: ${totalBooths})`;
-          document.getElementById('boothWardBadge').innerText = `Ward ${targetWard}`;
+          document.getElementById('boothInfoText').innerText = `📍 Polling Station #${rawBno} • ${blk}`;
+          document.getElementById('boothWardBadge').innerText = `PS Ward ${targetWard}`;
         }
       } else {
-        // Dynamically populate rounds dropdown based on actual max_rounds for this ward
-        const roundSelect = document.getElementById('entryRound');
-        const prevSelected = roundSelect.value || 'R1';
-        roundSelect.innerHTML = '';
-        for (let r = 1; r <= maxRounds; r++) {
-          const opt = document.createElement('option');
-          opt.value = `R${r}`;
-          opt.textContent = (r === maxRounds) ? `Round ${r} of ${maxRounds} (Final Round)` : `Round ${r} of ${maxRounds}`;
-          if (opt.value === prevSelected) opt.selected = true;
-          roundSelect.appendChild(opt);
-        }
-        if (!roundSelect.value) roundSelect.value = 'R1';
-        roundKey = roundSelect.value;
+        // ZP MODE (District-Wide Election)
+        targetWard = parseInt(document.getElementById('entryZpWard').value) || 1;
+        blk = 'Salumber ZP';
 
-        document.getElementById('boothInfoText').innerText = `📑 ${blk} Ward ${targetWard} • ${totalBooths} Booths • ${maxRounds} Rounds Total`;
-        document.getElementById('boothWardBadge').innerText = `${roundKey} of ${maxRounds}`;
+        const selVal = document.getElementById('selectBoothDropdown').value || '';
+        let bBlk = '', bNo = '';
+        if (selVal.includes(':')) {
+          [bBlk, bNo] = selVal.split(':');
+        } else {
+          bNo = document.getElementById('inputBoothNo').value.trim() || '1';
+        }
+
+        if (masterData.booths && masterData.booths.length > 0) {
+          if (bBlk) {
+            boothObj = masterData.booths.find(b => b.block_name === bBlk && String(b.booth_no) === bNo);
+          } else {
+            boothObj = masterData.booths.find(b => Number(b.zp_ward) === targetWard && String(b.booth_no) === bNo);
+          }
+        }
+
+        if (boothObj) {
+          roundKey = `B_${boothObj.block_name}_${boothObj.booth_no}`;
+          const sName = boothObj.booth_name_hi || boothObj.booth_name_en || '';
+          document.getElementById('boothInfoText').innerHTML = `📍 <strong>${boothObj.block_name} Booth #${boothObj.booth_no}:</strong> ${sName} • ${boothObj.total_elector} Electors`;
+          document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
+        } else {
+          roundKey = `B${bNo}`;
+          document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bNo} • ZP Ward ${targetWard}`;
+          document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
+        }
       }
 
       currentMappedWard = targetWard;
+      currentRoundKey = roundKey;
+      currentBoothObj = boothObj;
+
       loadCandidateInputs(cat, blk, targetWard, roundKey);
     }
 
@@ -1069,12 +1154,7 @@
       const wardNo = currentMappedWard;
 
       const rawBno = document.getElementById('inputBoothNo').value.trim() || '1';
-      let roundKey = 'R1';
-      if (activeEntryMode === 'booth') {
-        roundKey = `B${rawBno}`;
-      } else {
-        roundKey = document.getElementById('entryRound').value || 'R1';
-      }
+      let roundKey = currentRoundKey || ('B' + rawBno);
 
       const votesMap = {};
       let hasValue = false;
@@ -1106,15 +1186,14 @@
 
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
-          showToast(`✅ Saved votes for ${roundKey} (Ward ${wardNo})!`);
+          showToast(`✅ Saved votes for ${roundKey} (${cat} Ward ${wardNo})!`);
           await loadMasterData();
 
-          // Auto-advance to next booth if in booth mode
-          if (activeEntryMode === 'booth') {
-            const nextB = (parseInt(document.getElementById('inputBoothNo').value) || 1) + 1;
-            document.getElementById('inputBoothNo').value = nextB;
-            document.getElementById('selectBoothDropdown').value = nextB;
-            refreshEntryView();
+          // Auto-advance to next booth in dropdown
+          const sel = document.getElementById('selectBoothDropdown');
+          if (sel && sel.selectedIndex < sel.options.length - 1) {
+            sel.selectedIndex += 1;
+            onBoothDropdownChanged();
           } else {
             refreshEntryView();
           }
