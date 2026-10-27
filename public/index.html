@@ -319,9 +319,14 @@
       border-color: #0284c7;
       box-shadow: var(--shadow-sm);
     }
+    #roCenterPillStrip::-webkit-scrollbar {
+      display: none;
+    }
 
     /* WARD DISPLAY CARD */
     .ward-card {
+      flex-shrink: 0;
+      width: 100%;
       background: #ffffff;
       border: 1px solid var(--border-subtle);
       border-radius: 10px;
@@ -598,7 +603,7 @@
         </div>
 
         <!-- RO Centers Selector Strip -->
-        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:2px;" id="roCenterPillStrip">
+        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; -ms-overflow-style:none;" id="roCenterPillStrip">
           <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 RO Centers</button>
           <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand RO</button>
           <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada RO</button>
