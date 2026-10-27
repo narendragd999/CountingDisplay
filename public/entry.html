@@ -708,7 +708,7 @@
 
   <script>
     let authToken = localStorage.getItem('salumber_auth_token') || '';
-    let masterData = { candidates: [], wards: [], roundVotes: {} };
+    let masterData = { candidates: [], wards: [], roundVotes: {}, booths: [] };
     let currentCandidates = [];
     let activeEntryMode = 'booth'; // 'booth' or 'round'
     let currentMappedWard = 1;
@@ -889,7 +889,12 @@
       for (let b = 1; b <= maxB; b++) {
         const opt = document.createElement('option');
         opt.value = b;
-        opt.textContent = `Polling Station #${b} of ${maxB} (${blk})`;
+                let bObj = masterData.booths ? masterData.booths.find(x => x.block_name === blk && String(x.booth_no) === String(b)) : null;
+        if (bObj && bObj.booth_name_hi) {
+          opt.textContent = `#${b} - ${bObj.booth_name_hi} (Ward ${cat === 'PS' ? bObj.ps_ward : bObj.zp_ward})`;
+        } else {
+          opt.textContent = `Polling Station #${b} of ${maxB} (${blk})`;
+        }
         sel.appendChild(opt);
       }
       sel.value = curVal;
@@ -936,14 +941,22 @@
       let roundKey = 'R1';
 
       // Look up ward configuration (total booths & max rounds)
+      const rawBno = document.getElementById('inputBoothNo').value.trim() || '1';
+      const bnoStr = rawBno;
+      let boothObj = null;
+
+      if (masterData.booths && masterData.booths.length > 0) {
+        boothObj = masterData.booths.find(b => b.block_name === blk && String(b.booth_no) === bnoStr);
+      }
+
       if (activeEntryMode === 'round') {
         targetWard = parseInt(document.getElementById('entryWard').value) || 1;
       } else {
-        const rawBno = document.getElementById('inputBoothNo').value.trim() || '1'; const bno = parseInt(rawBno) || 1;
-        if (cat === 'PS') {
-          targetWard = Math.min(15, Math.max(1, Math.ceil(bno / 5)));
+        if (boothObj) {
+          targetWard = cat === 'PS' ? boothObj.ps_ward : boothObj.zp_ward;
         } else {
-          targetWard = Math.min(21, Math.max(1, Math.ceil(bno / 25)));
+          const bno = parseInt(rawBno) || 1;
+          targetWard = cat === 'PS' ? Math.min(15, Math.max(1, Math.ceil(bno / 5))) : Math.min(21, Math.max(1, Math.ceil(bno / 25)));
         }
       }
 
@@ -955,8 +968,14 @@
       if (activeEntryMode === 'booth') {
         const rawBno = document.getElementById('inputBoothNo').value.trim() || '1'; const bno = parseInt(rawBno) || 1;
         roundKey = `B${rawBno}`;
-        document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bno} • ${blk} (Total Ward Booths: ${totalBooths})`;
-        document.getElementById('boothWardBadge').innerText = `Ward ${targetWard}`;
+        if (boothObj) {
+          const sName = boothObj.booth_name_hi || boothObj.booth_name_en || '';
+          document.getElementById('boothInfoText').innerHTML = `📍 <strong>Booth #${rawBno}:</strong> ${sName} • <span style="color:#0284c7; font-weight:700;">${blk}</span> • ${boothObj.total_elector} Electors`;
+          document.getElementById('boothWardBadge').innerText = `${cat} Ward ${targetWard}`;
+        } else {
+          document.getElementById('boothInfoText').innerText = `📍 Polling Station #${rawBno} • ${blk} (Total Ward Booths: ${totalBooths})`;
+          document.getElementById('boothWardBadge').innerText = `Ward ${targetWard}`;
+        }
       } else {
         // Dynamically populate rounds dropdown based on actual max_rounds for this ward
         const roundSelect = document.getElementById('entryRound');
