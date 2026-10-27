@@ -914,26 +914,45 @@
       let targetWard = 1;
       let roundKey = 'R1';
 
-      if (activeEntryMode === 'booth') {
+      // Look up ward configuration (total booths & max rounds)
+      if (activeEntryMode === 'round') {
+        targetWard = parseInt(document.getElementById('entryWard').value) || 1;
+      } else {
         const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
-        
-        // Auto-calculate mapped ward:
-        // In PS: 15 wards, booths distributed approx 5 booths per ward (e.g. booths 1-5 = W1, 6-10 = W2...)
         if (cat === 'PS') {
           targetWard = Math.min(15, Math.max(1, Math.ceil(bno / 5)));
         } else {
-          // ZP: 21 wards across 522 booths
           targetWard = Math.min(21, Math.max(1, Math.ceil(bno / 25)));
         }
-        roundKey = `B${bno}`;
+      }
 
-        document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bno} • ${blk}`;
-        document.getElementById('boothWardBadge').innerText = `Mapped to Ward ${targetWard}`;
+      const wardInfo = masterData.wards.find(w => w.category === cat && w.block_name === blk && w.ward_no === targetWard);
+      const totalBooths = wardInfo ? (wardInfo.total_booths || (cat === 'ZP' ? 25 : 5)) : 5;
+      const tables = wardInfo ? (wardInfo.counting_tables || 5) : 5;
+      const maxRounds = wardInfo ? (wardInfo.max_rounds || Math.ceil(totalBooths / tables)) : Math.ceil(totalBooths / tables);
+
+      if (activeEntryMode === 'booth') {
+        const bno = parseInt(document.getElementById('inputBoothNo').value) || 1;
+        roundKey = `B${bno}`;
+        document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bno} • ${blk} (Total Ward Booths: ${totalBooths})`;
+        document.getElementById('boothWardBadge').innerText = `Ward ${targetWard}`;
       } else {
-        targetWard = parseInt(document.getElementById('entryWard').value) || 1;
-        roundKey = document.getElementById('entryRound').value || 'R1';
-        document.getElementById('boothInfoText').innerText = `📑 Summary Mode • ${blk} Ward ${targetWard}`;
-        document.getElementById('boothWardBadge').innerText = `${roundKey}`;
+        // Dynamically populate rounds dropdown based on actual max_rounds for this ward
+        const roundSelect = document.getElementById('entryRound');
+        const prevSelected = roundSelect.value || 'R1';
+        roundSelect.innerHTML = '';
+        for (let r = 1; r <= maxRounds; r++) {
+          const opt = document.createElement('option');
+          opt.value = `R${r}`;
+          opt.textContent = (r === maxRounds) ? `Round ${r} of ${maxRounds} (Final Round)` : `Round ${r} of ${maxRounds}`;
+          if (opt.value === prevSelected) opt.selected = true;
+          roundSelect.appendChild(opt);
+        }
+        if (!roundSelect.value) roundSelect.value = 'R1';
+        roundKey = roundSelect.value;
+
+        document.getElementById('boothInfoText').innerText = `📑 ${blk} Ward ${targetWard} • ${totalBooths} Booths • ${maxRounds} Rounds Total`;
+        document.getElementById('boothWardBadge').innerText = `${roundKey} of ${maxRounds}`;
       }
 
       currentMappedWard = targetWard;
@@ -1123,9 +1142,29 @@
           actionBtn = `<span style="font-size:11px; color:var(--text-dim);">No votes yet</span>`;
         }
 
+        const totalBooths = wInfo ? (wInfo.total_booths || 5) : 5;
+        const tables = wInfo ? (wInfo.counting_tables || 5) : 5;
+        const maxRounds = wInfo ? (wInfo.max_rounds || Math.ceil(totalBooths / tables)) : Math.ceil(totalBooths / tables);
+        const completedRounds = entryKeys.size;
+        const isComplete = (completedRounds >= maxRounds && maxRounds > 0);
+
+        if (isDeclared) {
+          statusBadge = '<span class="badge badge-success">✓ DECLARED</span>';
+          actionBtn = `<button onclick="reopenWard('${cat}', '${blk}', ${w})" class="btn btn-outline" style="padding:4px 8px; font-size:11px; color:var(--warning);">🔓 Reopen</button>`;
+        } else if (isComplete && hasVotes) {
+          statusBadge = `<span class="badge badge-success">✓ 100% COMPLETE (${completedRounds}/${maxRounds} Rds)</span>`;
+          actionBtn = `<button onclick="declareWardWinner('${cat}', '${blk}', ${w})" class="btn btn-primary" style="padding:6px 14px; font-size:11px; background:#15803d; border-color:#15803d;">🏆 Declare Winner</button>`;
+        } else if (hasVotes) {
+          statusBadge = `<span class="badge badge-primary">⚡ Round ${completedRounds} of ${maxRounds}</span>`;
+          actionBtn = `<button onclick="declareWardWinner('${cat}', '${blk}', ${w})" class="btn btn-outline" style="padding:4px 8px; font-size:11px;">Declare Early</button>`;
+        } else {
+          statusBadge = `<span class="badge" style="background:#f1f5f9; color:#64748b;">⏳ Awaiting (0/${maxRounds})</span>`;
+          actionBtn = `<span style="font-size:11px; color:var(--text-dim);">-</span>`;
+        }
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td style="font-weight:700;">Ward ${w}</td>
+          <td style="font-weight:700;">Ward ${w}<br><span style="font-size:10px; color:var(--text-dim); font-weight:600;">${totalBooths} booths</span></td>
           <td style="font-weight:700;">${leader && leader.totalVotes > 0 ? leader.name_hindi : '-'}</td>
           <td>${leader && leader.totalVotes > 0 ? `<span class="party-pill party-${leader.party || 'IND'}">${leader.party || 'IND'}</span>` : '-'}</td>
           <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:800;">${leader?.totalVotes || 0}</td>
