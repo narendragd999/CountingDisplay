@@ -1,0 +1,10 @@
+{
+  "name": "countingdisplay",
+  "version": "1.0.0",
+  "description": "Salumber Elections 2026 Live Display",
+  "main": "worker.js",
+  "scripts": {
+    "start": "node worker.js",
+    "deploy": "wrangler deploy"
+  }
+}
