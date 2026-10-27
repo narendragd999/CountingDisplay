@@ -874,9 +874,20 @@
 
       const hasVotes = candTotals.some(c => c.totalVotes > 0);
       const isCounting = hasVotes && !isDeclared;
-      const statusKey = isDeclared ? 'DECLARED' : (isCounting ? 'COUNTING' : 'PENDING');
-      const statusLabel = isDeclared ? 'WINNER DECLARED' : (isCounting ? `ROUND ${roundsSet.size} OF ${ward.max_rounds}` : 'AWAITING VOTES');
 
+      // Real Booth Count for this ward
+      let totalBooths = 5;
+      if (ward.category === 'ZP') {
+        totalBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === ward.ward_no).length : (ward.total_booths || 25);
+      } else {
+        totalBooths = masterData.booths ? masterData.booths.filter(b => b.block_name === ward.block_name && Number(b.ps_ward) === ward.ward_no).length : (ward.total_booths || 5);
+      }
+      if (!totalBooths || totalBooths < 1) totalBooths = ward.total_booths || 5;
+
+      const countedBooths = roundsSet.size;
+      const isAllBoothsCounted = (countedBooths >= totalBooths && totalBooths > 0);
+      const statusKey = isDeclared ? 'DECLARED' : (isCounting ? (isAllBoothsCounted ? 'COMPLETED' : 'COUNTING') : 'PENDING');
+      const statusLabel = isDeclared ? 'WINNER DECLARED' : (isCounting ? (isAllBoothsCounted ? `ALL ${totalBooths} BOOTHS COUNTED` : `${countedBooths} OF ${totalBooths} BOOTHS COUNTED`) : 'AWAITING VOTES');
       const card = document.createElement('div');
       card.className = `ward-card ${isDeclared ? 'declared' : (isCounting ? 'counting' : '')}`;
 

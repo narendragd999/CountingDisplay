@@ -1036,7 +1036,7 @@
           const bno = parseInt(rawBno) || 1;
           targetWard = Math.min(15, Math.max(1, Math.ceil(bno / 5)));
         }
-        roundKey = `B${rawBno}`;
+        roundKey = `B${rawBno}`.toUpperCase();
         
         if (boothObj) {
           const sName = boothObj.booth_name_hi || boothObj.booth_name_en || '';
@@ -1068,12 +1068,12 @@
         }
 
         if (boothObj) {
-          roundKey = `B_${boothObj.block_name}_${boothObj.booth_no}`;
+          roundKey = `B_${boothObj.block_name}_${boothObj.booth_no}`.toUpperCase();
           const sName = boothObj.booth_name_hi || boothObj.booth_name_en || '';
           document.getElementById('boothInfoText').innerHTML = `📍 <strong>${boothObj.block_name} Booth #${boothObj.booth_no}:</strong> ${sName} • ${boothObj.total_elector} Electors`;
           document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
         } else {
-          roundKey = `B${bNo}`;
+          roundKey = `B${bNo}`.toUpperCase();
           document.getElementById('boothInfoText').innerText = `📍 Polling Station #${bNo} • ZP Ward ${targetWard}`;
           document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
         }
@@ -1099,18 +1099,34 @@
         return;
       }
 
+      const rKeyUpper = (roundKey || '').toUpperCase();
+
       currentCandidates.forEach(cand => {
         const cVotes = masterData.roundVotes[cand.id] || {};
         
-        // Calculate cumulative previous votes
+        // Calculate cumulative previous votes (excluding this booth)
         let prevSum = 0;
         for (const [k, v] of Object.entries(cVotes)) {
-          if (k !== roundKey) prevSum += (v || 0);
+          if (k.toUpperCase() !== rKeyUpper) {
+            prevSum += (v || 0);
+          }
         }
 
-        const curVal = cVotes[roundKey] !== undefined ? cVotes[roundKey] : '';
+        // Case-insensitive lookup for this booth's entered votes
+        let curVal = '';
+        if (cVotes[rKeyUpper] !== undefined) {
+          curVal = cVotes[rKeyUpper];
+        } else if (cVotes[roundKey] !== undefined) {
+          curVal = cVotes[roundKey];
+        } else {
+          for (const [k, v] of Object.entries(cVotes)) {
+            if (k.toUpperCase() === rKeyUpper) {
+              curVal = v;
+              break;
+            }
+          }
+        }
         const initialTotal = prevSum + (Number(curVal) || 0);
-
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="font-weight:700; font-family:'Rajdhani',sans-serif; font-size:15px;">#${cand.ballot_no || '-'}</td>
@@ -1249,11 +1265,17 @@
         const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
         const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
 
-        const totalBooths = wInfo ? (wInfo.total_booths || 5) : 5;
-        const tables = wInfo ? (wInfo.counting_tables || 5) : 5;
-        const maxRounds = Math.max(1, Math.ceil(totalBooths / (tables || 5)));
-        const completedRounds = entryKeys.size;
-        const isComplete = (completedRounds >= maxRounds && maxRounds > 0);
+        // Total booths for this ward
+        let totalBooths = 5;
+        if (cat === 'ZP') {
+          totalBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === w).length : (wInfo ? wInfo.total_booths : 25);
+        } else {
+          totalBooths = masterData.booths ? masterData.booths.filter(b => b.block_name === blk && Number(b.ps_ward) === w).length : (wInfo ? wInfo.total_booths : 5);
+        }
+        if (!totalBooths || totalBooths < 1) totalBooths = wInfo ? (wInfo.total_booths || 5) : 5;
+
+        const countedBooths = entryKeys.size;
+        const isComplete = (countedBooths >= totalBooths && totalBooths > 0);
 
         let statusBadge = '';
         let actionBtn = '';
@@ -1262,19 +1284,19 @@
           statusBadge = '<span class="badge badge-success">✓ DECLARED</span>';
           actionBtn = `<button onclick="reopenWard('${cat}', '${blk}', ${w})" class="btn btn-outline" style="padding:4px 8px; font-size:11px; color:var(--warning);">🔓 Reopen</button>`;
         } else if (isTie) {
-          statusBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #f59e0b; font-weight:800;">⚖️ TIED (${completedRounds}/${maxRounds} Rds)</span>`;
+          statusBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #f59e0b; font-weight:800;">⚖️ TIED (${countedBooths}/${totalBooths} Booths)</span>`;
           actionBtn = `<button onclick="resolveTiePrompt('${cat}', '${blk}', ${w}, '${leader.name_hindi.replace(/'/g, "\\'")}', '${runnerUp.name_hindi.replace(/'/g, "\\'")}', ${leader.totalVotes})" class="btn" style="padding:6px 12px; font-size:11px; background:#d97706; color:#ffffff; font-weight:700;">⚖️ Resolve Tie (Lot)</button>`;
         } else if (isComplete && hasVotes) {
-          statusBadge = `<span class="badge badge-success">✓ 100% COMPLETE (${completedRounds}/${maxRounds} Rds)</span>`;
+          statusBadge = `<span class="badge badge-success">✓ 100% COMPLETE (${countedBooths}/${totalBooths} Booths)</span>`;
           actionBtn = `<button onclick="declareWardWinner('${cat}', '${blk}', ${w})" class="btn btn-primary" style="padding:6px 14px; font-size:11px; background:#15803d; border-color:#15803d;">🏆 Declare Winner</button>`;
         } else if (hasVotes) {
-          statusBadge = `<span class="badge badge-primary">⚡ Round ${completedRounds} of ${maxRounds}</span>`;
+          const pct = Math.round((countedBooths / totalBooths) * 100);
+          statusBadge = `<span class="badge badge-primary">⚡ ${countedBooths} of ${totalBooths} Booths Counted (${pct}%)</span>`;
           actionBtn = `<button onclick="declareWardWinner('${cat}', '${blk}', ${w})" class="btn btn-outline" style="padding:4px 8px; font-size:11px;">Declare Early</button>`;
         } else {
-          statusBadge = `<span class="badge" style="background:#f1f5f9; color:#64748b;">⏳ Awaiting (0/${maxRounds})</span>`;
+          statusBadge = `<span class="badge" style="background:#f1f5f9; color:#64748b;">⏳ Awaiting (0/${totalBooths} Booths)</span>`;
           actionBtn = `<span style="font-size:11px; color:var(--text-dim);">-</span>`;
         }
-
         let leaderNameHtml = '-';
         let partyHtml = '-';
         let marginHtml = '-';
