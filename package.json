@@ -5,6 +5,7 @@
   "main": "worker.js",
   "scripts": {
     "start": "node worker.js",
+    "build": "echo Pre-built worker ready",
     "deploy": "wrangler deploy"
   }
 }
