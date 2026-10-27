@@ -493,17 +493,17 @@
       <div class="mode-toggle-bar">
         <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Entry Method:</span>
         <label class="mode-radio-label">
-          <input type="radio" name="entryMode" value="booth" checked onchange="toggleEntryMode('booth')">
+          <input type="radio" name="entryMode" value="booth" onchange="toggleEntryMode('booth')">
           <span>📍 By Polling Station / Booth # (Recommended for Tables 1-5)</span>
         </label>
         <label class="mode-radio-label">
-          <input type="radio" name="entryMode" value="round" onchange="toggleEntryMode('round')">
+          <input type="radio" name="entryMode" value="round" checked onchange="toggleEntryMode('round')">
           <span>📑 By Ward & Round (Summary Sheet)</span>
         </label>
       </div>
 
       <!-- Sub-Selector A: Booth Number Entry -->
-      <div id="boothSelectorBox" class="form-grid">
+      <div id="boothSelectorBox" class="form-grid" style="display:none;">
         <div class="form-group">
           <label class="form-label">Polling Station / Booth #</label>
           <div style="display:flex; gap:8px;">
@@ -514,7 +514,7 @@
       </div>
 
       <!-- Sub-Selector B: Ward & Round Entry -->
-      <div id="roundSelectorBox" class="form-grid" style="display:none;">
+      <div id="roundSelectorBox" class="form-grid">
         <div class="form-group">
           <label class="form-label">Select Ward</label>
           <select id="entryWard" class="form-select" onchange="onWardRoundChanged()"></select>
@@ -566,7 +566,7 @@
         </button>
 
         <button id="btnSaveVotes" onclick="submitVotes()" class="btn btn-success" style="padding:12px 28px; font-size:14px;">
-          💾 SAVE VOTES & PROCEED
+          💾 SAVE ROUND SHEET
         </button>
       </div>
     </section>
@@ -711,7 +711,7 @@
     let authToken = localStorage.getItem('salumber_auth_token') || '';
     let masterData = { candidates: [], wards: [], roundVotes: {} };
     let currentCandidates = [];
-    let activeEntryMode = 'booth'; // 'booth' or 'round'
+    let activeEntryMode = 'round'; // 'booth' or 'round'
     let currentMappedWard = 1;
 
     // Initialization
