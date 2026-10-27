@@ -959,7 +959,8 @@
         }
       }
 
-      const wardInfo = masterData.wards.find(w => w.category === cat && w.block_name === blk && w.ward_no === targetWard);
+      const targetBlk = cat === 'ZP' ? 'Salumber ZP' : blk;
+      const wardInfo = masterData.wards.find(w => w.category === cat && w.block_name === targetBlk && w.ward_no === targetWard);
       const totalBooths = wardInfo ? (wardInfo.total_booths || (cat === 'ZP' ? 25 : 5)) : 5;
       const tables = wardInfo ? (wardInfo.counting_tables || 5) : 5;
       const maxRounds = Math.max(1, Math.ceil(totalBooths / (tables || 5)));
@@ -999,7 +1000,8 @@
     }
 
     function loadCandidateInputs(cat, blk, wardNo, roundKey) {
-      currentCandidates = masterData.candidates.filter(c => c.category === cat && c.block_name === blk && c.ward_no === wardNo);
+      const targetBlk = cat === 'ZP' ? 'Salumber ZP' : blk;
+      currentCandidates = masterData.candidates.filter(c => c.category === cat && c.block_name === targetBlk && c.ward_no === wardNo);
       currentCandidates.sort((a, b) => (a.ballot_no || 999) - (b.ballot_no || 999));
 
       const tbody = document.getElementById('candidatesTableBody');
@@ -1064,9 +1066,9 @@
       const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
       const wardNo = currentMappedWard;
 
+      const rawBno = document.getElementById('inputBoothNo').value.trim() || '1';
       let roundKey = 'R1';
       if (activeEntryMode === 'booth') {
-        const bno = document.getElementById('inputBoothNo').value || 1;
         roundKey = `B${rawBno}`;
       } else {
         roundKey = document.getElementById('entryRound').value || 'R1';
