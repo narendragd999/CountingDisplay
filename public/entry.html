@@ -479,7 +479,7 @@
         </div>
 
         <div class="form-group" id="blockSelectGroup">
-          <label class="form-label">Panchayat Samiti Block</label>
+          <label class="form-label">RO Center / Panchayat Samiti Block</label>
           <select id="entryBlock" class="form-select" onchange="onBlockChanged()">
             <option value="Geengla">Geengla (61 Booths)</option>
             <option value="Jaisamand">Jaisamand (81 Booths)</option>
@@ -845,10 +845,9 @@
     }
 
     function onCategoryChanged() {
-      const cat = document.getElementById('entryCategory').value;
+      // Keep block selector visible for both PS and ZP (EVMs are sorted by RO Center / Block)
       const blkGrp = document.getElementById('blockSelectGroup');
-      if (cat === 'PS') blkGrp.style.display = 'flex';
-      else blkGrp.style.display = 'none';
+      blkGrp.style.display = 'flex';
 
       populateBoothDropdown();
       populateWardDropdown();
@@ -935,7 +934,7 @@
 
     function refreshEntryView() {
       const cat = document.getElementById('entryCategory').value;
-      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+      const blk = document.getElementById('entryBlock').value || 'Semari';
 
       let targetWard = 1;
       let roundKey = 'R1';
