@@ -1,36 +1,71 @@
-# Salumber Panchayati Raj Election Live Results Portal 2026
+# 🗳️ Salumber Panchayati Raj Election Live Results Portal 2026
 ## Standalone Real-Time Election Broadcast System & Embedded Database
 
-This is the standalone, high-performance Live Election Results Portal and Operator Console for **Salumber District (Rajasthan) Panchayati Raj Elections 2026**.
+Official high-performance live election counting and display system for **Salumber District (Rajasthan) Panchayati Raj Elections 2026** (21 Zilla Parishad Wards & 105 Panchayat Samiti Wards across 7 Blocks).
 
-It eliminates all dependencies on Google Sheets and cloud services. It runs locally with an embedded SQLite database and WebSockets, providing sub-millisecond real-time live broadcast to big screen TVs (1080p / 4K).
+* **GitHub Repository**: [https://github.com/narendragd999/CountingDisplay.git](https://github.com/narendragd999/CountingDisplay.git)
+* **Local Offline Engine**: Python FastAPI + SQLite + WebSockets (<5ms live push)
+* **Global Public Broadcast**: Cloudflare Tunnel (`cloudflared`) with zero configuration
 
 ---
 
-## 🚀 1-Click Launch (Windows)
+## 🚀 How to Run
 
-Simply double-click:
+### Option A: Local Hall & LAN Broadcast (Offline Safe)
+Double-click:
 👉 **`start.bat`**
-
-This starts the server and automatically opens both interfaces in your browser:
-* **📺 TV Broadcast Screen**: [http://localhost:8000/](http://localhost:8000/) *(Press `F11` for full screen)*
+* **📺 TV Big Screen Display (1080p / 4K)**: [http://localhost:8000/](http://localhost:8000/)
 * **📝 Operator Vote Entry Console**: [http://localhost:8000/entry](http://localhost:8000/entry)
-* **📥 Instant CSV Export**: [http://localhost:8000/api/export_csv](http://localhost:8000/api/export_csv)
+* **📥 1-Click Results CSV Export**: [http://localhost:8000/api/export_csv](http://localhost:8000/api/export_csv)
+
+### Option B: Cloudflare Live Public Broadcast (Internet / Mobile Viewers)
+Double-click:
+👉 **`start_with_cloudflare.bat`**
+* Automatically starts the local server and connects to the **Cloudflare Global Edge Network** using `cloudflared`.
+* Prints a public HTTPS URL (e.g. `https://xxxx.trycloudflare.com`) in the terminal.
+* Share that link with District Collectors, Returning Officers, Media, and Mobile Viewers anywhere in the world with full live WebSocket updates!
 
 ---
 
-## 📱 Multi-Operator Network Setup (Counting Hall Wi-Fi / LAN)
+## ☁️ Cloudflare Hosting Guide
 
-Multiple operators on different laptops, tablets, or phones can enter votes simultaneously without conflicting:
+### Method 1: Cloudflare Tunnel (Recommended)
+1. Run `start_with_cloudflare.bat`.
+2. Cloudflare automatically establishes an encrypted tunnel between your local counting machine and Cloudflare's global edge.
+3. Features:
+   * **100% Offline Resilience**: If the internet drops, local counting on `localhost:8000` continues without interruption.
+   * **Full WebSockets**: Sub-millisecond push updates to all online viewers.
+   * **DDoS Protected**: Backed by Cloudflare enterprise network security.
 
-1. Connect the counting hall computers/phones to the same Wi-Fi or LAN.
-2. Find the server computer's IP address (e.g. `192.168.1.15`).
-3. Operators open:
-   `http://192.168.1.15:8000/entry`
-4. The big screen TV opens:
-   `http://192.168.1.15:8000/`
+### Method 2: Cloudflare Pages (Static Frontend from GitHub)
+1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
+2. Select repository: `narendragd999/CountingDisplay`.
+3. Set **Build output directory** to: `public`.
+4. Click **Save and Deploy**.
 
-Whenever any operator clicks **"SAVE ROUND VOTES"**, the TV display updates across the hall in **under 5 milliseconds via WebSockets**.
+---
+
+## 🌟 Key Election Features & Safety Controls
+
+1. **Devanagari Hindi Alphabetical Ordering (वर्णमाला क्रमानुसार)**:
+   * All 275 candidates are strictly sorted in Hindi alphabetical order according to Rajasthan State Election Commission Form 7A rules.
+   * Candidates display their official EVM Ballot Serial Number (`क्र.सं. 1`, `क्र.सं. 2`...).
+2. **Interactive TV Ward Filters & Pause / Play**:
+   * Direct dropdown filter on the big screen TV to jump to any of the 21 ZP wards or 105 PS wards instantly.
+   * `⏸ Pause` / `▶ Play` button to freeze the auto-rotation on any ward during inspection.
+3. **Round-Wise Entry vs. Automatic Cumulative Summation**:
+   * Operators enter only the votes counted in that specific round (`Round Votes`).
+   * The system automatically accumulates previous rounds into the **Cumulative Total (कुल संचयी योग)** with a real-time live preview.
+4. **Faulty EVM Protocol (Without VVPAT)**:
+   * Counting at other tables never stops.
+   * When a faulty machine is resolved via Auxiliary Display Unit (ADU) or power replacement, enter votes under the round or select `Faulty EVM Resolved / Aux Display`.
+5. **No Premature Declaration**:
+   * Wards with 0 entered votes can never be marked as `DECLARED`.
+   * Unearned leads are never awarded on zero votes.
+6. **Recount / Mistake Correction Unlocking**:
+   * Any declared ward can be re-opened for recount or corrections via the `🔓 UNLOCK / REOPEN WARD FOR EDITING` button.
+7. **Pre-Counting Hall Setup**:
+   * Built-in `⚙️ Hall & Rounds Setup` tool allows Returning Officers to configure counting tables (e.g., 5 or 6 tables) and booths per ward before counting day.
 
 ---
 
@@ -39,29 +74,19 @@ Whenever any operator clicks **"SAVE ROUND VOTES"**, the TV display updates acro
 ```
 CountingDisplay/
 │
-├── start.bat                   # 1-Click Windows desktop launcher
-├── app.py                      # FastAPI + SQLite + WebSocket server
-├── election_salumber_2026.db   # Embedded SQLite database (pre-seeded)
+├── start.bat                   # 1-Click Local LAN / Hall Launcher
+├── start_with_cloudflare.bat   # 1-Click Cloudflare Public Live Broadcast
+├── app.py                      # FastAPI + SQLite + WebSocket Engine
+├── election_salumber_2026.db   # Seeded SQLite Database (Clean 0-Vote State)
+├── requirements.txt            # Python Dependencies (fastapi, uvicorn)
 │
 ├── public/
-│   ├── index.html              # Pure 50/50 TV Broadcast Screen (1080p/4K)
+│   ├── index.html              # 50/50 TV Broadcast Screen (1080p/4K)
 │   └── entry.html              # Mobile/Desktop Operator Vote Entry Console
 │
-├── 0_Candidate_Master.csv      # CSV export of all 275 official candidates
-├── 0_Master_Setup.csv          # CSV export of all 21 ZP & 105 PS wards
-├── 1_ZP_Entry.csv              # CSV format for ZP live entries
-├── 2_PS_Entry.csv              # CSV format for PS live entries
-└── 3_ZP_Booths.csv             # CSV export of all 522 polling booths
+├── 0_Candidate_Master.csv      # Form 7A Alphabetical Candidate Directory
+├── 0_Master_Setup.csv          # District & Ward Metadata
+├── 1_ZP_Entry.csv              # Zilla Parishad Counting Master
+├── 2_PS_Entry.csv              # Panchayat Samiti Counting Master
+└── 3_ZP_Booths.csv             # 522 Polling Booths & Tables Mapping
 ```
-
----
-
-## 🏛️ Election Data Coverage
-
-* **Zilla Parishad (ZP) Salumber**: All 21 Wards (79 official candidates, 522 booths, 5 tables per ward).
-* **Panchayat Samitis (7 Blocks)**: 
-  * *Semari* (15 Wards, 54 candidates)
-  * *Salumbar* (15 Wards, 49 candidates)
-  * *Lasadiya* (15 Wards, 50 candidates)
-  * *Geengla* (15 Wards, 43 candidates)
-  * *Jaisamand, Sarada, Jhallara* (Templates ready; add candidates via the console anytime)
