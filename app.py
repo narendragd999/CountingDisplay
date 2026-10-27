@@ -542,11 +542,7 @@ async def save_votes(payload: dict, request: Request):
     cursor = conn.cursor()
 
     try:
-        # Check that hall setup is confirmed for this ward
-        cursor.execute("SELECT is_setup_done, max_rounds FROM wards WHERE category = ? AND block_name = ? AND ward_no = ?", (category, block, ward_no))
-        w_cfg = cursor.fetchone()
-        if not w_cfg or w_cfg[0] != 1:
-            raise HTTPException(status_code=400, detail="Cannot enter votes: Counting Hall & Rounds setup must be confirmed for this ward before entering votes.")
+        # Immediate direct entry allowed (no pre-setup restriction)
 
         # Validate votes non-negative
         for cid_str, v_count in votes_dict.items():
@@ -641,19 +637,7 @@ async def declare_ward(payload: dict, request: Request):
         conn.close()
         raise HTTPException(status_code=400, detail="Cannot declare ward without entered votes! At least one round of votes must be counted.")
 
-    # Verify that all rounds are completed
-    cursor.execute("SELECT max_rounds FROM wards WHERE category = ? AND block_name = ? AND ward_no = ?", (category, block, ward_no))
-    max_r = cursor.fetchone()[0]
-    cursor.execute("""
-    SELECT COUNT(DISTINCT v.round_key)
-    FROM candidates c
-    JOIN votes v ON c.id = v.candidate_id
-    WHERE c.category = ? AND c.block_name = ? AND c.ward_no = ? AND v.round_key LIKE 'R%'
-    """, (category, block, ward_no))
-    completed_r = cursor.fetchone()[0]
-    if completed_r < max_r:
-        conn.close()
-        raise HTTPException(status_code=400, detail=f"Cannot declare winner: All rounds must be completed! (Completed: {completed_r}/{max_r} rounds)")
+    # Ensure at least one round is entered
 
     cursor.execute("""
     UPDATE wards SET status = 'DECLARED'
