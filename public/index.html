@@ -798,9 +798,7 @@
       const zpContainer = document.getElementById('zpCardsContainer');
       const psContainer = document.getElementById('psCardsContainer');
 
-      const zpFilter = document.getElementById('zpWardFilter').value;
-      const psBlkFilter = document.getElementById('psBlockFilter').value;
-      const psWFilter = document.getElementById('psWardFilter').value;
+      const zpFilter = document.getElementById('zpWardFilter') ? document.getElementById('zpWardFilter').value : 'ALL';
 
       // Render ZP
       const zpWards = masterData.wards.filter(w => w.category === 'ZP' && (zpFilter === 'ALL' || w.ward_no == zpFilter));
@@ -836,10 +834,11 @@
         let lastRoundVotes = 0;
         const vObj = masterData.roundVotes[c.id] || {};
         for (const [rKey, count] of Object.entries(vObj)) {
-          if (rKey.startsWith('R')) {
-            sum += (count || 0);
+          const c = count || 0;
+          if (c > 0 || rKey.startsWith('R') || rKey.startsWith('B')) {
+            sum += c;
             roundsSet.add(rKey);
-            lastRoundVotes = count || 0;
+            lastRoundVotes = c;
           }
         }
         return { ...c, totalVotes: sum, lastRoundVotes };
