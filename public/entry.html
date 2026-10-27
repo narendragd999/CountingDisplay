@@ -937,30 +937,105 @@
         modeToggleBtn.style.display = (currentUser.role === 'ADMIN') ? 'inline-flex' : 'none';
       }
 
-      // 2. Scoped UI by Role
+      // 2. Scoped UI Elements strictly by Role
       const catSelect = document.getElementById('entryCategory');
       const blkSelect = document.getElementById('entryBlock');
+      const blkGroup = document.getElementById('blockSelectGroup');
+      const zpGroup = document.getElementById('zpWardSelectGroup');
+
+      const declCatSelect = document.getElementById('declareCategory');
+      const declBlkSelect = document.getElementById('declareBlock');
+      const declBlkGroup = document.getElementById('declareBlockGroup');
+
       const tabContestants = document.getElementById('tabBtnContestants');
 
+      const ALL_BLOCKS = [
+        { name: 'Geengla', booths: 61 },
+        { name: 'Jaisamand', booths: 81 },
+        { name: 'Jhallara', booths: 83 },
+        { name: 'Lasadiya', booths: 73 },
+        { name: 'Salumbar', booths: 77 },
+        { name: 'Sarada', booths: 78 },
+        { name: 'Semari', booths: 69 }
+      ];
+
       if (currentUser.role === 'PS') {
+        const assigned = currentUser.assigned_block || 'Jaisamand';
+        const bCount = BLOCK_TOTAL_BOOTHS[assigned] || 80;
+
+        // Entry Console Scope:
         if (catSelect) {
+          catSelect.innerHTML = `<option value="PS">Panchayat Samiti (${assigned})</option>`;
           catSelect.value = 'PS';
           catSelect.disabled = true;
         }
-        if (blkSelect && currentUser.assigned_block) {
-          blkSelect.value = currentUser.assigned_block;
+        if (blkSelect) {
+          blkSelect.innerHTML = `<option value="${assigned}">${assigned} (${bCount} Booths)</option>`;
+          blkSelect.value = assigned;
           blkSelect.disabled = true;
         }
+        if (blkGroup) blkGroup.style.display = 'flex';
+        if (zpGroup) zpGroup.style.display = 'none';
+
+        // Declare Winner Tab Scope:
+        if (declCatSelect) {
+          declCatSelect.innerHTML = `<option value="PS">Panchayat Samiti (${assigned})</option>`;
+          declCatSelect.value = 'PS';
+          declCatSelect.disabled = true;
+        }
+        if (declBlkSelect) {
+          declBlkSelect.innerHTML = `<option value="${assigned}">${assigned}</option>`;
+          declBlkSelect.value = assigned;
+          declBlkSelect.disabled = true;
+        }
+        if (declBlkGroup) declBlkGroup.style.display = 'flex';
+
+        // Hide Contestants Manager tab for non-admin operators
         if (tabContestants) tabContestants.style.display = 'none';
+
       } else if (currentUser.role === 'ZP') {
+        // Zilla Parishad Operator Scope:
         if (catSelect) {
+          catSelect.innerHTML = `<option value="ZP">Zilla Parishad (21 Wards)</option>`;
           catSelect.value = 'ZP';
           catSelect.disabled = true;
         }
+        if (blkGroup) blkGroup.style.display = 'none';
+        if (zpGroup) zpGroup.style.display = 'flex';
+
+        if (declCatSelect) {
+          declCatSelect.innerHTML = `<option value="ZP">Zilla Parishad (21 Wards)</option>`;
+          declCatSelect.value = 'ZP';
+          declCatSelect.disabled = true;
+        }
+        if (declBlkGroup) declBlkGroup.style.display = 'none';
+
         if (tabContestants) tabContestants.style.display = 'none';
+
       } else {
-        if (catSelect) catSelect.disabled = false;
-        if (blkSelect) blkSelect.disabled = false;
+        // ADMIN: Full access to everything
+        if (catSelect) {
+          catSelect.disabled = false;
+          catSelect.innerHTML = `
+            <option value="PS">Panchayat Samiti (7 Blocks)</option>
+            <option value="ZP">Zilla Parishad (21 Wards)</option>
+          `;
+        }
+        if (blkSelect) {
+          blkSelect.disabled = false;
+          blkSelect.innerHTML = ALL_BLOCKS.map(b => `<option value="${b.name}">${b.name} (${b.booths} Booths)</option>`).join('');
+        }
+        if (declCatSelect) {
+          declCatSelect.disabled = false;
+          declCatSelect.innerHTML = `
+            <option value="PS">Panchayat Samiti</option>
+            <option value="ZP">Zilla Parishad</option>
+          `;
+        }
+        if (declBlkSelect) {
+          declBlkSelect.disabled = false;
+          declBlkSelect.innerHTML = ALL_BLOCKS.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+        }
         if (tabContestants) tabContestants.style.display = 'inline-flex';
       }
     }
