@@ -299,6 +299,27 @@
       border-radius: 4px;
     }
 
+    
+    .ro-pill {
+      background: #ffffff;
+      border: 1px solid var(--border-main);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ro-pill:hover { background: var(--bg-subtle); color: var(--text-main); }
+    .ro-pill.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: var(--shadow-sm);
+    }
+
     /* WARD DISPLAY CARD */
     .ward-card {
       background: #ffffff;
@@ -503,6 +524,9 @@
     </div>
 
     <div class="header-badges">
+      <button onclick="toggleFullscreen()" class="btn-scroll-toggle" style="background:#1e293b; color:#cbd5e1; border-color:#334155; padding:5px 12px; font-size:12px; font-weight:800; cursor:pointer;" title="Toggle Fullscreen for Projectors">
+        ⛶ FULLSCREEN PROJECTOR
+      </button>
       <div class="live-indicator">
         <span class="live-dot"></span>
         LIVE RESULTS
@@ -557,30 +581,32 @@
 
     <!-- RIGHT COLUMN: PANCHAYAT SAMITI (105 WARDS) -->
     <section class="column-box">
-      <div class="column-head">
-        <div class="column-title">
-          <span>🏘️</span> Panchayat Samiti (105 Wards - 7 Blocks)
+      <div class="column-head" style="flex-direction:column; gap:8px; align-items:stretch;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="column-title">
+            <span>🏘️</span> Panchayat Samiti RO Centers (105 Wards across 7 Blocks)
+          </div>
+
+          <div class="filter-ctrls">
+            <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe;" onclick="toggleAutoRotateRO()">
+              🔄 Auto-Cycle Centers: ON
+            </button>
+            <button id="btnPsScroll" class="btn-scroll-toggle" onclick="toggleScroll('ps')">
+              ⏸ Pause Scroll
+            </button>
+          </div>
         </div>
 
-        <div class="filter-ctrls">
-          <select id="psBlockFilter" class="filter-select" onchange="onPsBlockFilterChanged()">
-            <option value="ALL">All 7 Blocks</option>
-            <option value="Semari">Semari</option>
-            <option value="Salumbar">Salumbar</option>
-            <option value="Lasadiya">Lasadiya</option>
-            <option value="Geengla">Geengla</option>
-            <option value="Jaisamand">Jaisamand</option>
-            <option value="Sarada">Sarada</option>
-            <option value="Jhallara">Jhallara</option>
-          </select>
-
-          <select id="psWardFilter" class="filter-select" onchange="renderCards()">
-            <option value="ALL">All Wards</option>
-          </select>
-
-          <button id="btnPsScroll" class="btn-scroll-toggle" onclick="toggleScroll('ps')">
-            ⏸ Pause Scroll
-          </button>
+        <!-- RO Centers Selector Strip -->
+        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:2px;" id="roCenterPillStrip">
+          <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 RO Centers</button>
+          <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand RO</button>
+          <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada RO</button>
+          <button class="ro-pill" onclick="selectROCenter('Salumbar', this)">Salumbar RO</button>
+          <button class="ro-pill" onclick="selectROCenter('Semari', this)">Semari RO</button>
+          <button class="ro-pill" onclick="selectROCenter('Lasadiya', this)">Lasadiya RO</button>
+          <button class="ro-pill" onclick="selectROCenter('Geengla', this)">Geengla RO</button>
+          <button class="ro-pill" onclick="selectROCenter('Jhallara', this)">Jhallara RO</button>
         </div>
       </div>
 
@@ -646,7 +672,60 @@
       }
     }
 
+    
+    let activeROCenter = 'ALL';
+    let autoRotateROInterval = null;
+    const roCentersList = ['Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
+    let currentROIndex = 0;
+
+    function selectROCenter(roName, btnEl) {
+      activeROCenter = roName;
+      document.querySelectorAll('.ro-pill').forEach(p => p.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      renderCards();
+    }
+
+    function toggleAutoRotateRO() {
+      const btn = document.getElementById('btnAutoRotateRO');
+      if (autoRotateROInterval) {
+        clearInterval(autoRotateROInterval);
+        autoRotateROInterval = null;
+        btn.innerText = '🔄 Auto-Cycle Centers: OFF';
+        btn.style.background = '#ffffff';
+        btn.style.color = 'var(--text-muted)';
+      } else {
+        btn.innerText = '🔄 Auto-Cycle Centers: ON';
+        btn.style.background = '#eff6ff';
+        btn.style.color = '#1d4ed8';
+        startAutoRotateRO();
+      }
+    }
+
+    function startAutoRotateRO() {
+      if (autoRotateROInterval) clearInterval(autoRotateROInterval);
+      autoRotateROInterval = setInterval(() => {
+        currentROIndex = (currentROIndex + 1) % roCentersList.length;
+        const nextRO = roCentersList[currentROIndex];
+        const pills = document.querySelectorAll('.ro-pill');
+        pills.forEach(p => {
+          if (p.textContent.includes(nextRO)) p.classList.add('active');
+          else p.classList.remove('active');
+        });
+        activeROCenter = nextRO;
+        renderCards();
+      }, 15000); // cycle every 15 seconds
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', async () => {
+      startAutoRotateRO();
       checkPortalLock();
       populateFilterOptions();
       await fetchMasterData();
@@ -735,8 +814,7 @@
       // Render PS
       const psWards = masterData.wards.filter(w => {
         if (w.category !== 'PS') return false;
-        if (psBlkFilter !== 'ALL' && w.block_name !== psBlkFilter) return false;
-        if (psWFilter !== 'ALL' && w.ward_no != psWFilter) return false;
+        if (activeROCenter !== 'ALL' && w.block_name !== activeROCenter) return false;
         return true;
       });
       psWards.sort((a, b) => a.block_name.localeCompare(b.block_name) || a.ward_no - b.ward_no);
@@ -815,7 +893,13 @@
         });
       }
 
-      const displayName = ward.category === 'ZP' ? `ZP Ward ${ward.ward_no}` : `${ward.block_name} - Ward ${ward.ward_no}`;
+      let displayName = ward.category === 'ZP' ? `ZP Ward ${ward.ward_no}` : `${ward.block_name} - Ward ${ward.ward_no}`;
+      let roBreakdownHtml = '';
+      if (ward.category === 'ZP') {
+        if (ward.ward_no === 1) {
+          roBreakdownHtml = '<div style="font-size:10px; color:#0369a1; background:#e0f2fe; padding:2px 8px; border-radius:4px; margin-top:2px; font-weight:700;">🏛️ Multi-Center: Jaisamand RO (29 Booths) + Sarada RO (3 Booths)</div>';
+        }
+      }
 
       card.innerHTML = `
         <div class="ward-card-head">
@@ -826,6 +910,7 @@
           </div>
           <span class="status-badge status-${statusKey}">${statusLabel}</span>
         </div>
+        ${roBreakdownHtml}
         ${leaderHtml}
         <table class="ward-table">
           <thead>
