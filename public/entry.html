@@ -513,7 +513,7 @@
       </div>
 
       <!-- Sub-Selector B: Ward & Round Entry -->
-      <div id="roundSelectorBox" class="form-grid">
+      <div id="roundSelectorBox" class="form-grid" style="display:none !important;">
         <div class="form-group">
           <label class="form-label">Select Ward</label>
           <select id="entryWard" class="form-select" onchange="onWardRoundChanged()"></select>
@@ -840,7 +840,7 @@
     function toggleEntryMode(mode) {
       activeEntryMode = mode;
       document.getElementById('boothSelectorBox').style.display = mode === 'booth' ? 'grid' : 'none';
-      document.getElementById('roundSelectorBox').style.display = mode === 'round' ? 'grid' : 'none';
+      document.getElementById('roundSelectorBox').style.display = 'none';
       refreshEntryView();
     }
 
@@ -1192,7 +1192,8 @@
         });
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
-          showToast("✓ All test votes cleared and wards reset to 0!");
+          alert("✓ All test votes have been reset to 0! All declared wards reopened.");
+          clearCurrentInputs();
           await loadMasterData();
           refreshEntryView();
           if (document.getElementById('panelDeclare').style.display !== 'none') {
