@@ -1,3 +1,4 @@
+import hashlib
 # app.py
 """
 SALUMBER DISTRICT PANCHAYATI RAJ ELECTIONS 2026
@@ -26,10 +27,47 @@ def get_auth_token():
     import hashlib
     return hashlib.sha256(f"salumber_salt_{PORTAL_PASSWORD}".encode()).hexdigest()
 
+def get_system_mode():
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT value FROM system_settings WHERE key = 'system_mode'")
+        row = cursor.fetchone()
+        conn.close()
+        return row[0] if row else "TEST"
+    except Exception:
+        return "TEST"
+
+def get_user_by_token(token: str):
+    if not token:
+        return None
+    if token == get_auth_token():
+        return {"username": "admin", "role": "ADMIN", "assigned_block": None, "display_name": "District Super Admin"}
+    
+    if "_" in token:
+        parts = token.rsplit("_", 1)
+        username, token_hash = parts[0], parts[1]
+        try:
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE username = ? AND is_active = 1", (username,))
+            user = cursor.fetchone()
+            conn.close()
+            if user:
+                u_dict = dict(user)
+                expected_hash = hashlib.sha256(f"{u_dict['username']}_{u_dict['password']}_salumber_salt_2026".encode()).hexdigest()
+                if token_hash == expected_hash:
+                    return u_dict
+        except Exception:
+            return None
+    return None
+
 def check_auth(request: Request):
     token = request.headers.get("X-Auth-Token") or request.query_params.get("token") or request.cookies.get("salumber_auth")
-    if token != get_auth_token():
-        raise HTTPException(status_code=401, detail="Authentication required. Please enter password.")
+    user = get_user_by_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Authentication required. Please log in.")
+    return user
 
 
 PS_BLOCKS = [
@@ -468,24 +506,90 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @app.post("/api/auth/login")
 async def auth_login(payload: dict):
-    """Authenticates operator or viewer with password."""
+    uname = (payload.get("username") or "").strip().lower()
     pwd = (payload.get("password") or "").strip()
-    if pwd == PORTAL_PASSWORD:
-        token = get_auth_token()
-        resp = JSONResponse({"status": "success", "token": token, "message": "Authentication successful!"})
+
+    matched_user = None
+
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        if uname:
+            cursor.execute("SELECT * FROM users WHERE username = ? AND is_active = 1", (uname,))
+            user = cursor.fetchone()
+            if user and dict(user)["password"] == pwd:
+                matched_user = dict(user)
+        else:
+            if pwd == PORTAL_PASSWORD:
+                matched_user = {"username": "admin", "role": "ADMIN", "assigned_block": None, "display_name": "District Super Admin"}
+            else:
+                cursor.execute("SELECT * FROM users WHERE password = ? AND is_active = 1", (pwd,))
+                user = cursor.fetchone()
+                if user:
+                    matched_user = dict(user)
+        conn.close()
+    except Exception as e:
+        print("Login DB check error:", e)
+
+    if not matched_user and pwd == PORTAL_PASSWORD:
+        matched_user = {"username": "admin", "role": "ADMIN", "assigned_block": None, "display_name": "District Super Admin"}
+
+    if matched_user:
+        token = f"{matched_user['username']}_{hashlib.sha256((matched_user['username'] + '_' + matched_user.get('password', PORTAL_PASSWORD) + '_salumber_salt_2026').encode()).hexdigest()}"
+        mode = get_system_mode()
+        resp = JSONResponse({
+            "status": "success",
+            "token": token,
+            "user": {
+                "username": matched_user["username"],
+                "role": matched_user["role"],
+                "assigned_block": matched_user["assigned_block"],
+                "display_name": matched_user["display_name"]
+            },
+            "system_mode": mode,
+            "message": f"Welcome, {matched_user['display_name']}!"
+        })
         resp.set_cookie(key="salumber_auth", value=token, max_age=86400, httponly=False)
         return resp
     else:
-        raise HTTPException(status_code=401, detail="Invalid password! Please try again.")
+        raise HTTPException(status_code=401, detail="Invalid username or password! Please try again.")
 
 @app.get("/api/auth/check")
 async def auth_check(request: Request):
-    """Checks if current session has valid authentication."""
     try:
-        check_auth(request)
-        return {"authenticated": True}
+        user = check_auth(request)
+        return {
+            "authenticated": True,
+            "user": {
+                "username": user["username"],
+                "role": user["role"],
+                "assigned_block": user["assigned_block"],
+                "display_name": user["display_name"]
+            },
+            "system_mode": get_system_mode()
+        }
     except HTTPException:
-        return {"authenticated": False}
+        return {"authenticated": False, "system_mode": get_system_mode()}
+
+@app.post("/api/set_system_mode")
+async def set_system_mode(payload: dict, request: Request):
+    user = check_auth(request)
+    if user["role"] != "ADMIN":
+        raise HTTPException(status_code=403, detail="Unauthorized: Only District Admin can switch system modes.")
+    
+    target_mode = (payload.get("mode") or "").strip().upper()
+    if target_mode not in ["TEST", "PRODUCTION"]:
+        raise HTTPException(status_code=400, detail="Invalid mode. Must be TEST or PRODUCTION.")
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('system_mode', ?)", (target_mode,))
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("SET_SYSTEM_MODE", f"System mode changed to {target_mode} by {user['username']}"))
+    conn.commit()
+    conn.close()
+
+    asyncio.create_task(broadcast_live_update())
+    return {"status": "success", "system_mode": target_mode, "message": f"System switched to {target_mode} mode successfully!"}
 
 @app.get("/api/state")
 def get_state():
@@ -529,7 +633,17 @@ def get_candidates(category: str, block: str, ward_no: int):
 
 @app.post("/api/save_votes")
 async def save_votes(payload: dict, request: Request):
-    check_auth(request)
+    user = check_auth(request)
+    category = payload.get('category')
+    block = payload.get('block')
+
+    # RBAC Guard: Block operator cannot modify other blocks or ZP
+    if user["role"] == "PS":
+        if category != "PS" or block != user["assigned_block"]:
+            raise HTTPException(status_code=403, detail=f"Permission Denied: Your account is restricted to {user['assigned_block']} Panchayat Samiti only.")
+    elif user["role"] == "ZP":
+        if category != "ZP":
+            raise HTTPException(status_code=403, detail="Permission Denied: Your account is restricted to Zilla Parishad entry only.")
     """
     Saves round votes atomically into SQLite and broadcasts immediately to TV!
     payload: { category, block, ward_no, round_key, votes: { cand_id: count }, declare: bool }
@@ -684,15 +798,19 @@ async def reopen_ward(payload: dict, request: Request):
 
 @app.post("/api/reset_testing_data")
 async def reset_testing_data(request: Request):
-    try:
-        check_auth(request)
-    except:
-        pass
+    user = check_auth(request)
+    if user["role"] != "ADMIN":
+        raise HTTPException(status_code=403, detail="Unauthorized: Only District Super Admin can reset testing data.")
+
+    current_mode = get_system_mode()
+    if current_mode == "PRODUCTION":
+        raise HTTPException(status_code=403, detail="CRITICAL: DATA RESET IS BLOCKED IN PRODUCTION MODE! Switch to Test Mode first if you need to run mock tests.")
+
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM votes")
     cursor.execute("UPDATE wards SET status = 'COUNTING'")
-    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("RESET_TESTING_DATA", "All votes cleared and wards reset for testing"))
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("RESET_TESTING_DATA", f"All votes cleared and wards reset for testing by {user['username']}"))
     conn.commit()
     conn.close()
     asyncio.create_task(broadcast_live_update())
@@ -728,7 +846,8 @@ def get_all_candidates_master():
         'candidates': c_rows,
         'wards': w_rows,
         'roundVotes': votes_map,
-        'booths': b_rows
+        'booths': b_rows,
+        'system_mode': get_system_mode()
     }
 
 

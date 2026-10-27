@@ -68,7 +68,8 @@
 
     .container {
       width: 100%;
-      max-width: 860px;
+      max-width: 98%;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -448,25 +449,36 @@
 
   <!-- AUTHENTICATION MODAL -->
   <div id="authModal" class="modal-overlay" style="display:none;">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width:440px;">
       <div style="text-align:center;">
         <div style="font-size:38px; margin-bottom:8px;">🔒</div>
-        <h2 style="font-size:17px; font-weight:800; color:#0f172a;">Operator Console Security</h2>
+        <h2 style="font-size:18px; font-weight:800; color:#0f172a;">Operator Console Login</h2>
         <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-          Salumber Panchayati Raj Elections 2026<br>Please enter access password to manage counting data.
+          Salumber Panchayati Raj Elections 2026<br>Please log in with your assigned username & password.
         </p>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Access Password</label>
-        <input type="password" id="loginPassword" class="form-input" placeholder="Enter access password" onkeydown="if(event.key==='Enter') submitLogin()">
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label">Username (यूजरनेम)</label>
+        <input type="text" id="loginUsername" class="form-input" placeholder="admin / op_jaisamand / zp_operator" style="font-weight:600;" onkeydown="if(event.key==='Enter') document.getElementById('loginPassword').focus()">
       </div>
 
-      <button onclick="submitLogin()" class="btn btn-primary" style="padding:11px; justify-content:center; font-size:13px;">
-        🔓 Sign In & Access Console
-      </button>
+      <div class="form-group">
+        <label class="form-label">Password (पासवर्ड)</label>
+        <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') submitLogin()">
+      </div>
 
-      <div id="authError" style="font-size:12px; color:var(--danger); text-align:center; display:none; font-weight:700;"></div>
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 12px; font-size:11px; color:#475569; line-height:1.5;">
+        <strong>Quick Reference:</strong><br>
+        • <strong>Admin:</strong> <code>admin</code> (pass: <code>salumber@admin</code>)<br>
+        • <strong>Zilla Parishad:</strong> <code>zp_operator</code> (pass: <code>zp2026</code>)<br>
+        • <strong>Panchayat Samiti:</strong> <code>op_geengla</code>, <code>op_jaisamand</code>, <code>op_jhallara</code>, <code>op_lasadiya</code>, <code>op_salumbar</code>, <code>op_sarada</code>, <code>op_semari</code> (pass: <code>block2026</code>)
+      </div>
+
+      <div id="authError" style="display:none; color:#ef4444; font-size:12px; margin-top:8px; font-weight:700;"></div>
+      <button onclick="submitLogin()" class="btn btn-primary" style="width:100%; margin-top:14px; justify-content:center; padding:10px; font-size:14px; font-weight:800;">
+        Unlock Counting Console ➔
+      </button>
     </div>
   </div>
 
@@ -477,14 +489,21 @@
       <div class="header-left">
         <h1><span>🏛️</span> Salumber District Elections 2026</h1>
         <p>Live Election Operator Console • Direct Booth & Round Vote Entry</p>
+        <div style="display:flex; gap:8px; align-items:center; margin-top:6px; flex-wrap:wrap;">
+          <span id="userBadge" class="badge" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; font-weight:700; font-size:12px;">👤 Guest</span>
+          <span id="systemModeBadge" class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-weight:800; font-size:12px;">🟠 TEST MODE</span>
+        </div>
       </div>
 
       <div class="header-actions">
-        <button onclick="resetTestingData()" class="btn btn-outline" style="color:#b91c1c; border-color:#fca5a5; background:#fff1f2; font-weight:700;">
+        <button id="btnAdminModeToggle" onclick="toggleAdminSystemMode()" class="btn btn-outline" style="display:none; font-weight:700; font-size:12px; border-color:#cbd5e1;">
+          ⚙️ Switch Mode
+        </button>
+        <button id="btnResetTesting" onclick="resetTestingData()" class="btn btn-outline" style="display:none; color:#b91c1c; border-color:#fca5a5; background:#fff1f2; font-weight:700; font-size:12px;">
           🧹 Reset Data (Test)
         </button>
         <a href="/" target="_blank" class="btn btn-outline">📺 Open TV Display</a>
-        <button onclick="logout()" class="btn btn-outline" style="color:var(--danger); border-color:#fca5a5;">🔒 Lock</button>
+        <button onclick="logout()" class="btn btn-outline" style="color:var(--danger); border-color:#fca5a5; font-size:12px; font-weight:700;">🔒 Logout</button>
       </div>
     </header>
 
@@ -773,11 +792,17 @@
 
   <script>
     let authToken = localStorage.getItem('salumber_auth_token') || '';
+    let currentUser = null;
+    try {
+      const stored = localStorage.getItem('salumber_user_profile');
+      if (stored) currentUser = JSON.parse(stored);
+    } catch(e) {}
+    let currentSystemMode = 'TEST';
     let masterData = { candidates: [], wards: [], roundVotes: {}, booths: [] };
     let currentCandidates = [];
     let currentRoundKey = 'R1';
     let currentBoothObj = null;
-    let activeEntryMode = 'booth'; // 'booth' or 'round'
+    let activeEntryMode = 'booth';
     let currentMappedWard = 1;
 
     // Initialization
@@ -794,7 +819,11 @@
         const resp = await fetch('/api/auth/check', { headers: { 'X-Auth-Token': authToken } });
         const res = await resp.json();
         if (res.authenticated) {
+          currentUser = res.user;
+          currentSystemMode = res.system_mode || 'TEST';
+          localStorage.setItem('salumber_user_profile', JSON.stringify(currentUser));
           hideAuthModal();
+          applyUserScopeAndMode();
           initApp();
         } else {
           showAuthModal();
@@ -806,7 +835,8 @@
 
     function showAuthModal() {
       document.getElementById('authModal').style.display = 'flex';
-      document.getElementById('loginPassword').focus();
+      const uEl = document.getElementById('loginUsername');
+      if (uEl) uEl.focus();
     }
 
     function hideAuthModal() {
@@ -814,13 +844,13 @@
     }
 
     async function submitLogin() {
-      const pwd = document.getElementById('loginPassword').value.trim();
+      const uname = (document.getElementById('loginUsername').value || '').trim();
+      const pwd = (document.getElementById('loginPassword').value || '').trim();
       const errEl = document.getElementById('authError');
-      errEl.style.display = 'none';
+      if (errEl) errEl.style.display = 'none';
 
       if (!pwd) {
-        errEl.innerText = 'Please enter password!';
-        errEl.style.display = 'block';
+        if (errEl) { errEl.innerText = 'Please enter password!'; errEl.style.display = 'block'; }
         return;
       }
 
@@ -828,32 +858,145 @@
         const resp = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: pwd })
+          body: JSON.stringify({ username: uname, password: pwd })
         });
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
           authToken = res.token;
+          currentUser = res.user;
+          currentSystemMode = res.system_mode || 'TEST';
           localStorage.setItem('salumber_auth_token', authToken);
+          localStorage.setItem('salumber_user_profile', JSON.stringify(currentUser));
           hideAuthModal();
+          applyUserScopeAndMode();
           initApp();
         } else {
-          errEl.innerText = res.detail || 'Invalid password!';
-          errEl.style.display = 'block';
+          if (errEl) {
+            errEl.innerText = res.detail || 'Invalid username or password!';
+            errEl.style.display = 'block';
+          } else {
+            alert(res.detail || 'Invalid username or password!');
+          }
         }
       } catch (e) {
-        errEl.innerText = 'Connection error: ' + e;
-        errEl.style.display = 'block';
+        if (errEl) {
+          errEl.innerText = 'Connection error: ' + e;
+          errEl.style.display = 'block';
+        }
       }
     }
 
     function logout() {
       localStorage.removeItem('salumber_auth_token');
+      localStorage.removeItem('salumber_user_profile');
       authToken = '';
+      currentUser = null;
       showAuthModal();
+    }
+
+    function applyUserScopeAndMode() {
+      if (!currentUser) return;
+
+      // 1. Update Header Badges
+      const userBadgeEl = document.getElementById('userBadge');
+      if (userBadgeEl) {
+        userBadgeEl.innerText = `👤 ${currentUser.display_name}`;
+      }
+
+      const modeBadgeEl = document.getElementById('systemModeBadge');
+      const resetBtn = document.getElementById('btnResetTesting');
+      const modeToggleBtn = document.getElementById('btnAdminModeToggle');
+
+      if (currentSystemMode === 'PRODUCTION') {
+        if (modeBadgeEl) {
+          modeBadgeEl.style.background = '#dcfce7';
+          modeBadgeEl.style.color = '#15803d';
+          modeBadgeEl.style.borderColor = '#86efac';
+          modeBadgeEl.innerHTML = `🟢 <strong>PRODUCTION MODE (LIVE ELECTION)</strong>`;
+        }
+        if (resetBtn) resetBtn.style.display = 'none';
+        if (modeToggleBtn) {
+          modeToggleBtn.innerText = '⚙️ Switch to Test Mode';
+        }
+      } else {
+        if (modeBadgeEl) {
+          modeBadgeEl.style.background = '#fef3c7';
+          modeBadgeEl.style.color = '#b45309';
+          modeBadgeEl.style.borderColor = '#fde68a';
+          modeBadgeEl.innerHTML = `🟠 <strong>TEST MODE (MOCK DATA)</strong>`;
+        }
+        if (resetBtn) {
+          resetBtn.style.display = (currentUser.role === 'ADMIN') ? 'inline-flex' : 'none';
+        }
+        if (modeToggleBtn) {
+          modeToggleBtn.innerText = '⚙️ Switch to Production Mode';
+        }
+      }
+
+      if (modeToggleBtn) {
+        modeToggleBtn.style.display = (currentUser.role === 'ADMIN') ? 'inline-flex' : 'none';
+      }
+
+      // 2. Scoped UI by Role
+      const catSelect = document.getElementById('entryCategory');
+      const blkSelect = document.getElementById('entryBlock');
+      const tabContestants = document.getElementById('tabBtnContestants');
+
+      if (currentUser.role === 'PS') {
+        if (catSelect) {
+          catSelect.value = 'PS';
+          catSelect.disabled = true;
+        }
+        if (blkSelect && currentUser.assigned_block) {
+          blkSelect.value = currentUser.assigned_block;
+          blkSelect.disabled = true;
+        }
+        if (tabContestants) tabContestants.style.display = 'none';
+      } else if (currentUser.role === 'ZP') {
+        if (catSelect) {
+          catSelect.value = 'ZP';
+          catSelect.disabled = true;
+        }
+        if (tabContestants) tabContestants.style.display = 'none';
+      } else {
+        if (catSelect) catSelect.disabled = false;
+        if (blkSelect) blkSelect.disabled = false;
+        if (tabContestants) tabContestants.style.display = 'inline-flex';
+      }
+    }
+
+    async function toggleAdminSystemMode() {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+      const targetMode = currentSystemMode === 'PRODUCTION' ? 'TEST' : 'PRODUCTION';
+      
+      const confirmMsg = targetMode === 'PRODUCTION'
+        ? "Switch to 🟢 PRODUCTION MODE?\n\nIn Production Mode, the 'Reset Data' button will be completely hidden and data wipe APIs will be blocked for safety on counting day."
+        : "Switch to 🟠 TEST MODE?\n\nIn Test Mode, you will be able to reset mock votes and test the portal freely.";
+      
+      if (!confirm(confirmMsg)) return;
+
+      try {
+        const resp = await fetch('/api/set_system_mode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          body: JSON.stringify({ mode: targetMode })
+        });
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          currentSystemMode = res.system_mode;
+          applyUserScopeAndMode();
+          showToast(`✅ ${res.message}`);
+        } else {
+          alert('Error: ' + (res.detail || 'Could not change mode.'));
+        }
+      } catch (e) {
+        alert('Connection error: ' + e);
+      }
     }
 
     async function initApp() {
       await loadMasterData();
+      applyUserScopeAndMode();
       populateBoothDropdown();
       populateWardDropdown();
       onCategoryChanged();
@@ -880,6 +1023,10 @@
         const resp = await fetch('/api/all_candidates_master');
         if (resp.ok) {
           masterData = await resp.json();
+          if (masterData.system_mode) {
+            currentSystemMode = masterData.system_mode;
+            applyUserScopeAndMode();
+          }
           checkCompletedWardsReadyToDeclare();
         }
       } catch (e) {}
