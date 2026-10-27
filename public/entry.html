@@ -434,6 +434,9 @@
       </div>
 
       <div class="header-actions">
+        <button onclick="resetTestingData()" class="btn btn-outline" style="color:#b91c1c; border-color:#fca5a5; background:#fff1f2; font-weight:700;">
+          🧹 Reset Data (Test)
+        </button>
         <a href="/" target="_blank" class="btn btn-outline">📺 Open TV Display</a>
         <button onclick="logout()" class="btn btn-outline" style="color:var(--danger); border-color:#fca5a5;">🔒 Lock</button>
       </div>
@@ -1175,6 +1178,31 @@
           <td style="text-align:center;">${actionBtn}</td>
         `;
         tbody.appendChild(tr);
+      }
+    }
+
+        async function resetTestingData() {
+      if (!confirm("⚠️ RESET ALL TEST DATA?\n\nThis will permanently delete all entered votes and reset all declared wards back to 0 votes for testing.\n\nAre you sure you want to proceed?")) {
+        return;
+      }
+      try {
+        const resp = await fetch('/api/reset_testing_data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken }
+        });
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          showToast("✓ All test votes cleared and wards reset to 0!");
+          await loadMasterData();
+          refreshEntryView();
+          if (document.getElementById('panelDeclare').style.display !== 'none') {
+            loadDeclareWardsTable();
+          }
+        } else {
+          alert(res.detail || res.message || "Failed to reset data");
+        }
+      } catch (e) {
+        alert("Error resetting test data: " + e.message);
       }
     }
 
