@@ -857,7 +857,6 @@
 
       const leader = candTotals[0];
       const runnerUp = candTotals[1];
-      const hasVotes = candTotals.some(c => c.totalVotes > 0);
       const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
       const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
 

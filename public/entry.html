@@ -489,21 +489,17 @@
         </div>
       </div>
 
-      <!-- Entry Mode Radio Toggle -->
-      <div class="mode-toggle-bar">
+      <!-- Entry Mode Radio Toggle (Hidden for clean Polling Station workflow) -->
+      <div class="mode-toggle-bar" style="display:none;">
         <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Entry Method:</span>
         <label class="mode-radio-label">
-          <input type="radio" name="entryMode" value="booth" onchange="toggleEntryMode('booth')">
-          <span>📍 By Polling Station / Booth # (Recommended for Tables 1-5)</span>
-        </label>
-        <label class="mode-radio-label">
-          <input type="radio" name="entryMode" value="round" checked onchange="toggleEntryMode('round')">
-          <span>📑 By Ward & Round (Summary Sheet)</span>
+          <input type="radio" name="entryMode" value="booth" checked onchange="toggleEntryMode('booth')">
+          <span>📍 By Polling Station / Booth #</span>
         </label>
       </div>
 
-      <!-- Sub-Selector A: Booth Number Entry -->
-      <div id="boothSelectorBox" class="form-grid" style="display:none;">
+      <!-- Polling Station / Booth Entry -->
+      <div id="boothSelectorBox" class="form-grid" style="display:grid;">
         <div class="form-group">
           <label class="form-label">Polling Station / Booth #</label>
           <div style="display:flex; gap:8px;">
@@ -566,7 +562,7 @@
         </button>
 
         <button id="btnSaveVotes" onclick="submitVotes()" class="btn btn-success" style="padding:12px 28px; font-size:14px;">
-          💾 SAVE ROUND SHEET
+          💾 SAVE BOOTH VOTES
         </button>
       </div>
     </section>
@@ -711,7 +707,7 @@
     let authToken = localStorage.getItem('salumber_auth_token') || '';
     let masterData = { candidates: [], wards: [], roundVotes: {} };
     let currentCandidates = [];
-    let activeEntryMode = 'round'; // 'booth' or 'round'
+    let activeEntryMode = 'booth'; // 'booth' or 'round'
     let currentMappedWard = 1;
 
     // Initialization
