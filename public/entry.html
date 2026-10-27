@@ -861,20 +861,38 @@
       refreshEntryView();
     }
 
+    const BLOCK_TOTAL_BOOTHS = {
+      'Geengla': 68,
+      'Semari': 69,
+      'Salumbar': 70,
+      'Lasadiya': 73,
+      'Sarada': 75,
+      'Jhallara': 83,
+      'Jaisamand': 84
+    };
+
     function populateBoothDropdown() {
       const cat = document.getElementById('entryCategory').value;
-      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+      const blk = document.getElementById('entryBlock').value || 'Semari';
+      const maxB = cat === 'ZP' ? 522 : (BLOCK_TOTAL_BOOTHS[blk] || 70);
 
-      // Filter booths for this block/ZP
-      const maxB = cat === 'ZP' ? 522 : 85;
+      const inputBooth = document.getElementById('inputBoothNo');
+      inputBooth.max = maxB;
+      let curVal = parseInt(inputBooth.value) || 1;
+      if (curVal > maxB) {
+        curVal = 1;
+        inputBooth.value = 1;
+      }
+
       const sel = document.getElementById('selectBoothDropdown');
       sel.innerHTML = '';
       for (let b = 1; b <= maxB; b++) {
         const opt = document.createElement('option');
         opt.value = b;
-        opt.textContent = `Polling Station #${b}`;
+        opt.textContent = `Polling Station #${b} of ${maxB} (${blk})`;
         sel.appendChild(opt);
       }
+      sel.value = curVal;
     }
 
     function populateWardDropdown() {
