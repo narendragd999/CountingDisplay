@@ -300,30 +300,68 @@
     }
 
     
+    @keyframes pillPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6);
+      }
+      70% {
+        box-shadow: 0 0 0 7px rgba(2, 132, 199, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(2, 132, 199, 0);
+      }
+    }
+
     .ro-pill {
       background: #ffffff;
       border: 1px solid var(--border-main);
       color: var(--text-muted);
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .ro-pill:hover { background: var(--bg-subtle); color: var(--text-main); }
+    .ro-pill:hover {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
     .ro-pill.active {
-      background: #0284c7;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #ffffff;
       border-color: #0284c7;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35);
+      animation: pillPulse 2.2s infinite;
+      transform: scale(1.04);
     }
     #roCenterPillStrip::-webkit-scrollbar {
       display: none;
     }
 
-    /* WARD DISPLAY CARD */
+    /* WARD DISPLAY CARD ANIMATION */
+    @keyframes cardFadeSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes winnerPulseGlow {
+      0%, 100% {
+        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15), 0 0 0 0 rgba(245, 158, 11, 0.3);
+      }
+      50% {
+        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.25), 0 0 0 5px rgba(245, 158, 11, 0.12);
+      }
+    }
+
     .ward-card {
       flex-shrink: 0;
       width: 100%;
@@ -332,12 +370,18 @@
       border-radius: 10px;
       overflow: hidden;
       box-shadow: var(--shadow-sm);
-      transition: all 0.2s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: cardFadeSlideIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .ward-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
 
     .ward-card.declared {
       border: 2px solid var(--gold-border);
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.12);
+      animation: cardFadeSlideIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both, winnerPulseGlow 3s infinite ease-in-out;
     }
 
     .ward-card.counting {
@@ -561,27 +605,33 @@
   </div>
 
   <!-- MASTER RO CENTER AUTO-CYCLE & CONTROLS STRIP -->
-  <div style="background: #ffffff; border: 1px solid var(--border-main); border-radius: 8px; padding: 7px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; box-shadow: var(--shadow-sm);">
-    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-      <span style="font-size: 12px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 4px; text-transform: uppercase;">
-        🏢 RO CENTERS:
-      </span>
-      <div style="display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;" id="roCenterPillStrip">
-        <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 RO Centers</button>
-        <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand RO (ZP 1-3)</button>
-        <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada RO (ZP 4-6)</button>
-        <button class="ro-pill" onclick="selectROCenter('Salumbar', this)">Salumbar RO (ZP 10-13)</button>
-        <button class="ro-pill" onclick="selectROCenter('Semari', this)">Semari RO (ZP 7-9)</button>
-        <button class="ro-pill" onclick="selectROCenter('Lasadiya', this)">Lasadiya RO (ZP 16-18)</button>
-        <button class="ro-pill" onclick="selectROCenter('Geengla', this)">Geengla RO (ZP 13-15)</button>
-        <button class="ro-pill" onclick="selectROCenter('Jhallara', this)">Jhallara RO (ZP 19-21)</button>
+  <div style="background: #ffffff; border: 1px solid var(--border-main); border-radius: 8px; padding: 7px 14px 9px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 12px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 4px; text-transform: uppercase;">
+          🏢 RO CENTERS:
+        </span>
+        <div style="display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;" id="roCenterPillStrip">
+          <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 RO Centers</button>
+          <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand RO (ZP 1-3)</button>
+          <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada RO (ZP 4-6)</button>
+          <button class="ro-pill" onclick="selectROCenter('Salumbar', this)">Salumbar RO (ZP 10-13)</button>
+          <button class="ro-pill" onclick="selectROCenter('Semari', this)">Semari RO (ZP 7-9)</button>
+          <button class="ro-pill" onclick="selectROCenter('Lasadiya', this)">Lasadiya RO (ZP 16-18)</button>
+          <button class="ro-pill" onclick="selectROCenter('Geengla', this)">Geengla RO (ZP 13-15)</button>
+          <button class="ro-pill" onclick="selectROCenter('Jhallara', this)">Jhallara RO (ZP 19-21)</button>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; font-weight:800; font-size:12px; padding:5px 12px; transition: all 0.2s;" onclick="toggleAutoRotateRO()">
+          🔄 Auto-Cycle Centers: ON (10s)
+        </button>
       </div>
     </div>
-
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; font-weight:800; font-size:12px; padding:5px 12px;" onclick="toggleAutoRotateRO()">
-        🔄 Auto-Cycle Centers: ON (10s)
-      </button>
+    <!-- 10s Cycle Progress Bar -->
+    <div style="width: 100%; height: 3px; background: #f1f5f9; border-radius: 2px; overflow: hidden;">
+      <div id="cycleProgressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #0284c7, #3b82f6, #0ea5e9); border-radius: 2px; transition: width 0.1s linear;"></div>
     </div>
   </div>
 
@@ -704,8 +754,32 @@
 
     let activeROCenter = 'ALL';
     let autoRotateROInterval = null;
+    let cycleProgressInterval = null;
+    let cycleTimeElapsed = 0;
+    const CYCLE_DURATION_MS = 10000;
     const roCentersList = ['ALL', 'Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
     let currentROIndex = 0;
+
+    function resetCycleProgressBar() {
+      if (cycleProgressInterval) clearInterval(cycleProgressInterval);
+      cycleTimeElapsed = 0;
+      const bar = document.getElementById('cycleProgressBar');
+      if (bar) bar.style.width = '0%';
+
+      cycleProgressInterval = setInterval(() => {
+        if (!autoRotateROInterval) {
+          if (bar) bar.style.width = '0%';
+          clearInterval(cycleProgressInterval);
+          return;
+        }
+        cycleTimeElapsed += 100;
+        const pct = Math.min(100, (cycleTimeElapsed / CYCLE_DURATION_MS) * 100);
+        if (bar) bar.style.width = pct + '%';
+        if (cycleTimeElapsed >= CYCLE_DURATION_MS) {
+          cycleTimeElapsed = 0;
+        }
+      }, 100);
+    }
 
     function selectROCenter(roName, btnEl) {
       activeROCenter = roName;
@@ -718,6 +792,7 @@
       if (zpEl) zpEl.scrollTop = 0;
       const psEl = document.getElementById('psCardsContainer');
       if (psEl) psEl.scrollTop = 0;
+      resetCycleProgressBar();
       renderCards(true);
     }
 
@@ -726,6 +801,7 @@
       if (autoRotateROInterval) {
         clearInterval(autoRotateROInterval);
         autoRotateROInterval = null;
+        resetCycleProgressBar();
         if (btn) {
           btn.innerText = '🔄 Auto-Cycle Centers: OFF';
           btn.style.background = '#ffffff';
@@ -743,6 +819,7 @@
 
     function startAutoRotateRO() {
       if (autoRotateROInterval) clearInterval(autoRotateROInterval);
+      resetCycleProgressBar();
       autoRotateROInterval = setInterval(() => {
         currentROIndex = (currentROIndex + 1) % roCentersList.length;
         const nextRO = roCentersList[currentROIndex];
@@ -757,8 +834,9 @@
         if (zpEl) zpEl.scrollTop = 0;
         const psEl = document.getElementById('psCardsContainer');
         if (psEl) psEl.scrollTop = 0;
+        resetCycleProgressBar();
         renderCards(true);
-      }, 10000); // cycle every 10 seconds across all RO centers
+      }, CYCLE_DURATION_MS); // cycle every 10 seconds across all RO centers
     }
 
     function toggleFullscreen() {
@@ -933,8 +1011,8 @@
           </div>
         `;
       } else {
-        zpWards.forEach(w => {
-          zpContainer.appendChild(createWardCardElement(w));
+        zpWards.forEach((w, idx) => {
+          zpContainer.appendChild(createWardCardElement(w, idx));
         });
       }
 
@@ -950,15 +1028,15 @@
       if (psWards.length === 0) {
         const blkLabel = activeROCenter === 'ALL' ? 'सभी 7 पंचायत समितियां' : activeROCenter;
         psContainer.innerHTML = `
-          <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
+          <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b; animation: cardFadeSlideIn 0.35s ease both;">
             <div style="font-size: 36px; margin-bottom: 8px;">🏘️ ⏳</div>
             <div style="font-size: 16px; font-weight: 800; color: #1e293b;">पंचायत समिति (${blkLabel}): परिणाम प्रविष्टि की प्रतीक्षा है</div>
             <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Panchayat Samiti wards</div>
           </div>
         `;
       } else {
-        psWards.forEach(w => {
-          psContainer.appendChild(createWardCardElement(w));
+        psWards.forEach((w, idx) => {
+          psContainer.appendChild(createWardCardElement(w, idx));
         });
       }
 
@@ -971,7 +1049,7 @@
       }
     }
 
-    function createWardCardElement(ward) {
+    function createWardCardElement(ward, idx = 0) {
       const isDeclared = ward.status === 'DECLARED';
       const cands = masterData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
 
@@ -1100,6 +1178,7 @@
 
       const card = document.createElement('div');
       card.className = `ward-card ${isDeclared ? 'declared' : (hasVotes ? 'counting' : '')}`;
+      card.style.animationDelay = `${Math.min(idx * 0.08, 0.45)}s`;
 
       let displayName = ward.category === 'ZP' ? `ZP Ward ${ward.ward_no}` : `${ward.block_name} - Ward ${ward.ward_no}`;
 
