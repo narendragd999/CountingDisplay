@@ -560,22 +560,44 @@
     </div>
   </div>
 
+  <!-- MASTER RO CENTER AUTO-CYCLE & CONTROLS STRIP -->
+  <div style="background: #ffffff; border: 1px solid var(--border-main); border-radius: 8px; padding: 7px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; box-shadow: var(--shadow-sm);">
+    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <span style="font-size: 12px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 4px; text-transform: uppercase;">
+        🏢 RO CENTERS:
+      </span>
+      <div style="display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;" id="roCenterPillStrip">
+        <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 RO Centers</button>
+        <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand RO (ZP 1-3)</button>
+        <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada RO (ZP 4-6)</button>
+        <button class="ro-pill" onclick="selectROCenter('Salumbar', this)">Salumbar RO (ZP 10-13)</button>
+        <button class="ro-pill" onclick="selectROCenter('Semari', this)">Semari RO (ZP 7-9)</button>
+        <button class="ro-pill" onclick="selectROCenter('Lasadiya', this)">Lasadiya RO (ZP 16-18)</button>
+        <button class="ro-pill" onclick="selectROCenter('Geengla', this)">Geengla RO (ZP 13-15)</button>
+        <button class="ro-pill" onclick="selectROCenter('Jhallara', this)">Jhallara RO (ZP 19-21)</button>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; font-weight:800; font-size:12px; padding:5px 12px;" onclick="toggleAutoRotateRO()">
+        🔄 Auto-Cycle Centers: ON (10s)
+      </button>
+    </div>
+  </div>
+
   <!-- SPLIT SCREEN 50/50 -->
   <main class="split-container">
     
     <!-- LEFT COLUMN: ZILLA PARISHAD (21 WARDS) -->
     <section class="column-box">
       <div class="column-head">
-        <div class="column-title">
+        <div class="column-title" id="zpColumnTitle">
           <span>🏛️</span> Zilla Parishad (21 Wards)
         </div>
 
         <div class="filter-ctrls">
-          <button id="btnAutoRotateZP" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe;" onclick="toggleAutoRotateZP()">
-            🔄 Auto-Cycle Wards: ON
-          </button>
           <select id="zpWardFilter" class="filter-select" onchange="renderCards(true)">
-            <option value="ALL">All 21 Wards</option>
+            <option value="ALL">All Wards</option>
           </select>
           <button id="btnZpScroll" class="btn-scroll-toggle" onclick="toggleScroll('zp')">
             ⏸ Pause Scroll
@@ -590,34 +612,22 @@
 
     <!-- RIGHT COLUMN: PANCHAYAT SAMITI (105 WARDS) -->
     <section class="column-box">
-      <div class="column-head" style="flex-direction:column; gap:8px; align-items:stretch;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div class="column-title">
-            <span>🏘️</span> Panchayat Samiti RO Centers (105 Wards across 7 Blocks)
-          </div>
-
-          <div class="filter-ctrls">
-            <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe;" onclick="toggleAutoRotateRO()">
-              🔄 Auto-Cycle Centers: ON
-            </button>
-            <button id="btnPsScroll" class="btn-scroll-toggle" onclick="toggleScroll('ps')">
-              ⏸ Pause Scroll
-            </button>
-          </div>
+      <div class="column-head">
+        <div class="column-title" id="psColumnTitle">
+          <span>🏘️</span> Panchayat Samiti (105 Wards across 7 Blocks)
         </div>
 
-        <!-- RO Centers Selector Strip -->
-        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; -ms-overflow-style:none;" id="roCenterPillStrip">
-          <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 RO Centers</button>
-          <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand RO</button>
-          <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada RO</button>
-          <button class="ro-pill" onclick="selectROCenter('Salumbar', this)">Salumbar RO</button>
-          <button class="ro-pill" onclick="selectROCenter('Semari', this)">Semari RO</button>
-          <button class="ro-pill" onclick="selectROCenter('Lasadiya', this)">Lasadiya RO</button>
-          <button class="ro-pill" onclick="selectROCenter('Geengla', this)">Geengla RO</button>
-          <button class="ro-pill" onclick="selectROCenter('Jhallara', this)">Jhallara RO</button>
+        <div class="filter-ctrls">
+          <button id="btnPsScroll" class="btn-scroll-toggle" onclick="toggleScroll('ps')">
+            ⏸ Pause Scroll
+          </button>
         </div>
       </div>
+
+      <div class="cards-scroll-body" id="psCardsContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
 
       <div class="cards-scroll-body" id="psCardsContainer">
         <!-- Rendered dynamically -->
@@ -682,69 +692,33 @@
     }
 
     
+    const BLOCK_ZP_MAPPING = {
+      'Jaisamand': [1, 2, 3],
+      'Sarada': [1, 4, 5, 6],
+      'Semari': [7, 8, 9],
+      'Salumbar': [10, 11, 12, 13],
+      'Geengla': [13, 14, 15],
+      'Lasadiya': [16, 17, 18],
+      'Jhallara': [19, 20, 21]
+    };
+
     let activeROCenter = 'ALL';
     let autoRotateROInterval = null;
-    const roCentersList = ['Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
+    const roCentersList = ['ALL', 'Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
     let currentROIndex = 0;
-
-    // Auto-Rotate ZP Wards
-    let autoRotateZPInterval = null;
-    let currentZPIndex = 0;
-
-    function toggleAutoRotateZP() {
-      const btn = document.getElementById('btnAutoRotateZP');
-      if (autoRotateZPInterval) {
-        clearInterval(autoRotateZPInterval);
-        autoRotateZPInterval = null;
-        if (btn) {
-          btn.innerText = '🔄 Auto-Cycle Wards: OFF';
-          btn.style.background = '#ffffff';
-          btn.style.color = 'var(--text-muted)';
-        }
-      } else {
-        if (btn) {
-          btn.innerText = '🔄 Auto-Cycle Wards: ON';
-          btn.style.background = '#eff6ff';
-          btn.style.color = '#1d4ed8';
-        }
-        startAutoRotateZP();
-      }
-    }
-
-    function startAutoRotateZP() {
-      if (autoRotateZPInterval) clearInterval(autoRotateZPInterval);
-      autoRotateZPInterval = setInterval(() => {
-        // Collect entered ZP wards
-        const enteredWards = (masterData.wards || [])
-          .filter(w => w.category === 'ZP' && wardHasEnteredVotes(w))
-          .map(w => w.ward_no);
-
-        let cycleTargets = ['ALL'];
-        if (enteredWards.length > 1) {
-          cycleTargets = [...enteredWards, 'ALL'];
-        } else if (enteredWards.length === 1) {
-          cycleTargets = [enteredWards[0], 'ALL'];
-        } else {
-          cycleTargets = ['ALL', ...Array.from({ length: 21 }, (_, i) => i + 1)];
-        }
-
-        currentZPIndex = (currentZPIndex + 1) % cycleTargets.length;
-        const nextTarget = cycleTargets[currentZPIndex];
-        const zpSel = document.getElementById('zpWardFilter');
-        if (zpSel) {
-          zpSel.value = nextTarget;
-        }
-        const zpEl = document.getElementById('zpCardsContainer');
-        if (zpEl) zpEl.scrollTop = 0;
-        renderCards(true);
-      }, 15000); // cycle every 15 seconds
-    }
 
     function selectROCenter(roName, btnEl) {
       activeROCenter = roName;
-      document.querySelectorAll('.ro-pill').forEach(p => p.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      renderCards();
+      document.querySelectorAll('.ro-pill').forEach(p => {
+        if (roName === 'ALL' && p.textContent.includes('All 7')) p.classList.add('active');
+        else if (roName !== 'ALL' && p.textContent.includes(roName)) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+      const zpEl = document.getElementById('zpCardsContainer');
+      if (zpEl) zpEl.scrollTop = 0;
+      const psEl = document.getElementById('psCardsContainer');
+      if (psEl) psEl.scrollTop = 0;
+      renderCards(true);
     }
 
     function toggleAutoRotateRO() {
@@ -752,13 +726,17 @@
       if (autoRotateROInterval) {
         clearInterval(autoRotateROInterval);
         autoRotateROInterval = null;
-        btn.innerText = '🔄 Auto-Cycle Centers: OFF';
-        btn.style.background = '#ffffff';
-        btn.style.color = 'var(--text-muted)';
+        if (btn) {
+          btn.innerText = '🔄 Auto-Cycle Centers: OFF';
+          btn.style.background = '#ffffff';
+          btn.style.color = 'var(--text-muted)';
+        }
       } else {
-        btn.innerText = '🔄 Auto-Cycle Centers: ON';
-        btn.style.background = '#eff6ff';
-        btn.style.color = '#1d4ed8';
+        if (btn) {
+          btn.innerText = '🔄 Auto-Cycle Centers: ON (10s)';
+          btn.style.background = '#eff6ff';
+          btn.style.color = '#1d4ed8';
+        }
         startAutoRotateRO();
       }
     }
@@ -768,14 +746,19 @@
       autoRotateROInterval = setInterval(() => {
         currentROIndex = (currentROIndex + 1) % roCentersList.length;
         const nextRO = roCentersList[currentROIndex];
+        activeROCenter = nextRO;
         const pills = document.querySelectorAll('.ro-pill');
         pills.forEach(p => {
-          if (p.textContent.includes(nextRO)) p.classList.add('active');
+          if (nextRO === 'ALL' && p.textContent.includes('All 7')) p.classList.add('active');
+          else if (nextRO !== 'ALL' && p.textContent.includes(nextRO)) p.classList.add('active');
           else p.classList.remove('active');
         });
-        activeROCenter = nextRO;
-        renderCards();
-      }, 15000); // cycle every 15 seconds
+        const zpEl = document.getElementById('zpCardsContainer');
+        if (zpEl) zpEl.scrollTop = 0;
+        const psEl = document.getElementById('psCardsContainer');
+        if (psEl) psEl.scrollTop = 0;
+        renderCards(true);
+      }, 10000); // cycle every 10 seconds across all RO centers
     }
 
     function toggleFullscreen() {
@@ -788,7 +771,6 @@
 
     window.addEventListener('DOMContentLoaded', async () => {
       startAutoRotateRO();
-      startAutoRotateZP();
       checkPortalLock();
       populateFilterOptions();
       await fetchMasterData();
@@ -912,16 +894,42 @@
       const prevPsScroll = psContainer ? psContainer.scrollTop : 0;
 
       // Render ZP - only wards whose votes have been entered
-      const zpWards = (masterData.wards || []).filter(w => w.category === 'ZP' && (zpFilter === 'ALL' || w.ward_no == zpFilter) && wardHasEnteredVotes(w));
+      const zpWards = (masterData.wards || []).filter(w => {
+        if (w.category !== 'ZP') return false;
+        if (zpFilter !== 'ALL' && w.ward_no != zpFilter) return false;
+        if (zpFilter === 'ALL' && activeROCenter !== 'ALL') {
+          const allowed = BLOCK_ZP_MAPPING[activeROCenter] || [];
+          if (!allowed.includes(Number(w.ward_no))) return false;
+        }
+        return wardHasEnteredVotes(w);
+      });
       zpWards.sort((a, b) => a.ward_no - b.ward_no);
+
+      // Update Column Titles
+      const zpTitleEl = document.getElementById('zpColumnTitle');
+      if (zpTitleEl) {
+        if (activeROCenter === 'ALL') {
+          zpTitleEl.innerHTML = '<span>🏛️</span> Zilla Parishad (All 21 Wards)';
+        } else {
+          const wList = (BLOCK_ZP_MAPPING[activeROCenter] || []).map(num => 'Ward ' + num).join(', ');
+          zpTitleEl.innerHTML = `<span>🏛️</span> Zilla Parishad (${activeROCenter} RO • ${wList})`;
+        }
+      }
+      const psTitleEl = document.getElementById('psColumnTitle');
+      if (psTitleEl) {
+        psTitleEl.innerHTML = activeROCenter === 'ALL' 
+          ? '<span>🏘️</span> Panchayat Samiti (All 7 Blocks)' 
+          : `<span>🏘️</span> Panchayat Samiti (${activeROCenter} RO)`;
+      }
 
       zpContainer.innerHTML = '';
       if (zpWards.length === 0) {
+        const blkLabel = activeROCenter === 'ALL' ? 'सभी 21 वार्ड' : `${activeROCenter} RO`;
         zpContainer.innerHTML = `
           <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
             <div style="font-size: 36px; margin-bottom: 8px;">🏛️ ⏳</div>
-            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद: परिणाम प्रविष्टि की प्रतीक्षा है</div>
-            <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Zila Parishad wards</div>
+            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद (${blkLabel}): परिणाम प्रविष्टि की प्रतीक्षा है</div>
+            <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Zila Parishad (${blkLabel})</div>
           </div>
         `;
       } else {
