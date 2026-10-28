@@ -571,7 +571,10 @@
         </div>
 
         <div class="filter-ctrls">
-          <select id="zpWardFilter" class="filter-select" onchange="renderCards()">
+          <button id="btnAutoRotateZP" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe;" onclick="toggleAutoRotateZP()">
+            🔄 Auto-Cycle Wards: ON
+          </button>
+          <select id="zpWardFilter" class="filter-select" onchange="renderCards(true)">
             <option value="ALL">All 21 Wards</option>
           </select>
           <button id="btnZpScroll" class="btn-scroll-toggle" onclick="toggleScroll('zp')">
@@ -684,6 +687,59 @@
     const roCentersList = ['Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
     let currentROIndex = 0;
 
+    // Auto-Rotate ZP Wards
+    let autoRotateZPInterval = null;
+    let currentZPIndex = 0;
+
+    function toggleAutoRotateZP() {
+      const btn = document.getElementById('btnAutoRotateZP');
+      if (autoRotateZPInterval) {
+        clearInterval(autoRotateZPInterval);
+        autoRotateZPInterval = null;
+        if (btn) {
+          btn.innerText = '🔄 Auto-Cycle Wards: OFF';
+          btn.style.background = '#ffffff';
+          btn.style.color = 'var(--text-muted)';
+        }
+      } else {
+        if (btn) {
+          btn.innerText = '🔄 Auto-Cycle Wards: ON';
+          btn.style.background = '#eff6ff';
+          btn.style.color = '#1d4ed8';
+        }
+        startAutoRotateZP();
+      }
+    }
+
+    function startAutoRotateZP() {
+      if (autoRotateZPInterval) clearInterval(autoRotateZPInterval);
+      autoRotateZPInterval = setInterval(() => {
+        // Collect entered ZP wards
+        const enteredWards = (masterData.wards || [])
+          .filter(w => w.category === 'ZP' && wardHasEnteredVotes(w))
+          .map(w => w.ward_no);
+
+        let cycleTargets = ['ALL'];
+        if (enteredWards.length > 1) {
+          cycleTargets = [...enteredWards, 'ALL'];
+        } else if (enteredWards.length === 1) {
+          cycleTargets = [enteredWards[0], 'ALL'];
+        } else {
+          cycleTargets = ['ALL', ...Array.from({ length: 21 }, (_, i) => i + 1)];
+        }
+
+        currentZPIndex = (currentZPIndex + 1) % cycleTargets.length;
+        const nextTarget = cycleTargets[currentZPIndex];
+        const zpSel = document.getElementById('zpWardFilter');
+        if (zpSel) {
+          zpSel.value = nextTarget;
+        }
+        const zpEl = document.getElementById('zpCardsContainer');
+        if (zpEl) zpEl.scrollTop = 0;
+        renderCards(true);
+      }, 15000); // cycle every 15 seconds
+    }
+
     function selectROCenter(roName, btnEl) {
       activeROCenter = roName;
       document.querySelectorAll('.ro-pill').forEach(p => p.classList.remove('active'));
@@ -732,6 +788,7 @@
 
     window.addEventListener('DOMContentLoaded', async () => {
       startAutoRotateRO();
+      startAutoRotateZP();
       checkPortalLock();
       populateFilterOptions();
       await fetchMasterData();
@@ -820,77 +877,146 @@
       }
     }
 
-    // Render Cards
-    function renderCards() {
+    function wardHasEnteredVotes(ward) {
+      if (ward.status === 'DECLARED') return true;
+      const cands = (masterData.candidates || []).filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
+      for (const c of cands) {
+        const vObj = (masterData.roundVotes && masterData.roundVotes[c.id]) || {};
+        for (const count of Object.values(vObj)) {
+          if ((count || 0) > 0) return true;
+        }
+      }
+      return false;
+    }
+
+    // Render Cards - Strictly display only wards whose votes have been entered or declared
+    let lastRenderFingerprint = '';
+    function renderCards(force = false) {
+      const zpFilter = document.getElementById('zpWardFilter') ? document.getElementById('zpWardFilter').value : 'ALL';
+      
+      const currentFingerprint = JSON.stringify({
+        votes: masterData.roundVotes || {},
+        declared: (masterData.wards || []).map(w => `${w.category}-${w.block_name}-${w.ward_no}-${w.status}`),
+        activeRO: activeROCenter,
+        zpFilter: zpFilter
+      });
+
+      if (!force && currentFingerprint === lastRenderFingerprint) {
+        return; // Data has not changed; do NOT wipe DOM, keep auto-scroll smooth!
+      }
+      lastRenderFingerprint = currentFingerprint;
+
       const zpContainer = document.getElementById('zpCardsContainer');
       const psContainer = document.getElementById('psCardsContainer');
+      const prevZpScroll = zpContainer ? zpContainer.scrollTop : 0;
+      const prevPsScroll = psContainer ? psContainer.scrollTop : 0;
 
-      const zpFilter = document.getElementById('zpWardFilter') ? document.getElementById('zpWardFilter').value : 'ALL';
-
-      // Render ZP
-      const zpWards = masterData.wards.filter(w => w.category === 'ZP' && (zpFilter === 'ALL' || w.ward_no == zpFilter));
+      // Render ZP - only wards whose votes have been entered
+      const zpWards = (masterData.wards || []).filter(w => w.category === 'ZP' && (zpFilter === 'ALL' || w.ward_no == zpFilter) && wardHasEnteredVotes(w));
       zpWards.sort((a, b) => a.ward_no - b.ward_no);
 
       zpContainer.innerHTML = '';
-      zpWards.forEach(w => {
-        zpContainer.appendChild(createWardCardElement(w));
-      });
+      if (zpWards.length === 0) {
+        zpContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
+            <div style="font-size: 36px; margin-bottom: 8px;">🏛️ ⏳</div>
+            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद: परिणाम प्रविष्टि की प्रतीक्षा है</div>
+            <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Zila Parishad wards</div>
+          </div>
+        `;
+      } else {
+        zpWards.forEach(w => {
+          zpContainer.appendChild(createWardCardElement(w));
+        });
+      }
 
-      // Render PS
-      const psWards = masterData.wards.filter(w => {
+      // Render PS - only wards whose votes have been entered
+      const psWards = (masterData.wards || []).filter(w => {
         if (w.category !== 'PS') return false;
         if (activeROCenter !== 'ALL' && w.block_name !== activeROCenter) return false;
-        return true;
+        return wardHasEnteredVotes(w);
       });
       psWards.sort((a, b) => a.block_name.localeCompare(b.block_name) || a.ward_no - b.ward_no);
 
       psContainer.innerHTML = '';
-      psWards.forEach(w => {
-        psContainer.appendChild(createWardCardElement(w));
-      });
+      if (psWards.length === 0) {
+        const blkLabel = activeROCenter === 'ALL' ? 'सभी 7 पंचायत समितियां' : activeROCenter;
+        psContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
+            <div style="font-size: 36px; margin-bottom: 8px;">🏘️ ⏳</div>
+            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">पंचायत समिति (${blkLabel}): परिणाम प्रविष्टि की प्रतीक्षा है</div>
+            <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Panchayat Samiti wards</div>
+          </div>
+        `;
+      } else {
+        psWards.forEach(w => {
+          psContainer.appendChild(createWardCardElement(w));
+        });
+      }
+
+      // Restore scroll positions if content is large
+      if (zpContainer && zpContainer.scrollHeight > prevZpScroll) {
+        zpContainer.scrollTop = prevZpScroll;
+      }
+      if (psContainer && psContainer.scrollHeight > prevPsScroll) {
+        psContainer.scrollTop = prevPsScroll;
+      }
     }
 
     function createWardCardElement(ward) {
       const isDeclared = ward.status === 'DECLARED';
       const cands = masterData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
 
-      // Compute votes
-      const roundsSet = new Set();
+      // Collect all rounds with votes
+      const roundsWithVotes = new Set();
       const candTotals = cands.map(c => {
         let sum = 0;
-        let lastRoundVotes = 0;
         const vObj = masterData.roundVotes[c.id] || {};
         for (const [rKey, count] of Object.entries(vObj)) {
-          const c = count || 0;
-          if (c > 0 || rKey.startsWith('R') || rKey.startsWith('B')) {
-            sum += c;
-            roundsSet.add(rKey);
-            lastRoundVotes = c;
+          const cnt = Number(count) || 0;
+          sum += cnt;
+          const upperKey = rKey.toUpperCase();
+          if (upperKey.startsWith('R') || upperKey === 'PB') {
+            roundsWithVotes.add(upperKey);
           }
         }
-        return { ...c, totalVotes: sum, lastRoundVotes };
+        return { ...c, totalVotes: sum };
       });
 
       candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
-
       const hasVotes = candTotals.some(c => c.totalVotes > 0);
-      const isCounting = hasVotes && !isDeclared;
 
-      // Real Booth Count for this ward
-      let totalBooths = 5;
-      if (ward.category === 'ZP') {
-        totalBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === ward.ward_no).length : (ward.total_booths || 25);
-      } else {
-        totalBooths = masterData.booths ? masterData.booths.filter(b => b.block_name === ward.block_name && Number(b.ps_ward) === ward.ward_no).length : (ward.total_booths || 5);
+      // Order active rounds: PB first, then dynamic numerical sort (R1, R2, ... R15)
+      let activeRoundKeys = Array.from(roundsWithVotes).sort((a, b) => {
+        if (a === 'PB') return -1;
+        if (b === 'PB') return 1;
+        const numA = parseInt(a.replace(/\D/g, '')) || 0;
+        const numB = parseInt(b.replace(/\D/g, '')) || 0;
+        return numA - numB;
+      });
+      if (activeRoundKeys.length === 0) {
+        activeRoundKeys = ['R1']; // default initial placeholder
       }
-      if (!totalBooths || totalBooths < 1) totalBooths = ward.total_booths || 5;
 
-      const countedBooths = roundsSet.size;
-      const isAllBoothsCounted = (countedBooths >= totalBooths && totalBooths > 0);
-      const statusKey = isDeclared ? 'DECLARED' : (isCounting ? (isAllBoothsCounted ? 'COMPLETED' : 'COUNTING') : 'PENDING');
-      const statusLabel = isDeclared ? 'WINNER DECLARED' : (isCounting ? (isAllBoothsCounted ? `ALL ${totalBooths} BOOTHS COUNTED` : `${countedBooths} OF ${totalBooths} BOOTHS COUNTED`) : 'AWAITING VOTES');
-      const card = document.createElement('div');
-      card.className = `ward-card ${isDeclared ? 'declared' : (isCounting ? 'counting' : '')}`;
+      // Find latest completed round
+      let highestRoundNum = 0;
+      activeRoundKeys.forEach(r => {
+        if (r.startsWith('R')) {
+          const num = parseInt(r.replace('R', '')) || 0;
+          if (num > highestRoundNum) highestRoundNum = num;
+        }
+      });
+
+      let statusKey = 'PENDING';
+      let statusLabel = 'AWAITING VOTES';
+
+      if (isDeclared) {
+        statusKey = 'DECLARED';
+        statusLabel = 'WINNER DECLARED';
+      } else if (hasVotes) {
+        statusKey = 'COUNTING';
+        statusLabel = highestRoundNum > 0 ? `ROUND ${highestRoundNum} COMPLETED` : 'COUNTING IN PROGRESS';
+      }
 
       const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
       const leader = validCands[0] || candTotals[0];
@@ -903,7 +1029,7 @@
         leaderHtml = `
           <div class="leader-strip declared-winner">
             <span>🏆 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) WON</span>
-            <span>${margin > 0 ? `Margin: +${margin} votes` : 'Decided by Draw of Lots (Lottery)'}</span>
+            <span>${margin > 0 ? `Margin: +${margin} votes` : 'Decided by Draw of Lots'}</span>
           </div>
         `;
       } else if (isTie) {
@@ -913,7 +1039,7 @@
             <span>Equal: ${leader.totalVotes} votes each</span>
           </div>
         `;
-      } else if (isCounting && leader && leader.totalVotes > 0) {
+      } else if (hasVotes && leader && leader.totalVotes > 0) {
         leaderHtml = `
           <div class="leader-strip">
             <span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) Leading</span>
@@ -922,50 +1048,71 @@
         `;
       }
 
+      // Build round header th's
+      let roundThs = '';
+      activeRoundKeys.forEach(r => {
+        const label = r === 'PB' ? 'PB' : r;
+        roundThs += `<th style="text-align:right; padding:6px 8px; width:46px; font-weight:800; color:var(--text-muted);">${label}</th>`;
+      });
+
+      // Build candidate rows
       let rowsHtml = '';
       if (candTotals.length === 0) {
-        rowsHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-dim); padding:10px;">Contestants awaiting finalization</td></tr>`;
+        rowsHtml = `<tr><td colspan="${4 + activeRoundKeys.length}" style="text-align:center; color:var(--text-dim); padding:10px;">No contestants registered</td></tr>`;
       } else {
         candTotals.forEach((c, idx) => {
           const isLeader = !isTie && idx === 0 && c.totalVotes > 0;
           const isTied = isTie && (c.totalVotes === leader.totalVotes);
+          const vObj = masterData.roundVotes[c.id] || {};
+
+          let roundTds = '';
+          activeRoundKeys.forEach(rKey => {
+            const val = vObj[rKey];
+            const displayVal = (val !== undefined && val !== null) ? val : '-';
+            roundTds += `
+              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:${val > 0 ? '700' : '500'}; color:${val > 0 ? 'var(--text-main)' : 'var(--text-dim)'}; padding:6px 8px;">
+                ${displayVal}
+              </td>
+            `;
+          });
+
           rowsHtml += `
             <tr class="${isLeader ? 'row-leader' : (isTied ? 'row-tied' : '')}" style="${isTied ? 'background:#fef3c7;' : ''}">
-              <td style="font-weight:700; font-family:'Rajdhani',sans-serif; width:30px;">#${c.ballot_no || idx+1}</td>
-              <td style="font-weight:${isLeader ? '800' : '600'};">${c.name_hindi}</td>
-              <td style="width:60px;"><span class="party-tag pt-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
-              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:800; color:${isLeader ? 'var(--primary)' : 'inherit'}; width:80px;">${c.totalVotes}</td>
+              <td style="font-weight:700; font-family:'Rajdhani',sans-serif; width:28px;">#${c.ballot_no || idx+1}</td>
+              <td style="font-weight:${isLeader ? '800' : '600'}; font-size:12px;">${c.name_hindi}</td>
+              <td style="width:50px;"><span class="party-tag pt-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
+              ${roundTds}
+              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:800; color:${isLeader ? 'var(--primary)' : 'inherit'}; width:70px; padding:6px 10px;">
+                ${c.totalVotes}
+              </td>
             </tr>
           `;
         });
       }
 
+      const card = document.createElement('div');
+      card.className = `ward-card ${isDeclared ? 'declared' : (hasVotes ? 'counting' : '')}`;
+
       let displayName = ward.category === 'ZP' ? `ZP Ward ${ward.ward_no}` : `${ward.block_name} - Ward ${ward.ward_no}`;
-      let roBreakdownHtml = '';
-      if (ward.category === 'ZP') {
-        if (ward.ward_no === 1) {
-          roBreakdownHtml = '<div style="font-size:10px; color:#0369a1; background:#e0f2fe; padding:2px 8px; border-radius:4px; margin-top:2px; font-weight:700;">🏛️ Multi-Center: Jaisamand RO (29 Booths) + Sarada RO (3 Booths)</div>';
-        }
-      }
 
       card.innerHTML = `
         <div class="ward-card-head">
           <div class="ward-name">
             <span>${ward.category === 'ZP' ? '🏛️' : '🏘️'}</span>
             <span>${displayName}</span>
-            <span style="font-size:10px; color:var(--text-dim); font-weight:700; background:#f1f5f9; padding:1px 5px; border-radius:3px;">${ward.reservation || 'GEN'}</span>
+            <span style="font-size:10px; color:var(--text-dim); font-weight:700; background:#f1f5f9; padding:1px 5px; border-radius:3px;">${ward.reservation || 'ST'}</span>
           </div>
           <span class="status-badge status-${statusKey}">${statusLabel}</span>
         </div>
-        ${roBreakdownHtml}
         ${leaderHtml}
         <table class="ward-table">
           <thead>
             <tr>
-              <th>#</th>
+              <th style="width:28px;">#</th>
               <th>Candidate</th>
-              <th>Party</th>
-              <th style="text-align:right;">Votes</th>
+              <th style="width:50px;">Party</th>
+              ${roundThs}
+              <th style="text-align:right; width:70px;">Total</th>
             </tr>
           </thead>
           <tbody>

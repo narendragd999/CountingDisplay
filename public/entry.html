@@ -142,7 +142,7 @@
     /* 3 NAVIGATION TABS */
     .nav-tabs {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 6px;
       background: #e2e8f0;
       padding: 5px;
@@ -443,6 +443,153 @@
       gap: 12px;
     }
 
+  
+    /* ROUND-CENTRIC MULTI-WARD ENTRY STYLES */
+    .round-pill-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 6px 0;
+      margin-bottom: 8px;
+      scrollbar-width: thin;
+    }
+    .round-pill {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1.5px solid var(--border-main);
+      background: #ffffff;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .round-pill:hover {
+      background: var(--bg-subtle);
+      border-color: var(--primary);
+    }
+    .round-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+    }
+    .round-pill .round-count {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: var(--text-dim);
+    }
+    .round-pill.active .round-count {
+      background: rgba(255,255,255,0.25);
+      color: #ffffff;
+    }
+    .ward-filter-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 4px 0 10px 0;
+      scrollbar-width: thin;
+    }
+    .ward-filter-pill {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border-main);
+      background: #ffffff;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .ward-filter-pill:hover { background: var(--bg-subtle); color: var(--text-main); }
+    .ward-filter-pill.active {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+    .vote-input-dual {
+      width: 100px;
+      background: #ffffff;
+      border: 2px solid var(--border-main);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-align: right;
+      outline: none;
+      transition: all 0.15s;
+    }
+    .vote-input-dual:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+    .vote-input-cumul {
+      color: var(--primary);
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+    .vote-input-cumul:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+    .input-error {
+      border-color: #dc2626 !important;
+      background: #fef2f2 !important;
+      color: #b91c1c !important;
+    }
+    .ward-entry-card {
+      background: #ffffff;
+      border: 1px solid var(--border-main);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .ward-entry-card.declared {
+      border: 2px solid #fcd34d;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.12);
+    }
+    .ward-entry-head {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ward-entry-card.declared .ward-entry-head {
+      background: #fef3c7;
+    }
+    .ward-entry-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sticky-action-bar {
+      position: sticky;
+      bottom: 0;
+      background: #ffffff;
+      border-top: 2px solid var(--border-main);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 0 0 12px 12px;
+      z-index: 50;
+    }
+
   </style>
 </head>
 <body>
@@ -518,6 +665,9 @@
       <button id="tabBtnContestants" class="nav-tab-btn" onclick="switchNavTab('contestants')">
         👥 Contestants Manager
       </button>
+      <button id="tabBtnHalls" class="nav-tab-btn" onclick="switchNavTab('halls')">
+        🏛️ Halls & Tables Setup
+      </button>
     </nav>
 
     <!-- Blinking Notification Banner for Completed Wards Awaiting Winner Declaration -->
@@ -531,10 +681,10 @@
       </button>
     </div>
 
-    <!-- =====================================================================
-         TAB 1: DIRECT VOTE ENTRY (BOOTH-WISE OR ROUND-WISE)
+        <!-- =====================================================================
+         TAB 1: DIRECT ROUND-WISE & MULTI-WARD VOTE ENTRY
          ===================================================================== -->
-    <section id="panelEntry" class="card">
+            <section id="panelEntry" class="card" style="padding-bottom: 0;">
       <div class="card-head">
         <div class="card-title">
           <span>🗳️</span> Direct Vote Entry Console
@@ -544,120 +694,126 @@
         </div>
       </div>
 
-            <!-- Scope Selection -->
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Category</label>
-          <select id="entryCategory" class="form-select" onchange="onCategoryChanged()">
-            <option value="PS">Panchayat Samiti (7 Blocks)</option>
-            <option value="ZP">Zilla Parishad (21 Wards)</option>
-          </select>
-        </div>
-
-        <div class="form-group" id="blockSelectGroup">
-          <label class="form-label">RO Center / Panchayat Samiti Block</label>
-          <select id="entryBlock" class="form-select" onchange="onBlockChanged()">
-            <option value="Geengla">Geengla (61 Booths)</option>
-            <option value="Jaisamand">Jaisamand (81 Booths)</option>
-            <option value="Jhallara">Jhallara (83 Booths)</option>
-            <option value="Lasadiya">Lasadiya (73 Booths)</option>
-            <option value="Salumbar">Salumbar (77 Booths)</option>
-            <option value="Sarada">Sarada (78 Booths)</option>
-            <option value="Semari">Semari (69 Booths)</option>
-          </select>
-        </div>
-
-        <div class="form-group" id="zpWardSelectGroup" style="display:none;">
-          <label class="form-label">Zilla Parishad Ward (वार्ड 1 से 21)</label>
-          <select id="entryZpWard" class="form-select" onchange="onZpWardChanged()"></select>
-        </div>
-      </div>
-
-      <!-- Entry Mode Radio Toggle (Hidden for clean Polling Station workflow) -->
-      <div class="mode-toggle-bar" style="display:none;">
-        <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Entry Method:</span>
-        <label class="mode-radio-label">
-          <input type="radio" name="entryMode" value="booth" checked onchange="toggleEntryMode('booth')">
-          <span>📍 By Polling Station / Booth #</span>
-        </label>
-      </div>
-
-      <!-- Polling Station / Booth Entry -->
-      <div id="boothSelectorBox" class="form-grid" style="display:grid;">
-        <div class="form-group">
-          <label class="form-label">Polling Station / Booth #</label>
-          <div style="display:flex; gap:8px;">
-            <input type="text" id="inputBoothNo" class="form-input" placeholder="e.g. 1 or 4A" value="1" oninput="onBoothInputChanged()" style="width:130px; font-size:16px; font-weight:800;" title="Enter Polling Station # or Auxiliary Booth (e.g. 4A)">
-            <select id="selectBoothDropdown" class="form-select" style="flex:1;" onchange="onBoothDropdownChanged()"></select>
+      <!-- DEAD-SIMPLE CONTROL BAR: CATEGORY -> WARD -> ROUND -->
+      <div style="background:#f8fafc; border:2px solid var(--border-main); border-radius:12px; padding:16px 20px; margin-bottom:16px;">
+        <div style="display:grid; grid-template-columns: auto 1.1fr 1fr 1fr; gap:16px; align-items:end;">
+          
+          <!-- STEP 1A: CATEGORY (PS vs ZP) -->
+          <div>
+            <label style="font-size:11px; font-weight:800; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">
+              ① CATEGORY
+            </label>
+            <div style="display:inline-flex; gap:6px;">
+              <button id="btnSwitchToPS" type="button" onclick="setEntryCategory('PS')" class="btn btn-primary" style="padding:9px 18px; font-size:13px; font-weight:800; border-radius:8px; box-shadow:var(--shadow-sm);">
+                🗳️ Panchayat Samiti
+              </button>
+              <button id="btnSwitchToZP" type="button" onclick="setEntryCategory('ZP')" class="btn btn-outline" style="padding:9px 18px; font-size:13px; font-weight:800; border-radius:8px; background:#ffffff; color:#334155; border:1.5px solid var(--border-main);">
+                🏛️ Zila Parishad
+              </button>
+            </div>
+            <select id="entryCategory" style="display:none;" onchange="onCategoryChanged()">
+              <option value="PS">PS</option>
+              <option value="ZP">ZP</option>
+            </select>
           </div>
+
+          <!-- STEP 1B: RO CELL / BLOCK (for PS; hidden for ZP) -->
+          <div id="blockSelectGroup">
+            <label style="font-size:11px; font-weight:800; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">
+              RO CELL / BLOCK
+            </label>
+            <select id="entryBlock" class="form-select" onchange="onBlockChanged()" style="font-weight:700; font-size:13px; padding:9px 12px; border-radius:8px; height:42px;">
+              <option value="Semari">Semari (69 Booths)</option>
+              <option value="Salumbar">Salumbar (80 Booths)</option>
+              <option value="Lasadiya">Lasadiya (73 Booths • 7 Tables)</option>
+              <option value="Geengla">Geengla (61 Booths)</option>
+              <option value="Jaisamand">Jaisamand (81 Booths)</option>
+              <option value="Sarada">Sarada (80 Booths)</option>
+              <option value="Jhallara">Jhallara (78 Booths)</option>
+            </select>
+          </div>
+
+          <div id="zpInfoGroup" style="display:none;">
+            <label style="font-size:11px; font-weight:800; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">
+              ZP SCOPE
+            </label>
+            <div style="font-size:13px; font-weight:700; color:#0369a1; padding:9px 12px; background:#e0f2fe; border:1px solid #bae6fd; border-radius:8px; height:42px; display:flex; align-items:center;">
+              🏛️ Salumber District ZP (All 21 Wards)
+            </div>
+          </div>
+
+          <!-- STEP 2: SELECT WARD (FIRST SELECT WARD!) -->
+          <div>
+            <label style="font-size:11px; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">
+              ② SELECT WARD
+            </label>
+            <select id="wardSelectDropdown" class="form-select" onchange="onWardSelected(this.value)" style="font-weight:800; font-size:14px; padding:9px 12px; border-radius:8px; height:42px; border:2px solid #0f172a; color:#0f172a; background:#ffffff;">
+              <!-- Dynamically populated: Ward 1, Ward 2 ... All Wards -->
+            </select>
+            <div id="wardFilterStrip" style="display:none;"></div>
+            <input type="text" id="wardSearchInput" style="display:none;">
+          </div>
+
+          <!-- STEP 3: SELECT ROUND (THEN SELECT ROUND!) -->
+          <div>
+            <label style="font-size:11px; font-weight:800; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">
+              ③ SELECT ROUND
+            </label>
+            <select id="roundSelectDropdown" class="form-select" onchange="onRoundSelected(this.value)" style="font-weight:800; font-size:14px; padding:9px 12px; border-radius:8px; height:42px; border:2px solid #0284c7; color:#0284c7; background:#ffffff;">
+              <!-- Dynamically populated: PB, Round 1, Round 2, Round 3 ... -->
+            </select>
+            <div id="roundPillStrip" style="display:none;"></div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Sub-Selector B: Ward & Round Entry -->
-      <div id="roundSelectorBox" class="form-grid" style="display:none !important;">
-        <div class="form-group">
-          <label class="form-label">Select Ward</label>
-          <select id="entryWard" class="form-select" onchange="onWardRoundChanged()"></select>
+      <!-- Active Status Strip -->
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+        <div id="roundInfoText" style="font-size:13px; color:#1e40af; font-weight:700;">
+          Loading sheet...
         </div>
-        <div class="form-group">
-          <label class="form-label">Select Counting Round</label>
-          <select id="entryRound" class="form-select" onchange="onWardRoundChanged()">
-            <option value="R1">Round 1</option>
-            <option value="R2">Round 2</option>
-            <option value="R3">Round 3</option>
-            <option value="R4">Round 4</option>
-            <option value="R5">Round 5</option>
-            <option value="R6">Round 6</option>
-            <option value="R7">Round 7</option>
-            <option value="R8">Round 8</option>
-            <option value="R9">Round 9</option>
-            <option value="R10">Round 10</option>
-          </select>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span id="roundActiveBadge" class="badge badge-primary" style="font-size:12px; font-weight:800;">
+            Round 1 Active
+          </span>
         </div>
       </div>
 
-      <!-- Live Auto-Mapped Details Banner -->
-      <div id="boothInfoBanner" class="booth-info-banner" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div id="boothInfoText" style="flex:1;">📍 Loading Polling Station...</div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div id="boothRoundBadge" class="badge" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; font-weight:800; font-size:12px;">Round 1 Active</div>
-          <div id="boothWardBadge" class="badge badge-primary" style="font-size:12px; font-weight:800;">Ward -</div>
+      <!-- Container of Ward Cards (Candidate Entry Sheet) -->
+      <div id="wardsContainer" style="display:flex; flex-direction:column; gap:14px; margin-bottom:14px;">
+        <!-- Dynamically rendered ward card with candidate rows -->
+      </div>
+
+      <!-- Sticky Save Bar with Round Declaration & Ekzai -->
+      <div class="sticky-action-bar">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <button onclick="clearCurrentRoundInputs()" class="btn btn-outline" style="color:var(--text-dim); padding:9px 14px; font-size:12px;">
+            ✕ Reset Inputs
+          </button>
+          <span id="pendingChangesCount" style="font-size:12px; font-weight:700; color:var(--text-muted);">
+            0 candidates entered
+          </span>
+          <span id="roundDeclarationBadge" class="badge" style="font-size:12px; font-weight:800; padding:5px 12px; background:#fef3c7; color:#b45309; border:1px solid #f59e0b;">
+            ⏳ In-Progress
+          </span>
         </div>
-      </div>
 
-      <!-- Candidate Vote Entry Table -->
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:60px;">Ballot #</th>
-              <th>Candidate Name</th>
-              <th>Party</th>
-              <th style="width:140px; text-align:right;">Votes (This Slip)</th>
-              <th style="width:110px; text-align:right;">Prev. Total</th>
-              <th style="width:120px; text-align:right;">Cumulative</th>
-            </tr>
-          </thead>
-          <tbody id="candidatesTableBody"></tbody>
-        </table>
-      </div>
-
-      <!-- Save & Next Buttons -->
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button onclick="clearCurrentInputs()" class="btn btn-outline" style="color:var(--text-dim);">
-          ✕ Clear Current Inputs
-        </button>
-
-        <button id="btnSaveVotes" onclick="submitVotes()" class="btn btn-success" style="padding:12px 28px; font-size:14px;">
-          💾 SAVE BOOTH VOTES
-        </button>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <button id="btnViewEkzai" onclick="openRoundEkzaiModal()" class="btn btn-outline" style="padding:9px 15px; font-size:13px; font-weight:700; border-color:#0284c7; color:#0284c7; background:#f0f9ff;">
+            📄 View Ekzai (एकजाई पत्रक)
+          </button>
+          <button id="btnSaveVotes" onclick="submitRoundVotes()" class="btn btn-success" style="padding:10px 24px; font-size:14px; font-weight:800; box-shadow:var(--shadow-md);">
+            💾 SAVE VOTES
+          </button>
+          <button id="btnDeclareRound" onclick="toggleDeclareRoundClick()" class="btn btn-primary" style="padding:10px 22px; font-size:14px; font-weight:800; background:#1e3a8a; border-color:#172554; box-shadow:var(--shadow-md);">
+            📢 DECLARE ROUND RESULTS
+          </button>
+        </div>
       </div>
     </section>
 
-    <!-- =====================================================================
-         TAB 2: DECLARE WARD WINNER (LIVE STANDINGS & FINALIZATION)
-         ===================================================================== -->
-    <section id="panelDeclare" class="card" style="display:none;">
+<section id="panelDeclare" class="card" style="display:none;">
       <div class="card-head">
         <div class="card-title">
           <span>🏆</span> Official Ward Winner Declaration & Status
@@ -785,12 +941,82 @@
         </div>
       </div>
     </section>
+    <!-- =====================================================================
+         TAB 4: COUNTING HALLS & TABLES SETUP (INDEPENDENT MECHANISM PER BLOCK)
+         ===================================================================== -->
+    <section id="panelHalls" class="card" style="display:none;">
+      <div class="card-head">
+        <div class="card-title">
+          <span>🏛️</span> Counting Halls & Tables Setup (Independent Mechanism)
+        </div>
+        <div class="badge badge-primary">
+          7 Counting Halls Active (RO Cells)
+        </div>
+      </div>
+
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:14px 18px; margin-bottom:16px;">
+        <div style="font-size:13px; font-weight:700; color:#14532d; display:flex; align-items:center; gap:8px;">
+          <span>ℹ️</span> Independent Table Allocation for Each Panchayat Samiti & Zilla Parishad
+        </div>
+        <p style="font-size:12px; color:#166534; margin-top:4px; line-height:1.5;">
+          Each Panchayat Samiti counting hall can have a separate number of counting tables. Changing tables automatically recalculates <strong>max rounds</strong> and updates round pills across the system in real time.
+        </p>
+      </div>
+
+      <!-- Halls Grid -->
+      <div id="hallsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
+        <!-- Dynamically rendered hall cards -->
+      </div>
+    </section>
+
+    <!-- EKZAI MODAL (OFFICIAL ROUND CONSOLIDATED STATEMENT) -->
+    <div id="ekzaiModal" class="modal-overlay" style="display:none;">
+      <div class="modal-card" style="max-width:920px; max-height:90vh; overflow-y:auto; padding:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid var(--border-main); padding-bottom:12px; margin-bottom:14px;">
+          <div>
+            <div style="font-size:12px; font-weight:800; color:var(--text-muted); letter-spacing:0.5px;">
+              राजस्थान राज्य निर्वाचन आयोग • पंचायती राज आम चुनाव 2026
+            </div>
+            <h2 id="ekzaiTitle" style="font-size:18px; font-weight:800; color:#0f172a; margin-top:2px;">
+              दौर एकजाई पत्रक (Consolidated Round Statement)
+            </h2>
+            <div id="ekzaiSubtitle" style="font-size:13px; color:var(--text-dim); margin-top:2px; font-weight:600;">
+              Loading...
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button onclick="window.print()" class="btn btn-outline" style="padding:6px 14px; font-size:12px; font-weight:700;">
+              🖨️ Print / PDF
+            </button>
+            <button onclick="closeRoundEkzaiModal()" class="btn btn-outline" style="padding:6px 12px; font-size:14px;">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div id="ekzaiContent">
+          <!-- Dynamically populated Ekzai table -->
+        </div>
+      </div>
+    </div>
+
 
   </div>
 
   <div id="toast"></div>
 
   <script>
+    
+    const BLOCK_ZP_WARDS = {
+      'Geengla': [13, 14, 15],
+      'Jaisamand': [1, 2, 3],
+      'Jhallara': [19, 20, 21],
+      'Lasadiya': [16, 17, 18],
+      'Salumbar': [10, 11, 12, 13],
+      'Sarada': [1, 4, 5, 6],
+      'Semari': [7, 8, 9]
+    };
+
     let authToken = localStorage.getItem('salumber_auth_token') || '';
     let currentUser = null;
     try {
@@ -1013,26 +1239,27 @@
         if (tabContestants) tabContestants.style.display = 'none';
 
       } else {
-        // ADMIN: Full access to everything
+        // ADMIN: Full access to both categories, strictly preserve user's currentSelectedCategory!
+        const btnPS = document.getElementById('btnSwitchToPS');
+        const btnZP = document.getElementById('btnSwitchToZP');
+        if (btnPS) { btnPS.style.display = 'inline-flex'; btnPS.disabled = false; }
+        if (btnZP) { btnZP.style.display = 'inline-flex'; btnZP.disabled = false; }
         if (catSelect) {
           catSelect.disabled = false;
-          catSelect.innerHTML = `
-            <option value="PS">Panchayat Samiti (7 Blocks)</option>
-            <option value="ZP">Zilla Parishad (21 Wards)</option>
-          `;
+          catSelect.value = currentSelectedCategory;
         }
-        if (blkSelect) {
+        if (blkSelect && blkSelect.options.length < 2) {
           blkSelect.disabled = false;
           blkSelect.innerHTML = ALL_BLOCKS.map(b => `<option value="${b.name}">${b.name} (${b.booths} Booths)</option>`).join('');
         }
-        if (declCatSelect) {
+        if (declCatSelect && declCatSelect.options.length < 2) {
           declCatSelect.disabled = false;
           declCatSelect.innerHTML = `
             <option value="PS">Panchayat Samiti</option>
             <option value="ZP">Zilla Parishad</option>
           `;
         }
-        if (declBlkSelect) {
+        if (declBlkSelect && declBlkSelect.options.length < 2) {
           declBlkSelect.disabled = false;
           declBlkSelect.innerHTML = ALL_BLOCKS.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
         }
@@ -1072,8 +1299,6 @@
     async function initApp() {
       await loadMasterData();
       applyUserScopeAndMode();
-      populateBoothDropdown();
-      populateWardDropdown();
       onCategoryChanged();
       initWebSocket();
     }
@@ -1098,11 +1323,12 @@
         const resp = await fetch('/api/all_candidates_master');
         if (resp.ok) {
           masterData = await resp.json();
-          if (masterData.system_mode) {
+          if (masterData.system_mode && masterData.system_mode !== currentSystemMode) {
             currentSystemMode = masterData.system_mode;
             applyUserScopeAndMode();
           }
           checkCompletedWardsReadyToDeclare();
+          updateRoundDeclarationUI();
         }
       } catch (e) {}
     }
@@ -1114,7 +1340,7 @@
       if (tab === 'entry') {
         document.getElementById('tabBtnEntry').classList.add('active');
         document.getElementById('panelEntry').style.display = 'flex';
-        refreshEntryView();
+        renderRoundPills(); populateWardFilterPills(); renderRoundEntrySheet();
       } else if (tab === 'declare') {
         document.getElementById('tabBtnDeclare').classList.add('active');
         document.getElementById('panelDeclare').style.display = 'flex';
@@ -1123,440 +1349,567 @@
         document.getElementById('tabBtnContestants').classList.add('active');
         document.getElementById('panelContestants').style.display = 'flex';
         loadManageBlockContestants();
+      } else if (tab === 'halls') {
+        document.getElementById('tabBtnHalls').classList.add('active');
+        document.getElementById('panelHalls').style.display = 'flex';
+        loadHallsConfigDashboard();
       }
     }
 
-    // ENTRY MODE TOGGLE (BOOTH VS ROUND)
-    function toggleEntryMode(mode) {
-      activeEntryMode = mode;
-      document.getElementById('boothSelectorBox').style.display = mode === 'booth' ? 'grid' : 'none';
-      document.getElementById('roundSelectorBox').style.display = 'none';
-      refreshEntryView();
-    }
+    // =====================================================================
+    // TAB 1: ROUND-CENTRIC MULTI-WARD ENTRY LOGIC (PB FIRST + SMART MACHINE ALLOCATION)
+    // =====================================================================
+    let currentSelectedCategory = 'PS'; // 'PS' or 'ZP' - preserved across all refreshes
+    let currentSelectedRound = 'R1'; // Default to Round 1
+    let currentSelectedWardFilter = '1'; // Default to Ward 1 for focused entry
+    let activeCategory = 'PS';
+    let activeBlock = 'Semari';
 
-    function populateZpWardDropdown() {
-      const sel = document.getElementById('entryZpWard');
-      if (!sel) return;
-      const prevVal = sel.value;
-      sel.innerHTML = '';
-      for (let w = 1; w <= 21; w++) {
-        const count = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === w).length : 0;
+    // 1. POPULATE WARD DROPDOWN (WARD BEFORE ROUND!)
+    function populateWardDropdown() {
+      const cat = currentSelectedCategory;
+      const blk = (cat === 'ZP') ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+      const wardDropdown = document.getElementById('wardSelectDropdown');
+      if (!wardDropdown) return;
+      wardDropdown.innerHTML = '';
+
+      let relevantWards = [];
+      if (cat === 'ZP') {
+        relevantWards = (masterData.wards || []).filter(w => w.category === 'ZP');
+      } else {
+        relevantWards = (masterData.wards || []).filter(w => w.category === 'PS' && w.block_name === blk);
+      }
+      relevantWards.sort((a, b) => a.ward_no - b.ward_no);
+
+      // Add "All Wards" option
+      const allOpt = document.createElement('option');
+      allOpt.value = 'ALL';
+      allOpt.textContent = `📋 All Wards (${relevantWards.length} Wards)`;
+      if (currentSelectedWardFilter === 'ALL') allOpt.selected = true;
+      wardDropdown.appendChild(allOpt);
+
+      // Add individual wards: Ward 1, Ward 2 ...
+      relevantWards.forEach(w => {
         const opt = document.createElement('option');
-        opt.value = w;
-        opt.textContent = `ZP Ward ${w} (${count || 25} Booths)`;
-        sel.appendChild(opt);
-      }
-      if (prevVal && [...sel.options].some(o => o.value == prevVal)) {
-        sel.value = prevVal;
+        opt.value = String(w.ward_no);
+        const icon = (cat === 'ZP') ? '🏛️' : '🏘️';
+        const resText = w.reservation ? ` (${w.reservation})` : '';
+        opt.textContent = `${icon} Ward ${w.ward_no}${resText}`;
+        if (String(currentSelectedWardFilter) === String(w.ward_no)) {
+          opt.selected = true;
+        }
+        wardDropdown.appendChild(opt);
+      });
+
+      // Ensure valid selection
+      const validValues = ['ALL', ...relevantWards.map(w => String(w.ward_no))];
+      if (!validValues.includes(String(currentSelectedWardFilter))) {
+        currentSelectedWardFilter = relevantWards.length > 0 ? String(relevantWards[0].ward_no) : 'ALL';
+        wardDropdown.value = currentSelectedWardFilter;
       }
     }
 
-    function onZpWardChanged() {
-      populateBoothDropdown();
-      refreshEntryView();
+    function onWardSelected(val) {
+      currentSelectedWardFilter = String(val);
+      updateHeaderBanner();
+      renderRoundEntrySheet();
+    }
+
+    // 2. POPULATE ROUND DROPDOWN (ROUND AFTER WARD!)
+    function populateRoundDropdown() {
+      const roundDropdown = document.getElementById('roundSelectDropdown');
+      if (!roundDropdown) return;
+      roundDropdown.innerHTML = '';
+
+      const pbOpt = document.createElement('option');
+      pbOpt.value = 'PB';
+      pbOpt.textContent = '✉️ Postal Ballots (PB)';
+      if (currentSelectedRound === 'PB') pbOpt.selected = true;
+      roundDropdown.appendChild(pbOpt);
+
+      for (let r = 1; r <= 15; r++) {
+        const rKey = `R${r}`;
+        const opt = document.createElement('option');
+        opt.value = rKey;
+        opt.textContent = `⚡ Round ${r}`;
+        if (currentSelectedRound === rKey) opt.selected = true;
+        roundDropdown.appendChild(opt);
+      }
+    }
+
+    function onRoundSelected(rKey) {
+      currentSelectedRound = rKey;
+      updateHeaderBanner();
+      renderRoundEntrySheet();
+    }
+
+    // Compatibility helpers
+    function renderRoundPills() {
+      populateRoundDropdown();
+      updateHeaderBanner();
+    }
+    function populateWardFilterPills() {
+      populateWardDropdown();
+    }
+
+    // Header Info Banner Sync
+    function updateHeaderBanner() {
+      const cat = currentSelectedCategory;
+      const blk = (cat === 'ZP') ? 'Zila Parishad' : document.getElementById('entryBlock').value;
+      const isPB = (currentSelectedRound === 'PB');
+      const rLabel = isPB ? 'Postal Ballots (PB)' : currentSelectedRound;
+      const wLabel = (currentSelectedWardFilter === 'ALL') ? 'All Wards' : `Ward ${currentSelectedWardFilter}`;
+
+      const bannerText = document.getElementById('roundInfoText');
+      if (bannerText) {
+        bannerText.innerHTML = `📍 <strong>${cat === 'ZP' ? '🏛️ Zila Parishad' : '🏘️ ' + blk} — ${wLabel} — ${rLabel}</strong>`;
+      }
+
+      const badge = document.getElementById('roundActiveBadge');
+      if (badge) {
+        badge.innerText = isPB ? '✉️ Postal Ballots Active' : `⚡ ${rLabel} Active`;
+      }
+
+      const saveBtn = document.getElementById('btnSaveVotes');
+      if (saveBtn) {
+        saveBtn.innerText = isPB ? '💾 SAVE PB VOTES' : `💾 SAVE ${rLabel} VOTES`;
+      }
+
+      updateRoundDeclarationUI();
+    }
+
+    // Category Switching
+    function setEntryCategory(cat) {
+      currentSelectedCategory = cat;
+      const catInput = document.getElementById('entryCategory');
+      if (catInput) catInput.value = cat;
+      onCategoryChanged();
     }
 
     function onCategoryChanged() {
-      const cat = document.getElementById('entryCategory').value;
+      const cat = currentSelectedCategory || document.getElementById('entryCategory')?.value || 'PS';
+      currentSelectedCategory = cat;
+
       const blkGrp = document.getElementById('blockSelectGroup');
-      const zpWardGrp = document.getElementById('zpWardSelectGroup');
+      const zpInfo = document.getElementById('zpInfoGroup');
+      const btnPS = document.getElementById('btnSwitchToPS');
+      const btnZP = document.getElementById('btnSwitchToZP');
 
       if (cat === 'PS') {
-        blkGrp.style.display = 'flex';
-        zpWardGrp.style.display = 'none';
+        if (btnPS) {
+          btnPS.className = 'btn btn-primary';
+          btnPS.style.background = '#0284c7';
+          btnPS.style.color = '#ffffff';
+          btnPS.style.borderColor = '#0284c7';
+        }
+        if (btnZP) {
+          btnZP.className = 'btn btn-outline';
+          btnZP.style.background = '#ffffff';
+          btnZP.style.color = '#334155';
+          btnZP.style.borderColor = 'var(--border-main)';
+        }
+        if (blkGrp) blkGrp.style.display = 'block';
+        if (zpInfo) zpInfo.style.display = 'none';
       } else {
-        // ZP MODE: Hide block selector, show ZP Ward selector (1 to 21)
-        blkGrp.style.display = 'none';
-        zpWardGrp.style.display = 'flex';
-        populateZpWardDropdown();
+        if (btnZP) {
+          btnZP.className = 'btn btn-primary';
+          btnZP.style.background = '#0284c7';
+          btnZP.style.color = '#ffffff';
+          btnZP.style.borderColor = '#0284c7';
+        }
+        if (btnPS) {
+          btnPS.className = 'btn btn-outline';
+          btnPS.style.background = '#ffffff';
+          btnPS.style.color = '#334155';
+          btnPS.style.borderColor = 'var(--border-main)';
+        }
+        if (blkGrp) blkGrp.style.display = 'none';
+        if (zpInfo) zpInfo.style.display = 'block';
       }
 
-      populateBoothDropdown();
       populateWardDropdown();
-      refreshEntryView();
+      populateRoundDropdown();
+      updateHeaderBanner();
+      renderRoundEntrySheet();
     }
 
     function onBlockChanged() {
-      populateBoothDropdown();
       populateWardDropdown();
-      refreshEntryView();
+      populateRoundDropdown();
+      updateHeaderBanner();
+      renderRoundEntrySheet();
     }
 
-    const BLOCK_TOTAL_BOOTHS = {
-      'Geengla': 61,
-      'Jaisamand': 81,
-      'Jhallara': 83,
-      'Lasadiya': 73,
-      'Salumbar': 77,
-      'Sarada': 78,
-      'Semari': 69
-    };
+    // Previous Cumulative Calculation
+    function getPreviousCumulativeVotes(candId, targetRoundKey) {
+      const vMap = (masterData.roundVotes && masterData.roundVotes[candId]) || {};
+      if (targetRoundKey === 'PB') return 0;
+      let sum = Number(vMap['PB'] || 0);
+      if (targetRoundKey === 'R1') return sum;
 
-    function populateBoothDropdown() {
-      const cat = document.getElementById('entryCategory').value;
-      const sel = document.getElementById('selectBoothDropdown');
-      const inputBooth = document.getElementById('inputBoothNo');
-      sel.innerHTML = '';
-
-      if (cat === 'PS') {
-        const blk = document.getElementById('entryBlock').value || 'Semari';
-        const maxB = BLOCK_TOTAL_BOOTHS[blk] || 69;
-        inputBooth.max = maxB;
-        let curVal = inputBooth.value.trim() || '1';
-
-        for (let b = 1; b <= maxB; b++) {
-          const opt = document.createElement('option');
-          opt.value = String(b);
-          let bObj = masterData.booths ? masterData.booths.find(x => x.block_name === blk && String(x.booth_no) === String(b)) : null;
-          if (bObj && bObj.booth_name_hi) {
-            opt.textContent = `#${b} - ${bObj.booth_name_hi} (PS Ward ${bObj.ps_ward})`;
-          } else {
-            opt.textContent = `Polling Station #${b} of ${maxB} (${blk})`;
-          }
-          sel.appendChild(opt);
-        }
-
-        if ([...sel.options].some(o => o.value == curVal)) {
-          sel.value = curVal;
-        } else if (sel.options.length > 0) {
-          sel.selectedIndex = 0;
-          inputBooth.value = sel.value;
-        }
-      } else {
-        // ZP MODE: Strictly By ZP Ward (1 to 21)
-        const zpWard = parseInt(document.getElementById('entryZpWard').value) || 1;
-        let zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === zpWard) : [];
-
-        zpBooths.sort((a, b) => {
-          if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
-          return (parseInt(a.booth_no) || 0) - (parseInt(b.booth_no) || 0);
-        });
-
-        zpBooths.forEach((bObj) => {
-          const opt = document.createElement('option');
-          opt.value = `${bObj.block_name}:${bObj.booth_no}`;
-          const sName = bObj.booth_name_hi || bObj.booth_name_en || '';
-          opt.textContent = `[${bObj.block_name}] Booth #${bObj.booth_no} - ${sName} (${bObj.total_elector} Electors)`;
-          sel.appendChild(opt);
-        });
-
-        if (sel.options.length > 0) {
-          sel.selectedIndex = 0;
-          const parts = sel.value.split(':');
-          inputBooth.value = parts[1] || '1';
-        } else {
-          inputBooth.value = '1';
+      const order = ['R1','R2','R3','R4','R5','R6','R7','R8','R9','R10','R11','R12','R13','R14','R15'];
+      const idx = order.indexOf(targetRoundKey);
+      if (idx > 0) {
+        for (let i = 0; i < idx; i++) {
+          sum += Number(vMap[order[i]] || 0);
         }
       }
+      return sum;
     }
 
-    function populateWardDropdown() {
-      const cat = document.getElementById('entryCategory').value;
-      const maxW = cat === 'ZP' ? 21 : 15;
-      const sel = document.getElementById('entryWard');
-      sel.innerHTML = '';
-      for (let w = 1; w <= maxW; w++) {
-        const opt = document.createElement('option');
-        opt.value = w;
-        opt.textContent = `Ward ${w}`;
-        sel.appendChild(opt);
-      }
-    }
+    function updateRoundPillCounts() {}
 
-    function onBoothInputChanged() {
-      const cat = document.getElementById('entryCategory').value;
-      const val = document.getElementById('inputBoothNo').value.trim();
-      const sel = document.getElementById('selectBoothDropdown');
+    // 3. RENDER ROUND ENTRY SHEET (DEAD-SIMPLE: NO BOOTH/ROUND MAPPING!)
+    function renderRoundEntrySheet() {
+      const cat = currentSelectedCategory || document.getElementById('entryCategory')?.value || 'PS';
+      const blk = (cat === 'ZP') ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+      activeCategory = cat;
+      activeBlock = blk;
 
+      const container = document.getElementById('wardsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let relevantWards = [];
       if (cat === 'ZP') {
-        const matchingOpt = [...sel.options].find(o => {
-          const parts = o.value.split(':');
-          return parts[1] === val;
-        });
-        if (matchingOpt) {
-          sel.value = matchingOpt.value;
-        }
+        relevantWards = (masterData.wards || []).filter(w => w.category === 'ZP');
       } else {
-        if ([...sel.options].some(o => o.value == val)) {
-          sel.value = val;
-        }
+        relevantWards = (masterData.wards || []).filter(w => w.category === 'PS' && w.block_name === blk);
       }
-      refreshEntryView();
-    }
+      relevantWards.sort((a,b) => a.ward_no - b.ward_no);
 
-    function onBoothDropdownChanged() {
-      const cat = document.getElementById('entryCategory').value;
-      const selVal = document.getElementById('selectBoothDropdown').value;
-      if (cat === 'ZP') {
-        const parts = selVal.split(':');
-        document.getElementById('inputBoothNo').value = parts[1] || '1';
-      } else {
-        document.getElementById('inputBoothNo').value = selVal;
+      // Filter by selected ward if not 'ALL'
+      if (currentSelectedWardFilter !== 'ALL') {
+        relevantWards = relevantWards.filter(w => String(w.ward_no) === String(currentSelectedWardFilter));
       }
-      refreshEntryView();
-    }
 
-    function onWardRoundChanged() {
-      refreshEntryView();
-    }
+      let renderedWardsCount = 0;
+      let totalEnteredInRound = 0;
 
-    function refreshEntryView() {
-      const cat = document.getElementById('entryCategory').value;
-      const rawBno = document.getElementById('inputBoothNo').value.trim() || '1';
-      let targetWard = 1;
-      let roundKey = 'R1';
-      let boothObj = null;
-      let blk = '';
+      relevantWards.forEach(wardInfo => {
+        const wNo = wardInfo.ward_no;
+        const isDeclared = (wardInfo.status === 'DECLARED');
 
-      if (cat === 'PS') {
-        blk = document.getElementById('entryBlock').value || 'Semari';
-        if (masterData.booths && masterData.booths.length > 0) {
-          boothObj = masterData.booths.find(b => b.block_name === blk && String(b.booth_no) === rawBno);
-        }
-        if (boothObj) {
-          targetWard = boothObj.ps_ward;
-        } else {
-          const bno = parseInt(rawBno) || 1;
-          targetWard = Math.min(15, Math.max(1, Math.ceil(bno / 5)));
-        }
-        roundKey = `B${rawBno}`.toUpperCase();
-      } else {
-        // ZP MODE (District-Wide Election)
-        blk = 'Salumber ZP';
-        let bBlk = '', bNo = '';
-        const selVal = document.getElementById('selectBoothDropdown').value || '';
-        if (selVal.includes(':')) {
-          [bBlk, bNo] = selVal.split(':');
-        } else {
-          bNo = rawBno;
-        }
-
-        targetWard = parseInt(document.getElementById('entryZpWard').value) || 1;
-        if (masterData.booths && masterData.booths.length > 0) {
-          if (bBlk) {
-            boothObj = masterData.booths.find(b => b.block_name === bBlk && String(b.booth_no) === bNo);
+        const wardCands = (masterData.candidates || []).filter(c => {
+          if (cat === 'ZP') {
+            return c.category === 'ZP' && Number(c.ward_no) === wNo;
           } else {
-            boothObj = masterData.booths.find(b => Number(b.zp_ward) === targetWard && String(b.booth_no) === bNo);
+            return c.category === 'PS' && c.block_name === blk && Number(c.ward_no) === wNo;
           }
-        }
+        });
+        wardCands.sort((a, b) => (a.ballot_no || 999) - (b.ballot_no || 999));
+        if (wardCands.length === 0) return;
 
-        if (boothObj) {
-          roundKey = `B_${boothObj.block_name}_${boothObj.booth_no}`.toUpperCase();
-        } else {
-          roundKey = `B_${bBlk || 'ZP'}_${bNo}`.toUpperCase();
-        }
-      }
+        renderedWardsCount++;
 
-      currentMappedWard = targetWard;
-      currentRoundKey = roundKey;
-      currentBoothObj = boothObj;
+        const card = document.createElement('div');
+        card.className = `ward-entry-card ${isDeclared ? 'declared' : ''}`;
+        card.setAttribute('data-ward-no', String(wNo));
 
-      const targetBlk = cat === 'ZP' ? 'Salumber ZP' : blk;
-      const wardInfo = (masterData.wards || []).find(w => w.category === cat && w.block_name === targetBlk && Number(w.ward_no) === Number(targetWard));
+        let rowsHtml = '';
+        let wardRoundTotal = 0;
 
-      // Calculate Currently Working Round & Booth Progress
-      const tables = (wardInfo && wardInfo.counting_tables) ? wardInfo.counting_tables : 5;
-      let totalB = (wardInfo && wardInfo.total_booths) ? wardInfo.total_booths : (cat === 'ZP' ? 25 : 5);
-      if (masterData.booths && masterData.booths.length > 0) {
-        if (cat === 'ZP') {
-          const cnt = masterData.booths.filter(b => Number(b.zp_ward) === targetWard).length;
-          if (cnt > 0) totalB = cnt;
-        } else {
-          const cnt = masterData.booths.filter(b => b.block_name === blk && Number(b.ps_ward) === targetWard).length;
-          if (cnt > 0) totalB = cnt;
-        }
-      }
-      const maxR = Math.max(1, Math.ceil(totalB / (tables || 5)));
+        wardCands.forEach(cand => {
+          const prevCumul = getPreviousCumulativeVotes(cand.id, currentSelectedRound);
+          const savedRoundVal = ((masterData.roundVotes && masterData.roundVotes[cand.id]) || {})[currentSelectedRound];
+          const hasSaved = (savedRoundVal !== undefined && savedRoundVal !== null);
 
-      // How many booths have reported votes so far for this ward?
-      const reportedBooths = new Set();
-      const wardCands = (masterData.candidates || []).filter(c => c.category === cat && c.block_name === targetBlk && Number(c.ward_no) === Number(targetWard));
-      wardCands.forEach(c => {
-        const vObj = (masterData.roundVotes || {})[c.id] || {};
-        for (const [k, v] of Object.entries(vObj)) {
-          if (v > 0) reportedBooths.add(k.toUpperCase());
-        }
+          let roundVal = hasSaved ? savedRoundVal : '';
+          let cumulVal = hasSaved ? (prevCumul + Number(savedRoundVal)) : (prevCumul > 0 ? prevCumul : '');
+
+          if (hasSaved && Number(savedRoundVal) > 0) {
+            totalEnteredInRound++;
+            wardRoundTotal += Number(savedRoundVal);
+          }
+
+          const isNota = (cand.party === 'NOTA' || (cand.name_hindi || '').includes('नोटा'));
+
+          rowsHtml += `
+            <tr id="candRow_${cand.id}" style="${isNota ? 'background:#f8fafc;' : ''}">
+              <td style="font-weight:800; font-family:'Rajdhani',sans-serif; font-size:15px; color:${isNota ? '#64748b' : 'inherit'}; width:50px;">
+                ${isNota ? 'नोटा' : '#' + (cand.ballot_no || '-')}
+              </td>
+              <td style="font-weight:700; font-size:14px;">
+                ${cand.name_hindi}
+              </td>
+              <td style="width:75px;">
+                <span class="party-pill party-${cand.party || 'IND'}">${cand.party || 'IND'}</span>
+              </td>
+              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:700; color:var(--text-dim); width:110px;" id="prevCumul_${cand.id}">
+                ${prevCumul}
+              </td>
+              <td style="text-align:right; width:130px;">
+                <input type="number" id="roundInput_${cand.id}" class="vote-input-dual" min="0" placeholder="0"
+                  value="${roundVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}"
+                  oninput="handleRoundVoteInput(${cand.id}, ${prevCumul}, ${wNo})">
+              </td>
+              <td style="text-align:right; width:130px;">
+                <input type="number" id="cumulInput_${cand.id}" class="vote-input-dual vote-input-cumul" min="0" placeholder="${prevCumul}"
+                  value="${cumulVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}"
+                  oninput="handleCumulVoteInput(${cand.id}, ${prevCumul}, ${wNo})">
+              </td>
+              <td style="text-align:right; width:130px;" id="statusLead_${cand.id}">
+                <span style="font-size:12px; color:var(--text-dim); font-weight:700;">-</span>
+              </td>
+            </tr>
+          `;
+        });
+
+        const statusBadge = isDeclared 
+          ? `<span class="badge badge-success">🏆 DECLARED</span>`
+          : `<span class="badge" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; font-weight:800;">${currentSelectedRound === 'PB' ? 'Postal Ballots' : currentSelectedRound}</span>`;
+
+        card.innerHTML = `
+          <div class="ward-entry-head">
+            <div class="ward-entry-title">
+              <span>${cat === 'ZP' ? '🏛️ Zilla Parishad Ward ' + wNo : '🏘️ ' + blk + ' - Ward ' + wNo}</span>
+              <span style="font-size:11px; font-weight:700; color:var(--text-dim); background:#ffffff; border:1px solid var(--border-subtle); padding:2px 8px; border-radius:4px;">
+                ${wardInfo.reservation || 'ST'} • ${wardInfo.total_booths || 5} Booths
+              </span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span id="wardRoundTotalBadge_${wNo}" style="font-size:12px; font-weight:800; color:var(--text-muted); font-family:'Rajdhani',sans-serif;">
+                Round Votes: ${wardRoundTotal}
+              </span>
+              ${statusBadge}
+            </div>
+          </div>
+          <div class="table-container" style="margin:0; border:none; border-radius:0;">
+            <table class="data-table" style="margin:0;">
+              <thead>
+                <tr>
+                  <th style="width:50px;">#</th>
+                  <th>Candidate Name</th>
+                  <th style="width:75px;">Party</th>
+                  <th style="width:110px; text-align:right;" title="Starting baseline before this round (includes Postal Ballots)">Prev. Total</th>
+                  <th style="width:130px; text-align:right; color:var(--primary);" title="Votes obtained in this round">Round Votes</th>
+                  <th style="width:130px; text-align:right; color:#0369a1;" title="Cumulative total through this round">Cumulative</th>
+                  <th style="width:130px; text-align:right;">Lead Margin</th>
+                </tr>
+              </thead>
+              <tbody id="wardTbody_${wNo}">
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        container.appendChild(card);
+        updateWardLiveLeadSummary(wNo);
       });
-      const countedCount = reportedBooths.size;
 
-      // Current active round being worked on
-      const activeRound = Math.min(maxR, Math.floor(countedCount / tables) + 1);
-
-      // What round batch does the selected booth belong to?
-      let currentBoothBatch = activeRound;
-      let tableNo = 1;
-      const bNoNum = parseInt(rawBno) || 1;
-      if (cat === 'ZP') {
-        const zpBooths = masterData.booths ? masterData.booths.filter(b => Number(b.zp_ward) === targetWard) : [];
-        zpBooths.sort((a, b) => (a.block_name !== b.block_name ? a.block_name.localeCompare(b.block_name) : (parseInt(a.booth_no)||0) - (parseInt(b.booth_no)||0)));
-        const bIdx = zpBooths.findIndex(b => (boothObj ? (b.block_name === boothObj.block_name && String(b.booth_no) === String(boothObj.booth_no)) : String(b.booth_no) === rawBno));
-        if (bIdx >= 0) {
-          currentBoothBatch = Math.floor(bIdx / tables) + 1;
-          tableNo = (bIdx % tables) + 1;
-        }
-      } else {
-        currentBoothBatch = Math.max(1, Math.ceil(bNoNum / tables));
-        tableNo = ((bNoNum - 1) % tables) + 1;
+      if (renderedWardsCount === 0) {
+        container.innerHTML = `
+          <div style="background:#ffffff; border:1px solid var(--border-main); border-radius:10px; padding:32px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">🔍</div>
+            <h3 style="font-size:16px; font-weight:800; color:var(--text-main);">No Candidates Found for Selected Ward</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">
+              Please select another ward or category.
+            </p>
+          </div>
+        `;
       }
 
-      const isWardComplete = (countedCount >= totalB && totalB > 0);
-      const isWardDeclared = wardInfo ? wardInfo.status === 'DECLARED' : false;
-
-      // Update booth banner with round info
-      const sName = boothObj ? (boothObj.booth_name_hi || boothObj.booth_name_en || '') : '';
-      if (boothObj) {
-        if (cat === 'ZP') {
-          document.getElementById('boothInfoText').innerHTML = `📍 <strong>[${boothObj.block_name}] Booth #${boothObj.booth_no}</strong> <span style="color:#0284c7; font-weight:700;">(Table Batch ${currentBoothBatch})</span>: ${sName} • ${boothObj.total_elector} Electors`;
-          document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
-        } else {
-          document.getElementById('boothInfoText').innerHTML = `📍 <strong>Booth #${rawBno}</strong> <span style="color:#0284c7; font-weight:700;">(Round ${currentBoothBatch} • Table ${tableNo})</span>: ${sName} • <span style="color:#0284c7; font-weight:700;">${blk}</span> • ${boothObj.total_elector} Electors`;
-          document.getElementById('boothWardBadge').innerText = `PS Ward ${targetWard}`;
-        }
-      } else {
-        if (cat === 'ZP') {
-          document.getElementById('boothInfoText').innerText = `📍 EVM #${rawBno} • ZP Ward ${targetWard}`;
-          document.getElementById('boothWardBadge').innerText = `ZP Ward ${targetWard}`;
-        } else {
-          document.getElementById('boothInfoText').innerText = `📍 Polling Station #${rawBno} • ${blk}`;
-          document.getElementById('boothWardBadge').innerText = `PS Ward ${targetWard}`;
-        }
+      const pendingBadge = document.getElementById('pendingChangesCount');
+      if (pendingBadge) {
+        pendingBadge.innerText = `${totalEnteredInRound} candidate entries active for ${currentSelectedRound}`;
       }
 
-      // Update Round Progress Badge
-      const roundBadgeEl = document.getElementById('boothRoundBadge');
-      if (roundBadgeEl) {
-        if (isWardDeclared) {
-          roundBadgeEl.className = 'badge badge-success';
-          roundBadgeEl.innerHTML = `🏆 WINNER DECLARED (${totalB} Booths)`;
-        } else if (isWardComplete) {
-          roundBadgeEl.className = 'badge blink-badge';
-          roundBadgeEl.style.cursor = 'pointer';
-          roundBadgeEl.innerHTML = `⚠️ 100% COMPLETE (${totalB}/${totalB} Booths) • CLICK TO DECLARE!`;
-          roundBadgeEl.onclick = () => {
-            switchNavTab('declare');
-            document.getElementById('declareCategory').value = cat;
-            onDeclareScopeChanged();
-            if (cat === 'PS') {
-              document.getElementById('declareBlock').value = blk;
-              onDeclareScopeChanged();
-            }
-          };
-        } else {
-          roundBadgeEl.className = 'badge';
-          roundBadgeEl.style.background = '#e0f2fe';
-          roundBadgeEl.style.color = '#0369a1';
-          roundBadgeEl.style.border = '1px solid #7dd3fc';
-          roundBadgeEl.onclick = null;
-          roundBadgeEl.innerHTML = `🔄 <strong>Round ${activeRound} of ${maxR}</strong> in progress • ⚡ ${countedCount}/${totalB} Booths Counted`;
-        }
-      }
-
-      loadCandidateInputs(cat, blk, targetWard, roundKey);
       checkCompletedWardsReadyToDeclare();
     }
 
-    function loadCandidateInputs(cat, blk, wardNo, roundKey) {
-      const targetBlk = cat === 'ZP' ? 'Salumber ZP' : blk;
-      currentCandidates = masterData.candidates.filter(c => c.category === cat && c.block_name === targetBlk && c.ward_no === wardNo);
-      currentCandidates.sort((a, b) => (a.ballot_no || 999) - (b.ballot_no || 999));
+    function handleRoundVoteInput(candId, prevCumul, wardNo) {
+      const rInp = document.getElementById(`roundInput_${candId}`);
+      const cInp = document.getElementById(`cumulInput_${candId}`);
+      if (!rInp || !cInp) return;
+      const rVal = rInp.value.trim();
 
-      const tbody = document.getElementById('candidatesTableBody');
-      tbody.innerHTML = '';
-
-      if (currentCandidates.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-dim); padding:20px;">No contestants registered for Ward ${wardNo} yet. Use <strong>Contestants Manager</strong> to add.</td></tr>`;
-        return;
+      if (rVal === '') {
+        cInp.value = prevCumul > 0 ? prevCumul : '';
+        cInp.classList.remove('input-error');
+      } else {
+        const num = parseInt(rVal) || 0;
+        cInp.value = prevCumul + num;
+        cInp.classList.remove('input-error');
       }
 
-      const rKeyUpper = (roundKey || '').toUpperCase();
+      updateWardLiveLeadSummary(wardNo);
+      updateTotalEnteredCounter();
+    }
 
-      currentCandidates.forEach(cand => {
-        const cVotes = masterData.roundVotes[cand.id] || {};
-        
-        // Calculate cumulative previous votes (excluding this booth)
-        let prevSum = 0;
-        for (const [k, v] of Object.entries(cVotes)) {
-          if (k.toUpperCase() !== rKeyUpper) {
-            prevSum += (v || 0);
-          }
-        }
+    function handleCumulVoteInput(candId, prevCumul, wardNo) {
+      const rInp = document.getElementById(`roundInput_${candId}`);
+      const cInp = document.getElementById(`cumulInput_${candId}`);
+      if (!rInp || !cInp) return;
+      const cVal = cInp.value.trim();
 
-        // Case-insensitive lookup for this booth's entered votes
-        let curVal = '';
-        if (cVotes[rKeyUpper] !== undefined) {
-          curVal = cVotes[rKeyUpper];
-        } else if (cVotes[roundKey] !== undefined) {
-          curVal = cVotes[roundKey];
+      if (cVal === '') {
+        rInp.value = '';
+        cInp.classList.remove('input-error');
+      } else {
+        const tot = parseInt(cVal) || 0;
+        if (tot < prevCumul) {
+          cInp.classList.add('input-error');
+          cInp.title = `Cumulative total (${tot}) cannot be less than previous round total (${prevCumul})!`;
+          rInp.value = '0';
         } else {
-          for (const [k, v] of Object.entries(cVotes)) {
-            if (k.toUpperCase() === rKeyUpper) {
-              curVal = v;
-              break;
-            }
+          cInp.classList.remove('input-error');
+          cInp.title = '';
+          const diff = tot - prevCumul;
+          rInp.value = diff;
+        }
+      }
+
+      updateWardLiveLeadSummary(wardNo);
+      updateTotalEnteredCounter();
+    }
+
+    function updateWardLiveLeadSummary(wardNo) {
+      const card = document.querySelector(`.ward-entry-card[data-ward-no="${wardNo}"]`);
+      if (!card) return;
+
+      const inputs = card.querySelectorAll('.vote-input-dual[id^="cumulInput_"]');
+      let wardRoundSum = 0;
+      const cands = [];
+
+      inputs.forEach(inp => {
+        const cid = inp.getAttribute('data-cand-id');
+        const prev = parseInt(inp.getAttribute('data-prev')) || 0;
+        const totVal = parseInt(inp.value) || prev;
+        const rVal = parseInt(document.getElementById(`roundInput_${cid}`)?.value) || 0;
+        wardRoundSum += rVal;
+
+        const candObj = (masterData.candidates || []).find(c => String(c.id) === String(cid));
+        if (candObj) {
+          cands.push({ ...candObj, totalVotes: totVal, roundVotes: rVal });
+        }
+      });
+
+      // Update ward round total badge
+      const badge = document.getElementById(`wardRoundTotalBadge_${wardNo}`);
+      if (badge) badge.innerText = `Round Votes: ${wardRoundSum}`;
+
+      // Calculate lead margin for each candidate in this ward
+      cands.sort((a, b) => b.totalVotes - a.totalVotes);
+      const validCands = cands.filter(c => c.party !== 'NOTA' && !String(c.name_hindi || '').includes('नोटा'));
+      const leader = validCands[0];
+      const runnerUp = validCands[1];
+
+      cands.forEach(c => {
+        const statusCell = document.getElementById(`statusLead_${c.id}`);
+        if (!statusCell) return;
+
+        if (leader && c.id === leader.id && leader.totalVotes > 0) {
+          const m = runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : leader.totalVotes;
+          statusCell.innerHTML = `<span style="font-size:11px; font-weight:800; color:#15803d; background:#dcfce7; padding:2px 7px; border-radius:4px;">🟢 Leading +${m}</span>`;
+        } else if (leader && runnerUp && c.totalVotes === leader.totalVotes && leader.totalVotes > 0) {
+          statusCell.innerHTML = `<span style="font-size:11px; font-weight:800; color:#b45309; background:#fef3c7; padding:2px 7px; border-radius:4px;">⚖️ Tied</span>`;
+        } else if (c.totalVotes > 0 && leader) {
+          const behind = leader.totalVotes - c.totalVotes;
+          statusCell.innerHTML = `<span style="font-size:11px; font-weight:700; color:var(--text-dim);">- ${behind}</span>`;
+        } else {
+          statusCell.innerHTML = `<span style="font-size:11px; color:var(--text-dim);">-</span>`;
+        }
+      });
+    }
+
+    function updateTotalEnteredCounter() {
+      let count = 0;
+      document.querySelectorAll('.vote-input-dual[id^="roundInput_"]').forEach(inp => {
+        if (inp.value.trim() !== '' && parseInt(inp.value) >= 0) count++;
+      });
+      const pendingBadge = document.getElementById('pendingChangesCount');
+      if (pendingBadge) {
+        pendingBadge.innerText = `${count} candidates entered in this round`;
+      }
+    }
+
+    function clearCurrentRoundInputs() {
+      if (!confirm(`Reset all inputs for ${currentSelectedRound} to saved database values?`)) return;
+      renderRoundEntrySheet();
+    }
+
+    function checkCompletedWardsReadyToDeclare() {
+      if (!masterData || !masterData.wards) return;
+      const cat = document.getElementById('entryCategory')?.value || activeCategory;
+      const blk = cat === 'ZP' ? 'Salumber ZP' : (document.getElementById('entryBlock')?.value || activeBlock);
+
+      const relevantWards = masterData.wards.filter(w => w.category === cat && w.block_name === blk);
+      const readyWards = [];
+
+      relevantWards.forEach(w => {
+        if (w.status === 'DECLARED') return;
+        const maxR = parseInt(w.max_rounds) || 1;
+        const cands = (masterData.candidates || []).filter(c => c.category === cat && c.block_name === blk && c.ward_no === w.ward_no);
+        if (cands.length === 0) return;
+
+        const lastRoundKey = 'R' + maxR;
+        let hasLastRoundVotes = false;
+        cands.forEach(c => {
+          const v = (masterData.roundVotes && masterData.roundVotes[c.id])?.[lastRoundKey];
+          if (v !== undefined && v !== null && Number(v) > 0) {
+            hasLastRoundVotes = true;
           }
-        }
-        const initialTotal = prevSum + (Number(curVal) || 0);
-        const isNota = (cand.party === 'NOTA' || (cand.name_hindi || '').includes('नोटा'));
-        const tr = document.createElement('tr');
-        if (isNota) tr.style.background = '#f8fafc';
-        tr.innerHTML = `
-          <td style="font-weight:800; font-family:'Rajdhani',sans-serif; font-size:15px; color:${isNota ? '#64748b' : 'inherit'};">${isNota ? 'नोटा' : '#' + (cand.ballot_no || '-')}</td>
-          <td style="font-weight:700; font-size:14px; color:${isNota ? '#334155' : 'inherit'};">${cand.name_hindi}</td>
-          <td><span class="party-pill party-${cand.party || 'IND'}">${cand.party || 'IND'}</span></td>
-          <td style="text-align:right;">
-            <input type="number" id="voteInput_${cand.id}" class="vote-input" value="${curVal}" min="0" placeholder="0"
-              oninput="calcLiveTotal(${cand.id}, ${prevSum})">
-          </td>
-          <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:700; color:var(--text-dim);" id="prevTotal_${cand.id}">
-            ${prevSum}
-          </td>
-          <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:18px; font-weight:800; color:var(--primary);" id="liveTotal_${cand.id}">
-            ${initialTotal}
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+        });
 
-    function calcLiveTotal(candId, prevSum) {
-      const inp = document.getElementById(`voteInput_${candId}`);
-      const val = parseInt(inp.value) || 0;
-      document.getElementById(`liveTotal_${candId}`).innerText = prevSum + val;
-    }
-
-    function clearCurrentInputs() {
-      currentCandidates.forEach(cand => {
-        const inp = document.getElementById(`voteInput_${cand.id}`);
-        if (inp) {
-          inp.value = '';
-          const prev = parseInt(document.getElementById(`prevTotal_${cand.id}`).innerText) || 0;
-          document.getElementById(`liveTotal_${cand.id}`).innerText = prev;
+        if (hasLastRoundVotes) {
+          readyWards.push(w.ward_no);
         }
       });
+
+      const badge = document.getElementById('declarePendingBadge');
+      const alertBox = document.getElementById('readyToDeclareAlert');
+      const alertText = document.getElementById('readyToDeclareText');
+      const declareBtn = document.getElementById('btnAlertDeclareNow');
+
+      if (readyWards.length > 0) {
+        if (badge) {
+          badge.style.display = 'inline-block';
+          badge.innerText = readyWards.length + ' READY';
+        }
+        if (alertBox) {
+          alertBox.style.display = 'flex';
+        }
+        if (alertText) {
+          alertText.innerHTML = '🏁 <strong>Ward ' + readyWards.join(', ') + '</strong> counting complete! Ready to declare official winner.';
+        }
+        if (declareBtn) {
+          declareBtn.onclick = () => switchNavTab('declare');
+        }
+      } else {
+        if (badge) badge.style.display = 'none';
+        if (alertBox) alertBox.style.display = 'none';
+      }
     }
 
-    async function submitVotes() {
-      const cat = document.getElementById('entryCategory').value;
-      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
-      const wardNo = currentMappedWard;
-
-      const rawBno = document.getElementById('inputBoothNo').value.trim() || '1';
-      let roundKey = currentRoundKey || ('B' + rawBno);
+    async function submitRoundVotes() {
+      const cat = currentSelectedCategory || document.getElementById('entryCategory')?.value || 'PS';
+      const blk = (cat === 'ZP') ? 'Salumber ZP' : document.getElementById('entryBlock').value;
 
       const votesMap = {};
-      let hasValue = false;
-      currentCandidates.forEach(cand => {
-        const inp = document.getElementById(`voteInput_${cand.id}`);
-        if (inp && inp.value.trim() !== '') {
-          votesMap[cand.id] = parseInt(inp.value.trim()) || 0;
-          hasValue = true;
+      let totalCandidatesEntered = 0;
+
+      const inputs = document.querySelectorAll('.vote-input-dual[id^="roundInput_"]');
+      inputs.forEach(inp => {
+        const valStr = inp.value.trim();
+        if (valStr !== '') {
+          const val = parseInt(valStr);
+          if (!isNaN(val) && val >= 0) {
+            const cid = inp.getAttribute('data-cand-id');
+            votesMap[cid] = val;
+            totalCandidatesEntered++;
+          }
         }
       });
 
-      if (!hasValue) {
-        alert('Please enter votes for at least one candidate before saving.');
+      if (totalCandidatesEntered === 0) {
+        alert(`Please enter votes for at least one contestant in ${currentSelectedRound} before saving.`);
         return;
       }
+
+      const saveBtn = document.getElementById('btnSaveVotes');
+      saveBtn.disabled = true;
+      saveBtn.innerText = '⏳ Saving...';
 
       try {
         const resp = await fetch('/api/save_votes', {
@@ -1565,32 +1918,32 @@
           body: JSON.stringify({
             category: cat,
             block: blk,
-            ward_no: wardNo,
-            round_key: roundKey,
+            round_key: currentSelectedRound,
             votes: votesMap
           })
         });
 
+        if (resp.status === 401) {
+          alert('Session expired or login needed. Please log in with password: salumber2026');
+          showAuthModal();
+          return;
+        }
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
-          showToast(`✅ Saved votes for ${roundKey} (${cat} Ward ${wardNo})!`);
+          showToast(`✅ ${res.message || 'Saved round votes successfully!'}`);
           await loadMasterData();
-
-          // Auto-advance to next booth in dropdown
-          const sel = document.getElementById('selectBoothDropdown');
-          if (sel && sel.selectedIndex < sel.options.length - 1) {
-            sel.selectedIndex += 1;
-            onBoothDropdownChanged();
-          } else {
-            refreshEntryView();
-          }
+          renderRoundEntrySheet();
         } else {
-          alert('Error: ' + (res.detail || 'Could not save votes.'));
+          alert('Error: ' + (res.detail || 'Could not save round votes.'));
         }
       } catch (e) {
         alert('Network connection error: ' + e);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerText = '💾 SAVE ROUND VOTES';
       }
     }
+
 
     // TAB 2: DECLARE WARD WINNER
     function onDeclareScopeChanged() {
@@ -1712,9 +2065,10 @@
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
           alert("✓ All test votes have been reset to 0! All declared wards reopened.");
-          clearCurrentInputs();
+          // reset inputs
+
           await loadMasterData();
-          refreshEntryView();
+          renderRoundPills(); populateWardFilterPills(); renderRoundEntrySheet();
           if (document.getElementById('panelDeclare').style.display !== 'none') {
             loadDeclareWardsTable();
           }
@@ -1723,6 +2077,17 @@
         }
       } catch (e) {
         alert("Error resetting test data: " + e.message);
+      }
+    }
+
+    
+    function resolveTiePrompt(cat, blk, wno, leaderName, runnerUpName, votes) {
+      var msg = 'TIE DETECTED in Ward ' + wno + ' (' + votes + ' votes each) between:\n1) ' + leaderName + '\n2) ' + runnerUpName + '\n\nUnder SEC Election Rules, a tie is resolved by drawing lots in presence of the Returning Officer (RO).\nType 1 to declare ' + leaderName + ' as winner by lot.\nType 2 to declare ' + runnerUpName + ' as winner by lot.';
+      var winner = prompt(msg);
+      if (winner === '1') {
+        declareWardWinner(cat, blk, wno, leaderName);
+      } else if (winner === '2') {
+        declareWardWinner(cat, blk, wno, runnerUpName);
       }
     }
 
@@ -1862,6 +2227,407 @@
       t.style.display = 'block';
       setTimeout(() => { t.style.display = 'none'; }, 3000);
     }
+  
+    // =========================================================================
+    // ROUND DECLARATION & EKZAI (एकजाई) LOGIC
+    // =========================================================================
+    function isCurrentRoundDeclared() {
+      const cat = document.getElementById('entryCategory')?.value || activeCategory;
+      const blk = cat === 'ZP' ? 'Salumber ZP' : (document.getElementById('entryBlock')?.value || activeBlock);
+      const declKey = cat + '_' + blk;
+      const declaredList = (masterData.declared_rounds && masterData.declared_rounds[declKey]) || [];
+      return declaredList.includes(currentSelectedRound);
+    }
+
+    function updateRoundDeclarationUI() {
+      const isDecl = isCurrentRoundDeclared();
+      const badge = document.getElementById('roundDeclarationBadge');
+      const btn = document.getElementById('btnDeclareRound');
+      const rName = currentSelectedRound === 'PB' ? 'Postal Ballots (PB)' : currentSelectedRound;
+
+      if (badge) {
+        if (isDecl) {
+          badge.className = 'badge';
+          badge.style.background = '#dcfce7';
+          badge.style.color = '#15803d';
+          badge.style.border = '1px solid #86efac';
+          badge.innerHTML = `🟢 ${rName} DECLARED OFFICIAL`;
+        } else {
+          badge.className = 'badge';
+          badge.style.background = '#fef3c7';
+          badge.style.color = '#b45309';
+          badge.style.border = '1px solid #f59e0b';
+          badge.innerHTML = `⏳ ${rName} In-Progress (Not Declared)`;
+        }
+      }
+
+      if (btn) {
+        if (isDecl) {
+          btn.innerText = '🔓 Unlock / Reopen Round';
+          btn.style.background = '#b45309';
+          btn.style.borderColor = '#92400e';
+        } else {
+          btn.innerText = `📢 DECLARE ${rName} RESULTS`;
+          btn.style.background = '#1e3a8a';
+          btn.style.borderColor = '#172554';
+        }
+      }
+    }
+
+    function toggleDeclareRoundClick() {
+      if (isCurrentRoundDeclared()) {
+        reopenCurrentRound();
+      } else {
+        confirmDeclareRound();
+      }
+    }
+
+    async function confirmDeclareRound() {
+      const cat = document.getElementById('entryCategory').value;
+      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+      const rName = currentSelectedRound === 'PB' ? 'Postal Ballots (PB)' : currentSelectedRound;
+
+      if (!confirm(`📢 OFFICIALLY DECLARE ${rName} RESULTS for ${cat} ${blk}?\n\nThis will:\n1) Mark ${rName} as officially declared\n2) Generate the official Ekzai Statement (एकजाई पत्रक)\n3) Broadcast declared round results to all TV displays across the counting center.`)) {
+        return;
+      }
+
+      try {
+        const resp = await fetch('/api/declare_round', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          body: JSON.stringify({ category: cat, block: blk, round_key: currentSelectedRound })
+        });
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          showToast(`📢 ${res.message}`);
+          await loadMasterData();
+          renderRoundPills();
+          renderRoundEntrySheet();
+          openRoundEkzaiModal();
+        } else {
+          alert('Error: ' + (res.detail || 'Could not declare round. Please ensure votes are entered first.'));
+        }
+      } catch (e) {
+        alert('Network error: ' + e);
+      }
+    }
+
+    async function reopenCurrentRound() {
+      const cat = document.getElementById('entryCategory').value;
+      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+      const rName = currentSelectedRound === 'PB' ? 'Postal Ballots (PB)' : currentSelectedRound;
+
+      if (!confirm(`Unlock / Reopen ${rName} for ${cat} ${blk} to make corrections?`)) return;
+
+      try {
+        const resp = await fetch('/api/reopen_round', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          body: JSON.stringify({ category: cat, block: blk, round_key: currentSelectedRound })
+        });
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          showToast(`🔓 ${res.message}`);
+          await loadMasterData();
+          renderRoundPills();
+          renderRoundEntrySheet();
+        } else {
+          alert('Error: ' + (res.detail || 'Could not reopen round.'));
+        }
+      } catch (e) {
+        alert('Network error: ' + e);
+      }
+    }
+
+    async function openRoundEkzaiModal() {
+      const cat = document.getElementById('entryCategory').value;
+      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
+      const rKey = currentSelectedRound;
+
+      document.getElementById('ekzaiModal').style.display = 'flex';
+      document.getElementById('ekzaiTitle').innerText = `${cat === 'ZP' ? 'जिला परिषद' : 'पंचायत समिति'} ${blk} — ${rKey === 'PB' ? 'डाक मतपत्र (Postal Ballots)' : rKey} एकजाई पत्रक`;
+      document.getElementById('ekzaiSubtitle').innerText = `Loading compiled round data...`;
+
+      try {
+        const resp = await fetch(`/api/round_ekzai?category=${cat}&block=${blk}&round_key=${rKey}`);
+        const data = await resp.json();
+        if (!resp.ok || data.status !== 'success') {
+          document.getElementById('ekzaiContent').innerHTML = `<p style="color:var(--danger); padding:20px;">Could not load Ekzai: ${data.detail || 'Error'}</p>`;
+          return;
+        }
+
+        const isDecl = data.is_declared;
+        document.getElementById('ekzaiSubtitle').innerHTML = `
+          <span>Status: <strong>${isDecl ? '🟢 OFFICIALLY DECLARED (घोषित)' : '⏳ DRAFT / IN-PROGRESS'}</strong></span>
+          ${data.declared_at ? `<span style="margin-left:12px;">Declared At: ${data.declared_at}</span>` : ''}
+        `;
+
+        let html = '';
+        data.wards.forEach(w => {
+          html += `
+            <div style="background:#ffffff; border:1px solid var(--border-main); border-radius:8px; margin-bottom:14px; overflow:hidden;">
+              <div style="background:#f8fafc; border-bottom:1px solid var(--border-subtle); padding:8px 14px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:14px; font-weight:800; color:#0f172a;">वार्ड संख्या: ${w.ward_no}</span>
+                <span style="font-size:12px; font-weight:700; color:${w.margin > 0 ? '#15803d' : '#64748b'};">
+                  ${w.margin > 0 ? `🟢 बढ़त: ${w.leader_name} (${w.leader_party}) +${w.margin} मत` : 'स्थिति: बराबरी / कोई मत नहीं'}
+                </span>
+              </div>
+              <table class="table" style="margin:0;">
+                <thead>
+                  <tr style="background:#f1f5f9;">
+                    <th style="width:50px;">#</th>
+                    <th>प्रत्याशी का नाम (Candidate)</th>
+                    <th style="width:75px;">दल</th>
+                    <th style="width:110px; text-align:right;">पूर्व दौर तक कुल</th>
+                    <th style="width:120px; text-align:right; color:var(--primary);">इस दौर के मत</th>
+                    <th style="width:120px; text-align:right; color:#0369a1;">प्रगतिशील कुल मत</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          w.candidates.forEach(c => {
+            const isLeader = (c.name_hindi === w.leader_name && w.margin > 0);
+            html += `
+              <tr style="${isLeader ? 'background:#f0fdf4;' : ''}">
+                <td style="font-weight:700;">#${c.ballot_no || '-'}</td>
+                <td style="font-weight:700;">${c.name_hindi} ${isLeader ? '🟢' : ''}</td>
+                <td><span class="party-pill party-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
+                <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:700;">${c.prev_votes}</td>
+                <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:800; color:var(--primary);">${c.current_round_votes}</td>
+                <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:800; color:#0369a1;">${c.cumul_votes}</td>
+              </tr>
+            `;
+          });
+
+          html += `</tbody></table></div>`;
+        });
+
+        document.getElementById('ekzaiContent').innerHTML = html;
+      } catch (e) {
+        document.getElementById('ekzaiContent').innerHTML = `<p style="color:var(--danger); padding:20px;">Error loading Ekzai: ${e}</p>`;
+      }
+    }
+
+    function closeRoundEkzaiModal() {
+      document.getElementById('ekzaiModal').style.display = 'none';
+    }
+
+
+    // =========================================================================
+    // TAB 4: COUNTING HALLS & TABLES SETUP LOGIC
+    // =========================================================================
+    async function loadHallsConfigDashboard() {
+      const container = document.getElementById('hallsGrid');
+      if (!container) return;
+      container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-dim);">Loading hall configurations...</div>';
+
+      try {
+        const resp = await fetch('/api/hall_summary');
+        const data = await resp.json();
+        if (!resp.ok || data.status !== 'success') {
+          container.innerHTML = '<div style="color:var(--danger); padding:20px;">Could not load hall summary.</div>';
+          return;
+        }
+
+        let html = '';
+        data.halls.forEach(h => {
+          const isZP = h.category === 'ZP';
+          html += `
+            <div class="card" style="border:1px solid var(--border-main); padding:16px; display:flex; flex-direction:column; justify-content:space-between; gap:12px;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="badge badge-gold" style="font-weight:800;">
+                    PANCHAYAT SAMITI RO CELL
+                  </span>
+                  <span style="font-size:12px; font-weight:700; color:var(--text-muted);">
+                    ${h.total_wards} PS Wards • ${h.total_booths} Booths
+                  </span>
+                </div>
+                <h3 style="font-size:18px; font-weight:800; color:var(--text-main); margin-top:8px;">
+                  ${h.block_name}
+                </h3>
+                <div style="font-size:11px; font-weight:700; color:#0369a1; background:#e0f2fe; padding:3px 8px; border-radius:5px; margin-top:4px; display:inline-block;">
+                  🏛️ Counts ZP Wards: ${(BLOCK_ZP_WARDS[h.block_name] || []).join(', ')} (Same CU Machines)
+                </div>
+                <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                  <span style="font-size:11px; background:#f1f5f9; padding:4px 8px; border-radius:6px; font-weight:700; color:var(--text-main);">
+                    Current Tables: ${h.min_tables === h.max_tables ? h.min_tables + ' Tables/Ward' : h.min_tables + '-' + h.max_tables + ' Tables'}
+                  </span>
+                  <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:4px 8px; border-radius:6px; font-weight:800;">
+                    Calculated: ${h.min_rounds === h.max_rounds ? h.max_rounds + ' Rounds' : h.min_rounds + ' to ' + h.max_rounds + ' Rounds'}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Quick Table Config Form -->
+              <div style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:8px; padding:12px;">
+                <label style="font-size:11px; font-weight:700; color:var(--text-main); display:block; margin-bottom:6px;">
+                  Configure Counting Tables for ${h.block_name}:
+                </label>
+                <div style="display:flex; gap:6px; margin-bottom:8px;">
+                  <select id="hallMode_${h.category}_${h.block_name.replace(/\s+/g,'_')}" class="form-select" style="font-size:12px; padding:5px 8px; font-weight:700;">
+                    <option value="HALL_POOL" selected>Hall-Wide Tables (ECI/SEC Pool)</option>
+                    <option value="PER_WARD">Tables per Ward (Simultaneous)</option>
+                  </select>
+                  <input type="number" id="hallTables_${h.category}_${h.block_name.replace(/\s+/g,'_')}" 
+                    value="${h.max_tables || 14}" min="1" max="50" class="form-input" style="width:75px; font-size:13px; padding:5px 8px; text-align:center; font-weight:800; color:#0284c7;">
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <button onclick="toggleHallWardDetails('${h.category}', '${h.block_name}')" class="btn btn-outline" style="font-size:11px; padding:5px 10px;">
+                    🔍 Ward Details
+                  </button>
+                  <button onclick="saveHallTableConfig('${h.category}', '${h.block_name}')" class="btn btn-primary" style="font-size:11px; padding:6px 14px; font-weight:800;">
+                    💾 Apply & Recalculate
+                  </button>
+                </div>
+              </div>
+
+              <!-- Collapsible Ward Breakdown -->
+              <div id="wardDetails_${h.category}_${h.block_name.replace(/\s+/g,'_')}" style="display:none; margin-top:8px; border-top:1px solid var(--border-main); padding-top:10px;">
+                <div id="wardDetailsContent_${h.category}_${h.block_name.replace(/\s+/g,'_')}" style="font-size:11px;">
+                  Loading ward details...
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = `<div style="color:var(--danger); padding:20px;">Network error: ${e}</div>`;
+      }
+    }
+
+    async function saveHallTableConfig(category, block) {
+      const key = `${category}_${block.replace(/\s+/g,'_')}`;
+      const mode = document.getElementById(`hallMode_${key}`).value;
+      const tables = parseInt(document.getElementById(`hallTables_${key}`).value) || 5;
+
+      try {
+        const payload = {
+          category: category,
+          block: block,
+          calc_mode: mode,
+          counting_tables: tables,
+          hall_tables: tables
+        };
+
+        const resp = await fetch('/api/bulk_apply_hall_config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          body: JSON.stringify(payload)
+        });
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          showToast(`✅ ${res.message}`);
+          await loadMasterData();
+          loadHallsConfigDashboard();
+        } else {
+          alert('Error: ' + (res.detail || 'Could not update hall tables.'));
+        }
+      } catch (e) {
+        alert('Network error: ' + e);
+      }
+    }
+
+    async function toggleHallWardDetails(category, block) {
+      const key = `${category}_${block.replace(/\s+/g,'_')}`;
+      const el = document.getElementById(`wardDetails_${key}`);
+      const contentEl = document.getElementById(`wardDetailsContent_${key}`);
+      if (!el) return;
+
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+        return;
+      }
+
+      el.style.display = 'block';
+      contentEl.innerHTML = 'Loading wards...';
+
+      try {
+        const resp = await fetch(`/api/ward_configs?category=${category}&block=${encodeURIComponent(block)}`);
+        const data = await resp.json();
+        if (!resp.ok || !data.wards) {
+          contentEl.innerHTML = 'Could not load wards.';
+          return;
+        }
+
+        let wHtml = `
+          <table class="table" style="font-size:11px; margin:0;">
+            <thead>
+              <tr style="background:#f1f5f9;">
+                <th>Ward</th>
+                <th style="text-align:right;">Booths</th>
+                <th style="text-align:right;">Tables</th>
+                <th style="text-align:right;">Rounds</th>
+                <th style="text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        data.wards.forEach(w => {
+          wHtml += `
+            <tr>
+              <td style="font-weight:700;">W${w.ward_no}</td>
+              <td style="text-align:right;">
+                <input type="number" id="wBooths_${w.id}" value="${w.total_booths}" min="1" style="width:45px; font-size:11px; text-align:center; padding:2px;">
+              </td>
+              <td style="text-align:right;">
+                <input type="number" id="wTables_${w.id}" value="${w.counting_tables}" min="1" style="width:45px; font-size:11px; text-align:center; padding:2px;">
+              </td>
+              <td style="text-align:right; font-weight:800; color:var(--primary);">${w.max_rounds}R</td>
+              <td style="text-align:center;">
+                <button onclick="saveWardCustomConfig(${w.id}, '${category}', '${block}', ${w.ward_no})" class="btn btn-outline" style="padding:2px 6px; font-size:10px;">
+                  💾 Save
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        wHtml += `</tbody></table>`;
+        contentEl.innerHTML = wHtml;
+      } catch (e) {
+        contentEl.innerHTML = `Error: ${e}`;
+      }
+    }
+
+    async function saveWardCustomConfig(wid, cat, blk, wno) {
+      const booths = parseInt(document.getElementById(`wBooths_${wid}`)?.value) || 5;
+      const tables = parseInt(document.getElementById(`wTables_${wid}`)?.value) || 5;
+
+      try {
+        const resp = await fetch('/api/save_ward_config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          body: JSON.stringify({
+            category: cat,
+            block: blk,
+            ward_no: wno,
+            total_booths: booths,
+            counting_tables: tables
+          })
+        });
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          showToast(`✓ Updated Ward ${wno}: ${tables} Tables -> ${res.max_rounds} Rounds`);
+          await loadMasterData();
+          loadHallsConfigDashboard();
+        } else {
+          alert('Error: ' + (res.detail || 'Could not save ward.'));
+        }
+      } catch (e) {
+        alert('Network error: ' + e);
+      }
+    }
+
+  
+    function quickSwitchCategory(targetCat) {
+      setEntryCategory(targetCat);
+    }
+
   </script>
 </body>
 </html>

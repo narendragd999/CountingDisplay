@@ -1,3 +1,14 @@
+
+BLOCK_ZP_MAPPING = {
+    'Geengla': [13, 14, 15],
+    'Jaisamand': [1, 2, 3],
+    'Jhallara': [19, 20, 21],
+    'Lasadiya': [16, 17, 18],
+    'Salumbar': [10, 11, 12, 13],
+    'Sarada': [1, 4, 5, 6],
+    'Semari': [7, 8, 9]
+}
+
 import hashlib
 # app.py
 """
@@ -47,6 +58,12 @@ def get_user_by_token(token: str):
     if "_" in token:
         parts = token.rsplit("_", 1)
         username, token_hash = parts[0], parts[1]
+
+        # Immediate check for portal password admin token
+        portal_admin_hash = hashlib.sha256(f"admin_{PORTAL_PASSWORD}_salumber_salt_2026".encode()).hexdigest()
+        if username == "admin" and token_hash == portal_admin_hash:
+            return {"username": "admin", "role": "ADMIN", "assigned_block": None, "display_name": "District Super Admin"}
+
         try:
             conn = get_db()
             cursor = conn.cursor()
@@ -57,6 +74,9 @@ def get_user_by_token(token: str):
                 u_dict = dict(user)
                 expected_hash = hashlib.sha256(f"{u_dict['username']}_{u_dict['password']}_salumber_salt_2026".encode()).hexdigest()
                 if token_hash == expected_hash:
+                    return u_dict
+                # Fallback for admin with portal password
+                if username == "admin" and token_hash == portal_admin_hash:
                     return u_dict
         except Exception:
             return None
@@ -167,6 +187,58 @@ def init_database():
         details TEXT
     )
     """)
+
+        # 5b. Round Declarations Table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS round_declarations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        category TEXT NOT NULL,
+        block_name TEXT NOT NULL,
+        round_key TEXT NOT NULL,
+        status TEXT DEFAULT 'DECLARED',
+        declared_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        total_votes_counted INTEGER DEFAULT 0,
+        UNIQUE(category, block_name, round_key)
+    )
+    """)
+
+    # 6. System Settings
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS system_settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+    )
+    """)
+    cursor.execute("INSERT OR IGNORE INTO system_settings (key, value) VALUES ('system_mode', 'TEST')")
+
+    # 7. Users Table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        role TEXT NOT NULL,
+        assigned_block TEXT,
+        display_name TEXT,
+        is_active INTEGER DEFAULT 1
+    )
+    """)
+
+    # Seed default users if empty
+    cursor.execute("SELECT COUNT(*) FROM users")
+    if cursor.fetchone()[0] == 0:
+        default_users = [
+            ('admin', 'salumber@admin', 'ADMIN', None, 'District Super Admin'),
+            ('zp_operator', 'zp2026', 'ZP', None, 'Zilla Parishad Operator'),
+            ('op_geengla', 'geengla2026', 'PS', 'Geengla', 'Geengla Hall Operator'),
+            ('op_jaisamand', 'jaisamand2026', 'PS', 'Jaisamand', 'Jaisamand Hall Operator'),
+            ('op_jhallara', 'jhallara2026', 'PS', 'Jhallara', 'Jhallara Hall Operator'),
+            ('op_lasadiya', 'lasadiya2026', 'PS', 'Lasadiya', 'Lasadiya Hall Operator'),
+            ('op_salumbar', 'salumbar2026', 'PS', 'Salumbar', 'Salumbar Hall Operator'),
+            ('op_sarada', 'sarada2026', 'PS', 'Sarada', 'Sarada Hall Operator'),
+            ('op_semari', 'semari2026', 'PS', 'Semari', 'Semari Hall Operator')
+        ]
+        cursor.executemany("INSERT OR IGNORE INTO users (username, password, role, assigned_block, display_name) VALUES (?, ?, ?, ?, ?)", default_users)
 
     conn.commit()
 
@@ -346,6 +418,17 @@ def calculate_full_state():
         # Build round progression table
         round_table = []
         c2_rounds = c2.get('roundVotes', {})
+        if (c1.get('pb_votes') or 0) > 0 or (c2.get('pb_votes') or 0) > 0:
+            pb1 = c1.get('pb_votes') or 0
+            pb2 = c2.get('pb_votes') or 0
+            round_table.append({
+                'round': 'PB',
+                'roundNo': 0,
+                'winnerVotes': pb1,
+                'runnerVotes': pb2,
+                'diff': pb1 - pb2,
+                'isCompleted': True
+            })
         for r in range(1, w['max_rounds'] + 1):
             r_key = f'R{r}'
             v1 = c1_rounds.get(r_key)
@@ -395,7 +478,7 @@ def calculate_full_state():
             'margin': margin,
             'hasVotes': has_votes,
             'roundTable': round_table,
-            'candidates': [{'id': x.get('id'), 'name': x['name_hindi'], 'party': normalize_party(x['party']), 'totalVotes': x['total_votes'], 'ballotNo': x.get('ballot_no', 1)} for x in sorted(cands, key=lambda k: (k.get('ballot_no') or 99))]
+            'candidates': [{'id': x.get('id'), 'name': x['name_hindi'], 'party': normalize_party(x['party']), 'totalVotes': x['total_votes'], 'ballotNo': x.get('ballot_no', 1), 'roundVotes': x.get('roundVotes', {})} for x in sorted(cands, key=lambda k: (k.get('ballot_no') or 99))]
         }
 
         # Update tallies & ticker strictly when votes exist
@@ -420,6 +503,17 @@ def calculate_full_state():
         else:
             ps_wards.append(ward_obj)
 
+    # Fetch Declared Rounds
+    cursor.execute("SELECT category, block_name, round_key, declared_at FROM round_declarations")
+    declared_rounds_map = {}
+    for r in cursor.fetchall():
+        key = f"{r['category']}_{r['block_name']}"
+        if key not in declared_rounds_map:
+            declared_rounds_map[key] = []
+        declared_rounds_map[key].append(r['round_key'])
+        r_display = "Postal Ballots (डाक मतपत्र)" if r['round_key'] == 'PB' else f"दौर {r['round_key'].replace('R','')}"
+        ticker_items.insert(0, f"📢 {r['block_name']} ({r['category']}) {r_display} परिणाम घोषित!")
+
     if not ticker_items:
         ticker_items = [
             "★ सलूंबर जिला परिषद एवं 7 पंचायत समितियों के मतगणना परिणाम लाइव",
@@ -428,6 +522,7 @@ def calculate_full_state():
 
     return {
         'status': 'success',
+        'declaredRounds': declared_rounds_map,
         'district': 'Salumber (सलूंबर)',
         'election': 'Panchayati Raj Elections 2026',
         'timestamp': datetime.now().strftime('%H:%M:%S'),
@@ -650,10 +745,14 @@ async def save_votes(payload: dict, request: Request):
     """
     category = payload.get('category')
     block = payload.get('block')
-    ward_no = int(payload.get('ward_no', 1))
+    raw_ward = payload.get('ward_no')
+    ward_no = int(raw_ward) if raw_ward is not None and str(raw_ward).strip() != '' else None
     round_key = str(payload.get('round_key', 'R1')).upper()
     votes_dict = payload.get('votes', {})
     declare = bool(payload.get('declare', False))
+    declared_wards = payload.get('declared_wards', [])
+    if ward_no and declare and ward_no not in declared_wards:
+        declared_wards.append(ward_no)
 
     conn = get_db()
     cursor = conn.cursor()
@@ -688,20 +787,21 @@ async def save_votes(payload: dict, request: Request):
                 cursor.execute("DELETE FROM votes WHERE candidate_id = ? AND round_key = ?", (cid, round_key))
 
         # Handle declare winner with strict data check
-        if declare:
-            cursor.execute("""
-            SELECT COALESCE(SUM(v.votes_count), 0)
-            FROM candidates c
-            JOIN votes v ON c.id = v.candidate_id
-            WHERE c.category = ? AND c.block_name = ? AND c.ward_no = ?
-            """, (category, block, ward_no))
-            total_ward_votes = cursor.fetchone()[0]
-            if total_ward_votes <= 0:
-                raise HTTPException(status_code=400, detail="Cannot declare ward without entered votes! At least one round of votes must be counted.")
-            cursor.execute("""
-            UPDATE wards SET status = 'DECLARED'
-            WHERE category = ? AND block_name = ? AND ward_no = ?
-            """, (category, block, ward_no))
+        if declared_wards:
+            for d_wno in declared_wards:
+                cursor.execute("""
+                SELECT COALESCE(SUM(v.votes_count), 0)
+                FROM candidates c
+                JOIN votes v ON c.id = v.candidate_id
+                WHERE c.category = ? AND c.block_name = ? AND c.ward_no = ?
+                """, (category, block, d_wno))
+                total_ward_votes = cursor.fetchone()[0]
+                if total_ward_votes <= 0:
+                    raise HTTPException(status_code=400, detail=f"Cannot declare Ward {d_wno} without entered votes! At least one round of votes must be counted.")
+                cursor.execute("""
+                UPDATE wards SET status = 'DECLARED'
+                WHERE category = ? AND block_name = ? AND ward_no = ?
+                """, (category, block, d_wno))
 
         # Log action
         cursor.execute("""
@@ -729,7 +829,7 @@ async def save_votes(payload: dict, request: Request):
 
     return {
         'status': 'success',
-        'message': f"Saved {round_key} votes for {category} {block} Ward {ward_no}!",
+        'message': f"Saved {round_key} votes for {category} {block} ({f'Ward {ward_no}' if ward_no else f'{len(votes_dict)} candidates'})!",
         'declared': declare
     }
 
@@ -839,7 +939,7 @@ def get_all_candidates_master():
         if cid not in votes_map: votes_map[cid] = {}
         votes_map[cid][vr['round_key']] = vr['votes_count']
 
-    cursor.execute("SELECT block_name, booth_no, booth_name_hi, booth_name_en, ps_ward, zp_ward, total_elector FROM booths")
+    cursor.execute("SELECT block_name, booth_no, booth_name_hi, booth_name_en, ps_ward, zp_ward, total_elector, table_no, round_no FROM booths")
     b_rows = [dict(r) for r in cursor.fetchall()]
     conn.close()
     return {
@@ -1036,6 +1136,32 @@ async def add_candidate(payload: dict, request: Request):
     asyncio.create_task(broadcast_live_update())
     return {'status': 'success', 'message': f"Added candidate {name} ({party}) to {category} {block} Ward {ward_no}!"}
 
+@app.get("/api/hall_summary")
+def get_hall_summary():
+    """Returns counting hall overview and table setups for each Panchayat Samiti and Zilla Parishad."""
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT 
+        category,
+        block_name,
+        COUNT(*) as total_wards,
+        SUM(total_booths) as total_booths,
+        MIN(total_booths) as min_booths,
+        MAX(total_booths) as max_booths,
+        MIN(counting_tables) as min_tables,
+        MAX(counting_tables) as max_tables,
+        MIN(max_rounds) as min_rounds,
+        MAX(max_rounds) as max_rounds
+    FROM wards
+    WHERE category = 'PS'
+    GROUP BY category, block_name
+    ORDER BY block_name ASC
+    """)
+    rows = [dict(r) for r in cursor.fetchall()]
+    conn.close()
+    return {'status': 'success', 'halls': rows}
+
 @app.get("/api/ward_configs")
 def get_ward_configs(category: Optional[str] = None, block: Optional[str] = None):
     """Returns ward configuration: booths, counting tables, max rounds, electorate, etc."""
@@ -1107,7 +1233,9 @@ async def bulk_apply_hall_config(payload: dict, request: Request):
     import math
     category = payload.get('category')
     block = payload.get('block')
+    calc_mode = payload.get('calc_mode', 'PER_WARD')  # 'PER_WARD' or 'HALL_POOL'
     tables = max(1, int(payload.get('counting_tables', 5)))
+    hall_tables = max(1, int(payload.get('hall_tables', 14)))
     default_booths = payload.get('default_booths')
 
     conn = get_db()
@@ -1123,25 +1251,66 @@ async def bulk_apply_hall_config(payload: dict, request: Request):
         cursor.execute("SELECT id, total_booths FROM wards WHERE category = 'PS'")
 
     rows = cursor.fetchall()
-    for r in rows:
-        wid = r['id']
-        if default_booths and int(default_booths) > 0:
-            b_count = int(default_booths)
-        else:
-            b_count = max(1, int(r['total_booths'] or 15))
-        m_rounds = math.ceil(b_count / tables)
-        cursor.execute("UPDATE wards SET counting_tables = ?, total_booths = ?, max_rounds = ?, is_setup_done = 1 WHERE id = ?", (tables, b_count, m_rounds, wid))
+    if not rows:
+        conn.close()
+        raise HTTPException(status_code=404, detail="No matching wards found.")
+
+    if calc_mode == 'HALL_POOL':
+        total_block_booths = sum(int(r['total_booths'] or 5) for r in rows)
+        common_rounds = max(1, math.ceil(total_block_booths / hall_tables))
+        for r in rows:
+            wid = r['id']
+            cursor.execute("""
+            UPDATE wards 
+            SET counting_tables = ?, max_rounds = ?, is_setup_done = 1 
+            WHERE id = ?
+            """, (hall_tables, common_rounds, wid))
+
+        # Also synchronize corresponding ZP wards counted in this same Panchayat Samiti RO cell!
+        if block and block in BLOCK_ZP_MAPPING:
+            zp_w_list = BLOCK_ZP_MAPPING[block]
+            placeholders = ','.join(['?'] * len(zp_w_list))
+            cursor.execute(f"""
+            UPDATE wards 
+            SET counting_tables = ?, max_rounds = ?, is_setup_done = 1 
+            WHERE category = 'ZP' AND ward_no IN ({placeholders})
+            """, [hall_tables, common_rounds] + zp_w_list)
+
+        # Update booth table_no and round_no for this block
+        if block:
+            cursor.execute("SELECT id, booth_no FROM booths WHERE block_name = ? ORDER BY CAST(booth_no AS INTEGER)", (block,))
+            b_list = cursor.fetchall()
+            for idx, brow in enumerate(b_list):
+                t_no = (idx % hall_tables) + 1
+                r_no = math.ceil((idx + 1) / hall_tables)
+                cursor.execute("UPDATE booths SET table_no = ?, round_no = ? WHERE id = ?", (t_no, r_no, brow['id']))
+    else:
+        for r in rows:
+            wid = r['id']
+            if default_booths and int(default_booths) > 0:
+                b_count = int(default_booths)
+            else:
+                b_count = max(1, int(r['total_booths'] or 15))
+            m_rounds = max(1, math.ceil(b_count / tables))
+            cursor.execute("""
+            UPDATE wards 
+            SET counting_tables = ?, total_booths = ?, max_rounds = ?, is_setup_done = 1 
+            WHERE id = ?
+            """, (tables, b_count, m_rounds, wid))
 
     cursor.execute("""
     INSERT INTO audit_log (action, details)
     VALUES (?, ?)
-    """, ("BULK_HALL_CONFIG", f"Set {tables} tables for {category or block or 'All PS'}"))
+    """, ("BULK_HALL_CONFIG", f"Configured {category or block} ({calc_mode}): Tables={hall_tables if calc_mode=='HALL_POOL' else tables}"))
 
     conn.commit()
     conn.close()
 
     asyncio.create_task(broadcast_live_update())
-    return {'status': 'success', 'message': f"Configured {tables} counting tables for {len(rows)} wards!"}
+    return {
+        'status': 'success', 
+        'message': f"Configured counting tables and updated rounds for {len(rows)} wards in {block or category}!"
+    }
 
 @app.get("/api/export_csv")
 def export_csv():
@@ -1196,3 +1365,171 @@ if __name__ == "__main__":
     print("   Admin & Candidates  : http://localhost:8000/admin")
     print("=" * 70)
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
+
+
+@app.post("/api/declare_round")
+async def declare_round(payload: dict, request: Request):
+    """Declares/finalizes official round results and triggers Ekzai release."""
+    check_auth(request)
+    category = payload.get('category')
+    block = payload.get('block')
+    round_key = str(payload.get('round_key', 'R1')).upper()
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Check if votes are entered for this round
+    cursor.execute("""
+    SELECT COALESCE(SUM(v.votes_count), 0), COUNT(DISTINCT v.candidate_id)
+    FROM votes v
+    JOIN candidates c ON v.candidate_id = c.id
+    WHERE c.category = ? AND c.block_name = ? AND v.round_key = ?
+    """, (category, block, round_key))
+    row = cursor.fetchone()
+    total_votes = row[0] or 0
+    entered_cands = row[1] or 0
+
+    if total_votes <= 0 and entered_cands == 0:
+        conn.close()
+        raise HTTPException(status_code=400, detail=f"Cannot declare {round_key}: No votes have been entered yet for {category} {block}!")
+
+    cursor.execute("""
+    INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted)
+    VALUES (?, ?, ?, 'DECLARED', ?)
+    ON CONFLICT(category, block_name, round_key) DO UPDATE SET 
+        status = 'DECLARED',
+        declared_at = CURRENT_TIMESTAMP,
+        total_votes_counted = excluded.total_votes_counted
+    """, (category, block, round_key, total_votes))
+
+    cursor.execute("""
+    INSERT INTO audit_log (action, details)
+    VALUES (?, ?)
+    """, ("DECLARE_ROUND", f"Declared {round_key} for {category} {block} with {total_votes} total votes across {entered_cands} candidates."))
+
+    conn.commit()
+    conn.close()
+
+    asyncio.create_task(broadcast_live_update())
+    r_title = "Postal Ballots (PB)" if round_key == 'PB' else f"Round {round_key.replace('R','')}"
+    return {
+        'status': 'success',
+        'message': f"📢 {category} {block} {r_title} has been officially DECLARED!",
+        'round_key': round_key,
+        'total_votes': total_votes
+    }
+
+@app.post("/api/reopen_round")
+async def reopen_round(payload: dict, request: Request):
+    """Reopens a declared round back to in-progress for corrections."""
+    check_auth(request)
+    category = payload.get('category')
+    block = payload.get('block')
+    round_key = str(payload.get('round_key', 'R1')).upper()
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+    DELETE FROM round_declarations 
+    WHERE category = ? AND block_name = ? AND round_key = ?
+    """, (category, block, round_key))
+
+    cursor.execute("""
+    INSERT INTO audit_log (action, details)
+    VALUES (?, ?)
+    """, ("REOPEN_ROUND", f"Reopened {round_key} for {category} {block} for modifications."))
+
+    conn.commit()
+    conn.close()
+
+    asyncio.create_task(broadcast_live_update())
+    return {
+        'status': 'success',
+        'message': f"Unlocked {round_key} for {category} {block}. You may now edit votes."
+    }
+
+@app.get("/api/round_ekzai")
+def get_round_ekzai(category: str, block: str, round_key: str):
+    """Generates official Consolidated Ekzai (एकजाई) Statement for a specific round."""
+    round_key = round_key.upper()
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Check declaration status
+    cursor.execute("""
+    SELECT status, declared_at, total_votes_counted 
+    FROM round_declarations 
+    WHERE category = ? AND block_name = ? AND round_key = ?
+    """, (category, block, round_key))
+    decl_row = cursor.fetchone()
+    is_declared = bool(decl_row)
+    declared_at = decl_row['declared_at'] if decl_row else None
+
+    # Fetch all candidates and their round votes
+    cursor.execute("""
+    SELECT c.id, c.ward_no, c.name_hindi, c.party, c.ballot_no,
+           COALESCE(v.votes_count, 0) as current_round_votes
+    FROM candidates c
+    LEFT JOIN votes v ON c.id = v.candidate_id AND v.round_key = ?
+    WHERE c.category = ? AND c.block_name = ?
+    ORDER BY c.ward_no, c.ballot_no
+    """, (round_key, category, block))
+    cand_rows = [dict(r) for r in cursor.fetchall()]
+
+    # Fetch previous votes for cumulative calculation
+    order = ['PB', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10']
+    target_idx = order.index(round_key) if round_key in order else 0
+    preceding_keys = order[:target_idx]
+
+    prev_votes_map = {}
+    if preceding_keys:
+        placeholders = ','.join(['?'] * len(preceding_keys))
+        cursor.execute(f"""
+        SELECT candidate_id, SUM(votes_count) as prev_total
+        FROM votes
+        WHERE round_key IN ({placeholders})
+        GROUP BY candidate_id
+        """, preceding_keys)
+        for r in cursor.fetchall():
+            prev_votes_map[r['candidate_id']] = r['prev_total'] or 0
+
+    # Build structured Ekzai by Ward
+    from collections import defaultdict
+    wards_map = defaultdict(list)
+    for c in cand_rows:
+        cid = c['id']
+        prev = prev_votes_map.get(cid, 0)
+        curr = c['current_round_votes']
+        cumul = prev + curr
+        c['prev_votes'] = prev
+        c['cumul_votes'] = cumul
+        wards_map[c['ward_no']].append(c)
+
+    ekzai_wards = []
+    for w_no in sorted(wards_map.keys()):
+        cands = wards_map[w_no]
+        # Determine ward leader and margin
+        valid_cands = [x for x in cands if x['party'] != 'NOTA' and 'नोटा' not in (x['name_hindi'] or '')]
+        valid_cands.sort(key=lambda x: x['cumul_votes'], reverse=True)
+        leader = valid_cands[0] if valid_cands else None
+        runner = valid_cands[1] if len(valid_cands) > 1 else None
+        margin = (leader['cumul_votes'] - runner['cumul_votes']) if (leader and runner) else (leader['cumul_votes'] if leader else 0)
+
+        ekzai_wards.append({
+            'ward_no': w_no,
+            'leader_name': leader['name_hindi'] if leader else '-',
+            'leader_party': leader['party'] if leader else '-',
+            'margin': margin,
+            'candidates': cands
+        })
+
+    conn.close()
+    return {
+        'status': 'success',
+        'category': category,
+        'block_name': block,
+        'round_key': round_key,
+        'is_declared': is_declared,
+        'declared_at': declared_at,
+        'wards': ekzai_wards
+    }
