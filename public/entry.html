@@ -773,7 +773,10 @@
         <div id="roundInfoText" style="font-size:13px; color:#1e40af; font-weight:700;">
           Loading sheet...
         </div>
-        <div style="display:flex; align-items:center; gap:12px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-size:11px; color:#1e40af; font-weight:700; background:#dbeafe; padding:3px 8px; border-radius:4px; border:1px solid #bfdbfe;">
+            ⌨️ Tab / Enter = Next Candidate &bull; Ctrl+S = Save
+          </span>
           <span id="roundActiveBadge" class="badge badge-primary" style="font-size:12px; font-weight:800;">
             Round 1 Active
           </span>
@@ -1650,6 +1653,7 @@
               <td style="text-align:right; width:130px;">
                 <input type="number" id="roundInput_${cand.id}" class="vote-input-dual round-vote-field" min="0" placeholder="0"
                   value="${roundVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}" data-index="${candIdx}"
+                  tabindex="${candIdx + 1}"
                   onfocus="this.select()"
                   onkeydown="handleVoteKeyNav(event, ${cand.id}, 'round', ${candIdx})"
                   oninput="handleRoundVoteInput(${cand.id}, ${prevCumul}, ${wNo})">
@@ -1657,6 +1661,8 @@
               <td style="text-align:right; width:130px;">
                 <input type="number" id="cumulInput_${cand.id}" class="vote-input-dual vote-input-cumul cumul-vote-field" min="0" placeholder="${prevCumul}"
                   value="${cumulVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}" data-index="${candIdx}"
+                  tabindex="-1"
+                  title="Auto-calculated (tabindex -1 to keep Tab in Round Votes column)"
                   onfocus="this.select()"
                   onkeydown="handleVoteKeyNav(event, ${cand.id}, 'cumul', ${candIdx})"
                   oninput="handleCumulVoteInput(${cand.id}, ${prevCumul}, ${wNo})">
@@ -1758,6 +1764,71 @@
         }
       }, 60);
     }
+
+        // Quick Round Stepper (Previous / Next)
+    function stepRound(direction) {
+      const sel = document.getElementById('roundSelectDropdown');
+      if (!sel || sel.options.length <= 1) return;
+      let newIdx = sel.selectedIndex + direction;
+      if (newIdx >= 0 && newIdx < sel.options.length) {
+        sel.selectedIndex = newIdx;
+        onRoundSelected(sel.value);
+      }
+    }
+
+    // High-Efficiency Column-Locked Keyboard Navigation
+    // When typing in Round Votes, Tab and Enter move straight DOWN to the next candidate (skipping Cumulative)
+    function handleVoteKeyNav(event, candId, colType, index) {
+      if (event.key === 'Tab' || event.key === 'Enter' || event.key === 'ArrowDown') {
+        if (!event.shiftKey) {
+          event.preventDefault();
+          const nextInp = document.querySelector(`input[data-index="${index + 1}"][id^="${colType}Input_"]`);
+          if (nextInp) {
+            nextInp.focus();
+            nextInp.select();
+          } else {
+            // At the end of the candidate list, focus the Save Votes button
+            const saveBtn = document.getElementById('btnSaveVotes');
+            if (saveBtn) saveBtn.focus();
+          }
+        } else if (event.key === 'Tab' || event.key === 'ArrowUp') {
+          // Shift+Tab or ArrowUp moves UP to the previous candidate in the same column
+          event.preventDefault();
+          const prevInp = document.querySelector(`input[data-index="${index - 1}"][id^="${colType}Input_"]`);
+          if (prevInp) {
+            prevInp.focus();
+            prevInp.select();
+          }
+        }
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        const prevInp = document.querySelector(`input[data-index="${index - 1}"][id^="${colType}Input_"]`);
+        if (prevInp) {
+          prevInp.focus();
+          prevInp.select();
+        }
+      } else if (event.key === 'ArrowRight' && colType === 'round') {
+        const cumulInp = document.getElementById(`cumulInput_${candId}`);
+        if (cumulInp) {
+          cumulInp.focus();
+          cumulInp.select();
+        }
+      } else if (event.key === 'ArrowLeft' && colType === 'cumul') {
+        const roundInp = document.getElementById(`roundInput_${candId}`);
+        if (roundInp) {
+          roundInp.focus();
+          roundInp.select();
+        }
+      }
+    }
+
+    // Global Shortcut: Ctrl+S or Cmd+S to instantly Save Votes
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        submitRoundVotes();
+      }
+    });
 
     function handleRoundVoteInput(candId, prevCumul, wardNo) {
       const rInp = document.getElementById(`roundInput_${candId}`);
