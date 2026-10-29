@@ -2192,7 +2192,7 @@
       }
       if (!confirm('🎲 Generate realistic dummy test data across Zilla Parishad and all 7 Panchayat Samitis?\n\nThis will populate round votes and winners so you can test the TV display and cards.')) return;
 
-      const token = sessionStorage.getItem('salumber_token') || 'admin';
+      const token = authToken || localStorage.getItem('salumber_auth_token') || '';
       try {
         const resp = await fetch('/api/seed_dummy_test_data', {
           method: 'POST',
