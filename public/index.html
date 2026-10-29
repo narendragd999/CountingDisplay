@@ -1151,17 +1151,49 @@
         `;
       }
 
-      // Build round header th's
+      // Only display the LAST 3 active rounds to keep table compact & ultra-readable
+      let displayRoundKeys = activeRoundKeys;
+      const hasEarlierRounds = activeRoundKeys.length > 3;
+      if (hasEarlierRounds) {
+        displayRoundKeys = activeRoundKeys.slice(-3);
+      }
+
+      // Dynamic sizing based on candidate count
+      const candCount = candTotals.length;
+      let rowPadding = '5px 8px';
+      let nameFontSize = '13px';
+      let partyFontSize = '10px';
+      let roundFontSize = '14px';
+      let totalFontSize = '16px';
+
+      if (candCount >= 6) {
+        rowPadding = '3.5px 6px';
+        nameFontSize = '12px';
+        partyFontSize = '9px';
+        roundFontSize = '12.5px';
+        totalFontSize = '14.5px';
+      } else if (candCount >= 5) {
+        rowPadding = '4px 7px';
+        nameFontSize = '12.5px';
+        partyFontSize = '9.5px';
+        roundFontSize = '13px';
+        totalFontSize = '15px';
+      }
+
+      // Build round header th's (Max 3 rounds + Total)
       let roundThs = '';
-      activeRoundKeys.forEach(r => {
+      if (hasEarlierRounds) {
+        roundThs += `<th style="text-align:center; padding:5px 2px; width:18px; font-weight:800; color:var(--text-dim); font-size:9px;" title="Earlier rounds included in Total">...</th>`;
+      }
+      displayRoundKeys.forEach(r => {
         const label = r === 'PB' ? 'PB' : r;
-        roundThs += `<th style="text-align:right; padding:6px 8px; width:46px; font-weight:800; color:var(--text-muted);">${label}</th>`;
+        roundThs += `<th style="text-align:right; padding:5px 6px; width:44px; font-weight:800; color:var(--text-muted); font-size:10px;">${label}</th>`;
       });
 
       // Build candidate rows
       let rowsHtml = '';
       if (candTotals.length === 0) {
-        rowsHtml = `<tr><td colspan="${4 + activeRoundKeys.length}" style="text-align:center; color:var(--text-dim); padding:10px;">No contestants registered</td></tr>`;
+        rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:10px;">No contestants registered</td></tr>`;
       } else {
         candTotals.forEach((c, idx) => {
           const isLeader = !isTie && idx === 0 && c.totalVotes > 0;
@@ -1169,23 +1201,34 @@
           const vObj = masterData.roundVotes[c.id] || {};
 
           let roundTds = '';
-          activeRoundKeys.forEach(rKey => {
+          if (hasEarlierRounds) {
+            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:10px; padding:2px;">•</td>`;
+          }
+          displayRoundKeys.forEach(rKey => {
             const val = vObj[rKey];
             const displayVal = (val !== undefined && val !== null) ? val : '-';
             roundTds += `
-              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:${val > 0 ? '700' : '500'}; color:${val > 0 ? 'var(--text-main)' : 'var(--text-dim)'}; padding:6px 8px;">
+              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:${roundFontSize}; font-weight:${val > 0 ? '700' : '500'}; color:${val > 0 ? 'var(--text-main)' : 'var(--text-dim)'}; padding:4px 6px;">
                 ${displayVal}
               </td>
             `;
           });
 
+          const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
+
           rowsHtml += `
-            <tr class="${isLeader ? 'row-leader' : (isTied ? 'row-tied' : '')}" style="${isTied ? 'background:#fef3c7;' : ''}">
-              <td style="font-weight:700; font-family:'Rajdhani',sans-serif; width:28px;">#${c.ballot_no || idx+1}</td>
-              <td style="font-weight:${isLeader ? '800' : '600'}; font-size:12px;">${c.name_hindi}</td>
-              <td style="width:50px;"><span class="party-tag pt-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
+            <tr class="${isLeader ? 'row-leader' : (isTied ? 'row-tied' : '')}" style="${isTied ? 'background:#fef3c7;' : (isNota ? 'background:#f8fafc;' : '')}">
+              <td style="font-weight:700; font-family:'Rajdhani',sans-serif; font-size:11.5px; width:26px; padding:${rowPadding}; color:var(--text-dim);">#${c.ballot_no || idx+1}</td>
+              <td style="padding:${rowPadding};">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+                  <span style="font-weight:${isLeader ? '800' : '700'}; font-size:${nameFontSize}; color:${isNota ? '#64748b' : 'var(--text-main)'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    ${c.name_hindi}
+                  </span>
+                  <span class="party-tag pt-${c.party || 'IND'}" style="font-size:${partyFontSize}; flex-shrink:0;">${c.party || 'IND'}</span>
+                </div>
+              </td>
               ${roundTds}
-              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:800; color:${isLeader ? 'var(--primary)' : 'inherit'}; width:70px; padding:6px 10px;">
+              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:${totalFontSize}; font-weight:800; color:${isLeader ? 'var(--primary)' : 'inherit'}; width:65px; padding:${rowPadding};">
                 ${c.totalVotes}
               </td>
             </tr>
@@ -1212,11 +1255,10 @@
         <table class="ward-table">
           <thead>
             <tr>
-              <th style="width:28px;">#</th>
-              <th>Candidate</th>
-              <th style="width:50px;">Party</th>
+              <th style="width:26px;">#</th>
+              <th>Candidate & Party</th>
               ${roundThs}
-              <th style="text-align:right; width:70px;">Total</th>
+              <th style="text-align:right; width:65px;">Total</th>
             </tr>
           </thead>
           <tbody>
