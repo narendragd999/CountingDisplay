@@ -1609,7 +1609,11 @@
         let rowsHtml = '';
         let wardRoundTotal = 0;
 
-        wardCands.forEach(cand => {
+        let totalPrevSum = 0;
+        let totalRoundSum = 0;
+        let totalCumulSum = 0;
+
+        wardCands.forEach((cand, candIdx) => {
           const prevCumul = getPreviousCumulativeVotes(cand.id, currentSelectedRound);
           const savedRoundVal = ((masterData.roundVotes && masterData.roundVotes[cand.id]) || {})[currentSelectedRound];
           const hasSaved = (savedRoundVal !== undefined && savedRoundVal !== null);
@@ -1617,9 +1621,14 @@
           let roundVal = hasSaved ? savedRoundVal : '';
           let cumulVal = hasSaved ? (prevCumul + Number(savedRoundVal)) : (prevCumul > 0 ? prevCumul : '');
 
+          totalPrevSum += prevCumul;
           if (hasSaved && Number(savedRoundVal) > 0) {
             totalEnteredInRound++;
             wardRoundTotal += Number(savedRoundVal);
+            totalRoundSum += Number(savedRoundVal);
+            totalCumulSum += (prevCumul + Number(savedRoundVal));
+          } else {
+            totalCumulSum += prevCumul;
           }
 
           const isNota = (cand.party === 'NOTA' || (cand.name_hindi || '').includes('नोटा'));
@@ -1639,13 +1648,17 @@
                 ${prevCumul}
               </td>
               <td style="text-align:right; width:130px;">
-                <input type="number" id="roundInput_${cand.id}" class="vote-input-dual" min="0" placeholder="0"
-                  value="${roundVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}"
+                <input type="number" id="roundInput_${cand.id}" class="vote-input-dual round-vote-field" min="0" placeholder="0"
+                  value="${roundVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}" data-index="${candIdx}"
+                  onfocus="this.select()"
+                  onkeydown="handleVoteKeyNav(event, ${cand.id}, 'round', ${candIdx})"
                   oninput="handleRoundVoteInput(${cand.id}, ${prevCumul}, ${wNo})">
               </td>
               <td style="text-align:right; width:130px;">
-                <input type="number" id="cumulInput_${cand.id}" class="vote-input-dual vote-input-cumul" min="0" placeholder="${prevCumul}"
-                  value="${cumulVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}"
+                <input type="number" id="cumulInput_${cand.id}" class="vote-input-dual vote-input-cumul cumul-vote-field" min="0" placeholder="${prevCumul}"
+                  value="${cumulVal}" data-prev="${prevCumul}" data-cand-id="${cand.id}" data-ward-no="${wNo}" data-index="${candIdx}"
+                  onfocus="this.select()"
+                  onkeydown="handleVoteKeyNav(event, ${cand.id}, 'cumul', ${candIdx})"
                   oninput="handleCumulVoteInput(${cand.id}, ${prevCumul}, ${wNo})">
               </td>
               <td style="text-align:right; width:130px;" id="statusLead_${cand.id}">
@@ -1690,6 +1703,25 @@
               <tbody id="wardTbody_${wNo}">
                 ${rowsHtml}
               </tbody>
+              <tfoot style="background:#f8fafc; border-top:2px solid var(--border-main); font-weight:800;">
+                <tr>
+                  <td colspan="3" style="font-size:12px; color:var(--text-main); padding:10px 14px; text-transform:uppercase; letter-spacing:0.5px;">
+                    📊 कुल मत योग (Form 17-C Total)
+                  </td>
+                  <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; color:var(--text-dim); padding:10px 14px;" id="footPrevTotal_${wNo}">
+                    ${totalPrevSum}
+                  </td>
+                  <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:18px; color:var(--primary); font-weight:900; padding:10px 14px;" id="footRoundTotal_${wNo}">
+                    ${totalRoundSum}
+                  </td>
+                  <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:18px; color:#0369a1; font-weight:900; padding:10px 14px;" id="footCumulTotal_${wNo}">
+                    ${totalCumulSum}
+                  </td>
+                  <td style="text-align:right; font-size:11px; color:#15803d; font-weight:800; padding:10px 14px;">
+                    LIVE CHECK
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         `;
@@ -1716,6 +1748,15 @@
       }
 
       checkCompletedWardsReadyToDeclare();
+
+      // Auto-focus first candidate input for instant typing
+      setTimeout(() => {
+        const firstInp = document.querySelector('.round-vote-field');
+        if (firstInp) {
+          firstInp.focus();
+          firstInp.select();
+        }
+      }, 60);
     }
 
     function handleRoundVoteInput(candId, prevCumul, wardNo) {
@@ -1788,6 +1829,21 @@
       // Update ward round total badge
       const badge = document.getElementById(`wardRoundTotalBadge_${wardNo}`);
       if (badge) badge.innerText = `Round Votes: ${wardRoundSum}`;
+
+      let livePrevSum = 0;
+      let liveCumulSum = 0;
+      inputs.forEach(inp => {
+        const prev = parseInt(inp.getAttribute('data-prev')) || 0;
+        const totVal = parseInt(inp.value) || prev;
+        livePrevSum += prev;
+        liveCumulSum += totVal;
+      });
+      const fPrev = document.getElementById(`footPrevTotal_${wardNo}`);
+      if (fPrev) fPrev.innerText = livePrevSum;
+      const fRound = document.getElementById(`footRoundTotal_${wardNo}`);
+      if (fRound) fRound.innerText = wardRoundSum;
+      const fCumul = document.getElementById(`footCumulTotal_${wardNo}`);
+      if (fCumul) fCumul.innerText = liveCumulSum;
 
       // Calculate lead margin for each candidate in this ward
       cands.sort((a, b) => b.totalVotes - a.totalVotes);

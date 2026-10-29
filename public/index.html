@@ -281,13 +281,16 @@
       background: var(--bg-subtle);
     }
 
+    /* SMART ADAPTIVE BROADCAST GRID: Fits multiple cards side-by-side on TV / wide displays */
     .cards-scroll-body {
       flex: 1;
       overflow-y: auto;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
       gap: 10px;
+      align-content: start;
+      align-items: start;
       scroll-behavior: smooth;
     }
 
@@ -461,7 +464,7 @@
     }
 
     .ward-table td {
-      padding: 6px 12px;
+      padding: 5px 8px;
       border-bottom: 1px solid #f1f5f9;
       color: var(--text-main);
     }
@@ -585,10 +588,11 @@
     </div>
   </header>
 
-  <!-- SUMMARY SCOREBOARD -->
+  <!-- SUMMARY SCOREBOARD WITH TOTAL DECLARED COUNTS -->
   <div class="summary-strip">
     <div class="tally-group">
       <span class="tally-title">Zilla Parishad (21):</span>
+      <span class="tally-pill" id="zpDeclaredPill" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd;">Declared: 0/21</span>
       <span class="tally-pill pt-BJP" id="zpTallyBJP">BJP: 0</span>
       <span class="tally-pill pt-INC" id="zpTallyINC">INC: 0</span>
       <span class="tally-pill pt-BAP" id="zpTallyBAP">BAP: 0</span>
@@ -597,6 +601,7 @@
 
     <div class="tally-group">
       <span class="tally-title">Panchayat Samiti (105):</span>
+      <span class="tally-pill" id="psDeclaredPill" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd;">Declared: 0/105</span>
       <span class="tally-pill pt-BJP" id="psTallyBJP">BJP: 0</span>
       <span class="tally-pill pt-INC" id="psTallyINC">INC: 0</span>
       <span class="tally-pill pt-BAP" id="psTallyBAP">BAP: 0</span>
@@ -1214,11 +1219,14 @@
     // Tally update
     function updateSummaryTallies() {
       const tally = {
-        ZP: { BJP: 0, INC: 0, BAP: 0, IND: 0 },
-        PS: { BJP: 0, INC: 0, BAP: 0, IND: 0 }
+        ZP: { BJP: 0, INC: 0, BAP: 0, IND: 0, declared: 0 },
+        PS: { BJP: 0, INC: 0, BAP: 0, IND: 0, declared: 0 }
       };
 
       masterData.wards.forEach(w => {
+        if (w.status === 'DECLARED') {
+          if (tally[w.category]) tally[w.category].declared++;
+        }
         const cands = masterData.candidates.filter(c => c.category === w.category && c.block_name === w.block_name && c.ward_no === w.ward_no);
         const totals = cands.map(c => {
           let sum = 0;
@@ -1237,6 +1245,11 @@
           }
         }
       });
+
+      const zpDecEl = document.getElementById('zpDeclaredPill');
+      if (zpDecEl) zpDecEl.innerText = `Declared: ${tally.ZP.declared}/21`;
+      const psDecEl = document.getElementById('psDeclaredPill');
+      if (psDecEl) psDecEl.innerText = `Declared: ${tally.PS.declared}/105`;
 
       document.getElementById('zpTallyBJP').innerText = `BJP: ${tally.ZP.BJP}`;
       document.getElementById('zpTallyINC').innerText = `INC: ${tally.ZP.INC}`;
@@ -1265,21 +1278,21 @@
       const psEl = document.getElementById('psCardsContainer');
 
       setInterval(() => {
-        if (zpAutoScroll && zpEl) {
-          if (zpEl.scrollTop + zpEl.clientHeight >= zpEl.scrollHeight - 10) {
+        if (zpAutoScroll && zpEl && zpEl.scrollHeight > zpEl.clientHeight + 15) {
+          if (zpEl.scrollTop + zpEl.clientHeight >= zpEl.scrollHeight - 8) {
             zpEl.scrollTop = 0;
           } else {
-            zpEl.scrollTop += 1.2;
+            zpEl.scrollTop += 0.8;
           }
         }
       }, 50);
 
       setInterval(() => {
-        if (psAutoScroll && psEl) {
-          if (psEl.scrollTop + psEl.clientHeight >= psEl.scrollHeight - 10) {
+        if (psAutoScroll && psEl && psEl.scrollHeight > psEl.clientHeight + 15) {
+          if (psEl.scrollTop + psEl.clientHeight >= psEl.scrollHeight - 8) {
             psEl.scrollTop = 0;
           } else {
-            psEl.scrollTop += 1.2;
+            psEl.scrollTop += 0.8;
           }
         }
       }, 50);

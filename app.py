@@ -1343,6 +1343,7 @@ def serve_tv_display():
     return "<h1>TV Display not found</h1>"
 
 @app.get("/entry", response_class=HTMLResponse)
+@app.get("/entry.html", response_class=HTMLResponse)
 def serve_entry_console():
     """Serves the mobile & desktop vote entry console for operators."""
     if os.path.exists("public/entry.html"):
