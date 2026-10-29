@@ -941,12 +941,16 @@ def get_all_candidates_master():
 
     cursor.execute("SELECT block_name, booth_no, booth_name_hi, booth_name_en, ps_ward, zp_ward, total_elector, table_no, round_no FROM booths")
     b_rows = [dict(r) for r in cursor.fetchall()]
+
+    cursor.execute("SELECT category, block_name, round_key, status, declared_at FROM round_declarations")
+    rd_rows = [dict(r) for r in cursor.fetchall()]
     conn.close()
     return {
         'candidates': c_rows,
         'wards': w_rows,
         'roundVotes': votes_map,
         'booths': b_rows,
+        'declaredRounds': rd_rows,
         'system_mode': get_system_mode()
     }
 

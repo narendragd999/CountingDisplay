@@ -1101,12 +1101,24 @@
       let statusKey = 'PENDING';
       let statusLabel = 'AWAITING VOTES';
 
+      // Check if this round was officially declared by the Returning Officer
+      const isRoundDeclared = (masterData.declaredRounds || []).some(dr => 
+        dr.category === ward.category && 
+        (ward.category === 'ZP' || dr.block_name === ward.block_name) && 
+        dr.round_key === ('R' + highestRoundNum) &&
+        dr.status === 'DECLARED'
+      );
+
       if (isDeclared) {
         statusKey = 'DECLARED';
-        statusLabel = 'WINNER DECLARED';
+        statusLabel = '🏆 WINNER DECLARED';
       } else if (hasVotes) {
         statusKey = 'COUNTING';
-        statusLabel = highestRoundNum > 0 ? `ROUND ${highestRoundNum} COMPLETED` : 'COUNTING IN PROGRESS';
+        if (isRoundDeclared) {
+          statusLabel = `ROUND ${highestRoundNum} DECLARED`;
+        } else {
+          statusLabel = highestRoundNum > 0 ? `ROUND ${highestRoundNum} IN PROGRESS` : 'COUNTING IN PROGRESS';
+        }
       }
 
       const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
