@@ -83,7 +83,9 @@ def get_user_by_token(token: str):
     return None
 
 def check_auth(request: Request):
-    token = request.headers.get("X-Auth-Token") or request.query_params.get("token") or request.cookies.get("salumber_auth")
+    auth_h = request.headers.get("Authorization") or ""
+    bearer = auth_h.replace("Bearer ", "").strip() if auth_h.startswith("Bearer ") else None
+    token = request.headers.get("X-Auth-Token") or bearer or request.query_params.get("token") or request.cookies.get("salumber_auth")
     user = get_user_by_token(token)
     if not user:
         raise HTTPException(status_code=401, detail="Authentication required. Please log in.")
@@ -929,95 +931,99 @@ async def seed_dummy_test_data(request: Request):
             wards_cands[key] = []
         wards_cands[key].append(c)
 
-    # 3. Generate realistic votes for Zilla Parishad
-    zp_declared_winner_wards = {1, 3, 5}
+    # Helper to insert round votes
+    def insert_round_votes(c_list, r_key, is_pb=False):
+        for idx, c in enumerate(c_list):
+            is_nota = (c['party'] == 'NOTA' or 'नोटा' in (c.get('name_hindi') or ''))
+            if is_pb:
+                cnt = random.randint(1, 5) if is_nota else random.randint(8, 28)
+            else:
+                if is_nota:
+                    cnt = random.randint(4, 18)
+                elif idx == 0:
+                    cnt = random.randint(260, 420)
+                elif idx == 1:
+                    cnt = random.randint(200, 350)
+                else:
+                    cnt = random.randint(90, 240)
+            cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, ?, ?)", (c['id'], r_key, cnt))
+
+    # 3. Generate realistic multi-round votes for Zilla Parishad
+    # Showcasing progression across rounds:
+    # Wards 1, 3, 8: 5 Rounds (PB, R1, R2, R3, R4, R5) -> DECLARED WINNER
+    # Wards 2, 7, 10: 4 Rounds (PB, R1, R2, R3, R4) -> Round 4 in progress
+    # Wards 4, 5, 9, 12: 3 Rounds (PB, R1, R2, R3) -> Round 3 in progress
+    # Wards 6, 11, 13, 14: 2 Rounds (PB, R1, R2) -> Round 2 in progress
+    # Wards 15, 16, 17: 1 Round (PB, R1) -> Round 1 in progress
+    # Wards 18+: PB only or Awaiting votes
+    zp_declared_winner_wards = {1, 3, 8}
     for key, c_list in wards_cands.items():
         cat, blk, w_no = key
         if cat == 'ZP':
-            # Postal Ballots
-            for c in c_list:
-                pb = random.randint(5, 25)
-                cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, 'PB', ?)", (c['id'], pb))
-            
-            # Round 1
-            for idx, c in enumerate(c_list):
-                if c['party'] == 'NOTA' or 'नोटा' in c['name_hindi']:
-                    r1 = random.randint(8, 25)
-                elif idx == 0:
-                    r1 = random.randint(280, 420)
-                else:
-                    r1 = random.randint(150, 320)
-                cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, 'R1', ?)", (c['id'], r1))
-            
-            # Round 2 for Wards 1 to 10
-            if w_no <= 10:
-                for idx, c in enumerate(c_list):
-                    if c['party'] == 'NOTA' or 'नोटा' in c['name_hindi']:
-                        r2 = random.randint(5, 20)
-                    elif idx == 0:
-                        r2 = random.randint(300, 450)
-                    else:
-                        r2 = random.randint(180, 350)
-                    cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, 'R2', ?)", (c['id'], r2))
+            # Postal Ballots for all active wards
+            insert_round_votes(c_list, 'PB', is_pb=True)
 
-            # Round 3 for Wards 1 to 5
-            if w_no <= 5:
-                for idx, c in enumerate(c_list):
-                    if c['party'] == 'NOTA' or 'नोटा' in c['name_hindi']:
-                        r3 = random.randint(4, 15)
-                    elif idx == 0:
-                        r3 = random.randint(250, 380)
-                    else:
-                        r3 = random.randint(140, 290)
-                    cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, 'R3', ?)", (c['id'], r3))
+            # R1 for wards 1 to 17
+            if w_no <= 17:
+                insert_round_votes(c_list, 'R1')
+            # R2 for wards with >= 2 rounds
+            if w_no in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}:
+                insert_round_votes(c_list, 'R2')
+            # R3 for wards with >= 3 rounds
+            if w_no in {1, 2, 3, 4, 5, 7, 8, 9, 10, 12}:
+                insert_round_votes(c_list, 'R3')
+            # R4 for wards with >= 4 rounds (shows R2, R3, R4!)
+            if w_no in {1, 2, 3, 7, 8, 10}:
+                insert_round_votes(c_list, 'R4')
+            # R5 for wards with 5 rounds (shows R3, R4, R5!)
+            if w_no in {1, 2, 8}:
+                insert_round_votes(c_list, 'R5')
 
             if w_no in zp_declared_winner_wards:
                 cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'ZP' AND ward_no = ?", (w_no,))
         
         elif cat == 'PS':
-            # For Panchayat Samiti: seed PB and R1 for wards 1 to 8 in each block
+            # For Panchayat Samiti: Realistic multi-round progression across all 7 blocks
+            # Ward 1: 5 Rounds (PB, R1, R2, R3, R4, R5) -> DECLARED WINNER
+            # Ward 2: 5 Rounds (PB, R1, R2, R3, R4, R5) -> R5 in progress
+            # Ward 3: 4 Rounds (PB, R1, R2, R3, R4) -> DECLARED WINNER
+            # Ward 4: 4 Rounds (PB, R1, R2, R3, R4) -> R4 in progress
+            # Ward 5: 3 Rounds (PB, R1, R2, R3) -> R3 in progress
+            # Ward 6: 2 Rounds (PB, R1, R2) -> R2 in progress
+            # Ward 7: 2 Rounds (PB, R1, R2) -> R2 in progress
+            # Ward 8: 1 Round (PB, R1) -> R1 in progress
+            # Ward 9+: Awaiting votes
             if w_no <= 8:
-                for c in c_list:
-                    pb = random.randint(3, 18)
-                    cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, 'PB', ?)", (c['id'], pb))
-                
-                for idx, c in enumerate(c_list):
-                    if c['party'] == 'NOTA' or 'नोटा' in c['name_hindi']:
-                        r1 = random.randint(6, 20)
-                    elif idx == 0:
-                        r1 = random.randint(220, 380)
-                    else:
-                        r1 = random.randint(120, 260)
-                    cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, 'R1', ?)", (c['id'], r1))
-                
-                # Round 2 for wards 1 to 4
-                if w_no <= 4:
-                    for idx, c in enumerate(c_list):
-                        if c['party'] == 'NOTA' or 'नोटा' in c['name_hindi']:
-                            r2 = random.randint(4, 18)
-                        elif idx == 0:
-                            r2 = random.randint(240, 390)
-                        else:
-                            r2 = random.randint(130, 270)
-                        cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, 'R2', ?)", (c['id'], r2))
+                insert_round_votes(c_list, 'PB', is_pb=True)
+                insert_round_votes(c_list, 'R1')
+            if w_no <= 7:
+                insert_round_votes(c_list, 'R2')
+            if w_no <= 5:
+                insert_round_votes(c_list, 'R3')
+            if w_no <= 4:
+                insert_round_votes(c_list, 'R4')
+            if w_no in {1, 2}:
+                insert_round_votes(c_list, 'R5')
 
-                # Declare winner in Ward 1 of each block
-                if w_no == 1:
-                    cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'PS' AND block_name = ? AND ward_no = ?", (blk, w_no))
+            if w_no in {1, 3}:
+                cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'PS' AND block_name = ? AND ward_no = ?", (blk, w_no))
 
-    # Add official round declarations for R1
+    # Add official round declarations
     cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R1', 'DECLARED', 12500)")
+    cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R2', 'DECLARED', 12380)")
+    cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R3', 'DECLARED', 11950)")
     for b in ['Jaisamand', 'Sarada', 'Semari', 'Salumbar', 'Geengla', 'Lasadiya', 'Jhallara']:
         cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R1', 'DECLARED', 3400)", (b,))
+        cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R2', 'DECLARED', 3350)", (b,))
 
-    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("SEED_DUMMY_DATA", f"Realistic test data seeded across ZP and PS by {user['username']}"))
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("SEED_DUMMY_DATA", f"Realistic multi-round test data (R1 to R5) seeded across ZP and PS by {user['username']}"))
     conn.commit()
     conn.close()
 
     asyncio.create_task(broadcast_live_update())
     return {
         'status': 'success',
-        'message': '🎲 Realistic dummy test data generated successfully! TV display and console are now populated.'
+        'message': '🎲 Realistic multi-round test data (PB, R1, R2, R3, R4, R5) generated successfully! Dynamic 3-round card views and declared winners populated.'
     }
 
 @app.post("/api/reset_testing_data")

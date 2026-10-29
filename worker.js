@@ -138,23 +138,52 @@ export default {
       }
       MASTER_DATA.roundVotes = {};
       MASTER_DATA.declaredRounds = [
-        { category: 'ZP', block_name: 'Salumber ZP', round_key: 'R1', status: 'DECLARED' }
+        { category: 'ZP', block_name: 'Salumber ZP', round_key: 'R1', status: 'DECLARED' },
+        { category: 'ZP', block_name: 'Salumber ZP', round_key: 'R2', status: 'DECLARED' },
+        { category: 'ZP', block_name: 'Salumber ZP', round_key: 'R3', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Semari', round_key: 'R1', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Semari', round_key: 'R2', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Sarada', round_key: 'R1', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Sarada', round_key: 'R2', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Salumbar', round_key: 'R1', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Salumbar', round_key: 'R2', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Jaisamand', round_key: 'R1', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Jaisamand', round_key: 'R2', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Geengla', round_key: 'R1', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Geengla', round_key: 'R2', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Lasadiya', round_key: 'R1', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Lasadiya', round_key: 'R2', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Jhallara', round_key: 'R1', status: 'DECLARED' },
+        { category: 'PS', block_name: 'Jhallara', round_key: 'R2', status: 'DECLARED' }
       ];
       (MASTER_DATA.candidates || []).forEach((c, idx) => {
         const vObj = {};
         const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
-        vObj['PB'] = isNota ? 5 : (10 + (idx % 15));
-        vObj['R1'] = isNota ? 12 : (180 + (idx * 23) % 220);
-        if (c.ward_no <= 8) {
-          vObj['R2'] = isNota ? 10 : (160 + (idx * 17) % 240);
-        }
-        if (c.ward_no <= 4) {
-          vObj['R3'] = isNota ? 8 : (140 + (idx * 19) % 210);
+        const wNo = c.ward_no;
+        const isZp = (c.category === 'ZP');
+
+        // PB
+        vObj['PB'] = isNota ? 5 : (12 + (idx % 18));
+        
+        if (isZp) {
+          if (wNo <= 17) vObj['R1'] = isNota ? 12 : (220 + (idx * 23) % 200);
+          if ([1,2,3,4,5,6,7,8,9,10,11,12,13,14].includes(wNo)) vObj['R2'] = isNota ? 10 : (240 + (idx * 17) % 210);
+          if ([1,2,3,4,5,7,8,9,10,12].includes(wNo)) vObj['R3'] = isNota ? 8 : (230 + (idx * 19) % 200);
+          if ([1,2,3,7,8,10].includes(wNo)) vObj['R4'] = isNota ? 7 : (250 + (idx * 29) % 220);
+          if ([1,2,8].includes(wNo)) vObj['R5'] = isNota ? 6 : (260 + (idx * 31) % 230);
+        } else {
+          if (wNo <= 8) vObj['R1'] = isNota ? 12 : (200 + (idx * 23) % 190);
+          if (wNo <= 7) vObj['R2'] = isNota ? 10 : (210 + (idx * 17) % 180);
+          if (wNo <= 5) vObj['R3'] = isNota ? 8 : (220 + (idx * 19) % 190);
+          if (wNo <= 4) vObj['R4'] = isNota ? 7 : (230 + (idx * 29) % 200);
+          if (wNo <= 2) vObj['R5'] = isNota ? 6 : (240 + (idx * 31) % 210);
         }
         MASTER_DATA.roundVotes[c.id] = vObj;
       });
       (MASTER_DATA.wards || []).forEach(w => {
-        if (w.ward_no === 1 || w.ward_no === 3) {
+        if (w.category === 'ZP' && [1, 3, 8].includes(w.ward_no)) {
+          w.status = 'DECLARED';
+        } else if (w.category === 'PS' && [1, 3].includes(w.ward_no)) {
           w.status = 'DECLARED';
         } else {
           w.status = 'COUNTING';
@@ -162,7 +191,7 @@ export default {
       });
       return jsonResponse({
         status: 'success',
-        message: '🎲 Realistic dummy test data generated successfully on Cloudflare!'
+        message: '🎲 Realistic multi-round test data (PB, R1 to R5) generated successfully on Cloudflare!'
       });
     }
 
