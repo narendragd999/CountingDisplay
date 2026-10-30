@@ -169,12 +169,12 @@
 9,7,Semari,"Government Senior Secondary School, Kunda Room No. 01",1173,Table 4,Round 2
 10,7,Semari,"Government Senior Secondary School, Kunda Room No. 02",1020,Table 5,Round 2
 11,7,Semari,Government Senior Secondary School Sadakadi Room No. 01,1108,Table 1,Round 3
-12,7,Semari,Government Senior Secondary School Sadakadi Room No. 02,1243,Table 2,Round 3
+12,7,Semari,Government Senior Secondary School Sadakadi Room No. 02,775,Table 2,Round 3
 13,7,Semari,Government Senior Secondary School Kuradiya Room No. 01,1039,Table 3,Round 3
-14,7,Semari,Government Senior Secondary School Kuradiya Room No. 02,1347,Table 4,Round 3
+14,7,Semari,Government Senior Secondary School Kuradiya Room No. 02,774,Table 4,Round 3
 15,7,Semari,Government Upper Primary School Gatoda Room No. 01,664,Table 5,Round 3
 16,7,Semari,Government Upper Primary School Gatoda Room No. 02,858,Table 1,Round 4
-17,7,Semari,Government Senior Secondary School Senthal Kharad Room No. 01,1526,Table 2,Round 4
+17,7,Semari,Government Senior Secondary School Senthal Kharad Room No. 01,749,Table 2,Round 4
 18,7,Semari,Government upper Primary School Newaphala Room No. 01,1062,Table 3,Round 4
 19,7,Semari,Government Upper Primary School Newaphala Room No. 02,791,Table 4,Round 4
 20,7,Semari,Government Senior Secondary School Ghodasar Room No. 01,948,Table 5,Round 4
@@ -201,12 +201,12 @@
 41,8,Semari,Government Senior Secondary School Kanpur Room No. 02,776,Table 5,Round 4
 42,8,Semari,Government Senior Secondary School Shaktavato ka Guda Room No. 01,775,Table 1,Round 5
 43,8,Semari,Government Senior Secondary School Shaktavato ka Guda Room No. 02,781,Table 2,Round 5
-44,8,Semari,Government Upper Primary School Bhorai Ghata Room No. 02,1350,Table 3,Round 5
+44,8,Semari,Government Upper Primary School Bhorai Ghata Room No. 02,778,Table 3,Round 5
 45,8,Semari,Government Senior Secondary School Bhorai Room No. 01,1247,Table 4,Round 5
 46,8,Semari,Government Senior Secondary School Bhorai Room No. 02,982,Table 5,Round 5
-47,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 01,1274,Table 1,Round 1
-48,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 02,1311,Table 2,Round 1
-49,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 03,1299,Table 3,Round 1
+47,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 01,929,Table 1,Round 1
+48,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 02,781,Table 2,Round 1
+49,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 03,653,Table 3,Round 1
 50,9,Semari,Government Upper Primary School Dhani Sipur Room No. 01,1194,Table 4,Round 1
 51,9,Semari,Government Upper Primary School Dhani Sipur Room No. 02,1005,Table 5,Round 1
 52,9,Semari,Government Senior Secondary School Mallada Room No. 01,883,Table 1,Round 2
@@ -411,7 +411,7 @@
 72,17,Lasadiya,GSSS GHATA ROOM NO. 1,875,Table 4,Round 4
 73,17,Lasadiya,GSSS GHATA ROOM NO. 3,995,Table 5,Round 4
 18,18,Lasadiya,GSSS. KHAJURI ROOM NO. 1,1241,Table 1,Round 1
-19,18,Lasadiya,GSSS. KHAJURI ROOM NO. 3,1267,Table 2,Round 1
+19,18,Lasadiya,GSSS. KHAJURI ROOM NO. 3,767,Table 2,Round 1
 20,18,Lasadiya,GOVT. BEDAWAL ROOM NO. 1,943,Table 3,Round 1
 21,18,Lasadiya,GOVT. BEDAWAL ROOM NO. 3,1039,Table 4,Round 1
 22,18,Lasadiya,GOVT. BEDAWAL ROOM NO. 5,1047,Table 5,Round 1
@@ -521,3 +521,11 @@
 71,21,Jhallara,Government Senior Secondary School Limboda Room No 2,847,Table 2,Round 6
 75,21,Jhallara,Government Senior Secondary School Sajnot Room No 1,650,Table 3,Round 6
 76,21,Jhallara,Government Senior Secondary School Sajnot Room No 2,839,Table 4,Round 6
+12/1,7,Semari,Government Senior Secondary School Sadakadi Room No. 03,468,Table 2,Round 3
+14/1,7,Semari,Government Senior Secondary School Kuradiya Room No. 03,573,Table 4,Round 3
+17/1,7,Semari,Government Senior Secondary School Senthal Kharad Room No. 02,777,Table 2,Round 4
+44/1,8,Semari,Government Upper Primary School Bhorai Ghata Room No. 03,572,Table 4,Round 9
+47/1,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 04,345,Table 2,Round 10
+48/1,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 05,530,Table 3,Round 10
+49/1,9,Semari,Government Senior Secondary School Surkhand Ka Kheda Room No. 06,646,Table 4,Round 10
+19/1,18,Lasadiya,GSSS. KHAJURI ROOM NO. 2,500,Table 5,Round 3
