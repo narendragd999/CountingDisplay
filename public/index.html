@@ -633,6 +633,19 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 5px; background: #f8fafc; border: 1px solid var(--border-main); border-radius: 6px; padding: 2px 8px;">
+          <label for="cycleTimeSelect" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">⏱ Interval:</label>
+          <select id="cycleTimeSelect" class="filter-select" style="padding: 2px 6px; font-size: 12px; font-weight: 700; height: 26px; border: none; background: transparent; cursor: pointer;" onchange="changeCycleDuration(this.value)">
+            <option value="5">5s</option>
+            <option value="8">8s</option>
+            <option value="10" selected>10s</option>
+            <option value="15">15s</option>
+            <option value="20">20s</option>
+            <option value="30">30s</option>
+            <option value="45">45s</option>
+            <option value="60">60s</option>
+          </select>
+        </div>
         <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; font-weight:800; font-size:12px; padding:5px 12px; transition: all 0.2s;" onclick="toggleAutoRotateRO()">
           🔄 Auto-Cycle Centers: ON (10s)
         </button>
@@ -760,9 +773,32 @@
     let autoRotateROInterval = null;
     let cycleProgressInterval = null;
     let cycleTimeElapsed = 0;
-    const CYCLE_DURATION_MS = 10000;
+    let cycleDurationSeconds = parseInt(localStorage.getItem('tv_cycle_seconds') || '10', 10);
+    if (isNaN(cycleDurationSeconds) || cycleDurationSeconds < 3) cycleDurationSeconds = 10;
     const roCentersList = ['ALL', 'Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
     let currentROIndex = 0;
+
+    function getCycleDurationMs() {
+      return cycleDurationSeconds * 1000;
+    }
+
+    function changeCycleDuration(val) {
+      const sec = parseInt(val, 10);
+      if (isNaN(sec) || sec < 3) return;
+      cycleDurationSeconds = sec;
+      localStorage.setItem('tv_cycle_seconds', sec);
+
+      const btn = document.getElementById('btnAutoRotateRO');
+      if (btn && autoRotateROInterval) {
+        btn.innerText = `🔄 Auto-Cycle Centers: ON (${cycleDurationSeconds}s)`;
+      }
+
+      if (autoRotateROInterval) {
+        startAutoRotateRO();
+      } else {
+        resetCycleProgressBar();
+      }
+    }
 
     function resetCycleProgressBar() {
       if (cycleProgressInterval) clearInterval(cycleProgressInterval);
@@ -777,9 +813,10 @@
           return;
         }
         cycleTimeElapsed += 100;
-        const pct = Math.min(100, (cycleTimeElapsed / CYCLE_DURATION_MS) * 100);
+        const totalMs = getCycleDurationMs();
+        const pct = Math.min(100, (cycleTimeElapsed / totalMs) * 100);
         if (bar) bar.style.width = pct + '%';
-        if (cycleTimeElapsed >= CYCLE_DURATION_MS) {
+        if (cycleTimeElapsed >= totalMs) {
           cycleTimeElapsed = 0;
         }
       }, 100);
@@ -813,7 +850,7 @@
         }
       } else {
         if (btn) {
-          btn.innerText = '🔄 Auto-Cycle Centers: ON (10s)';
+          btn.innerText = `🔄 Auto-Cycle Centers: ON (${cycleDurationSeconds}s)`;
           btn.style.background = '#eff6ff';
           btn.style.color = '#1d4ed8';
         }
@@ -824,6 +861,11 @@
     function startAutoRotateRO() {
       if (autoRotateROInterval) clearInterval(autoRotateROInterval);
       resetCycleProgressBar();
+      const durMs = getCycleDurationMs();
+      const btn = document.getElementById('btnAutoRotateRO');
+      if (btn) {
+        btn.innerText = `🔄 Auto-Cycle Centers: ON (${cycleDurationSeconds}s)`;
+      }
       autoRotateROInterval = setInterval(() => {
         currentROIndex = (currentROIndex + 1) % roCentersList.length;
         const nextRO = roCentersList[currentROIndex];
@@ -840,7 +882,7 @@
         if (psEl) psEl.scrollTop = 0;
         resetCycleProgressBar();
         renderCards(true);
-      }, CYCLE_DURATION_MS); // cycle every 10 seconds across all RO centers
+      }, durMs);
     }
 
     function toggleFullscreen() {
@@ -852,6 +894,10 @@
     }
 
     window.addEventListener('DOMContentLoaded', async () => {
+      const cycleSel = document.getElementById('cycleTimeSelect');
+      if (cycleSel && cycleDurationSeconds) {
+        cycleSel.value = String(cycleDurationSeconds);
+      }
       startAutoRotateRO();
       checkPortalLock();
       populateFilterOptions();
