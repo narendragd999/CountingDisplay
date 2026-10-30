@@ -726,13 +726,13 @@
               RO CELL / BLOCK
             </label>
             <select id="entryBlock" class="form-select" onchange="onBlockChanged()" style="font-weight:700; font-size:13px; padding:9px 12px; border-radius:8px; height:42px;">
-              <option value="Semari">Semari (69 Booths)</option>
-              <option value="Salumbar">Salumbar (80 Booths)</option>
-              <option value="Lasadiya">Lasadiya (73 Booths • 7 Tables)</option>
+              <option value="Semari">Semari (76 Booths)</option>
+              <option value="Salumbar">Salumbar (77 Booths)</option>
+              <option value="Lasadiya">Lasadiya (74 Booths • 7 Tables)</option>
               <option value="Geengla">Geengla (61 Booths)</option>
               <option value="Jaisamand">Jaisamand (81 Booths)</option>
-              <option value="Sarada">Sarada (80 Booths)</option>
-              <option value="Jhallara">Jhallara (78 Booths)</option>
+              <option value="Sarada">Sarada (78 Booths)</option>
+              <option value="Jhallara">Jhallara (83 Booths)</option>
             </select>
           </div>
 
@@ -1183,14 +1183,24 @@
 
       const tabContestants = document.getElementById('tabBtnContestants');
 
+      const BLOCK_TOTAL_BOOTHS = {
+        'Geengla': 61,
+        'Jaisamand': 81,
+        'Jhallara': 83,
+        'Lasadiya': 74,
+        'Salumbar': 77,
+        'Sarada': 78,
+        'Semari': 76
+      };
+
       const ALL_BLOCKS = [
         { name: 'Geengla', booths: 61 },
         { name: 'Jaisamand', booths: 81 },
         { name: 'Jhallara', booths: 83 },
-        { name: 'Lasadiya', booths: 73 },
+        { name: 'Lasadiya', booths: 74 },
         { name: 'Salumbar', booths: 77 },
         { name: 'Sarada', booths: 78 },
-        { name: 'Semari', booths: 69 }
+        { name: 'Semari', booths: 76 }
       ];
 
       if (currentUser.role === 'PS') {
