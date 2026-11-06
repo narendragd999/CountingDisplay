@@ -660,17 +660,14 @@
   <!-- SPLIT SCREEN 50/50 -->
   <main class="split-container">
     
-    <!-- LEFT COLUMN: ZILLA PARISHAD (21 WARDS) -->
+    <!-- LEFT COLUMN: ZILLA PARISHAD (ALL 21 WARDS DISPLAYED) -->
     <section class="column-box">
       <div class="column-head">
         <div class="column-title" id="zpColumnTitle">
-          <span>🏛️</span> Zilla Parishad (21 Wards)
+          <span>🏛️</span> Zilla Parishad (All 21 Wards)
         </div>
 
         <div class="filter-ctrls">
-          <select id="zpWardFilter" class="filter-select" onchange="renderCards(true)">
-            <option value="ALL">All Wards</option>
-          </select>
           <button id="btnZpScroll" class="btn-scroll-toggle" onclick="toggleScroll('zp')">
             ⏸ Pause Scroll
           </button>
@@ -908,6 +905,7 @@
 
     function populateFilterOptions() {
       const zpSel = document.getElementById('zpWardFilter');
+      if (!zpSel) return;
       for (let i = 1; i <= 21; i++) {
         const opt = document.createElement('option');
         opt.value = i;
@@ -997,17 +995,15 @@
       return false;
     }
 
-    // Render ZP Cards - Displays all entered ZP wards regularly, keeping vertical scroll continuous
+    // Render ZP Cards - Displays ALL 21 ZP wards unconditionally (never filtered by PS or RO center)
     let lastZpFingerprint = '';
     function renderZpCards(force = false) {
       const zpContainer = document.getElementById('zpCardsContainer');
       if (!zpContainer) return;
-      const zpFilter = document.getElementById('zpWardFilter') ? document.getElementById('zpWardFilter').value : 'ALL';
 
       const currentZpFingerprint = JSON.stringify({
         votes: masterData.roundVotes || {},
-        declared: (masterData.wards || []).filter(w => w.category === 'ZP').map(w => `${w.ward_no}-${w.status}`),
-        zpFilter: zpFilter
+        declared: (masterData.wards || []).filter(w => w.category === 'ZP').map(w => `${w.ward_no}-${w.status}`)
       });
 
       if (!force && currentZpFingerprint === lastZpFingerprint) {
@@ -1017,32 +1013,21 @@
 
       const prevZpScroll = zpContainer.scrollTop;
 
-      // Zila Parishad displays all entered wards (NOT affected by RO center auto-cycle)
-      const zpWards = (masterData.wards || []).filter(w => {
-        if (w.category !== 'ZP') return false;
-        if (zpFilter !== 'ALL' && w.ward_no != zpFilter) return false;
-        return wardHasEnteredVotes(w);
-      });
+      // Zila Parishad displays ALL 21 wards unconditionally: NEVER filtered PS-wise or RO center-wise!
+      const zpWards = (masterData.wards || []).filter(w => w.category === 'ZP');
       zpWards.sort((a, b) => a.ward_no - b.ward_no);
 
-      // Title stays regular
       const zpTitleEl = document.getElementById('zpColumnTitle');
       if (zpTitleEl) {
-        if (zpFilter === 'ALL') {
-          zpTitleEl.innerHTML = '<span>🏛️</span> Zilla Parishad (All 21 Wards)';
-        } else {
-          zpTitleEl.innerHTML = `<span>🏛️</span> Zilla Parishad (Ward ${zpFilter})`;
-        }
+        zpTitleEl.innerHTML = '<span>🏛️</span> Zilla Parishad (All 21 Wards)';
       }
 
       zpContainer.innerHTML = '';
       if (zpWards.length === 0) {
-        const blkLabel = zpFilter === 'ALL' ? 'सभी 21 वार्ड' : `वार्ड ${zpFilter}`;
         zpContainer.innerHTML = `
           <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
             <div style="font-size: 36px; margin-bottom: 8px;">🏛️ ⏳</div>
-            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद (${blkLabel}): परिणाम प्रविष्टि की प्रतीक्षा है</div>
-            <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Zila Parishad (${blkLabel})</div>
+            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद (सभी 21 वार्ड): लोडिंग...</div>
           </div>
         `;
       } else {
@@ -1051,7 +1036,7 @@
         });
       }
 
-      // Preserve smooth scroll position
+      // Preserve smooth continuous scroll position
       if (zpContainer.scrollHeight > prevZpScroll) {
         zpContainer.scrollTop = prevZpScroll;
       }
