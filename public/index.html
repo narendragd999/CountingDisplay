@@ -618,17 +618,17 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         <span style="font-size: 12px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 4px; text-transform: uppercase;">
-          🏢 RO CENTERS:
+          🏢 PS AUTO-CYCLE:
         </span>
         <div style="display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;" id="roCenterPillStrip">
-          <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 RO Centers</button>
-          <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand RO (ZP 1-3)</button>
-          <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada RO (ZP 4-6)</button>
-          <button class="ro-pill" onclick="selectROCenter('Salumbar', this)">Salumbar RO (ZP 10-13)</button>
-          <button class="ro-pill" onclick="selectROCenter('Semari', this)">Semari RO (ZP 7-9)</button>
-          <button class="ro-pill" onclick="selectROCenter('Lasadiya', this)">Lasadiya RO (ZP 16-18)</button>
-          <button class="ro-pill" onclick="selectROCenter('Geengla', this)">Geengla RO (ZP 13-15)</button>
-          <button class="ro-pill" onclick="selectROCenter('Jhallara', this)">Jhallara RO (ZP 19-21)</button>
+          <button class="ro-pill active" onclick="selectROCenter('ALL', this)">All 7 Blocks</button>
+          <button class="ro-pill" onclick="selectROCenter('Jaisamand', this)">Jaisamand (15 Wards)</button>
+          <button class="ro-pill" onclick="selectROCenter('Sarada', this)">Sarada (15 Wards)</button>
+          <button class="ro-pill" onclick="selectROCenter('Salumbar', this)">Salumbar (15 Wards)</button>
+          <button class="ro-pill" onclick="selectROCenter('Semari', this)">Semari (15 Wards)</button>
+          <button class="ro-pill" onclick="selectROCenter('Lasadiya', this)">Lasadiya (15 Wards)</button>
+          <button class="ro-pill" onclick="selectROCenter('Geengla', this)">Geengla (15 Wards)</button>
+          <button class="ro-pill" onclick="selectROCenter('Jhallara', this)">Jhallara (15 Wards)</button>
         </div>
       </div>
 
@@ -647,7 +647,7 @@
           </select>
         </div>
         <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; font-weight:800; font-size:12px; padding:5px 12px; transition: all 0.2s;" onclick="toggleAutoRotateRO()">
-          🔄 Auto-Cycle Centers: ON (10s)
+          🔄 Auto-Cycle PS: ON (10s)
         </button>
       </div>
     </div>
@@ -790,7 +790,7 @@
 
       const btn = document.getElementById('btnAutoRotateRO');
       if (btn && autoRotateROInterval) {
-        btn.innerText = `🔄 Auto-Cycle Centers: ON (${cycleDurationSeconds}s)`;
+        btn.innerText = `🔄 Auto-Cycle PS: ON (${cycleDurationSeconds}s)`;
       }
 
       if (autoRotateROInterval) {
@@ -825,16 +825,15 @@
     function selectROCenter(roName, btnEl) {
       activeROCenter = roName;
       document.querySelectorAll('.ro-pill').forEach(p => {
-        if (roName === 'ALL' && p.textContent.includes('All 7')) p.classList.add('active');
+        if (roName === 'ALL' && (p.textContent.includes('All 7') || p.textContent.includes('All Blocks'))) p.classList.add('active');
         else if (roName !== 'ALL' && p.textContent.includes(roName)) p.classList.add('active');
         else p.classList.remove('active');
       });
-      const zpEl = document.getElementById('zpCardsContainer');
-      if (zpEl) zpEl.scrollTop = 0;
+      // Do NOT touch ZP! Zila Parishad scroll runs regularly on the left.
       const psEl = document.getElementById('psCardsContainer');
       if (psEl) psEl.scrollTop = 0;
       resetCycleProgressBar();
-      renderCards(true);
+      renderPsCards(true);
     }
 
     function toggleAutoRotateRO() {
@@ -844,13 +843,13 @@
         autoRotateROInterval = null;
         resetCycleProgressBar();
         if (btn) {
-          btn.innerText = '🔄 Auto-Cycle Centers: OFF';
+          btn.innerText = '🔄 Auto-Cycle PS: OFF';
           btn.style.background = '#ffffff';
           btn.style.color = 'var(--text-muted)';
         }
       } else {
         if (btn) {
-          btn.innerText = `🔄 Auto-Cycle Centers: ON (${cycleDurationSeconds}s)`;
+          btn.innerText = `🔄 Auto-Cycle PS: ON (${cycleDurationSeconds}s)`;
           btn.style.background = '#eff6ff';
           btn.style.color = '#1d4ed8';
         }
@@ -864,7 +863,7 @@
       const durMs = getCycleDurationMs();
       const btn = document.getElementById('btnAutoRotateRO');
       if (btn) {
-        btn.innerText = `🔄 Auto-Cycle Centers: ON (${cycleDurationSeconds}s)`;
+        btn.innerText = `🔄 Auto-Cycle PS: ON (${cycleDurationSeconds}s)`;
       }
       autoRotateROInterval = setInterval(() => {
         currentROIndex = (currentROIndex + 1) % roCentersList.length;
@@ -872,16 +871,15 @@
         activeROCenter = nextRO;
         const pills = document.querySelectorAll('.ro-pill');
         pills.forEach(p => {
-          if (nextRO === 'ALL' && p.textContent.includes('All 7')) p.classList.add('active');
+          if (nextRO === 'ALL' && (p.textContent.includes('All 7') || p.textContent.includes('All Blocks'))) p.classList.add('active');
           else if (nextRO !== 'ALL' && p.textContent.includes(nextRO)) p.classList.add('active');
           else p.classList.remove('active');
         });
-        const zpEl = document.getElementById('zpCardsContainer');
-        if (zpEl) zpEl.scrollTop = 0;
+        // Auto-cycle applies ONLY to Panchayat Samiti on the right side!
         const psEl = document.getElementById('psCardsContainer');
         if (psEl) psEl.scrollTop = 0;
         resetCycleProgressBar();
-        renderCards(true);
+        renderPsCards(true);
       }, durMs);
     }
 
@@ -999,60 +997,47 @@
       return false;
     }
 
-    // Render Cards - Strictly display only wards whose votes have been entered or declared
-    let lastRenderFingerprint = '';
-    function renderCards(force = false) {
+    // Render ZP Cards - Displays all entered ZP wards regularly, keeping vertical scroll continuous
+    let lastZpFingerprint = '';
+    function renderZpCards(force = false) {
+      const zpContainer = document.getElementById('zpCardsContainer');
+      if (!zpContainer) return;
       const zpFilter = document.getElementById('zpWardFilter') ? document.getElementById('zpWardFilter').value : 'ALL';
-      
-      const currentFingerprint = JSON.stringify({
+
+      const currentZpFingerprint = JSON.stringify({
         votes: masterData.roundVotes || {},
-        declared: (masterData.wards || []).map(w => `${w.category}-${w.block_name}-${w.ward_no}-${w.status}`),
-        activeRO: activeROCenter,
+        declared: (masterData.wards || []).filter(w => w.category === 'ZP').map(w => `${w.ward_no}-${w.status}`),
         zpFilter: zpFilter
       });
 
-      if (!force && currentFingerprint === lastRenderFingerprint) {
-        return; // Data has not changed; do NOT wipe DOM, keep auto-scroll smooth!
+      if (!force && currentZpFingerprint === lastZpFingerprint) {
+        return; // Data has not changed; do NOT touch DOM, keep auto-scroll 100% continuous!
       }
-      lastRenderFingerprint = currentFingerprint;
+      lastZpFingerprint = currentZpFingerprint;
 
-      const zpContainer = document.getElementById('zpCardsContainer');
-      const psContainer = document.getElementById('psCardsContainer');
-      const prevZpScroll = zpContainer ? zpContainer.scrollTop : 0;
-      const prevPsScroll = psContainer ? psContainer.scrollTop : 0;
+      const prevZpScroll = zpContainer.scrollTop;
 
-      // Render ZP - only wards whose votes have been entered
+      // Zila Parishad displays all entered wards (NOT affected by RO center auto-cycle)
       const zpWards = (masterData.wards || []).filter(w => {
         if (w.category !== 'ZP') return false;
         if (zpFilter !== 'ALL' && w.ward_no != zpFilter) return false;
-        if (zpFilter === 'ALL' && activeROCenter !== 'ALL') {
-          const allowed = BLOCK_ZP_MAPPING[activeROCenter] || [];
-          if (!allowed.includes(Number(w.ward_no))) return false;
-        }
         return wardHasEnteredVotes(w);
       });
       zpWards.sort((a, b) => a.ward_no - b.ward_no);
 
-      // Update Column Titles
+      // Title stays regular
       const zpTitleEl = document.getElementById('zpColumnTitle');
       if (zpTitleEl) {
-        if (activeROCenter === 'ALL') {
+        if (zpFilter === 'ALL') {
           zpTitleEl.innerHTML = '<span>🏛️</span> Zilla Parishad (All 21 Wards)';
         } else {
-          const wList = (BLOCK_ZP_MAPPING[activeROCenter] || []).map(num => 'Ward ' + num).join(', ');
-          zpTitleEl.innerHTML = `<span>🏛️</span> Zilla Parishad (${activeROCenter} RO • ${wList})`;
+          zpTitleEl.innerHTML = `<span>🏛️</span> Zilla Parishad (Ward ${zpFilter})`;
         }
-      }
-      const psTitleEl = document.getElementById('psColumnTitle');
-      if (psTitleEl) {
-        psTitleEl.innerHTML = activeROCenter === 'ALL' 
-          ? '<span>🏘️</span> Panchayat Samiti (All 7 Blocks)' 
-          : `<span>🏘️</span> Panchayat Samiti (${activeROCenter} RO)`;
       }
 
       zpContainer.innerHTML = '';
       if (zpWards.length === 0) {
-        const blkLabel = activeROCenter === 'ALL' ? 'सभी 21 वार्ड' : `${activeROCenter} RO`;
+        const blkLabel = zpFilter === 'ALL' ? 'सभी 21 वार्ड' : `वार्ड ${zpFilter}`;
         zpContainer.innerHTML = `
           <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
             <div style="font-size: 36px; margin-bottom: 8px;">🏛️ ⏳</div>
@@ -1066,7 +1051,40 @@
         });
       }
 
-      // Render PS - only wards whose votes have been entered
+      // Preserve smooth scroll position
+      if (zpContainer.scrollHeight > prevZpScroll) {
+        zpContainer.scrollTop = prevZpScroll;
+      }
+    }
+
+    // Render PS Cards - Controls the right side results filtered/cycled by RO Center
+    let lastPsFingerprint = '';
+    function renderPsCards(force = false) {
+      const psContainer = document.getElementById('psCardsContainer');
+      if (!psContainer) return;
+
+      const currentPsFingerprint = JSON.stringify({
+        votes: masterData.roundVotes || {},
+        declared: (masterData.wards || []).filter(w => w.category === 'PS').map(w => `${w.block_name}-${w.ward_no}-${w.status}`),
+        activeRO: activeROCenter
+      });
+
+      if (!force && currentPsFingerprint === lastPsFingerprint) {
+        return;
+      }
+      lastPsFingerprint = currentPsFingerprint;
+
+      const prevPsScroll = psContainer.scrollTop;
+
+      // Update Column Title for Panchayat Samiti
+      const psTitleEl = document.getElementById('psColumnTitle');
+      if (psTitleEl) {
+        psTitleEl.innerHTML = activeROCenter === 'ALL' 
+          ? '<span>🏘️</span> Panchayat Samiti (All 7 Blocks)' 
+          : `<span>🏘️</span> Panchayat Samiti (${activeROCenter} RO)`;
+      }
+
+      // Filter PS wards strictly for activeROCenter
       const psWards = (masterData.wards || []).filter(w => {
         if (w.category !== 'PS') return false;
         if (activeROCenter !== 'ALL' && w.block_name !== activeROCenter) return false;
@@ -1090,13 +1108,15 @@
         });
       }
 
-      // Restore scroll positions if content is large
-      if (zpContainer && zpContainer.scrollHeight > prevZpScroll) {
-        zpContainer.scrollTop = prevZpScroll;
-      }
-      if (psContainer && psContainer.scrollHeight > prevPsScroll) {
+      // Restore scroll if background data update; if user changed block or auto-cycled, it stays at top
+      if (!force && psContainer.scrollHeight > prevPsScroll) {
         psContainer.scrollTop = prevPsScroll;
       }
+    }
+
+    function renderCards(force = false) {
+      renderZpCards(force);
+      renderPsCards(force);
     }
 
     function createWardCardElement(ward, idx = 0) {
