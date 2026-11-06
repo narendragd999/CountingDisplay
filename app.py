@@ -1492,15 +1492,7 @@ def serve_admin():
         return FileResponse("public/admin.html")
     return FileResponse("public/entry.html")
 
-if __name__ == "__main__":
-    print("=" * 70)
-    print("   SALUMBER LIVE ELECTION PORTAL & DATABASE SERVER")
-    print("=" * 70)
-    print("   TV Broadcast Screen : http://localhost:8000/")
-    print("   Operator Vote Entry : http://localhost:8000/entry")
-    print("   Admin & Candidates  : http://localhost:8000/admin")
-    print("=" * 70)
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
+
 
 
 @app.post("/api/declare_round")
@@ -1669,3 +1661,17 @@ def get_round_ekzai(category: str, block: str, round_key: str):
         'declared_at': declared_at,
         'wards': ekzai_wards
     }
+
+if __name__ == "__main__":
+    import sys
+    port = int(os.environ.get("PORT", 8082))
+    if len(sys.argv) > 1 and sys.argv[1].isdigit():
+        port = int(sys.argv[1])
+    print("=" * 70)
+    print("   SALUMBER LIVE ELECTION PORTAL & DATABASE SERVER")
+    print("=" * 70)
+    print(f"   TV Broadcast Screen : http://localhost:{port}/")
+    print(f"   Operator Vote Entry : http://localhost:{port}/entry")
+    print(f"   Admin & Candidates  : http://localhost:{port}/admin")
+    print("=" * 70)
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
