@@ -513,8 +513,6 @@ def calculate_full_state():
         if key not in declared_rounds_map:
             declared_rounds_map[key] = []
         declared_rounds_map[key].append(r['round_key'])
-        r_display = "Postal Ballots (डाक मतपत्र)" if r['round_key'] == 'PB' else f"दौर {r['round_key'].replace('R','')}"
-        ticker_items.insert(0, f"📢 {r['block_name']} ({r['category']}) {r_display} परिणाम घोषित!")
 
     if not ticker_items:
         ticker_items = [
@@ -787,6 +785,25 @@ async def save_votes(payload: dict, request: Request):
             else:
                 # Operator cleared the vote input - delete existing record to allow full erasure/correction
                 cursor.execute("DELETE FROM votes WHERE candidate_id = ? AND round_key = ?", (cid, round_key))
+
+        # Auto-declare round upon saving votes
+        cursor.execute("""
+        SELECT COALESCE(SUM(v.votes_count), 0)
+        FROM votes v
+        JOIN candidates c ON v.candidate_id = c.id
+        WHERE c.category = ? AND c.block_name = ? AND v.round_key = ?
+        """, (category, block, round_key))
+        r_sum_row = cursor.fetchone()
+        r_tot = r_sum_row[0] if r_sum_row else 0
+        if r_tot > 0:
+            cursor.execute("""
+            INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted)
+            VALUES (?, ?, ?, 'DECLARED', ?)
+            ON CONFLICT(category, block_name, round_key) DO UPDATE SET 
+                status = 'DECLARED',
+                declared_at = CURRENT_TIMESTAMP,
+                total_votes_counted = excluded.total_votes_counted
+            """, (category, block, round_key, r_tot))
 
         # Handle declare winner with strict data check
         if declared_wards:

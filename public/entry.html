@@ -791,7 +791,7 @@
         <!-- Dynamically rendered ward card with candidate rows -->
       </div>
 
-      <!-- Sticky Save Bar with Round Declaration & Ekzai -->
+      <!-- Sticky Save Bar with Ekzai & Save Votes -->
       <div class="sticky-action-bar">
         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
           <button onclick="clearCurrentRoundInputs()" class="btn btn-outline" style="color:var(--text-dim); padding:9px 14px; font-size:12px;">
@@ -800,9 +800,6 @@
           <span id="pendingChangesCount" style="font-size:12px; font-weight:700; color:var(--text-muted);">
             0 candidates entered
           </span>
-          <span id="roundDeclarationBadge" class="badge" style="font-size:12px; font-weight:800; padding:5px 12px; background:#fef3c7; color:#b45309; border:1px solid #f59e0b;">
-            ⏳ In-Progress
-          </span>
         </div>
 
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -810,10 +807,7 @@
             📄 View Ekzai (एकजाई पत्रक)
           </button>
           <button id="btnSaveVotes" onclick="submitRoundVotes()" class="btn btn-success" style="padding:10px 24px; font-size:14px; font-weight:800; box-shadow:var(--shadow-md);">
-            💾 SAVE VOTES
-          </button>
-          <button id="btnDeclareRound" onclick="toggleDeclareRoundClick()" class="btn btn-primary" style="padding:10px 22px; font-size:14px; font-weight:800; background:#1e3a8a; border-color:#172554; box-shadow:var(--shadow-md);">
-            📢 DECLARE ROUND RESULTS
+            💾 SAVE ROUND VOTES
           </button>
         </div>
       </div>
@@ -1691,7 +1685,7 @@
 
         const statusBadge = isDeclared 
           ? `<span class="badge badge-success">🏆 DECLARED</span>`
-          : `<span class="badge" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; font-weight:800;">${currentSelectedRound === 'PB' ? 'Postal Ballots' : currentSelectedRound}</span>`;
+          : ``;
 
         card.innerHTML = `
           <div class="ward-entry-head">
@@ -2412,38 +2406,7 @@
     }
 
     function updateRoundDeclarationUI() {
-      const isDecl = isCurrentRoundDeclared();
-      const badge = document.getElementById('roundDeclarationBadge');
-      const btn = document.getElementById('btnDeclareRound');
-      const rName = currentSelectedRound === 'PB' ? 'Postal Ballots (PB)' : currentSelectedRound;
-
-      if (badge) {
-        if (isDecl) {
-          badge.className = 'badge';
-          badge.style.background = '#dcfce7';
-          badge.style.color = '#15803d';
-          badge.style.border = '1px solid #86efac';
-          badge.innerHTML = `🟢 ${rName} DECLARED OFFICIAL`;
-        } else {
-          badge.className = 'badge';
-          badge.style.background = '#fef3c7';
-          badge.style.color = '#b45309';
-          badge.style.border = '1px solid #f59e0b';
-          badge.innerHTML = `⏳ ${rName} In-Progress (Not Declared)`;
-        }
-      }
-
-      if (btn) {
-        if (isDecl) {
-          btn.innerText = '🔓 Unlock / Reopen Round';
-          btn.style.background = '#b45309';
-          btn.style.borderColor = '#92400e';
-        } else {
-          btn.innerText = `📢 DECLARE ${rName} RESULTS`;
-          btn.style.background = '#1e3a8a';
-          btn.style.borderColor = '#172554';
-        }
-      }
+      // Round declaration button and in-progress labels removed; rounds are automatically processed.
     }
 
     function toggleDeclareRoundClick() {

@@ -1143,27 +1143,9 @@
         }
       });
 
-      let statusKey = 'PENDING';
-      let statusLabel = 'AWAITING VOTES';
-
-      // Check if this round was officially declared by the Returning Officer
-      const isRoundDeclared = (masterData.declaredRounds || []).some(dr => 
-        dr.category === ward.category && 
-        (ward.category === 'ZP' || dr.block_name === ward.block_name) && 
-        dr.round_key === ('R' + highestRoundNum) &&
-        dr.status === 'DECLARED'
-      );
-
+      let statusBadgeHtml = '';
       if (isDeclared) {
-        statusKey = 'DECLARED';
-        statusLabel = '🏆 WINNER DECLARED';
-      } else if (hasVotes) {
-        statusKey = 'COUNTING';
-        if (isRoundDeclared) {
-          statusLabel = `ROUND ${highestRoundNum} DECLARED`;
-        } else {
-          statusLabel = highestRoundNum > 0 ? `ROUND ${highestRoundNum} IN PROGRESS` : 'COUNTING IN PROGRESS';
-        }
+        statusBadgeHtml = `<span class="status-badge status-DECLARED">🏆 WINNER DECLARED</span>`;
       }
 
       const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
@@ -1294,7 +1276,7 @@
             <span>${displayName}</span>
             <span style="font-size:10px; color:var(--text-dim); font-weight:700; background:#f1f5f9; padding:1px 5px; border-radius:3px;">${ward.reservation || 'ST'}</span>
           </div>
-          <span class="status-badge status-${statusKey}">${statusLabel}</span>
+          ${statusBadgeHtml}
         </div>
         ${leaderHtml}
         <table class="ward-table">
