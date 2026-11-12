@@ -1394,8 +1394,15 @@ async def renumber_ward_candidates(payload: dict, request: Request):
 
 @app.post("/api/candidates/delete")
 async def delete_candidate(payload: dict, request: Request):
-    """Delete a single candidate and re-index ballot order."""
+    """Delete a single candidate and re-index ballot order using official rules."""
     check_auth(request)
+    import unicodedata
+
+    STATE_PARTIES = {'BJP','INC','BSP','CPIM','CPI(M)','CPI-M','CPI_M','AAP','NPP','BAP'}
+
+    def clean_hi(name):
+        return unicodedata.normalize('NFKC', name or '').strip().strip('\u200b\u200c\u200d\ufeff\xa0')
+
     cid = int(payload.get('candidate_id'))
     conn = get_db()
     cursor = conn.cursor()
@@ -1409,17 +1416,42 @@ async def delete_candidate(payload: dict, request: Request):
     cursor.execute("DELETE FROM votes WHERE candidate_id = ?", (cid,))
     cursor.execute("DELETE FROM candidates WHERE id = ?", (cid,))
 
-    cursor.execute("SELECT id FROM candidates WHERE category=? AND block_name=? AND ward_no=? ORDER BY ballot_no, name_hindi", (cat, blk, wno))
-    re_rows = cursor.fetchall()
-    for seq, r in enumerate(re_rows, start=1):
-        cursor.execute("UPDATE candidates SET ballot_no = ? WHERE id = ?", (seq, r[0]))
+    # Re-index remaining candidates in official order: State Party (A-Z) -> IND (A-Z) -> NOTA last
+    cursor.execute("SELECT id, name_hindi, party FROM candidates WHERE category=? AND block_name=? AND ward_no=? AND is_active=1", (cat, blk, wno))
+    rows = cursor.fetchall()
+    state_party = []
+    independent = []
+    nota = []
+    for r in rows:
+        cid_r, name_r, party_r = r[0], r[1], r[2]
+        p_r = (party_r or '').strip().upper()
+        if p_r == 'NOTA' or 'नोटा' in (name_r or ''):
+            nota.append((cid_r, name_r, party_r))
+        elif p_r not in STATE_PARTIES:
+            independent.append((cid_r, name_r, party_r))
+        else:
+            state_party.append((cid_r, name_r, party_r))
+
+    ordered = sorted(state_party, key=lambda x: clean_hi(x[1])) + sorted(independent, key=lambda x: clean_hi(x[1])) + nota
+    for seq, (rcid, _, _) in enumerate(ordered, start=1):
+        cursor.execute("UPDATE candidates SET ballot_no = ? WHERE id = ?", (seq, rcid))
 
     cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("DELETE_CANDIDATE", f"Deleted {cname} from {cat} {blk} W{wno}"))
     conn.commit()
-    conn.close()
 
+    # Sync all_candidates_master.json
+    try:
+        cursor.execute("SELECT id, category, block_name, ward_no, ballot_no, name_hindi, party, symbol, gender, age, candidate_category FROM candidates ORDER BY category, block_name, ward_no, ballot_no")
+        all_cands = [dict(zip([d[0] for d in cursor.description], r)) for r in cursor.fetchall()]
+        import json as _json
+        with open('all_candidates_master.json', 'w', encoding='utf-8') as f:
+            _json.dump(all_cands, f, ensure_ascii=False, indent=2)
+    except Exception as ex:
+        print(f"Warning syncing json: {ex}")
+
+    conn.close()
     asyncio.create_task(broadcast_live_update())
-    return {'status': 'success', 'message': f"Deleted contestant {cname} successfully."}
+    return {'status': 'success', 'message': f"Deleted candidate {cname} and re-indexed {cat} {blk} Ward {wno}."}
 
 @app.post("/api/wards/update_booths_bulk")
 async def update_booths_bulk(payload: dict, request: Request):
