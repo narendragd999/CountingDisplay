@@ -1,276 +1,563 @@
-Type,Block,Ward No,Ballot No,Candidate Name (Hindi),Party,Symbol,Gender,Age,Category
-PS,Geengla,1,1,"प्रतापी बाई",INC,Official,F,69,ST (Woman)
-PS,Geengla,1,2,"मीनादेवी",BJP,Official,F,33,ST (Woman)
-PS,Geengla,2,1,"प्रेमी बाई",INC,Official,F,32,OBC (Woman)
-PS,Geengla,2,2,"मोती",BJP,Official,F,51,General (Woman)
-PS,Geengla,3,1,"गौतम लाल",BJP,Official,M,32,ST
-PS,Geengla,3,2,"वालाराम तावड",INC,Official,M,79,ST
-PS,Geengla,3,3,"सुरेश कुमार भील",BAP,Official,M,24,ST
-PS,Geengla,4,1,"भेरू लाल",IND,Official,M,39,OBC
-PS,Geengla,4,2,"महेंद्र कुमार पटेल",BJP,Official,M,30,OBC
-PS,Geengla,4,3,"ललित पटेल",INC,Official,M,45,OBC
-PS,Geengla,5,1,"अनिता कुमारी मीना",BAP,Official,F,23,ST (Woman)
-PS,Geengla,5,2,"गुलाब कुंवर",BJP,Official,F,54,General (Woman)
-PS,Geengla,5,3,"लक्ष्मी कुंवर",INC,Official,F,53,General (Woman)
-PS,Geengla,6,1,"गोपाल सिंह",INC,Official,M,36,General
-PS,Geengla,6,2,"रघुवीर सिंह सिसोदिया",BJP,Official,M,43,General
-PS,Geengla,7,1,"गणपत लाल",INC,Official,M,38,SC
-PS,Geengla,7,2,"प्रकाश चन्द्र मेघवाल",BAP,Official,M,49,SC
-PS,Geengla,7,3,"रतन लाल",BJP,Official,M,46,SC
-PS,Geengla,8,1,"शंकरी",BAP,Official,F,40,ST (Woman)
-PS,Geengla,8,2,"शान्ता बाई",BJP,Official,F,36,ST (Woman)
-PS,Geengla,8,3,"शान्ति",INC,Official,F,32,ST (Woman)
-PS,Geengla,8,4,"संगीता मीणा",IND,Official,F,32,ST (Woman)
-PS,Geengla,9,1,"गंगा देवी",INC,Official,F,58,ST (Woman)
-PS,Geengla,9,2,"देवा",BJP,Official,M,65,ST
-PS,Geengla,9,3,"रमेश लाल",BAP,Official,M,40,ST
-PS,Geengla,10,1,"खुशपाल सिंह",BAP,Official,M,33,General
-PS,Geengla,10,2,"पन्ना लाल",INC,Official,M,42,General
-PS,Geengla,10,3,"प्रकाशचन्द",BJP,Official,M,34,OBC
-PS,Geengla,11,1,"कुरी",BJP,Official,F,53,ST (Woman)
-PS,Geengla,11,2,"कैलाशी देवी",INC,Official,F,41,ST (Woman)
-PS,Geengla,11,3,"गंगा मीणा",BAP,Official,F,22,ST (Woman)
-PS,Geengla,12,1,"किशन लाल",INC,Official,M,53,ST
-PS,Geengla,12,2,"प्रकाश चन्द्र मीणा",BAP,Official,M,40,ST
-PS,Geengla,12,3,"रूपा",BJP,Official,M,45,ST
-PS,Geengla,13,1,"प्रेमलता",BJP,Official,F,30,ST (Woman)
-PS,Geengla,13,2,"मोड़ीलाल",INC,Official,M,44,ST
-PS,Geengla,13,3,"रमेश लाल मीणा",BAP,Official,M,22,ST
-PS,Geengla,14,1,"उषा कुमारी मीणा",INC,Official,F,23,ST (Woman)
-PS,Geengla,14,2,"कमला कुमारी मीणा",BAP,Official,F,21,ST (Woman)
-PS,Geengla,14,3,"पार्वती",BJP,Official,F,41,ST (Woman)
-PS,Geengla,15,1,"वेलू बाई",BJP,Official,F,41,OBC (Woman)
-PS,Geengla,15,2,"शंकरी पटेल",INC,Official,F,30,OBC (Woman)
-PS,Geengla,15,3,"हीरकी",BAP,Official,F,56,OBC (Woman)
-PS,Lasadiya,1,1,"दुर्गा कुमारी मीणा",BAP,Official,F,21,ST (Woman)
-PS,Lasadiya,1,2,"भंवरी",INC,Official,F,36,ST (Woman)
-PS,Lasadiya,1,3,"शंकरी  मीणा",BJP,Official,F,43,ST (Woman)
-PS,Lasadiya,2,1,"धापु देवी डाँगी",BJP,Official,F,38,OBC (Woman)
-PS,Lasadiya,2,2,"प्रेमी",BAP,Official,F,32,ST (Woman)
-PS,Lasadiya,2,3,"लच्छु",INC,Official,F,69,OBC (Woman)
-PS,Lasadiya,3,1,"आछूडी कुमारी मीणा",BAP,Official,F,21,ST (Woman)
-PS,Lasadiya,3,2,"कानकी",INC,Official,F,33,ST (Woman)
-PS,Lasadiya,3,3,"शांति कुमारी मीणा",BJP,Official,F,26,ST (Woman)
-PS,Lasadiya,4,1,"डाया  मीणा",BJP,Official,M,38,ST
-PS,Lasadiya,4,2,"भगवान लाल",INC,Official,M,55,ST
-PS,Lasadiya,4,3,"लोगर लाल मीणा",IND,Official,M,59,ST
-PS,Lasadiya,4,4,"हिरा",BAP,Official,M,36,ST
-PS,Lasadiya,5,1,"खेमा",INC,Official,M,41,ST
-PS,Lasadiya,5,2,"भेरा उर्फ़ भेरुलाल मीणा",BJP,Official,M,48,ST
-PS,Lasadiya,5,3,"भेरू लाल",BAP,Official,M,27,ST
-PS,Lasadiya,6,1,"कमली",BAP,Official,F,43,ST (Woman)
-PS,Lasadiya,6,2,"कमली",BAP,Official,F,43,ST (Woman)
-PS,Lasadiya,6,3,"चोखली मीणा",BJP,Official,F,43,ST (Woman)
-PS,Lasadiya,6,4,"लक्ष्मी",INC,Official,F,40,ST (Woman)
-PS,Lasadiya,7,1,"गंगा देवी मीणा",BAP,Official,F,30,ST (Woman)
-PS,Lasadiya,7,2,"भगली",INC,Official,F,51,ST (Woman)
-PS,Lasadiya,7,3,"मीरा",BJP,Official,F,26,ST (Woman)
-PS,Lasadiya,8,1,"कमली मीणा",BJP,Official,F,49,ST (Woman)
-PS,Lasadiya,8,2,"नारायणी",INC,Official,F,38,ST (Woman)
-PS,Lasadiya,8,3,"रामकन्या",BAP,Official,F,28,ST (Woman)
-PS,Lasadiya,9,1,"देवी लाल",BAP,Official,M,56,ST
-PS,Lasadiya,9,2,"लक्ष्मण",INC,Official,M,55,ST
-PS,Lasadiya,9,3,"हीराबाई मीणा",BJP,Official,F,57,ST (Woman)
-PS,Lasadiya,10,1,"केशरी",BJP,Official,F,53,ST (Woman)
-PS,Lasadiya,10,2,"प्रभु",INC,Official,M,53,ST
-PS,Lasadiya,10,3,"रामा",BAP,Official,M,44,ST
-PS,Lasadiya,11,1,"ऊंकार लाल मीणा",BAP,Official,M,26,ST
-PS,Lasadiya,11,2,"प्रकाश उर्फ़ प्रकाश चंद मीणा",BJP,Official,M,34,ST
-PS,Lasadiya,11,3,"वरदीचंद",IND,Official,M,57,ST
-PS,Lasadiya,11,4,"हेमला",INC,Official,M,48,ST
-PS,Lasadiya,12,1,"चुनकी",INC,Official,F,35,ST (Woman)
-PS,Lasadiya,12,2,"लोगरी कुमार मीणा",BAP,Official,F,28,ST (Woman)
-PS,Lasadiya,12,3,"हकरी बाई",BJP,Official,F,40,ST (Woman)
-PS,Lasadiya,13,1,"उदेलाल  उर्फ  उदयलाल",BJP,Official,M,39,ST
-PS,Lasadiya,13,2,"कालु लाल",BAP,Official,M,29,ST
-PS,Lasadiya,13,3,"श्रवण",INC,Official,M,35,ST
-PS,Lasadiya,14,1,"धनराज पटेल",BJP,Official,M,43,OBC (Woman)
-PS,Lasadiya,14,2,"प्रदीप कुमार जैन",INC,Official,M,48,General
-PS,Lasadiya,14,3,"प्रदीप कुमार जैन",INC,Official,M,48,General
-PS,Lasadiya,14,4,"लिम्बा राम",BAP,Official,M,32,ST
-PS,Lasadiya,15,1,"कालू",IND,Official,M,43,ST
-PS,Lasadiya,15,2,"नारायण उर्फ़ नारायण लाल मीणा",BJP,Official,M,37,ST
-PS,Lasadiya,15,3,"रामा",INC,Official,M,58,ST
-PS,Lasadiya,15,4,"वालचन्द",BAP,Official,M,32,ST
-PS,Salumbar,1,1,"केसर कुमारी मीणा",BAP,Official,F,26,ST (Woman)
-PS,Salumbar,1,2,"दीपिका मीना",INC,Official,F,31,ST (Woman)
-PS,Salumbar,1,3,"नन्दू देवी",BJP,Official,F,31,ST (Woman)
-PS,Salumbar,2,1,"गोपाल सिंह",BJP,Official,M,29,General
-PS,Salumbar,2,2,"नाहर सिंह",INC,Official,M,58,General
-PS,Salumbar,2,3,"हितेश कुमार मीणा",BAP,Official,M,29,ST
-PS,Salumbar,3,1,"प्रकाश",BJP,Official,M,37,OBC
-PS,Salumbar,3,2,"भगवती लाल सुथार",INC,Official,M,43,OBC
-PS,Salumbar,3,3,"लीना सुथार",BAP,Official,F,32,OBC (Woman)
-PS,Salumbar,4,1,"रंजना कुंवर",INC,Official,F,47,General (Woman)
-PS,Salumbar,4,2,"रूपी मीणा",BAP,Official,F,45,ST (Woman)
-PS,Salumbar,4,3,"लीला कुंवर",BJP,Official,F,54,General (Woman)
-PS,Salumbar,5,1,"अर्जुन मेहता",BJP,Official,M,36,General
-PS,Salumbar,5,2,"जगदीश कुमार मीणा",BAP,Official,M,31,ST
-PS,Salumbar,5,3,"प्रताप सिंह",INC,Official,M,42,General
-PS,Salumbar,5,4,"प्रदीप कुमार मेहता",IND,Official,M,33,General
-PS,Salumbar,5,5,"विजयमाला",AAP,Official,F,65,General
-PS,Salumbar,6,1,"कंकू",IND,Official,F,63,General (Woman)
-PS,Salumbar,6,2,"नाथी कंवर",IND,Official,F,33,General (Woman)
-PS,Salumbar,6,3,"बंशती कुमारी मीणा",BAP,Official,F,27,ST (Woman)
-PS,Salumbar,6,4,"भमरी",BJP,Official,F,42,General (Woman)
-PS,Salumbar,6,5,"लाली",INC,Official,F,41,General (Woman)
-PS,Salumbar,7,1,"नर्बदा",INC,Official,F,33,ST (Woman)
-PS,Salumbar,7,2,"मोती",BAP,Official,F,38,ST (Woman)
-PS,Salumbar,7,3,"सविता",BJP,Official,F,38,ST (Woman)
-PS,Salumbar,8,1,"जितेन्द्र कुमार मीणा",BAP,Official,M,22,ST
-PS,Salumbar,8,2,"भेरा",BJP,Official,M,58,ST
-PS,Salumbar,8,3,"मेघराज मीणा",INC,Official,M,26,ST
-PS,Salumbar,9,1,"कमला कुमारी",BJP,Official,F,25,ST (Woman)
-PS,Salumbar,9,2,"कूरकी",INC,Official,F,52,ST (Woman)
-PS,Salumbar,9,3,"केसरी",BAP,Official,F,39,ST (Woman)
-PS,Salumbar,10,1,"कमलेश",BAP,Official,M,28,SC
-PS,Salumbar,10,2,"नारायण",BJP,Official,M,58,SC
-PS,Salumbar,10,3,"भैरुलाल",INC,Official,M,63,SC
-PS,Salumbar,11,1,"कनकलता",INC,Official,F,41,General (Woman)
-PS,Salumbar,11,2,"निर्मला",BJP,Official,F,40,General (Woman)
-PS,Salumbar,11,3,"रेखा सुथार",BAP,Official,F,36,General (Woman)
-PS,Salumbar,12,1,"कोदरलाल",INC,Official,M,65,ST
-PS,Salumbar,12,2,"पन्नालाल",BJP,Official,M,40,ST
-PS,Salumbar,12,3,"हेमराज",BAP,Official,M,30,ST
-PS,Salumbar,13,1,"अशोक कुमार मीणा",INC,Official,M,56,ST
-PS,Salumbar,13,2,"गोतम लाल",BJP,Official,M,36,ST
-PS,Salumbar,13,3,"गौतमलाल मीणा",BAP,Official,M,28,ST
-PS,Salumbar,14,1,"केशी",BJP,Official,F,42,OBC (Woman)
-PS,Salumbar,14,2,"दीपिका कुंवर चुन्डावत",INC,Official,F,27,General (Woman)
-PS,Salumbar,14,3,"हेमलता कटारा",BAP,Official,F,27,ST (Woman)
-PS,Salumbar,15,1,"नाथूलाल  मीणा",BAP,Official,M,26,ST
-PS,Salumbar,15,2,"मन्‍ना लाल",INC,Official,M,56,ST
-PS,Salumbar,15,3,"मोहित",BJP,Official,M,35,ST
-PS,Semari,1,1,"धुलेश्वर",INC,Official,M,63,ST
-PS,Semari,1,2,"नारायणलाल मीणा",IND,Official,M,56,ST
-PS,Semari,1,3,"बालुराम मीणा",BAP,Official,M,35,ST (Woman)
-PS,Semari,1,4,"मांगीलाल मीणा",IND,Official,M,36,ST
-PS,Semari,1,5,"विरमल",BJP,Official,M,39,ST
-PS,Semari,2,1,"अमर सिंह",BJP,Official,M,34,ST
-PS,Semari,2,2,"लक्ष्मन सिंह",INC,Official,M,73,ST
-PS,Semari,2,3,"संजय मीणा",BAP,Official,M,24,ST
-PS,Semari,3,1,"प्रीती मीणा",BJP,Official,F,39,ST (Woman)
-PS,Semari,3,2,"बबली",INC,Official,F,56,ST (Woman)
-PS,Semari,3,3,"माया मीना",BAP,Official,F,28,ST (Woman)
-PS,Semari,4,1,"अरुणा रोत",BJP,Official,F,28,ST (Woman)
-PS,Semari,4,2,"ओम प्रकाश मीणा",BAP,Official,M,27,ST
-PS,Semari,4,3,"कालूराम",INC,Official,M,59,ST
-PS,Semari,4,4,"कुसुमलता मीणा",IND,Official,F,33,ST (Woman)
-PS,Semari,4,5,"रेखा मीणा",IND,Official,F,33,ST (Woman)
-PS,Semari,5,1,"गौतम लाल पटेल",BJP,Official,M,31,OBC
-PS,Semari,5,2,"धनपाल मीणा",BAP,Official,M,34,ST
-PS,Semari,5,3,"मोडीलाल",IND,Official,M,71,OBC
-PS,Semari,5,4,"रमेश कुमार",INC,Official,M,33,OBC
-PS,Semari,6,1,"निर्भय सिंह राठौड",BJP,Official,M,43,General
-PS,Semari,6,2,"प्रकाश मीणा",BAP,Official,M,27,ST
-PS,Semari,6,3,"महेन्द्र कुमार भाम्बी",IND,Official,M,29,SC
-PS,Semari,6,4,"योगेश",INC,Official,M,27,General
-PS,Semari,7,1,"दुर्गा",INC,Official,F,35,OBC (Woman)
-PS,Semari,7,2,"ललिता पटेल",BJP,Official,F,27,OBC (Woman)
-PS,Semari,7,3,"वेलु",IND,Official,F,49,OBC (Woman)
-PS,Semari,8,1,"तारा देवी पटेल",IND,Official,F,34,OBC (Woman)
-PS,Semari,8,2,"रवीना सुथार",INC,Official,F,23,OBC (Woman)
-PS,Semari,8,3,"लता",IND,Official,F,52,OBC (Woman)
-PS,Semari,8,4,"लता जैन",BJP,Official,F,57,General (Woman)
-PS,Semari,9,1,"कौशल्या",BAP,Official,F,30,ST (Woman)
-PS,Semari,9,2,"प्रियंका",INC,Official,F,31,ST (Woman)
-PS,Semari,9,3,"हिना कुमारी डिन्डोर",BJP,Official,F,25,ST (Woman)
-PS,Semari,10,1,"पार्वती देवी",BJP,Official,F,64,ST (Woman)
-PS,Semari,10,2,"राधा देवी",INC,Official,F,33,ST (Woman)
-PS,Semari,10,3,"सेजन मीना",BAP,Official,F,28,ST (Woman)
-PS,Semari,11,1,"पंकज",INC,Official,M,41,General
-PS,Semari,11,2,"रतन सिह",BJP,Official,M,60,General
-PS,Semari,11,3,"वनराज सिंह",IND,Official,M,28,General
-PS,Semari,11,4,"विजय कुमार मीणा",BAP,Official,M,30,ST
-PS,Semari,12,1,"धन्नु",BAP,Official,F,27,ST (Woman)
-PS,Semari,12,2,"बाबुलाल",INC,Official,M,43,ST
-PS,Semari,12,3,"शान्तिलाल",IND,Official,M,39,ST
-PS,Semari,12,4,"हीरालाल मीना",BJP,Official,M,43,ST
-PS,Semari,13,1,"किरण मीणा",INC,Official,M,37,ST
-PS,Semari,13,2,"गीता कुमारी मीना",BAP,Official,F,21,ST (Woman)
-PS,Semari,13,3,"लक्ष्मण",BJP,Official,M,48,ST
-PS,Semari,14,1,"पानू",INC,Official,F,43,ST (Woman)
-PS,Semari,14,2,"लीला देवी",BJP,Official,F,38,ST (Woman)
-PS,Semari,14,3,"शान्ती देवी मीणा",BAP,Official,F,31,ST (Woman)
-PS,Semari,15,1,"करुणा",INC,Official,F,42,ST (Woman)
-PS,Semari,15,2,"राजु देवी",BJP,Official,F,34,ST (Woman)
-PS,Semari,15,3,"रीना देवी",BAP,Official,F,35,ST (Woman)
-ZP,Salumber ZP,1,1,"गोविंद कलासुआ",AAP,Official,M,65,ST
-ZP,Salumber ZP,1,2,"वाल चन्द्र",BJP,Official,M,49,ST
-ZP,Salumber ZP,1,3,"विजय कुमार मीणा",INC,Official,M,27,ST
-ZP,Salumber ZP,1,4,"सुरेश कुमार मीणा",BAP,Official,M,34,ST
-ZP,Salumber ZP,2,1,"गंगाराम",INC,Official,M,65,ST
-ZP,Salumber ZP,2,2,"मनीष कुमार मीणा",BJP,Official,M,48,ST
-ZP,Salumber ZP,2,3,"रंजीत कुमार मीणा",BAP,Official,M,30,ST
-ZP,Salumber ZP,2,4,"रमेश मीणा",IND,Official,M,49,ST
-ZP,Salumber ZP,2,5,"शंकरलाल मीणा",AAP,Official,M,32,ST
-ZP,Salumber ZP,3,1,"केशु",BJP,Official,F,37,OBC (Woman)
-ZP,Salumber ZP,3,2,"नर्बदा",IND,Official,F,34,General (Woman)
-ZP,Salumber ZP,3,3,"मनीता पटेल",INC,Official,F,29,OBC (Woman)
-ZP,Salumber ZP,3,4,"राधा कुमारी मीणा",BAP,Official,F,32,ST (Woman)
-ZP,Salumber ZP,3,5,"सुशीला",IND,Official,F,58,OBC (Woman)
-ZP,Salumber ZP,4,1,"अनीता मीणा",INC,Official,F,28,ST (Woman)
-ZP,Salumber ZP,4,2,"कल्पना कुमारी मीणा",BAP,Official,F,29,ST (Woman)
-ZP,Salumber ZP,4,3,"सोनल",BJP,Official,F,34,ST (Woman)
-ZP,Salumber ZP,4,4,"हेमलता मीणा",IND,Official,F,28,ST (Woman)
-ZP,Salumber ZP,5,1,"करीना कुमारी मीणा",BAP,Official,F,27,ST (Woman)
-ZP,Salumber ZP,5,2,"जमना",INC,Official,F,30,General (Woman)
-ZP,Salumber ZP,5,3,"बंसती कुमारी पटेल",IND,Official,F,25,OBC (Woman)
-ZP,Salumber ZP,5,4,"रतनी",BJP,Official,F,41,General (Woman)
-ZP,Salumber ZP,6,1,"अनुराधा मीणा",BAP,Official,F,26,ST (Woman)
-ZP,Salumber ZP,6,2,"बसन्ती",INC,Official,F,62,ST (Woman)
-ZP,Salumber ZP,6,3,"रेखादेवी",BJP,Official,F,27,ST (Woman)
-ZP,Salumber ZP,7,1,"पुष्पा देवी",INC,Official,F,39,ST (Woman)
-ZP,Salumber ZP,7,2,"बसंती मीणा",BJP,Official,F,37,ST (Woman)
-ZP,Salumber ZP,7,3,"लक्ष्मी",BAP,Official,F,27,ST (Woman)
-ZP,Salumber ZP,8,1,"कालुलाल",INC,Official,M,60,ST
-ZP,Salumber ZP,8,2,"मोहनलाल",BAP,Official,M,35,ST
-ZP,Salumber ZP,8,3,"हरिराम",BJP,Official,M,53,ST
-ZP,Salumber ZP,9,1,"गौरांग",BAP,Official,M,52,ST
-ZP,Salumber ZP,9,2,"मणीलाल मीणा",AAP,Official,M,24,ST
-ZP,Salumber ZP,9,3,"लछुलाल",INC,Official,M,65,ST
-ZP,Salumber ZP,9,4,"श्रवण कुमार",BJP,Official,M,45,ST
-ZP,Salumber ZP,10,1,"देवेन्द्र सिंह",INC,Official,M,53,General
-ZP,Salumber ZP,10,2,"नरेश कुमार",BAP,Official,M,35,ST
-ZP,Salumber ZP,10,3,"मेगालाल",IND,Official,M,40,OBC
-ZP,Salumber ZP,10,4,"रतनलाल",IND,Official,M,41,General
-ZP,Salumber ZP,10,5,"सुरेन्द्र सिंह चौहान",IND,Official,M,25,General
-ZP,Salumber ZP,10,6,"हितेश कुमार सेवक",BJP,Official,M,34,General
-ZP,Salumber ZP,11,1,"अनिल",IND,Official,M,43,OBC
-ZP,Salumber ZP,11,2,"गोविन्द",BJP,Official,M,44,OBC
-ZP,Salumber ZP,11,3,"दिनेश कुमार",INC,Official,M,37,OBC
-ZP,Salumber ZP,11,4,"दिनेश कुमार पटेल",IND,Official,M,34,OBC
-ZP,Salumber ZP,11,5,"रमेश चौधरी",BAP,Official,M,45,OBC
-ZP,Salumber ZP,12,1,"गेबीलाल दमावत",INC,Official,M,54,General
-ZP,Salumber ZP,12,2,"देवेन्द्र सिंह",BJP,Official,M,31,General
-ZP,Salumber ZP,12,3,"लक्ष्मीलाल सालवी",BAP,Official,M,50,SC
-ZP,Salumber ZP,13,1,"उमेश",INC,Official,M,41,ST
-ZP,Salumber ZP,13,2,"किशनलाल",AAP,Official,M,56,ST
-ZP,Salumber ZP,13,3,"जगदीश कुमार मीणा",IND,Official,M,30,ST
-ZP,Salumber ZP,13,4,"जया मीणा",BJP,Official,F,28,ST (Woman)
-ZP,Salumber ZP,13,5,"रूपी देवी",BAP,Official,F,32,ST (Woman)
-ZP,Salumber ZP,14,1,"निर्मला कुंवर सिसोदिया",INC,Official,F,25,General (Woman)
-ZP,Salumber ZP,14,2,"पदमा कुंवर",BJP,Official,F,44,General (Woman)
-ZP,Salumber ZP,14,3,"रेखा भील",BAP,Official,F,26,ST (Woman)
-ZP,Salumber ZP,15,1,"धीरज सालवी",BAP,Official,M,27,SC
-ZP,Salumber ZP,15,2,"नाथुलाल",INC,Official,M,44,SC
-ZP,Salumber ZP,15,3,"लोगरलाल",BJP,Official,M,47,SC
-ZP,Salumber ZP,16,1,"केसर कुमारी मीणा",BJP,Official,F,22,ST (Woman)
-ZP,Salumber ZP,16,2,"धुली कुमारी",INC,Official,F,24,ST (Woman)
-ZP,Salumber ZP,16,3,"विमला",BAP,Official,F,36,ST (Woman)
-ZP,Salumber ZP,17,1,"कालकी",BAP,Official,F,44,ST (Woman)
-ZP,Salumber ZP,17,2,"गुड्‌डी मीणा",BJP,Official,F,24,ST (Woman)
-ZP,Salumber ZP,17,3,"लाली कुमारी मीणा",INC,Official,F,22,ST (Woman)
-ZP,Salumber ZP,18,1,"अणदी लाल",BAP,Official,M,38,ST
-ZP,Salumber ZP,18,2,"गौतम लाल मीणा",AAP,Official,M,33,ST
-ZP,Salumber ZP,18,3,"रामलाल",INC,Official,M,48,ST
-ZP,Salumber ZP,18,4,"लीला मीणा",BJP,Official,F,37,ST (Woman)
-ZP,Salumber ZP,19,1,"मोगी",BAP,Official,F,55,ST (Woman)
-ZP,Salumber ZP,19,2,"मोहनी कुमारी मीणा",INC,Official,F,26,ST (Woman)
-ZP,Salumber ZP,19,3,"सुखना",BJP,Official,F,31,ST (Woman)
-ZP,Salumber ZP,20,1,"पुष्पा कुमारी मीणा",INC,Official,F,32,ST (Woman)
-ZP,Salumber ZP,20,2,"रम्बा मीणा",BAP,Official,F,34,ST (Woman)
-ZP,Salumber ZP,20,3,"हिम्मती मीणा",BJP,Official,F,21,ST (Woman)
-ZP,Salumber ZP,21,1,"नागेन्द्र",BJP,Official,M,48,ST
-ZP,Salumber ZP,21,2,"रमेशचन्द्र मीणा",BAP,Official,M,33,ST
-ZP,Salumber ZP,21,3,"रामलाल",INC,Official,M,50,ST
+﻿id,category,block_name,ward_no,ballot_no,name_hindi,party,symbol,gender,age,candidate_category
+155,PS,Geengla,1,1,प्रतापी बाई,INC,Official,F,69,ST (Woman)
+154,PS,Geengla,1,2,मीनादेवी,BJP,Official,F,33,ST (Woman)
+281,PS,Geengla,1,3,नोटा (NOTA),NOTA,नोटा,,,
+157,PS,Geengla,2,1,प्रेमी बाई,INC,Official,F,32,OBC (Woman)
+156,PS,Geengla,2,2,मोती,BJP,Official,F,51,General (Woman)
+282,PS,Geengla,2,3,नोटा (NOTA),NOTA,नोटा,,,
+158,PS,Geengla,3,1,गौतम लाल,BJP,Official,M,32,ST
+160,PS,Geengla,3,2,वालाराम तावड,INC,Official,M,79,ST
+159,PS,Geengla,3,3,सुरेश कुमार भील,BAP,Official,M,24,ST
+283,PS,Geengla,3,4,नोटा (NOTA),NOTA,नोटा,,,
+162,PS,Geengla,4,1,भेरू लाल,IND,Official,M,39,OBC
+161,PS,Geengla,4,2,महेंद्र कुमार पटेल,BJP,Official,M,30,OBC
+163,PS,Geengla,4,3,ललित पटेल,INC,Official,M,45,OBC
+284,PS,Geengla,4,4,नोटा (NOTA),NOTA,नोटा,,,
+165,PS,Geengla,5,1,अनिता कुमारी मीना,BAP,Official,F,23,ST (Woman)
+166,PS,Geengla,5,2,गुलाब कुंवर,BJP,Official,F,54,General (Woman)
+164,PS,Geengla,5,3,लक्ष्मी कुंवर,INC,Official,F,53,General (Woman)
+285,PS,Geengla,5,4,नोटा (NOTA),NOTA,नोटा,,,
+167,PS,Geengla,6,1,गोपाल सिंह,INC,Official,M,36,General
+168,PS,Geengla,6,2,रघुवीर सिंह सिसोदिया,BJP,Official,M,43,General
+286,PS,Geengla,6,3,नोटा (NOTA),NOTA,नोटा,,,
+171,PS,Geengla,7,1,गणपत लाल,INC,Official,M,38,SC
+170,PS,Geengla,7,2,प्रकाश चन्द्र मेघवाल,BAP,Official,M,49,SC
+169,PS,Geengla,7,3,रतन लाल,BJP,Official,M,46,SC
+287,PS,Geengla,7,4,नोटा (NOTA),NOTA,नोटा,,,
+174,PS,Geengla,8,1,शंकरी,BAP,Official,F,40,ST (Woman)
+172,PS,Geengla,8,2,शान्ता बाई,BJP,Official,F,36,ST (Woman)
+173,PS,Geengla,8,3,शान्ति,INC,Official,F,32,ST (Woman)
+175,PS,Geengla,8,4,संगीता मीणा,IND,Official,F,32,ST (Woman)
+288,PS,Geengla,8,5,नोटा (NOTA),NOTA,नोटा,,,
+178,PS,Geengla,9,1,गंगा देवी,INC,Official,F,58,ST (Woman)
+177,PS,Geengla,9,2,देवा,BJP,Official,M,65,ST
+176,PS,Geengla,9,3,रमेश लाल,BAP,Official,M,40,ST
+289,PS,Geengla,9,4,नोटा (NOTA),NOTA,नोटा,,,
+180,PS,Geengla,10,1,खुशपाल सिंह,BAP,Official,M,33,General
+179,PS,Geengla,10,2,पन्ना लाल,INC,Official,M,42,General
+181,PS,Geengla,10,3,प्रकाशचन्द,BJP,Official,M,34,OBC
+290,PS,Geengla,10,4,नोटा (NOTA),NOTA,नोटा,,,
+184,PS,Geengla,11,1,कुरी,BJP,Official,F,53,ST (Woman)
+183,PS,Geengla,11,2,कैलाशी देवी,INC,Official,F,41,ST (Woman)
+182,PS,Geengla,11,3,गंगा मीणा,BAP,Official,F,22,ST (Woman)
+291,PS,Geengla,11,4,नोटा (NOTA),NOTA,नोटा,,,
+186,PS,Geengla,12,1,किशन लाल,INC,Official,M,53,ST
+187,PS,Geengla,12,2,प्रकाश चन्द्र मीणा,BAP,Official,M,40,ST
+185,PS,Geengla,12,3,रूपा,BJP,Official,M,45,ST
+292,PS,Geengla,12,4,नोटा (NOTA),NOTA,नोटा,,,
+189,PS,Geengla,13,1,प्रेमलता,BJP,Official,F,30,ST (Woman)
+190,PS,Geengla,13,2,मोड़ीलाल,INC,Official,M,44,ST
+188,PS,Geengla,13,3,रमेश लाल मीणा,BAP,Official,M,22,ST
+293,PS,Geengla,13,4,नोटा (NOTA),NOTA,नोटा,,,
+191,PS,Geengla,14,1,उषा कुमारी मीणा,INC,Official,F,23,ST (Woman)
+193,PS,Geengla,14,2,कमला कुमारी मीणा,BAP,Official,F,21,ST (Woman)
+192,PS,Geengla,14,3,पार्वती,BJP,Official,F,41,ST (Woman)
+294,PS,Geengla,14,4,नोटा (NOTA),NOTA,नोटा,,,
+195,PS,Geengla,15,1,वेलू बाई,BJP,Official,F,41,OBC (Woman)
+196,PS,Geengla,15,2,शंकरी पटेल,INC,Official,F,30,OBC (Woman)
+194,PS,Geengla,15,3,हीरकी,BAP,Official,F,56,OBC (Woman)
+295,PS,Geengla,15,4,नोटा (NOTA),NOTA,नोटा,,,
+407,PS,Jaisamand,1,1,काना मीणा,BJP,Official,M,56,ST
+408,PS,Jaisamand,1,2,गणपत लाल मीणा,BAP,Official,M,23,ST
+409,PS,Jaisamand,1,3,धनराज,INC,Official,M,46,ST
+410,PS,Jaisamand,1,4,राजकुमार मीणा,IND,सेब,M,22,ST
+296,PS,Jaisamand,1,5,नोटा (NOTA),NOTA,नोटा,,,
+411,PS,Jaisamand,2,1,अजय कुमार मीणा,BAP,Official,M,31,ST
+413,PS,Jaisamand,2,2,नरेन्द्र कुमार मीणा,INC,Official,M,31,ST
+412,PS,Jaisamand,2,3,रामलाल मीणा,BJP,Official,M,39,ST
+414,PS,Jaisamand,2,4,सुरजमल मीणा,IND,अलमारी,M,56,ST
+297,PS,Jaisamand,2,5,नोटा (NOTA),NOTA,नोटा,,,
+416,PS,Jaisamand,3,1,गीता देवी,BJP,Official,F,54,ST (Woman)
+417,PS,Jaisamand,3,2,बाबु लाल मीणा,BAP,Official,M,46,ST
+415,PS,Jaisamand,3,3,रवींद्र कूमार मीणा,INC,Official,M,35,ST
+298,PS,Jaisamand,3,4,नोटा (NOTA),NOTA,नोटा,,,
+421,PS,Jaisamand,4,1,राधा देवीलाल मीणा,BAP,Official,F,39,ST (Woman)
+418,PS,Jaisamand,4,2,रेखा,BJP,Official,F,42,ST (Woman)
+420,PS,Jaisamand,4,3,वाली,AAP,Official,F,40,ST (Woman)
+419,PS,Jaisamand,4,4,सजन,INC,Official,F,40,ST (Woman)
+299,PS,Jaisamand,4,5,नोटा (NOTA),NOTA,नोटा,,,
+423,PS,Jaisamand,5,1,प्रभु लाल मीणा,BJP,Official,M,54,ST
+425,PS,Jaisamand,5,2,मांगीलाल मीणा,AAP,Official,M,39,ST
+422,PS,Jaisamand,5,3,माया डॉ. विकास खराडी,BAP,Official,F,33,ST (Woman)
+424,PS,Jaisamand,5,4,रेशमा मीणा,INC,Official,F,56,ST (Woman)
+300,PS,Jaisamand,5,5,नोटा (NOTA),NOTA,नोटा,,,
+427,PS,Jaisamand,6,1,कमला देवी,AAP,Official,F,38,ST (Woman)
+428,PS,Jaisamand,6,2,किरण मीणा,INC,Official,F,29,ST (Woman)
+429,PS,Jaisamand,6,3,भूरी किशोर मीणा,BAP,Official,F,32,ST (Woman)
+426,PS,Jaisamand,6,4,सूरज तेजसिंह मीणा,BJP,Official,F,28,ST (Woman)
+301,PS,Jaisamand,6,5,नोटा (NOTA),NOTA,नोटा,,,
+431,PS,Jaisamand,7,1,जमना कुमारी मीणा,INC,Official,F,29,ST (Woman)
+430,PS,Jaisamand,7,2,ज्वाला मीना,BJP,Official,F,42,ST (Woman)
+432,PS,Jaisamand,7,3,रेखा कालूलाल,BAP,Official,F,24,ST (Woman)
+302,PS,Jaisamand,7,4,नोटा (NOTA),NOTA,नोटा,,,
+433,PS,Jaisamand,8,1,अम्बा धुलिराम अहारी,BAP,Official,F,25,ST (Woman)
+435,PS,Jaisamand,8,2,कालू मीणा,INC,Official,F,35,ST (Woman)
+434,PS,Jaisamand,8,3,शारदा शंकर लाल मीणा,BJP,Official,F,56,ST (Woman)
+303,PS,Jaisamand,8,4,नोटा (NOTA),NOTA,नोटा,,,
+440,PS,Jaisamand,9,1,गोविंद प्रेमचंद पटेल,IND,ईंटें,M,37,OBC
+436,PS,Jaisamand,9,2,दिनेश कुमार प्रजापत,INC,Official,M,32,OBC
+439,PS,Jaisamand,9,3,पदमा,AAP,Official,M,54,OBC
+437,PS,Jaisamand,9,4,पदु बाई पदमलाल,BJP,Official,F,56,OBC (Woman)
+438,PS,Jaisamand,9,5,प्रकाश तेली,BAP,Official,M,28,OBC
+304,PS,Jaisamand,9,6,नोटा (NOTA),NOTA,नोटा,,,
+442,PS,Jaisamand,10,1,जवाहर लाल मीणा,BAP,Official,M,58,ST
+443,PS,Jaisamand,10,2,देवीलाल,BJP,Official,M,44,ST
+441,PS,Jaisamand,10,3,शेलेन्द्र सिंह मीणा,INC,Official,M,49,ST
+305,PS,Jaisamand,10,4,नोटा (NOTA),NOTA,नोटा,,,
+445,PS,Jaisamand,11,1,ईन्द्र कुंवर,INC,Official,F,37,General (Woman)
+448,PS,Jaisamand,11,2,कडुआ बाई,IND,चारपाई,F,53,General (Woman)
+447,PS,Jaisamand,11,3,नरसा कुंवर,IND,सेब,F,29,General (Woman)
+444,PS,Jaisamand,11,4,ममता कुमारी मीणा,BAP,Official,F,25,ST (Woman)
+446,PS,Jaisamand,11,5,मोहन कुंवर,BJP,Official,F,38,General (Woman)
+306,PS,Jaisamand,11,6,नोटा (NOTA),NOTA,नोटा,,,
+449,PS,Jaisamand,12,1,कंचन,BAP,Official,F,38,General (Woman)
+451,PS,Jaisamand,12,2,कलावती देवीसिंह,BJP,Official,F,38,General (Woman)
+450,PS,Jaisamand,12,3,चन्दन,INC,Official,F,65,General (Woman)
+307,PS,Jaisamand,12,4,नोटा (NOTA),NOTA,नोटा,,,
+452,PS,Jaisamand,13,1,अनिता कुमारी मीणा,BAP,Official,F,24,ST (Woman)
+453,PS,Jaisamand,13,2,देवी सिंह,INC,Official,M,45,General
+455,PS,Jaisamand,13,3,भीमराज पटेल,BJP,Official,M,33,OBC
+454,PS,Jaisamand,13,4,लोकेन्द्र सिंह राठौड,IND,अलमारी,M,33,General
+456,PS,Jaisamand,13,5,हिम्मत सिंह,IND,सेब,M,43,General
+308,PS,Jaisamand,13,6,नोटा (NOTA),NOTA,नोटा,,,
+457,PS,Jaisamand,14,1,कमल कुमार खटीक,BJP,Official,M,29,SC
+458,PS,Jaisamand,14,2,भँवरलाल सालवी,BAP,Official,M,62,SC
+459,PS,Jaisamand,14,3,शंकर लाल नट,INC,Official,M,40,SC
+309,PS,Jaisamand,14,4,नोटा (NOTA),NOTA,नोटा,,,
+461,PS,Jaisamand,15,1,अग्रवाल प्रियंका,INC,Official,F,25,General (Woman)
+463,PS,Jaisamand,15,2,कंचन किशोर जोशी,IND,बाँसुरी,F,41,General (Woman)
+464,PS,Jaisamand,15,3,चंदा दिनेश कुमार जोशी,BJP,Official,F,33,General (Woman)
+460,PS,Jaisamand,15,4,तिलक कंवर,IND,सेब,F,39,General (Woman)
+462,PS,Jaisamand,15,5,रेखा कुंवर हिम्मत सिंह राठौड,BAP,Official,F,29,General (Woman)
+310,PS,Jaisamand,15,6,नोटा (NOTA),NOTA,नोटा,,,
+524,PS,Jhallara,1,1,दौलत राम,INC,Official,M,32,ST
+522,PS,Jhallara,1,2,नरदा,IND,अलमारी,F,21,ST (Woman)
+521,PS,Jhallara,1,3,नाथु,BJP,Official,M,58,ST
+523,PS,Jhallara,1,4,परमानन्द मीणा,BAP,Official,M,32,ST
+311,PS,Jhallara,1,5,नोटा (NOTA),NOTA,नोटा,,,
+528,PS,Jhallara,2,1,मनीषा कुमारी मीणा,INC,Official,F,23,ST (Woman)
+527,PS,Jhallara,2,2,ललीता कुमारी मीणा,BJP,Official,F,21,ST (Woman)
+525,PS,Jhallara,2,3,श्रीमति नन्दू,IND,अलमारी,F,26,ST (Woman)
+526,PS,Jhallara,2,4,श्रीमती सोनिया,BAP,Official,F,24,ST (Woman)
+312,PS,Jhallara,2,5,नोटा (NOTA),NOTA,नोटा,,,
+531,PS,Jhallara,3,1,खेता,INC,Official,M,35,ST
+529,PS,Jhallara,3,2,गणेश,BJP,Official,M,31,ST
+530,PS,Jhallara,3,3,रूपा,BAP,Official,M,36,ST
+313,PS,Jhallara,3,4,नोटा (NOTA),NOTA,नोटा,,,
+533,PS,Jhallara,4,1,कली कुंवर,INC,Official,F,39,General (Woman)
+532,PS,Jhallara,4,2,कैलाश कुंवर,BJP,Official,F,51,General (Woman)
+314,PS,Jhallara,4,3,नोटा (NOTA),NOTA,नोटा,,,
+534,PS,Jhallara,5,1,गोपी लाल,BJP,Official,M,33,ST
+536,PS,Jhallara,5,2,धुलीराम,INC,Official,M,51,ST
+535,PS,Jhallara,5,3,मुकेश कुमार मीणा,BAP,Official,M,25,ST
+315,PS,Jhallara,5,4,नोटा (NOTA),NOTA,नोटा,,,
+537,PS,Jhallara,6,1,नारायण,BJP,Official,M,31,OBC
+538,PS,Jhallara,6,2,वालजी मीणा,INC,Official,M,68,ST
+316,PS,Jhallara,6,3,नोटा (NOTA),NOTA,नोटा,,,
+539,PS,Jhallara,7,1,देवीलाल पटेल,BJP,Official,M,41,OBC
+540,PS,Jhallara,7,2,रीतू मीणा,BAP,Official,F,28,ST (Woman)
+541,PS,Jhallara,7,3,लालुराम,INC,Official,M,32,OBC
+317,PS,Jhallara,7,4,नोटा (NOTA),NOTA,नोटा,,,
+543,PS,Jhallara,8,1,जगदीश राम,BAP,Official,M,46,ST
+542,PS,Jhallara,8,2,जितेंद्र सिंह चौहान,BJP,Official,M,29,General
+544,PS,Jhallara,8,3,देवी सिंह,INC,Official,M,40,General
+318,PS,Jhallara,8,4,नोटा (NOTA),NOTA,नोटा,,,
+547,PS,Jhallara,9,1,नर्वदा मीणा,INC,Official,F,26,ST (Woman)
+545,PS,Jhallara,9,2,लसु,BJP,Official,F,39,ST (Woman)
+546,PS,Jhallara,9,3,वर्षा मीणा,BAP,Official,F,23,ST (Woman)
+319,PS,Jhallara,9,4,नोटा (NOTA),NOTA,नोटा,,,
+551,PS,Jhallara,10,1,इन्द्रा मीणा,IND,गुब्बारा,F,29,ST (Woman)
+548,PS,Jhallara,10,2,कान्ता कुमारी मीणा,BJP,Official,F,21,ST (Woman)
+549,PS,Jhallara,10,3,भगवती,IND,अलमारी,F,21,ST (Woman)
+552,PS,Jhallara,10,4,लक्ष्मी कुमारी,INC,Official,F,24,ST (Woman)
+550,PS,Jhallara,10,5,श्रीमती सुगना,BAP,Official,F,42,ST (Woman)
+320,PS,Jhallara,10,6,नोटा (NOTA),NOTA,नोटा,,,
+553,PS,Jhallara,11,1,नर्बदा,BJP,Official,F,25,ST (Woman)
+555,PS,Jhallara,11,2,शांता,INC,Official,F,44,ST (Woman)
+554,PS,Jhallara,11,3,शीला मीणा,BAP,Official,F,31,ST (Woman)
+321,PS,Jhallara,11,4,नोटा (NOTA),NOTA,नोटा,,,
+556,PS,Jhallara,12,1,सज्जन कुँवर,BJP,Official,F,45,General (Woman)
+557,PS,Jhallara,12,2,सुमन भाटी,INC,Official,F,33,General (Woman)
+322,PS,Jhallara,12,3,नोटा (NOTA),NOTA,नोटा,,,
+561,PS,Jhallara,13,1,कन्हैया लाल,INC,Official,M,34,ST
+559,PS,Jhallara,13,2,देवा,IND,कोट,M,50,ST
+560,PS,Jhallara,13,3,राजेन्द्र कुमार मीणा,BAP,Official,M,32,ST
+558,PS,Jhallara,13,4,हरीश कुमार,BJP,Official,M,45,ST
+323,PS,Jhallara,13,5,नोटा (NOTA),NOTA,नोटा,,,
+562,PS,Jhallara,14,1,पुजी,BJP,Official,F,59,ST (Woman)
+563,PS,Jhallara,14,2,मेनका कुमारी,BAP,Official,F,30,ST (Woman)
+564,PS,Jhallara,14,3,सोनिया मीणा,INC,Official,F,25,ST (Woman)
+324,PS,Jhallara,14,4,नोटा (NOTA),NOTA,नोटा,,,
+565,PS,Jhallara,15,1,गोतम लाल,BJP,Official,M,43,ST
+566,PS,Jhallara,15,2,प्रकाश चन्द्र,BAP,Official,M,29,ST
+567,PS,Jhallara,15,3,महेन्द्र कुमार,INC,Official,M,44,ST
+325,PS,Jhallara,15,4,नोटा (NOTA),NOTA,नोटा,,,
+104,PS,Lasadiya,1,1,दुर्गा कुमारी मीणा,BAP,Official,F,21,ST (Woman)
+106,PS,Lasadiya,1,2,भंवरी,INC,Official,F,36,ST (Woman)
+105,PS,Lasadiya,1,3,शंकरी  मीणा,BJP,Official,F,43,ST (Woman)
+326,PS,Lasadiya,1,4,नोटा (NOTA),NOTA,नोटा,,,
+107,PS,Lasadiya,2,1,धापु देवी डाँगी,BJP,Official,F,38,OBC (Woman)
+109,PS,Lasadiya,2,2,प्रेमी,BAP,Official,F,32,ST (Woman)
+108,PS,Lasadiya,2,3,लच्छु,INC,Official,F,69,OBC (Woman)
+327,PS,Lasadiya,2,4,नोटा (NOTA),NOTA,नोटा,,,
+110,PS,Lasadiya,3,1,आछूडी कुमारी मीणा,BAP,Official,F,21,ST (Woman)
+112,PS,Lasadiya,3,2,कानकी,INC,Official,F,33,ST (Woman)
+111,PS,Lasadiya,3,3,शांति कुमारी मीणा,BJP,Official,F,26,ST (Woman)
+328,PS,Lasadiya,3,4,नोटा (NOTA),NOTA,नोटा,,,
+115,PS,Lasadiya,4,1,डाया  मीणा,BJP,Official,M,38,ST
+113,PS,Lasadiya,4,2,भगवान लाल,INC,Official,M,55,ST
+114,PS,Lasadiya,4,3,लोगर लाल मीणा,IND,Official,M,59,ST
+116,PS,Lasadiya,4,4,हिरा,BAP,Official,M,36,ST
+329,PS,Lasadiya,4,5,नोटा (NOTA),NOTA,नोटा,,,
+119,PS,Lasadiya,5,1,खेमा,INC,Official,M,41,ST
+118,PS,Lasadiya,5,2,भेरा उर्फ़ भेरुलाल मीणा,BJP,Official,M,48,ST
+117,PS,Lasadiya,5,3,भेरू लाल,BAP,Official,M,27,ST
+330,PS,Lasadiya,5,4,नोटा (NOTA),NOTA,नोटा,,,
+122,PS,Lasadiya,6,1,कमली,BAP,Official,F,43,ST (Woman)
+123,PS,Lasadiya,6,2,कमली,BAP,Official,F,43,ST (Woman)
+121,PS,Lasadiya,6,3,चोखली मीणा,BJP,Official,F,43,ST (Woman)
+120,PS,Lasadiya,6,4,लक्ष्मी,INC,Official,F,40,ST (Woman)
+331,PS,Lasadiya,6,5,नोटा (NOTA),NOTA,नोटा,,,
+124,PS,Lasadiya,7,1,गंगा देवी मीणा,BAP,Official,F,30,ST (Woman)
+126,PS,Lasadiya,7,2,भगली,INC,Official,F,51,ST (Woman)
+125,PS,Lasadiya,7,3,मीरा,BJP,Official,F,26,ST (Woman)
+332,PS,Lasadiya,7,4,नोटा (NOTA),NOTA,नोटा,,,
+128,PS,Lasadiya,8,1,कमली मीणा,BJP,Official,F,49,ST (Woman)
+127,PS,Lasadiya,8,2,नारायणी,INC,Official,F,38,ST (Woman)
+129,PS,Lasadiya,8,3,रामकन्या,BAP,Official,F,28,ST (Woman)
+333,PS,Lasadiya,8,4,नोटा (NOTA),NOTA,नोटा,,,
+131,PS,Lasadiya,9,1,देवी लाल,BAP,Official,M,56,ST
+132,PS,Lasadiya,9,2,लक्ष्मण,INC,Official,M,55,ST
+130,PS,Lasadiya,9,3,हीराबाई मीणा,BJP,Official,F,57,ST (Woman)
+334,PS,Lasadiya,9,4,नोटा (NOTA),NOTA,नोटा,,,
+133,PS,Lasadiya,10,1,केशरी,BJP,Official,F,53,ST (Woman)
+135,PS,Lasadiya,10,2,प्रभु,INC,Official,M,53,ST
+134,PS,Lasadiya,10,3,रामा,BAP,Official,M,44,ST
+335,PS,Lasadiya,10,4,नोटा (NOTA),NOTA,नोटा,,,
+138,PS,Lasadiya,11,1,ऊंकार लाल मीणा,BAP,Official,M,26,ST
+139,PS,Lasadiya,11,2,प्रकाश उर्फ़ प्रकाश चंद मीणा,BJP,Official,M,34,ST
+137,PS,Lasadiya,11,3,वरदीचंद,IND,Official,M,57,ST
+136,PS,Lasadiya,11,4,हेमला,INC,Official,M,48,ST
+336,PS,Lasadiya,11,5,नोटा (NOTA),NOTA,नोटा,,,
+141,PS,Lasadiya,12,1,चुनकी,INC,Official,F,35,ST (Woman)
+142,PS,Lasadiya,12,2,लोगरी कुमार मीणा,BAP,Official,F,28,ST (Woman)
+140,PS,Lasadiya,12,3,हकरी बाई,BJP,Official,F,40,ST (Woman)
+337,PS,Lasadiya,12,4,नोटा (NOTA),NOTA,नोटा,,,
+144,PS,Lasadiya,13,1,उदेलाल  उर्फ  उदयलाल,BJP,Official,M,39,ST
+143,PS,Lasadiya,13,2,कालु लाल,BAP,Official,M,29,ST
+145,PS,Lasadiya,13,3,श्रवण,INC,Official,M,35,ST
+338,PS,Lasadiya,13,4,नोटा (NOTA),NOTA,नोटा,,,
+148,PS,Lasadiya,14,1,धनराज पटेल,BJP,Official,M,43,OBC (Woman)
+146,PS,Lasadiya,14,2,प्रदीप कुमार जैन,INC,Official,M,48,General
+147,PS,Lasadiya,14,3,प्रदीप कुमार जैन,INC,Official,M,48,General
+149,PS,Lasadiya,14,4,लिम्बा राम,BAP,Official,M,32,ST
+339,PS,Lasadiya,14,5,नोटा (NOTA),NOTA,नोटा,,,
+152,PS,Lasadiya,15,1,कालू,IND,Official,M,43,ST
+151,PS,Lasadiya,15,2,नारायण उर्फ़ नारायण लाल मीणा,BJP,Official,M,37,ST
+153,PS,Lasadiya,15,3,रामा,INC,Official,M,58,ST
+150,PS,Lasadiya,15,4,वालचन्द,BAP,Official,M,32,ST
+340,PS,Lasadiya,15,5,नोटा (NOTA),NOTA,नोटा,,,
+55,PS,Salumbar,1,1,केसर कुमारी मीणा,BAP,Official,F,26,ST (Woman)
+57,PS,Salumbar,1,2,दीपिका मीना,INC,Official,F,31,ST (Woman)
+56,PS,Salumbar,1,3,नन्दू देवी,BJP,Official,F,31,ST (Woman)
+341,PS,Salumbar,1,4,नोटा (NOTA),NOTA,नोटा,,,
+58,PS,Salumbar,2,1,गोपाल सिंह,BJP,Official,M,29,General
+60,PS,Salumbar,2,2,नाहर सिंह,INC,Official,M,58,General
+59,PS,Salumbar,2,3,हितेश कुमार मीणा,BAP,Official,M,29,ST
+342,PS,Salumbar,2,4,नोटा (NOTA),NOTA,नोटा,,,
+63,PS,Salumbar,3,1,प्रकाश,BJP,Official,M,37,OBC
+61,PS,Salumbar,3,2,भगवती लाल सुथार,INC,Official,M,43,OBC
+62,PS,Salumbar,3,3,लीना सुथार,BAP,Official,F,32,OBC (Woman)
+343,PS,Salumbar,3,4,नोटा (NOTA),NOTA,नोटा,,,
+66,PS,Salumbar,4,1,रंजना कुंवर,INC,Official,F,47,General (Woman)
+64,PS,Salumbar,4,2,रूपी मीणा,BAP,Official,F,45,ST (Woman)
+65,PS,Salumbar,4,3,लीला कुंवर,BJP,Official,F,54,General (Woman)
+344,PS,Salumbar,4,4,नोटा (NOTA),NOTA,नोटा,,,
+71,PS,Salumbar,5,1,अर्जुन मेहता,BJP,Official,M,36,General
+70,PS,Salumbar,5,2,जगदीश कुमार मीणा,BAP,Official,M,31,ST
+67,PS,Salumbar,5,3,प्रताप सिंह,INC,Official,M,42,General
+68,PS,Salumbar,5,4,प्रदीप कुमार मेहता,IND,Official,M,33,General
+69,PS,Salumbar,5,5,विजयमाला,AAP,Official,F,65,General
+345,PS,Salumbar,5,6,नोटा (NOTA),NOTA,नोटा,,,
+76,PS,Salumbar,6,1,कंकू,IND,Official,F,63,General (Woman)
+75,PS,Salumbar,6,2,नाथी कंवर,IND,Official,F,33,General (Woman)
+72,PS,Salumbar,6,3,बंशती कुमारी मीणा,BAP,Official,F,27,ST (Woman)
+73,PS,Salumbar,6,4,भमरी,BJP,Official,F,42,General (Woman)
+74,PS,Salumbar,6,5,लाली,INC,Official,F,41,General (Woman)
+346,PS,Salumbar,6,6,नोटा (NOTA),NOTA,नोटा,,,
+77,PS,Salumbar,7,1,नर्बदा,INC,Official,F,33,ST (Woman)
+79,PS,Salumbar,7,2,मोती,BAP,Official,F,38,ST (Woman)
+78,PS,Salumbar,7,3,सविता,BJP,Official,F,38,ST (Woman)
+347,PS,Salumbar,7,4,नोटा (NOTA),NOTA,नोटा,,,
+80,PS,Salumbar,8,1,जितेन्द्र कुमार मीणा,BAP,Official,M,22,ST
+81,PS,Salumbar,8,2,भेरा,BJP,Official,M,58,ST
+82,PS,Salumbar,8,3,मेघराज मीणा,INC,Official,M,26,ST
+348,PS,Salumbar,8,4,नोटा (NOTA),NOTA,नोटा,,,
+83,PS,Salumbar,9,1,कमला कुमारी,BJP,Official,F,25,ST (Woman)
+85,PS,Salumbar,9,2,कूरकी,INC,Official,F,52,ST (Woman)
+84,PS,Salumbar,9,3,केसरी,BAP,Official,F,39,ST (Woman)
+349,PS,Salumbar,9,4,नोटा (NOTA),NOTA,नोटा,,,
+87,PS,Salumbar,10,1,कमलेश,BAP,Official,M,28,SC
+88,PS,Salumbar,10,2,नारायण,BJP,Official,M,58,SC
+86,PS,Salumbar,10,3,भैरुलाल,INC,Official,M,63,SC
+350,PS,Salumbar,10,4,नोटा (NOTA),NOTA,नोटा,,,
+91,PS,Salumbar,11,1,कनकलता,INC,Official,F,41,General (Woman)
+89,PS,Salumbar,11,2,निर्मला,BJP,Official,F,40,General (Woman)
+90,PS,Salumbar,11,3,रेखा सुथार,BAP,Official,F,36,General (Woman)
+351,PS,Salumbar,11,4,नोटा (NOTA),NOTA,नोटा,,,
+92,PS,Salumbar,12,1,कोदरलाल,INC,Official,M,65,ST
+94,PS,Salumbar,12,2,पन्नालाल,BJP,Official,M,40,ST
+93,PS,Salumbar,12,3,हेमराज,BAP,Official,M,30,ST
+352,PS,Salumbar,12,4,नोटा (NOTA),NOTA,नोटा,,,
+97,PS,Salumbar,13,1,अशोक कुमार मीणा,INC,Official,M,56,ST
+95,PS,Salumbar,13,2,गोतम लाल,BJP,Official,M,36,ST
+96,PS,Salumbar,13,3,गौतमलाल मीणा,BAP,Official,M,28,ST
+353,PS,Salumbar,13,4,नोटा (NOTA),NOTA,नोटा,,,
+99,PS,Salumbar,14,1,केशी,BJP,Official,F,42,OBC (Woman)
+100,PS,Salumbar,14,2,दीपिका कुंवर चुन्डावत,INC,Official,F,27,General (Woman)
+98,PS,Salumbar,14,3,हेमलता कटारा,BAP,Official,F,27,ST (Woman)
+354,PS,Salumbar,14,4,नोटा (NOTA),NOTA,नोटा,,,
+102,PS,Salumbar,15,1,नाथूलाल  मीणा,BAP,Official,M,26,ST
+103,PS,Salumbar,15,2,मन्‍ना लाल,INC,Official,M,56,ST
+101,PS,Salumbar,15,3,मोहित,BJP,Official,M,35,ST
+355,PS,Salumbar,15,4,नोटा (NOTA),NOTA,नोटा,,,
+465,PS,Sarada,1,1,बाबु लाल मीणा,BAP,Official,M,40,ST
+467,PS,Sarada,1,2,मुकेश कुमार मीणा,INC,Official,M,34,ST
+466,PS,Sarada,1,3,हजारी लाल,BJP,Official,M,46,ST
+356,PS,Sarada,1,4,नोटा (NOTA),NOTA,नोटा,,,
+468,PS,Sarada,2,1,उमा शंकर मीणा,BAP,Official,M,32,ST
+469,PS,Sarada,2,2,केशवलाल मीणा,INC,Official,M,39,ST
+471,PS,Sarada,2,3,गणेश लाल मीणा,IND,सेब,M,28,ST
+470,PS,Sarada,2,4,लक्ष्मण लाल,BJP,Official,M,46,ST
+357,PS,Sarada,2,5,नोटा (NOTA),NOTA,नोटा,,,
+473,PS,Sarada,3,1,कालूलाल,INC,Official,M,70,SC
+474,PS,Sarada,3,2,धूलचंद,BJP,Official,M,66,SC
+472,PS,Sarada,3,3,बसंती लाल मेघवाल,BAP,Official,M,40,SC
+475,PS,Sarada,3,4,शंकर,IND,अलमारी,M,55,SC
+358,PS,Sarada,3,5,नोटा (NOTA),NOTA,नोटा,,,
+478,PS,Sarada,4,1,लक्ष्मी,BJP,Official,F,45,ST (Woman)
+477,PS,Sarada,4,2,शारदा,INC,Official,F,31,ST (Woman)
+476,PS,Sarada,4,3,सुरज मीणा,BAP,Official,F,29,ST (Woman)
+359,PS,Sarada,4,4,नोटा (NOTA),NOTA,नोटा,,,
+481,PS,Sarada,5,1,उर्मिला पटेल,IND,चारपाई,F,32,General (Woman)
+483,PS,Sarada,5,2,कमला,BJP,Official,F,51,General (Woman)
+482,PS,Sarada,5,3,जोसना,IND,अलमारी,F,28,General (Woman)
+479,PS,Sarada,5,4,रेशमा बानो,BAP,Official,F,22,OBC (Woman)
+480,PS,Sarada,5,5,विनीता मीणा,INC,Official,F,31,ST (Woman)
+360,PS,Sarada,5,6,नोटा (NOTA),NOTA,नोटा,,,
+484,PS,Sarada,6,1,दुर्गा,BJP,Official,F,50,ST (Woman)
+486,PS,Sarada,6,2,मीना कुमारी मीणा,INC,Official,F,21,ST (Woman)
+485,PS,Sarada,6,3,सुमन कुमारी,BAP,Official,F,36,ST (Woman)
+361,PS,Sarada,6,4,नोटा (NOTA),NOTA,नोटा,,,
+488,PS,Sarada,7,1,कमला देवी,INC,Official,F,60,ST (Woman)
+489,PS,Sarada,7,2,कलावती,BJP,Official,F,38,ST (Woman)
+490,PS,Sarada,7,3,सीमा,IND,अलमारी,F,36,ST (Woman)
+487,PS,Sarada,7,4,सोहनी देवी,BAP,Official,F,39,ST (Woman)
+362,PS,Sarada,7,5,नोटा (NOTA),NOTA,नोटा,,,
+492,PS,Sarada,8,1,उषा देवी,BJP,Official,F,25,ST (Woman)
+491,PS,Sarada,8,2,चंदा कुमारी मीणा,BAP,Official,F,26,ST (Woman)
+493,PS,Sarada,8,3,ममता,INC,Official,F,34,ST (Woman)
+363,PS,Sarada,8,4,नोटा (NOTA),NOTA,नोटा,,,
+494,PS,Sarada,9,1,चून्नी लाल,BJP,Official,M,71,ST
+496,PS,Sarada,9,2,रणजीत,BAP,Official,M,35,ST
+495,PS,Sarada,9,3,विष्णु,INC,Official,M,62,ST
+364,PS,Sarada,9,4,नोटा (NOTA),NOTA,नोटा,,,
+499,PS,Sarada,10,1,बबली देवी,INC,Official,F,34,ST (Woman)
+498,PS,Sarada,10,2,मंजूला,BJP,Official,F,40,ST (Woman)
+497,PS,Sarada,10,3,संगीता अहारी,BAP,Official,F,35,ST (Woman)
+365,PS,Sarada,10,4,नोटा (NOTA),NOTA,नोटा,,,
+504,PS,Sarada,11,1,आगा खान,BJP,Official,M,44,General
+500,PS,Sarada,11,2,नवीद बेग मिर्जा,INC,Official,M,42,General
+502,PS,Sarada,11,3,सुरेश कुमार,BAP,Official,M,34,ST
+503,PS,Sarada,11,4,हीरालाल,IND,अलमारी,M,52,OBC
+501,PS,Sarada,11,5,हेमन्त,IND,चारपाई,M,34,General
+366,PS,Sarada,11,6,नोटा (NOTA),NOTA,नोटा,,,
+505,PS,Sarada,12,1,गमीर लाल,BAP,Official,M,57,ST
+508,PS,Sarada,12,2,महेन्द्र,INC,Official,M,35,ST
+506,PS,Sarada,12,3,रामलाल,IND,चारपाई,M,54,ST
+507,PS,Sarada,12,4,हजारी लाल,BJP,Official,M,49,ST
+367,PS,Sarada,12,5,नोटा (NOTA),NOTA,नोटा,,,
+511,PS,Sarada,13,1,कंकू,IND,सेब,F,56,OBC (Woman)
+509,PS,Sarada,13,2,रक्षा सुथार,INC,Official,F,22,OBC (Woman)
+510,PS,Sarada,13,3,लाली,BJP,Official,F,61,General (Woman)
+512,PS,Sarada,13,4,लीला कुमारी,BAP,Official,F,26,ST (Woman)
+368,PS,Sarada,13,5,नोटा (NOTA),NOTA,नोटा,,,
+517,PS,Sarada,14,1,गंगाराम,IND,अलमारी,M,38,ST
+516,PS,Sarada,14,2,नरेश मीणा,AAP,Official,M,35,ST
+515,PS,Sarada,14,3,प्रकाश,BJP,Official,M,40,ST
+514,PS,Sarada,14,4,मनोहर,BAP,Official,M,46,ST
+513,PS,Sarada,14,5,शिवलाल,INC,Official,M,64,ST
+369,PS,Sarada,14,6,नोटा (NOTA),NOTA,नोटा,,,
+518,PS,Sarada,15,1,अरविन्द कुमार मीणा,BAP,Official,M,31,ST
+519,PS,Sarada,15,2,मावालाल,INC,Official,M,48,ST
+520,PS,Sarada,15,3,मोगालाल,BJP,Official,M,48,ST
+370,PS,Sarada,15,4,नोटा (NOTA),NOTA,नोटा,,,
+3,PS,Semari,1,1,धुलेश्वर,INC,Official,M,63,ST
+5,PS,Semari,1,2,नारायणलाल मीणा,IND,Official,M,56,ST
+1,PS,Semari,1,3,बालुराम मीणा,BAP,Official,M,35,ST (Woman)
+4,PS,Semari,1,4,मांगीलाल मीणा,IND,Official,M,36,ST
+2,PS,Semari,1,5,विरमल,BJP,Official,M,39,ST
+371,PS,Semari,1,6,नोटा (NOTA),NOTA,नोटा,,,
+7,PS,Semari,2,1,अमर सिंह,BJP,Official,M,34,ST
+6,PS,Semari,2,2,लक्ष्मन सिंह,INC,Official,M,73,ST
+8,PS,Semari,2,3,संजय मीणा,BAP,Official,M,24,ST
+372,PS,Semari,2,4,नोटा (NOTA),NOTA,नोटा,,,
+10,PS,Semari,3,1,प्रीती मीणा,BJP,Official,F,39,ST (Woman)
+11,PS,Semari,3,2,बबली,INC,Official,F,56,ST (Woman)
+9,PS,Semari,3,3,माया मीना,BAP,Official,F,28,ST (Woman)
+373,PS,Semari,3,4,नोटा (NOTA),NOTA,नोटा,,,
+15,PS,Semari,4,1,अरुणा रोत,BJP,Official,F,28,ST (Woman)
+14,PS,Semari,4,2,ओम प्रकाश मीणा,BAP,Official,M,27,ST
+16,PS,Semari,4,3,कालूराम,INC,Official,M,59,ST
+13,PS,Semari,4,4,कुसुमलता मीणा,IND,Official,F,33,ST (Woman)
+12,PS,Semari,4,5,रेखा मीणा,IND,Official,F,33,ST (Woman)
+374,PS,Semari,4,6,नोटा (NOTA),NOTA,नोटा,,,
+17,PS,Semari,5,1,गौतम लाल पटेल,BJP,Official,M,31,OBC
+18,PS,Semari,5,2,धनपाल मीणा,BAP,Official,M,34,ST
+19,PS,Semari,5,3,मोडीलाल,IND,Official,M,71,OBC
+20,PS,Semari,5,4,रमेश कुमार,INC,Official,M,33,OBC
+375,PS,Semari,5,5,नोटा (NOTA),NOTA,नोटा,,,
+24,PS,Semari,6,1,निर्भय सिंह राठौड,BJP,Official,M,43,General
+23,PS,Semari,6,2,प्रकाश मीणा,BAP,Official,M,27,ST
+22,PS,Semari,6,3,महेन्द्र कुमार भाम्बी,IND,Official,M,29,SC
+21,PS,Semari,6,4,योगेश,INC,Official,M,27,General
+376,PS,Semari,6,5,नोटा (NOTA),NOTA,नोटा,,,
+27,PS,Semari,7,1,दुर्गा,INC,Official,F,35,OBC (Woman)
+25,PS,Semari,7,2,ललिता पटेल,BJP,Official,F,27,OBC (Woman)
+26,PS,Semari,7,3,वेलु,IND,Official,F,49,OBC (Woman)
+377,PS,Semari,7,4,नोटा (NOTA),NOTA,नोटा,,,
+28,PS,Semari,8,1,तारा देवी पटेल,IND,Official,F,34,OBC (Woman)
+29,PS,Semari,8,2,रवीना सुथार,INC,Official,F,23,OBC (Woman)
+30,PS,Semari,8,3,लता,IND,Official,F,52,OBC (Woman)
+31,PS,Semari,8,4,लता जैन,BJP,Official,F,57,General (Woman)
+378,PS,Semari,8,5,नोटा (NOTA),NOTA,नोटा,,,
+32,PS,Semari,9,1,कौशल्या,BAP,Official,F,30,ST (Woman)
+34,PS,Semari,9,2,प्रियंका,INC,Official,F,31,ST (Woman)
+33,PS,Semari,9,3,हिना कुमारी डिन्डोर,BJP,Official,F,25,ST (Woman)
+379,PS,Semari,9,4,नोटा (NOTA),NOTA,नोटा,,,
+35,PS,Semari,10,1,पार्वती देवी,BJP,Official,F,64,ST (Woman)
+37,PS,Semari,10,2,राधा देवी,INC,Official,F,33,ST (Woman)
+36,PS,Semari,10,3,सेजन मीना,BAP,Official,F,28,ST (Woman)
+380,PS,Semari,10,4,नोटा (NOTA),NOTA,नोटा,,,
+41,PS,Semari,11,1,पंकज,INC,Official,M,41,General
+40,PS,Semari,11,2,रतन सिह,BJP,Official,M,60,General
+38,PS,Semari,11,3,वनराज सिंह,IND,Official,M,28,General
+39,PS,Semari,11,4,विजय कुमार मीणा,BAP,Official,M,30,ST
+381,PS,Semari,11,5,नोटा (NOTA),NOTA,नोटा,,,
+43,PS,Semari,12,1,धन्नु,BAP,Official,F,27,ST (Woman)
+45,PS,Semari,12,2,बाबुलाल,INC,Official,M,43,ST
+44,PS,Semari,12,3,शान्तिलाल,IND,Official,M,39,ST
+42,PS,Semari,12,4,हीरालाल मीना,BJP,Official,M,43,ST
+382,PS,Semari,12,5,नोटा (NOTA),NOTA,नोटा,,,
+48,PS,Semari,13,1,किरण मीणा,INC,Official,M,37,ST
+46,PS,Semari,13,2,गीता कुमारी मीना,BAP,Official,F,21,ST (Woman)
+47,PS,Semari,13,3,लक्ष्मण,BJP,Official,M,48,ST
+383,PS,Semari,13,4,नोटा (NOTA),NOTA,नोटा,,,
+51,PS,Semari,14,1,पानू,INC,Official,F,43,ST (Woman)
+49,PS,Semari,14,2,लीला देवी,BJP,Official,F,38,ST (Woman)
+50,PS,Semari,14,3,शान्ती देवी मीणा,BAP,Official,F,31,ST (Woman)
+384,PS,Semari,14,4,नोटा (NOTA),NOTA,नोटा,,,
+54,PS,Semari,15,1,करुणा,INC,Official,F,42,ST (Woman)
+53,PS,Semari,15,2,राजु देवी,BJP,Official,F,34,ST (Woman)
+52,PS,Semari,15,3,रीना देवी,BAP,Official,F,35,ST (Woman)
+385,PS,Semari,15,4,नोटा (NOTA),NOTA,नोटा,,,
+569,ZP,Salumber ZP,1,1,गोविंद कलासुआ,AAP,Official,M,65,ST
+570,ZP,Salumber ZP,1,2,वाल चन्द,BJP,Official,M,49,ST
+568,ZP,Salumber ZP,1,3,विजय कुमार,INC,Official,M,27,ST
+571,ZP,Salumber ZP,1,4,सुरेश कुमार सोनु,BAP,Official,M,34,ST
+386,ZP,Salumber ZP,1,5,नोटा (NOTA),NOTA,नोटा,,,
+572,ZP,Salumber ZP,2,1,गंगा राम,INC,Official,M,65,ST
+575,ZP,Salumber ZP,2,2,मनीष कुमार मीणा,BJP,Official,M,48,ST
+574,ZP,Salumber ZP,2,3,रणजित कुमार मीणा,BAP,Official,M,30,ST
+576,ZP,Salumber ZP,2,4,रमेश मीणा,IND,हाथ गाड़ी,M,49,ST
+573,ZP,Salumber ZP,2,5,शंकरलाल मीणा,AAP,Official,M,32,ST
+387,ZP,Salumber ZP,2,6,नोटा (NOTA),NOTA,नोटा,,,
+577,ZP,Salumber ZP,3,1,केशु कन्हैयालाल पटेल,BJP,Official,F,37,OBC (Woman)
+581,ZP,Salumber ZP,3,2,नर्बदा,IND,गैस का चूल्हा,F,34,General (Woman)
+578,ZP,Salumber ZP,3,3,मनीता पटेल,INC,Official,F,29,OBC (Woman)
+579,ZP,Salumber ZP,3,4,राधा जगदीश मीणा,BAP,Official,F,32,ST (Woman)
+580,ZP,Salumber ZP,3,5,सुशीला,IND,हारमोनियम,F,58,OBC (Woman)
+388,ZP,Salumber ZP,3,6,नोटा (NOTA),NOTA,नोटा,,,
+583,ZP,Salumber ZP,4,1,अनिता मीणा,INC,Official,F,28,ST (Woman)
+585,ZP,Salumber ZP,4,2,कल्पना महेन्द्र मीणा,BAP,Official,F,29,ST (Woman)
+582,ZP,Salumber ZP,4,3,सोनल मीणा,BJP,Official,F,34,ST (Woman)
+584,ZP,Salumber ZP,4,4,हेमलता मीणा,IND,चक्की,F,28,ST (Woman)
+389,ZP,Salumber ZP,4,5,नोटा (NOTA),NOTA,नोटा,,,
+587,ZP,Salumber ZP,5,1,करीना रणजीत कुमार मीणा,BAP,Official,F,27,ST (Woman)
+588,ZP,Salumber ZP,5,2,जमना,INC,Official,F,30,General (Woman)
+589,ZP,Salumber ZP,5,3,बंसती कुमारी पटेल,IND,कैंची,F,25,OBC (Woman)
+586,ZP,Salumber ZP,5,4,रतनी,BJP,Official,F,41,General (Woman)
+390,ZP,Salumber ZP,5,5,नोटा (NOTA),NOTA,नोटा,,,
+592,ZP,Salumber ZP,6,1,अनुराधा जितेश कुमार कटारा,BAP,Official,F,26,ST (Woman)
+590,ZP,Salumber ZP,6,2,बसन्ती,INC,Official,F,62,ST (Woman)
+591,ZP,Salumber ZP,6,3,रेखा देवी,BJP,Official,F,27,ST (Woman)
+391,ZP,Salumber ZP,6,4,नोटा (NOTA),NOTA,नोटा,,,
+593,ZP,Salumber ZP,7,1,पुष्पा देवी,INC,Official,F,39,ST (Woman)
+594,ZP,Salumber ZP,7,2,बसंती मीणा,BJP,Official,F,37,ST (Woman)
+595,ZP,Salumber ZP,7,3,लक्ष्मी,BAP,Official,F,27,ST (Woman)
+392,ZP,Salumber ZP,7,4,नोटा (NOTA),NOTA,नोटा,,,
+596,ZP,Salumber ZP,8,1,कालूलाल,INC,Official,M,60,ST
+598,ZP,Salumber ZP,8,2,मोहनलाल,BAP,Official,M,35,ST
+597,ZP,Salumber ZP,8,3,हरिराम,BJP,Official,M,53,ST
+393,ZP,Salumber ZP,8,4,नोटा (NOTA),NOTA,नोटा,,,
+601,ZP,Salumber ZP,9,1,गौरांग,BAP,Official,M,52,ST
+602,ZP,Salumber ZP,9,2,मणीलाल मीना,AAP,Official,M,24,ST
+599,ZP,Salumber ZP,9,3,लच्छुलाल,INC,Official,M,65,ST
+600,ZP,Salumber ZP,9,4,श्रवणकुमार,BJP,Official,M,45,ST
+394,ZP,Salumber ZP,9,5,नोटा (NOTA),NOTA,नोटा,,,
+604,ZP,Salumber ZP,10,1,देवेन्द्र सिंह,INC,Official,M,53,General
+606,ZP,Salumber ZP,10,2,नरेश कुमार,BAP,Official,M,35,ST
+603,ZP,Salumber ZP,10,3,मेगालाल,IND,चक्की,M,40,OBC
+608,ZP,Salumber ZP,10,4,रतन लाल पटेल,IND,टेलीविजन,M,41,General
+605,ZP,Salumber ZP,10,5,सुरेन्द्र सिंह चौहान,IND,कैंची,M,25,General
+607,ZP,Salumber ZP,10,6,हितेश कुमार सेवक,BJP,Official,M,34,General
+395,ZP,Salumber ZP,10,7,नोटा (NOTA),NOTA,नोटा,,,
+613,ZP,Salumber ZP,11,1,अनिल,IND,हाथ गाड़ी,M,43,OBC
+611,ZP,Salumber ZP,11,2,गोविन्द,BJP,Official,M,44,OBC
+609,ZP,Salumber ZP,11,3,दिनेश कुमार,INC,Official,M,37,OBC
+612,ZP,Salumber ZP,11,4,दिनेश कुमार पटेल,IND,कैंची,M,34,OBC
+610,ZP,Salumber ZP,11,5,रमेश चौधरी,BAP,Official,M,45,OBC
+396,ZP,Salumber ZP,11,6,नोटा (NOTA),NOTA,नोटा,,,
+614,ZP,Salumber ZP,12,1,गेबीलाल दमावत,INC,Official,M,54,General
+615,ZP,Salumber ZP,12,2,देवेन्द्र सिंह,BJP,Official,M,31,General
+616,ZP,Salumber ZP,12,3,लक्ष्मी लाल,BAP,Official,M,50,SC
+397,ZP,Salumber ZP,12,4,नोटा (NOTA),NOTA,नोटा,,,
+617,ZP,Salumber ZP,13,1,उमेश,INC,Official,M,41,ST
+620,ZP,Salumber ZP,13,2,किशनलाल मीणा,AAP,Official,M,56,ST
+621,ZP,Salumber ZP,13,3,जगदीश कुमार मीणा,IND,टेलीफोन,M,30,ST
+618,ZP,Salumber ZP,13,4,जया मीणा,BJP,Official,F,28,ST (Woman)
+619,ZP,Salumber ZP,13,5,रूपी देवी,BAP,Official,F,32,ST (Woman)
+398,ZP,Salumber ZP,13,6,नोटा (NOTA),NOTA,नोटा,,,
+622,ZP,Salumber ZP,14,1,निर्मला कुंवर सिसोदिया,INC,Official,F,25,General (Woman)
+623,ZP,Salumber ZP,14,2,पदमा कुँवर,BJP,Official,F,44,General (Woman)
+624,ZP,Salumber ZP,14,3,रेखा कुरीलाल भील,BAP,Official,F,26,ST (Woman)
+399,ZP,Salumber ZP,14,4,नोटा (NOTA),NOTA,नोटा,,,
+627,ZP,Salumber ZP,15,1,धीरज सालवी,BAP,Official,M,27,SC
+625,ZP,Salumber ZP,15,2,नाथुलाल मेघवाल,INC,Official,M,44,SC
+626,ZP,Salumber ZP,15,3,लोगरलाल,BJP,Official,M,47,SC
+400,ZP,Salumber ZP,15,4,नोटा (NOTA),NOTA,नोटा,,,
+629,ZP,Salumber ZP,16,1,केशर कुमारी मीणा,BJP,Official,F,22,ST (Woman)
+628,ZP,Salumber ZP,16,2,धुली कुमारी,INC,Official,F,24,ST (Woman)
+630,ZP,Salumber ZP,16,3,विमला,BAP,Official,F,36,ST (Woman)
+401,ZP,Salumber ZP,16,4,नोटा (NOTA),NOTA,नोटा,,,
+633,ZP,Salumber ZP,17,1,कालकी सीताराम,BAP,Official,F,44,ST (Woman)
+632,ZP,Salumber ZP,17,2,गुड्‌डी कुमारी मीणा,BJP,Official,F,24,ST (Woman)
+631,ZP,Salumber ZP,17,3,लाली कुमारी मीणा,INC,Official,F,22,ST (Woman)
+402,ZP,Salumber ZP,17,4,नोटा (NOTA),NOTA,नोटा,,,
+636,ZP,Salumber ZP,18,1,अणदीलाल (आनन्द बुज),BAP,Official,M,38,ST
+637,ZP,Salumber ZP,18,2,गोतम लाल मीना,AAP,Official,M,33,ST
+634,ZP,Salumber ZP,18,3,रामलाल,INC,Official,M,48,ST
+635,ZP,Salumber ZP,18,4,लीला मीणा,BJP,Official,F,37,ST (Woman)
+403,ZP,Salumber ZP,18,5,नोटा (NOTA),NOTA,नोटा,,,
+639,ZP,Salumber ZP,19,1,मोगी बाई,BAP,Official,F,55,ST (Woman)
+638,ZP,Salumber ZP,19,2,मोहनी कुमारी मीणा,INC,Official,F,26,ST (Woman)
+640,ZP,Salumber ZP,19,3,सुखना,BJP,Official,F,31,ST (Woman)
+404,ZP,Salumber ZP,19,4,नोटा (NOTA),NOTA,नोटा,,,
+641,ZP,Salumber ZP,20,1,पुष्पा कुमारी मीणा,INC,Official,F,32,ST (Woman)
+642,ZP,Salumber ZP,20,2,रम्बा लिम्बाराम मीणा,BAP,Official,F,34,ST (Woman)
+643,ZP,Salumber ZP,20,3,हिम्मती मीणा,BJP,Official,F,21,ST (Woman)
+405,ZP,Salumber ZP,20,4,नोटा (NOTA),NOTA,नोटा,,,
+646,ZP,Salumber ZP,21,1,नागेन्द्र,BJP,Official,M,48,ST
+645,ZP,Salumber ZP,21,2,रमेश चन्द्र मीणा,BAP,Official,M,33,ST
+644,ZP,Salumber ZP,21,3,राम लाल मीणा,INC,Official,M,50,ST
+406,ZP,Salumber ZP,21,4,नोटा (NOTA),NOTA,नोटा,,,
