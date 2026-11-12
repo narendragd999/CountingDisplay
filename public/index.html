@@ -294,7 +294,12 @@
       gap: 12px;
       align-content: start;
       align-items: start;
-      scroll-behavior: smooth;
+      scroll-behavior: auto !important;
+      -webkit-overflow-scrolling: touch;
+      will-change: scroll-position;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      contain: layout paint;
     }
 
     .cards-scroll-body::-webkit-scrollbar {
@@ -347,27 +352,7 @@
       display: none;
     }
 
-    /* WARD DISPLAY CARD ANIMATION */
-    @keyframes cardFadeSlideIn {
-      0% {
-        opacity: 0;
-        transform: translateY(14px) scale(0.985);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @keyframes winnerPulseGlow {
-      0%, 100% {
-        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15), 0 0 0 0 rgba(245, 158, 11, 0.3);
-      }
-      50% {
-        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.25), 0 0 0 5px rgba(245, 158, 11, 0.12);
-      }
-    }
-
+    /* WARD DISPLAY CARDS - STABLE HARDWARE-ACCELERATED TV RENDER (NO FLICKER / NO BLINKING) */
     .ward-card {
       width: 100%;
       height: max-content;
@@ -377,18 +362,18 @@
       border-radius: 10px;
       overflow: hidden;
       box-shadow: var(--shadow-sm);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      animation: cardFadeSlideIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      opacity: 1 !important;
     }
 
     .ward-card:hover {
       box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
     }
 
     .ward-card.declared {
       border: 2px solid var(--gold-border);
-      animation: cardFadeSlideIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both, winnerPulseGlow 3s infinite ease-in-out;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.18);
     }
 
     .ward-card.counting {
@@ -995,6 +980,58 @@
       return false;
     }
 
+    // In-Place Card Reconciliation: NEVER destroys the DOM tree, avoiding scroll collapse and screen flicker
+    function reconcileCardsInContainer(container, wards, emptyHtml = '') {
+      if (!container) return;
+      if (!wards || wards.length === 0) {
+        if (!container.querySelector('.empty-placeholder')) {
+          container.innerHTML = emptyHtml;
+        }
+        return;
+      }
+
+      const placeholder = container.querySelector('.empty-placeholder');
+      if (placeholder) placeholder.remove();
+
+      const existingCards = new Map();
+      container.querySelectorAll('.ward-card').forEach(el => {
+        if (el.dataset.wardKey) existingCards.set(el.dataset.wardKey, el);
+      });
+
+      const currentKeys = new Set();
+      wards.forEach((w, idx) => {
+        const key = `${w.category}_${w.block_name}_${w.ward_no}`;
+        currentKeys.add(key);
+
+        const cardData = buildWardCardData(w, idx);
+        let cardEl = existingCards.get(key);
+
+        if (cardEl) {
+          if (cardEl.className !== cardData.className) {
+            cardEl.className = cardData.className;
+          }
+          if (cardEl.dataset.contentSig !== cardData.innerHTML) {
+            cardEl.innerHTML = cardData.innerHTML;
+            cardEl.dataset.contentSig = cardData.innerHTML;
+          }
+          container.appendChild(cardEl); // Preserves element instance in-place
+        } else {
+          cardEl = document.createElement('div');
+          cardEl.className = cardData.className;
+          cardEl.dataset.wardKey = key;
+          cardEl.dataset.contentSig = cardData.innerHTML;
+          cardEl.innerHTML = cardData.innerHTML;
+          container.appendChild(cardEl);
+        }
+      });
+
+      existingCards.forEach((el, key) => {
+        if (!currentKeys.has(key)) {
+          el.remove();
+        }
+      });
+    }
+
     // Render ZP Cards - Displays ALL 21 ZP wards unconditionally (never filtered by PS or RO center)
     let lastZpFingerprint = '';
     function renderZpCards(force = false) {
@@ -1007,13 +1044,10 @@
       });
 
       if (!force && currentZpFingerprint === lastZpFingerprint) {
-        return; // Data has not changed; do NOT touch DOM, keep auto-scroll 100% continuous!
+        return; // Data unchanged; keep DOM untouched
       }
       lastZpFingerprint = currentZpFingerprint;
 
-      const prevZpScroll = zpContainer.scrollTop;
-
-      // Zila Parishad displays ALL 21 wards unconditionally: NEVER filtered PS-wise or RO center-wise!
       const zpWards = (masterData.wards || []).filter(w => w.category === 'ZP');
       zpWards.sort((a, b) => a.ward_no - b.ward_no);
 
@@ -1022,24 +1056,14 @@
         zpTitleEl.innerHTML = '<span>🏛️</span> Zilla Parishad (All 21 Wards)';
       }
 
-      zpContainer.innerHTML = '';
-      if (zpWards.length === 0) {
-        zpContainer.innerHTML = `
-          <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
-            <div style="font-size: 36px; margin-bottom: 8px;">🏛️ ⏳</div>
-            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद (सभी 21 वार्ड): लोडिंग...</div>
-          </div>
-        `;
-      } else {
-        zpWards.forEach((w, idx) => {
-          zpContainer.appendChild(createWardCardElement(w, idx));
-        });
-      }
+      const emptyHtml = `
+        <div class="empty-placeholder" style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
+          <div style="font-size: 36px; margin-bottom: 8px;">🏛️ ⏳</div>
+          <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद (सभी 21 वार्ड): लोडिंग...</div>
+        </div>
+      `;
 
-      // Preserve smooth continuous scroll position
-      if (zpContainer.scrollHeight > prevZpScroll) {
-        zpContainer.scrollTop = prevZpScroll;
-      }
+      reconcileCardsInContainer(zpContainer, zpWards, emptyHtml);
     }
 
     // Render PS Cards - Controls the right side results filtered/cycled by RO Center
@@ -1059,9 +1083,6 @@
       }
       lastPsFingerprint = currentPsFingerprint;
 
-      const prevPsScroll = psContainer.scrollTop;
-
-      // Update Column Title for Panchayat Samiti
       const psTitleEl = document.getElementById('psColumnTitle');
       if (psTitleEl) {
         psTitleEl.innerHTML = activeROCenter === 'ALL' 
@@ -1069,7 +1090,6 @@
           : `<span>🏘️</span> Panchayat Samiti (${activeROCenter} RO)`;
       }
 
-      // Filter PS wards strictly for activeROCenter
       const psWards = (masterData.wards || []).filter(w => {
         if (w.category !== 'PS') return false;
         if (activeROCenter !== 'ALL' && w.block_name !== activeROCenter) return false;
@@ -1077,26 +1097,16 @@
       });
       psWards.sort((a, b) => a.block_name.localeCompare(b.block_name) || a.ward_no - b.ward_no);
 
-      psContainer.innerHTML = '';
-      if (psWards.length === 0) {
-        const blkLabel = activeROCenter === 'ALL' ? 'सभी 7 पंचायत समितियां' : activeROCenter;
-        psContainer.innerHTML = `
-          <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b; animation: cardFadeSlideIn 0.35s ease both;">
-            <div style="font-size: 36px; margin-bottom: 8px;">🏘️ ⏳</div>
-            <div style="font-size: 16px; font-weight: 800; color: #1e293b;">पंचायत समिति (${blkLabel}): परिणाम प्रविष्टि की प्रतीक्षा है</div>
-            <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Panchayat Samiti wards</div>
-          </div>
-        `;
-      } else {
-        psWards.forEach((w, idx) => {
-          psContainer.appendChild(createWardCardElement(w, idx));
-        });
-      }
+      const blkLabel = activeROCenter === 'ALL' ? 'सभी 7 पंचायत समितियां' : activeROCenter;
+      const emptyHtml = `
+        <div class="empty-placeholder" style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
+          <div style="font-size: 36px; margin-bottom: 8px;">🏘️ ⏳</div>
+          <div style="font-size: 16px; font-weight: 800; color: #1e293b;">पंचायत समिति (${blkLabel}): परिणाम प्रविष्टि की प्रतीक्षा है</div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Panchayat Samiti wards</div>
+        </div>
+      `;
 
-      // Restore scroll if background data update; if user changed block or auto-cycled, it stays at top
-      if (!force && psContainer.scrollHeight > prevPsScroll) {
-        psContainer.scrollTop = prevPsScroll;
-      }
+      reconcileCardsInContainer(psContainer, psWards, emptyHtml);
     }
 
     function renderCards(force = false) {
@@ -1104,7 +1114,7 @@
       renderPsCards(force);
     }
 
-    function createWardCardElement(ward, idx = 0) {
+    function buildWardCardData(ward, idx = 0) {
       const isDeclared = ward.status === 'DECLARED';
       const cands = masterData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
 
@@ -1139,7 +1149,6 @@
         activeRoundKeys = ['R1']; // default initial placeholder
       }
 
-      // Find latest completed round
       let highestRoundNum = 0;
       activeRoundKeys.forEach(r => {
         if (r.startsWith('R')) {
@@ -1183,14 +1192,12 @@
         `;
       }
 
-      // Only display the LAST 3 active rounds to keep table compact & ultra-readable
       let displayRoundKeys = activeRoundKeys;
       const hasEarlierRounds = activeRoundKeys.length > 3;
       if (hasEarlierRounds) {
         displayRoundKeys = activeRoundKeys.slice(-3);
       }
 
-      // Dynamic sizing based on candidate count
       const candCount = candTotals.length;
       let rowPadding = '5px 8px';
       let nameFontSize = '13px';
@@ -1212,7 +1219,6 @@
         totalFontSize = '15px';
       }
 
-      // Build round header th's (Max 3 rounds + Total)
       let roundThs = '';
       if (hasEarlierRounds) {
         roundThs += `<th style="text-align:center; padding:5px 2px; width:18px; font-weight:800; color:var(--text-dim); font-size:9px;" title="Earlier rounds included in Total">...</th>`;
@@ -1222,7 +1228,6 @@
         roundThs += `<th style="text-align:right; padding:5px 6px; width:44px; font-weight:800; color:var(--text-muted); font-size:10px;">${label}</th>`;
       });
 
-      // Build candidate rows
       let rowsHtml = '';
       if (candTotals.length === 0) {
         rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:10px;">No contestants registered</td></tr>`;
@@ -1268,13 +1273,9 @@
         });
       }
 
-      const card = document.createElement('div');
-      card.className = `ward-card ${isDeclared ? 'declared' : (hasVotes ? 'counting' : '')}`;
-      card.style.animationDelay = `${Math.min(idx * 0.08, 0.45)}s`;
-
       let displayName = ward.category === 'ZP' ? `ZP Ward ${ward.ward_no}` : `${ward.block_name} - Ward ${ward.ward_no}`;
 
-      card.innerHTML = `
+      const innerHTML = `
         <div class="ward-card-head">
           <div class="ward-name">
             <span>${ward.category === 'ZP' ? '🏛️' : '🏘️'}</span>
@@ -1299,6 +1300,19 @@
         </table>
       `;
 
+      return {
+        className: `ward-card ${isDeclared ? 'declared' : (hasVotes ? 'counting' : '')}`,
+        innerHTML
+      };
+    }
+
+    function createWardCardElement(ward, idx = 0) {
+      const data = buildWardCardData(ward, idx);
+      const card = document.createElement('div');
+      card.className = data.className;
+      card.dataset.wardKey = `${ward.category}_${ward.block_name}_${ward.ward_no}`;
+      card.dataset.contentSig = data.innerHTML;
+      card.innerHTML = data.innerHTML;
       return card;
     }
 
@@ -1359,29 +1373,95 @@
       }
     }
 
+    let zpUserInteracting = false;
+    let psUserInteracting = false;
+    let zpInteractTimeout = null;
+    let psInteractTimeout = null;
+
+    function attachScrollInteractionHandlers() {
+      const zpEl = document.getElementById('zpCardsContainer');
+      const psEl = document.getElementById('psCardsContainer');
+
+      const onZpInteract = () => {
+        zpUserInteracting = true;
+        if (zpInteractTimeout) clearTimeout(zpInteractTimeout);
+        zpInteractTimeout = setTimeout(() => {
+          zpUserInteracting = false;
+        }, 4000); // 4-second pause so manual scroll never fights with auto-scroll
+      };
+
+      const onPsInteract = () => {
+        psUserInteracting = true;
+        if (psInteractTimeout) clearTimeout(psInteractTimeout);
+        psInteractTimeout = setTimeout(() => {
+          psUserInteracting = false;
+        }, 4000);
+      };
+
+      if (zpEl) {
+        ['wheel', 'touchstart', 'touchmove', 'pointerdown'].forEach(ev => {
+          zpEl.addEventListener(ev, onZpInteract, { passive: true });
+        });
+      }
+
+      if (psEl) {
+        ['wheel', 'touchstart', 'touchmove', 'pointerdown'].forEach(ev => {
+          psEl.addEventListener(ev, onPsInteract, { passive: true });
+        });
+      }
+    }
+
+    // High-Performance Hardware-Accelerated 60/120 FPS Auto-Scroll (No Stutter, No Flickering)
     function startAutoScrollLoop() {
       const zpEl = document.getElementById('zpCardsContainer');
       const psEl = document.getElementById('psCardsContainer');
 
-      setInterval(() => {
-        if (zpAutoScroll && zpEl && zpEl.scrollHeight > zpEl.clientHeight + 15) {
-          if (zpEl.scrollTop + zpEl.clientHeight >= zpEl.scrollHeight - 8) {
-            zpEl.scrollTop = 0;
-          } else {
-            zpEl.scrollTop += 0.8;
-          }
-        }
-      }, 50);
+      attachScrollInteractionHandlers();
 
-      setInterval(() => {
-        if (psAutoScroll && psEl && psEl.scrollHeight > psEl.clientHeight + 15) {
-          if (psEl.scrollTop + psEl.clientHeight >= psEl.scrollHeight - 8) {
-            psEl.scrollTop = 0;
-          } else {
-            psEl.scrollTop += 0.8;
+      let lastTime = performance.now();
+      let zpAcc = zpEl ? zpEl.scrollTop : 0;
+      let psAcc = psEl ? psEl.scrollTop : 0;
+
+      const SPEED = 22; // Pixels per second: optimal broadcast readability speed
+
+      function step(now) {
+        const dt = Math.min((now - lastTime) / 1000, 0.1);
+        lastTime = now;
+
+        // --- ZP CONTAINER SCROLL ---
+        if (zpEl) {
+          if (zpUserInteracting) {
+            zpAcc = zpEl.scrollTop; // Stay synced with user's manual scroll position
+          } else if (zpAutoScroll && zpEl.scrollHeight > zpEl.clientHeight + 15) {
+            zpAcc += SPEED * dt;
+            if (zpAcc + zpEl.clientHeight >= zpEl.scrollHeight - 6) {
+              zpAcc = 0;
+              zpEl.scrollTop = 0;
+            } else {
+              zpEl.scrollTop = zpAcc;
+            }
           }
         }
-      }, 50);
+
+        // --- PS CONTAINER SCROLL ---
+        if (psEl) {
+          if (psUserInteracting) {
+            psAcc = psEl.scrollTop; // Stay synced with user's manual scroll position
+          } else if (psAutoScroll && psEl.scrollHeight > psEl.clientHeight + 15) {
+            psAcc += SPEED * dt;
+            if (psAcc + psEl.clientHeight >= psEl.scrollHeight - 6) {
+              psAcc = 0;
+              psEl.scrollTop = 0;
+            } else {
+              psEl.scrollTop = psAcc;
+            }
+          }
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
     }
   </script>
 </body>
