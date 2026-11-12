@@ -7,9 +7,6 @@ with open('public/index.html', 'r', encoding='utf-8') as f:
 with open('public/entry.html', 'r', encoding='utf-8') as f:
     entry_html = f.read()
 
-with open('public/smart_tv.html', 'r', encoding='utf-8') as f:
-    smart_tv_html = f.read()
-
 conn = sqlite3.connect('election_salumber_2026.db')
 conn.row_factory = sqlite3.Row
 cursor = conn.cursor()
@@ -51,7 +48,6 @@ conn.close()
 master_json_str = json.dumps(master, ensure_ascii=False)
 index_json_str = json.dumps(index_html)
 entry_json_str = json.dumps(entry_html)
-smart_tv_json_str = json.dumps(smart_tv_html)
 users_json_str = json.dumps(u_rows, ensure_ascii=False)
 
 worker_template = """/**
@@ -61,7 +57,6 @@ worker_template = """/**
 
 const INDEX_HTML = __INDEX_HTML__;
 const ENTRY_HTML = __ENTRY_HTML__;
-const SMART_TV_HTML = __SMART_TV_HTML__;
 let MASTER_DATA = __MASTER_DATA__;
 const USERS_LIST = __USERS_LIST__;
 let SYSTEM_MODE = "__SYSTEM_MODE__";
@@ -90,12 +85,6 @@ export default {
 
     if (path === '/entry') {
       return new Response(ENTRY_HTML, {
-        headers: { 'Content-Type': 'text/html; charset=utf-8' }
-      });
-    }
-
-    if (path === '/tv' || path === '/smart') {
-      return new Response(SMART_TV_HTML, {
         headers: { 'Content-Type': 'text/html; charset=utf-8' }
       });
     }
@@ -396,7 +385,6 @@ export default {
 
 worker_content = worker_template.replace('__INDEX_HTML__', index_json_str)
 worker_content = worker_content.replace('__ENTRY_HTML__', entry_json_str)
-worker_content = worker_content.replace('__SMART_TV_HTML__', smart_tv_json_str)
 worker_content = worker_content.replace('__MASTER_DATA__', master_json_str)
 worker_content = worker_content.replace('__USERS_LIST__', users_json_str)
 worker_content = worker_content.replace('__SYSTEM_MODE__', system_mode)

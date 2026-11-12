@@ -1923,14 +1923,6 @@ def serve_admin():
         return FileResponse("public/admin.html")
     return FileResponse("public/entry.html")
 
-@app.get("/tv", response_class=HTMLResponse)
-@app.get("/smart", response_class=HTMLResponse)
-def serve_smart_tv():
-    """Serves the smart interactive TV display for ZP and PS results."""
-    if os.path.exists("public/smart_tv.html"):
-        return FileResponse("public/smart_tv.html")
-    return "<h1>Smart TV Display not found</h1>"
-
 
 
 
