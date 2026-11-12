@@ -1291,8 +1291,20 @@ async def renumber_ward_candidates(payload: dict, request: Request):
     check_auth(request)
     import unicodedata
 
-    # Party codes that are treated as INDEPENDENT (not a recognized state party)
-    IND_PARTIES = {'IND', 'NIRDALIYA', 'NIRDALI', 'निर्दलीय'}
+    # ── Official recognized / state / national party codes ──────────────────
+    # Anything NOT in this list (and not NOTA) is treated as Independent.
+    STATE_PARTIES = {
+        'BJP',      # Bharatiya Janata Party
+        'INC',      # Indian National Congress
+        'BSP',      # Bahujan Samaj Party
+        'CPIM',     # Communist Party of India (Marxist)
+        'CPI(M)',   # alternate code
+        'CPI-M',    # alternate code
+        'CPI_M',    # alternate code
+        'AAP',      # Aam Aadmi Party
+        'NPP',      # National People's Party
+        'BAP',      # Bhartiya Aadiwasi Party
+    }
 
     category = payload.get('category')
     block = payload.get('block')
@@ -1312,8 +1324,9 @@ async def renumber_ward_candidates(payload: dict, request: Request):
         return (party or '').upper() == 'NOTA' or 'नोटा' in (name or '')
 
     def is_ind(name, party):
+        """True if NOT a recognized state party and NOT nota — i.e. Independent."""
         p = (party or '').strip().upper()
-        return p in IND_PARTIES
+        return p not in STATE_PARTIES
 
     conn = get_db()
     cursor = conn.cursor()
