@@ -319,6 +319,62 @@ export default {
       }
     }
 
+    // EXPORT DATABASE SNAPSHOT (For Live -> Local Backup)
+    if (path === '/api/database/export' || path === '/api/database/export_json' || path === '/api/database/export_sqlite') {
+      MASTER_DATA.system_mode = SYSTEM_MODE;
+      const jsonStr = JSON.stringify(MASTER_DATA, null, 2);
+      return new Response(jsonStr, {
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Content-Disposition': 'attachment; filename="election_salumber_live_snapshot.json"'
+        }
+      });
+    }
+
+    // IMPORT DATABASE SNAPSHOT (Restore into Worker Memory)
+    if (path === '/api/database/import' && request.method === 'POST') {
+      try {
+        let importedData = null;
+        const contentType = request.headers.get('content-type') || '';
+        if (contentType.includes('multipart/form-data')) {
+          const formData = await request.formData();
+          const file = formData.get('file');
+          if (file) {
+            const text = await file.text();
+            importedData = JSON.parse(text);
+          }
+        } else {
+          importedData = await request.json();
+        }
+
+        if (!importedData) {
+          return jsonResponse({ detail: 'No data or invalid file provided' }, 400);
+        }
+
+        if (importedData.roundVotes) {
+          MASTER_DATA.roundVotes = importedData.roundVotes;
+        }
+        if (importedData.wards) {
+          importedData.wards.forEach(w => {
+            const target = MASTER_DATA.wards.find(mw => mw.category === w.category && mw.block_name === w.block_name && mw.ward_no === w.ward_no);
+            if (target && w.status) target.status = w.status;
+          });
+        }
+        if (importedData.system_mode) {
+          SYSTEM_MODE = importedData.system_mode;
+          MASTER_DATA.system_mode = SYSTEM_MODE;
+        }
+
+        return jsonResponse({
+          status: 'success',
+          type: 'json',
+          message: 'Data successfully restored into live worker memory!'
+        });
+      } catch (e) {
+        return jsonResponse({ detail: 'Import failed: ' + e.message }, 400);
+      }
+    }
+
     // SERVE DEFAULT TV DISPLAY (index.html)
     return new Response(INDEX_HTML, {
       headers: { 'Content-Type': 'text/html; charset=utf-8' }

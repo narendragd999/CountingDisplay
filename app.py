@@ -25,7 +25,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Request, Form
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, JSONResponse, Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
@@ -1452,6 +1452,194 @@ async def delete_candidate(payload: dict, request: Request):
     conn.close()
     asyncio.create_task(broadcast_live_update())
     return {'status': 'success', 'message': f"Deleted candidate {cname} and re-indexed {cat} {blk} Ward {wno}."}
+
+
+# ── DATABASE EXPORT / BACKUP & IMPORT / RESTORE (FAILSAFE RECOVERY) ───────────
+
+@app.get("/api/database/export")
+@app.get("/api/database/export_sqlite")
+async def export_database_sqlite(request: Request):
+    """
+    Downloads the complete live SQLite database file (.db) with a timestamped filename.
+    Use this to save backups or migrate between live and local servers.
+    """
+    check_auth(request)
+    if not os.path.exists(DB_FILE):
+        raise HTTPException(status_code=404, detail="Database file not found.")
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"election_salumber_2026_backup_{timestamp}.db"
+    return FileResponse(
+        path=DB_FILE,
+        filename=filename,
+        media_type="application/x-sqlite3",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
+
+
+@app.get("/api/database/export_json")
+async def export_database_json(request: Request):
+    """
+    Downloads a full portable JSON snapshot containing all master data and entered votes.
+    Useful for Cloudflare Workers sync or emergency text-based inspection.
+    """
+    check_auth(request)
+    master = get_all_candidates_master()
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"election_salumber_snapshot_{timestamp}.json"
+
+    json_str = json.dumps(master, ensure_ascii=False, indent=2)
+    return Response(
+        content=json_str,
+        media_type="application/json",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
+
+
+@app.post("/api/database/import")
+async def import_database(file: UploadFile = File(...), request: Request = None):
+    """
+    Restores the database from an uploaded .db (SQLite) or .json (Snapshot) file.
+    Automatically creates a safety backup of the existing database first.
+    """
+    check_auth(request)
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file selected.")
+
+    contents = await file.read()
+    if not contents:
+        raise HTTPException(status_code=400, detail="Uploaded file is empty.")
+
+    # Always create an automatic safety backup of current database
+    os.makedirs("backups", exist_ok=True)
+    safety_backup_name = f"backups/election_salumber_pre_import_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db"
+    if os.path.exists(DB_FILE):
+        import shutil
+        shutil.copyfile(DB_FILE, safety_backup_name)
+
+    is_sqlite = contents.startswith(b"SQLite format 3\x00")
+
+    if is_sqlite or file.filename.lower().endswith('.db'):
+        if not contents.startswith(b"SQLite format 3\x00"):
+            raise HTTPException(status_code=400, detail="Invalid SQLite database format. Must begin with 'SQLite format 3'.")
+
+        temp_db = "temp_restore.db"
+        with open(temp_db, "wb") as f:
+            f.write(contents)
+
+        # Validate that required tables exist in uploaded DB
+        try:
+            t_conn = sqlite3.connect(temp_db)
+            t_cur = t_conn.cursor()
+            t_cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            tables = [row[0] for row in t_cur.fetchall()]
+            for req_tbl in ['candidates', 'wards', 'votes']:
+                if req_tbl not in tables:
+                    t_conn.close()
+                    os.remove(temp_db)
+                    raise HTTPException(status_code=400, detail=f"Database file is missing required table '{req_tbl}'.")
+            t_cur.execute("SELECT COUNT(*) FROM candidates")
+            cand_count = t_cur.fetchone()[0]
+            t_cur.execute("SELECT COUNT(*) FROM votes")
+            vote_count = t_cur.fetchone()[0]
+            t_conn.close()
+        except HTTPException:
+            raise
+        except Exception as e:
+            if os.path.exists(temp_db):
+                os.remove(temp_db)
+            raise HTTPException(status_code=400, detail=f"SQLite verification failed: {str(e)}")
+
+        # Atomically replace DB_FILE with uploaded database
+        import shutil
+        shutil.move(temp_db, DB_FILE)
+
+        # Sync all_candidates_master.json
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute("SELECT id, category, block_name, ward_no, ballot_no, name_hindi, party, symbol, gender, age, candidate_category FROM candidates ORDER BY category, block_name, ward_no, ballot_no")
+            all_cands = [dict(zip([d[0] for d in cur.description], r)) for r in cur.fetchall()]
+            with open('all_candidates_master.json', 'w', encoding='utf-8') as f:
+                json.dump(all_cands, f, ensure_ascii=False, indent=2)
+            cur.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", 
+                        ("RESTORE_DB", f"Restored database from uploaded .db file ({file.filename}) with {cand_count} candidates and {vote_count} votes"))
+            conn.commit()
+            conn.close()
+        except Exception as ex:
+            print(f"Warning syncing after restore: {ex}")
+
+        asyncio.create_task(broadcast_live_update())
+        return {
+            "status": "success",
+            "type": "sqlite",
+            "message": f"Database successfully restored from '{file.filename}' ({cand_count} candidates, {vote_count} votes restored). Safety backup saved to '{safety_backup_name}'.",
+            "safety_backup": safety_backup_name
+        }
+
+    else:
+        # JSON snapshot restore
+        try:
+            json_data = json.loads(contents.decode('utf-8'))
+        except Exception:
+            raise HTTPException(status_code=400, detail="File must be a valid .db (SQLite) or .json snapshot file.")
+
+        if not isinstance(json_data, dict):
+            raise HTTPException(status_code=400, detail="Invalid JSON snapshot format.")
+
+        conn = get_db()
+        cur = conn.cursor()
+
+        restored_votes = 0
+        round_votes = json_data.get('roundVotes') or {}
+        for cid_str, r_dict in round_votes.items():
+            try:
+                cid = int(cid_str)
+                for r_key, cnt in r_dict.items():
+                    if cnt is not None:
+                        cur.execute("INSERT OR REPLACE INTO votes (candidate_id, round_key, votes_count) VALUES (?, ?, ?)",
+                                    (cid, str(r_key).upper(), int(cnt)))
+                        restored_votes += 1
+            except Exception:
+                continue
+
+        # Restore declared statuses
+        restored_wards = 0
+        for w in json_data.get('wards', []):
+            if w.get('category') and w.get('ward_no') and w.get('status'):
+                cur.execute("UPDATE wards SET status = ? WHERE category = ? AND block_name = ? AND ward_no = ?",
+                            (w['status'], w['category'], w.get('block_name'), int(w['ward_no'])))
+                restored_wards += 1
+
+        # Restore system mode if provided
+        if json_data.get('system_mode'):
+            cur.execute("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('system_mode', ?)",
+                        (json_data['system_mode'],))
+
+        cur.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)",
+                    ("RESTORE_JSON", f"Imported JSON snapshot with {restored_votes} vote entries into local database"))
+        conn.commit()
+        conn.close()
+
+        # Sync JSON
+        try:
+            conn2 = get_db()
+            cur2 = conn2.cursor()
+            cur2.execute("SELECT id, category, block_name, ward_no, ballot_no, name_hindi, party, symbol, gender, age, candidate_category FROM candidates ORDER BY category, block_name, ward_no, ballot_no")
+            all_cands = [dict(zip([d[0] for d in cur2.description], r)) for r in cur2.fetchall()]
+            with open('all_candidates_master.json', 'w', encoding='utf-8') as f:
+                json.dump(all_cands, f, ensure_ascii=False, indent=2)
+            conn2.close()
+        except Exception as ex:
+            print(f"Warning syncing json: {ex}")
+
+        asyncio.create_task(broadcast_live_update())
+        return {
+            "status": "success",
+            "type": "json",
+            "message": f"Successfully imported {restored_votes} vote entries from JSON snapshot into local database! Safety backup saved.",
+            "safety_backup": safety_backup_name
+        }
 
 @app.post("/api/wards/update_booths_bulk")
 async def update_booths_bulk(payload: dict, request: Request):
