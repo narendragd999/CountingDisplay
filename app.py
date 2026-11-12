@@ -1281,9 +1281,18 @@ async def update_candidate(payload: dict, request: Request):
 
 @app.post("/api/candidates/renumber_ward")
 async def renumber_ward_candidates(payload: dict, request: Request):
-    """Sort all candidates in a ward alphabetically (Hindi), put NOTA last, reassign ballot_no 1..N."""
+    """
+    Sort candidates in official ballot order:
+      1. Recognized/State Party candidates (BJP, INC, BAP, AAP, etc.) → Hindi A-Z
+      2. Independent candidates (IND / निर्दलीय)                       → Hindi A-Z
+      3. NOTA                                                            → last
+    Reassigns ballot_no 1..N accordingly.
+    """
     check_auth(request)
     import unicodedata
+
+    # Party codes that are treated as INDEPENDENT (not a recognized state party)
+    IND_PARTIES = {'IND', 'NIRDALIYA', 'NIRDALI', 'निर्दलीय'}
 
     category = payload.get('category')
     block = payload.get('block')
@@ -1299,6 +1308,13 @@ async def renumber_ward_candidates(payload: dict, request: Request):
             return ""
         return unicodedata.normalize('NFKC', name).strip().strip('\u200b\u200c\u200d\ufeff\xa0')
 
+    def is_nota(name, party):
+        return (party or '').upper() == 'NOTA' or 'नोटा' in (name or '')
+
+    def is_ind(name, party):
+        p = (party or '').strip().upper()
+        return p in IND_PARTIES
+
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute(
@@ -1310,17 +1326,32 @@ async def renumber_ward_candidates(payload: dict, request: Request):
         conn.close()
         raise HTTPException(status_code=404, detail=f"No candidates found for {category} {block} Ward {ward_no}.")
 
-    regular = [(r[0], r[1], r[2]) for r in rows if r[2] != 'NOTA' and 'नोटा' not in (r[1] or '')]
-    nota = [(r[0], r[1], r[2]) for r in rows if r[2] == 'NOTA' or 'नोटा' in (r[1] or '')]
+    state_party = []
+    independent = []
+    nota = []
 
-    sorted_regular = sorted(regular, key=lambda x: clean_hi(x[1]))
-    ordered = sorted_regular + nota
+    for r in rows:
+        cid, name, party = r[0], r[1], r[2]
+        if is_nota(name, party):
+            nota.append((cid, name, party))
+        elif is_ind(name, party):
+            independent.append((cid, name, party))
+        else:
+            state_party.append((cid, name, party))
+
+    # Sort each group by Hindi name A-Z
+    state_party_sorted = sorted(state_party, key=lambda x: clean_hi(x[1]))
+    independent_sorted = sorted(independent, key=lambda x: clean_hi(x[1]))
+
+    # Final order: State Party → Independent → NOTA
+    ordered = state_party_sorted + independent_sorted + nota
 
     for seq, (cid, cname, cparty) in enumerate(ordered, start=1):
         cursor.execute("UPDATE candidates SET ballot_no = ? WHERE id = ?", (seq, cid))
 
-    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)",
-                   ("RENUMBER_WARD", f"Re-numbered {len(ordered)} candidates in {category} {block} Ward {ward_no} (Hindi alpha + NOTA last)"))
+    details = (f"Re-numbered {len(ordered)} candidates in {category} {block} Ward {ward_no} "
+               f"[State:{len(state_party_sorted)} IND:{len(independent_sorted)} NOTA:{len(nota)}]")
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("RENUMBER_WARD", details))
     conn.commit()
 
     # Sync all_candidates_master.json
@@ -1337,9 +1368,14 @@ async def renumber_ward_candidates(payload: dict, request: Request):
     asyncio.create_task(broadcast_live_update())
     return {
         'status': 'success',
-        'message': f"Re-numbered {len(ordered)} candidates in {category} {block} Ward {ward_no} in Hindi alphabetical order (NOTA last).",
+        'message': (f"Ward {ward_no}: {len(state_party_sorted)} state party (Hindi A-Z) → "
+                    f"{len(independent_sorted)} independent (Hindi A-Z) → {len(nota)} NOTA. "
+                    f"Ballot numbers 1–{len(ordered)} assigned."),
         'ward_no': ward_no,
-        'total': len(ordered)
+        'total': len(ordered),
+        'state_party_count': len(state_party_sorted),
+        'independent_count': len(independent_sorted),
+        'nota_count': len(nota)
     }
 
 

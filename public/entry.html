@@ -925,7 +925,7 @@
           <span>Registered Contestants</span>
           <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <span id="manageCountBadge" class="badge badge-primary">0 Contestants</span>
-            <button type="button" onclick="renumberAllWards()" class="btn btn-primary" style="padding:5px 12px; font-size:11px; font-weight:800; background:#7c3aed; border-color:#7c3aed;" title="Sort all wards in this block by Hindi alphabetical order and assign ballot numbers 1,2,3... with NOTA last">
+            <button type="button" onclick="renumberAllWards()" class="btn btn-primary" style="padding:5px 12px; font-size:11px; font-weight:800; background:#7c3aed; border-color:#7c3aed;" title="Official order: State Party (A-Z) → IND (A-Z) → NOTA last — applied to all wards in this block">
               🔢 Re-number All Wards
             </button>
           </div>
@@ -2341,7 +2341,7 @@
                   onclick="renumberWard('${cat}','${blk}',${c.ward_no})"
                   class="btn btn-primary"
                   style="padding:3px 10px; font-size:11px; font-weight:800; background:#7c3aed; border-color:#7c3aed; white-space:nowrap;"
-                  title="Sort Ward ${c.ward_no} candidates by Hindi alphabetical order, assign ballot numbers 1,2,3... NOTA last">
+                  title="Official order: State Party (A-Z) → IND (A-Z) → NOTA last">
                   🔢 Re-number Ward ${c.ward_no}
                 </button>
               </td>
@@ -2368,9 +2368,9 @@
       }
     }
 
-    // Re-number a single ward (Hindi alpha sort, NOTA last)
+    // Re-number a single ward (State Party Hindi A-Z → IND Hindi A-Z → NOTA last)
     async function renumberWard(cat, blk, wardNo) {
-      const confirmed = confirm(`Re-number Ward ${wardNo} candidates?\n\nThis will:\n• Sort all candidates in Hindi alphabetical order\n• Assign Ballot No. 1, 2, 3...\n• Place NOTA last\n\nProceed?`);
+      const confirmed = confirm(`Re-number Ward ${wardNo} candidates?\n\nOfficial ballot order:\n1️⃣ State Party candidates — Hindi A-Z (BJP, INC, BAP, AAP...)\n2️⃣ Independent (IND) candidates — Hindi A-Z\n3️⃣ NOTA — last\n\nBallot numbers 1, 2, 3... will be assigned in this order.\nProceed?`);
       if (!confirmed) return;
 
       try {
@@ -2381,7 +2381,7 @@
         });
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
-          showToast(`✅ ${res.message}`);
+          showToast(`✅ Ward ${wardNo}: ${res.state_party_count ?? ''} state party → ${res.independent_count ?? ''} IND → ${res.nota_count ?? ''} NOTA | ${res.message}`);
           await loadMasterData();
           loadManageBlockContestants();
           renderRoundEntrySheet();
@@ -2393,7 +2393,7 @@
       }
     }
 
-    // Re-number ALL wards in current block (one by one)
+    // Re-number ALL wards in current block
     async function renumberAllWards() {
       const cat = document.getElementById('manageCategory').value;
       const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('manageBlock').value;
@@ -2406,7 +2406,7 @@
         return;
       }
 
-      const confirmed = confirm(`Re-number ALL ${wardNos.length} wards in ${cat === 'ZP' ? 'Zilla Parishad' : blk}?\n\nAll wards will be sorted by Hindi alphabetical order with NOTA last and ballot numbers reassigned.\n\nProceed?`);
+      const confirmed = confirm(`Re-number ALL ${wardNos.length} wards in ${cat === 'ZP' ? 'Zilla Parishad' : blk}?\n\nOfficial ballot order for EVERY ward:\n1️⃣ State Party candidates (BJP, INC, BAP, AAP...) — Hindi A-Z\n2️⃣ Independent (IND) candidates — Hindi A-Z\n3️⃣ NOTA — last\n\nProceed?`);
       if (!confirmed) return;
 
       showToast('⏳ Re-numbering all wards...');
@@ -2428,7 +2428,7 @@
       await loadMasterData();
       loadManageBlockContestants();
       renderRoundEntrySheet();
-      showToast(`✅ Re-numbered ${done} wards successfully${failed > 0 ? ` (${failed} failed)` : ''}.`);
+      showToast(`✅ Re-numbered ${done} wards (State Party A-Z → IND A-Z → NOTA)${failed > 0 ? ` | ${failed} failed` : ''}.`);
     }
 
     async function submitBulkImport() {

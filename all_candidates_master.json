@@ -5148,19 +5148,6 @@
     "candidate_category": "ST"
   },
   {
-    "id": 4,
-    "category": "PS",
-    "block_name": "Semari",
-    "ward_no": 1,
-    "ballot_no": 4,
-    "name_hindi": "मांगीलाल मीणा",
-    "party": "IND",
-    "symbol": "Official",
-    "gender": "M",
-    "age": "36",
-    "candidate_category": "ST"
-  },
-  {
     "id": 5,
     "category": "PS",
     "block_name": "Semari",
@@ -5171,6 +5158,19 @@
     "symbol": "Official",
     "gender": "M",
     "age": "56",
+    "candidate_category": "ST"
+  },
+  {
+    "id": 4,
+    "category": "PS",
+    "block_name": "Semari",
+    "ward_no": 1,
+    "ballot_no": 5,
+    "name_hindi": "मांगीलाल मीणा",
+    "party": "IND",
+    "symbol": "Official",
+    "gender": "M",
+    "age": "36",
     "candidate_category": "ST"
   },
   {
