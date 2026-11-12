@@ -921,11 +921,16 @@
 
       <!-- Candidate List -->
       <div>
-        <div style="font-size:13px; font-weight:800; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:13px; font-weight:800; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <span>Registered Contestants</span>
-          <span id="manageCountBadge" class="badge badge-primary">0 Contestants</span>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <span id="manageCountBadge" class="badge badge-primary">0 Contestants</span>
+            <button type="button" onclick="renumberAllWards()" class="btn btn-primary" style="padding:5px 12px; font-size:11px; font-weight:800; background:#7c3aed; border-color:#7c3aed;" title="Sort all wards in this block by Hindi alphabetical order and assign ballot numbers 1,2,3... with NOTA last">
+              🔢 Re-number All Wards
+            </button>
+          </div>
         </div>
-        <div class="table-container" style="max-height:280px; overflow-y:auto;">
+        <div class="table-container" style="max-height:340px; overflow-y:auto;">
           <table class="data-table">
             <thead>
               <tr>
@@ -933,7 +938,7 @@
                 <th style="width:70px;">Ballot #</th>
                 <th>Candidate Name</th>
                 <th>Party</th>
-                <th style="width:80px; text-align:center;">Action</th>
+                <th style="width:160px; text-align:center;">Action</th>
               </tr>
             </thead>
             <tbody id="manageCandidatesTableBody"></tbody>
@@ -1651,7 +1656,10 @@
                 ${isNota ? 'नोटा' : '#' + (cand.ballot_no || '-')}
               </td>
               <td style="font-weight:700; font-size:14px;">
-                ${cand.name_hindi}
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span>${cand.name_hindi}</span>
+                  ${!isNota ? `<button type="button" onclick="openEditCandidateModal(${cand.id})" class="btn-icon" title="Edit Candidate Name / Details" style="cursor:pointer; background:transparent; border:none; color:#0284c7; font-size:13px; padding:2px 4px; border-radius:4px; opacity:0.75;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.75">✏️</button>` : ''}
+                </div>
               </td>
               <td style="width:75px;">
                 <span class="party-pill party-${cand.party || 'IND'}">${cand.party || 'IND'}</span>
@@ -2319,15 +2327,38 @@
       if (cands.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:20px;">No contestants registered for ${cat} ${blk} yet. Paste list from Excel above.</td></tr>`;
       } else {
+        // Group by ward_no and add per-ward Re-number button as a separator row
+        let currentWard = null;
         cands.forEach(c => {
+          if (c.ward_no !== currentWard) {
+            currentWard = c.ward_no;
+            const wardRow = document.createElement('tr');
+            wardRow.style.cssText = 'background:linear-gradient(to right,#f0f4ff,#f8faff); border-top:2px solid #c7d2fe;';
+            wardRow.innerHTML = `
+              <td colspan="5" style="padding:5px 10px; display:flex; align-items:center; justify-content:space-between;">
+                <span style="font-size:12px; font-weight:800; color:#3730a3;">📋 Ward ${c.ward_no}</span>
+                <button type="button"
+                  onclick="renumberWard('${cat}','${blk}',${c.ward_no})"
+                  class="btn btn-primary"
+                  style="padding:3px 10px; font-size:11px; font-weight:800; background:#7c3aed; border-color:#7c3aed; white-space:nowrap;"
+                  title="Sort Ward ${c.ward_no} candidates by Hindi alphabetical order, assign ballot numbers 1,2,3... NOTA last">
+                  🔢 Re-number Ward ${c.ward_no}
+                </button>
+              </td>
+            `;
+            tbody.appendChild(wardRow);
+          }
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td style="font-weight:700;">W${c.ward_no}</td>
             <td style="font-weight:700; font-family:'Rajdhani',sans-serif;">#${c.ballot_no || '-'}</td>
             <td style="font-weight:700;">${c.name_hindi}</td>
             <td><span class="party-pill party-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
-            <td style="text-align:center;">
-              <button onclick="deleteContestant(${c.id}, '${c.name_hindi}')" class="btn btn-outline" style="color:var(--danger); border-color:#fca5a5; padding:4px 8px; font-size:11px;">
+            <td style="text-align:center; display:flex; gap:6px; justify-content:center;">
+              <button type="button" onclick="openEditCandidateModal(${c.id})" class="btn btn-primary" style="padding:4px 10px; font-size:11px; font-weight:700;">
+                ✏️ Edit
+              </button>
+              <button type="button" onclick="deleteContestant(${c.id}, '${c.name_hindi.replace(/'/g, "\\'")}')" class="btn btn-outline" style="color:var(--danger); border-color:#fca5a5; padding:4px 8px; font-size:11px;">
                 🗑️ Delete
               </button>
             </td>
@@ -2335,6 +2366,69 @@
           tbody.appendChild(tr);
         });
       }
+    }
+
+    // Re-number a single ward (Hindi alpha sort, NOTA last)
+    async function renumberWard(cat, blk, wardNo) {
+      const confirmed = confirm(`Re-number Ward ${wardNo} candidates?\n\nThis will:\n• Sort all candidates in Hindi alphabetical order\n• Assign Ballot No. 1, 2, 3...\n• Place NOTA last\n\nProceed?`);
+      if (!confirmed) return;
+
+      try {
+        const resp = await fetch('/api/candidates/renumber_ward', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          body: JSON.stringify({ category: cat, block: blk, ward_no: wardNo })
+        });
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          showToast(`✅ ${res.message}`);
+          await loadMasterData();
+          loadManageBlockContestants();
+          renderRoundEntrySheet();
+        } else {
+          alert('Error: ' + (res.detail || 'Could not re-number ward.'));
+        }
+      } catch (e) {
+        alert('Network error: ' + e);
+      }
+    }
+
+    // Re-number ALL wards in current block (one by one)
+    async function renumberAllWards() {
+      const cat = document.getElementById('manageCategory').value;
+      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('manageBlock').value;
+      const wardNos = [...new Set(
+        masterData.candidates.filter(c => c.category === cat && c.block_name === blk).map(c => c.ward_no)
+      )].sort((a, b) => a - b);
+
+      if (wardNos.length === 0) {
+        alert('No candidates found for this block.');
+        return;
+      }
+
+      const confirmed = confirm(`Re-number ALL ${wardNos.length} wards in ${cat === 'ZP' ? 'Zilla Parishad' : blk}?\n\nAll wards will be sorted by Hindi alphabetical order with NOTA last and ballot numbers reassigned.\n\nProceed?`);
+      if (!confirmed) return;
+
+      showToast('⏳ Re-numbering all wards...');
+      let done = 0, failed = 0;
+      for (const wno of wardNos) {
+        try {
+          const resp = await fetch('/api/candidates/renumber_ward', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+            body: JSON.stringify({ category: cat, block: blk, ward_no: wno })
+          });
+          const res = await resp.json();
+          if (resp.ok && res.status === 'success') done++;
+          else failed++;
+        } catch (e) {
+          failed++;
+        }
+      }
+      await loadMasterData();
+      loadManageBlockContestants();
+      renderRoundEntrySheet();
+      showToast(`✅ Re-numbered ${done} wards successfully${failed > 0 ? ` (${failed} failed)` : ''}.`);
     }
 
     async function submitBulkImport() {
@@ -2764,5 +2858,164 @@
     }
 
   </script>
+  <!-- EDIT CANDIDATE MODAL -->
+  <div id="editCandidateModal" class="modal-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#ffffff; border-radius:12px; width:90%; max-width:480px; box-shadow:var(--shadow-lg); overflow:hidden; border:1px solid var(--border-main);">
+      <div style="padding:16px 20px; background:#0f172a; color:#ffffff; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:15px; font-weight:800; display:flex; align-items:center; gap:8px;">
+          <span>✏️</span> Edit Candidate Details
+        </div>
+        <button type="button" onclick="closeEditCandidateModal()" style="background:transparent; border:none; color:#94a3b8; font-size:18px; cursor:pointer; font-weight:bold;">✕</button>
+      </div>
+
+      <div style="padding:20px; display:flex; flex-direction:column; gap:14px;">
+        <input type="hidden" id="editCandidateId">
+        
+        <div>
+          <label style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:5px;">
+            Ward & Block Scope
+          </label>
+          <div id="editCandidateScope" style="font-size:13px; font-weight:700; color:var(--primary); padding:8px 12px; background:#f0f9ff; border-radius:6px; border:1px solid #bae6fd;">
+            <!-- Scope dynamically populated -->
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:800; color:var(--text-main); display:block; margin-bottom:5px;">
+            Candidate Name in Hindi (मतगणना पत्रक पर नाम) <span style="color:var(--danger)">*</span>
+          </label>
+          <input type="text" id="editCandidateNameHindi" class="form-input" style="font-size:14px; font-weight:700; width:100%; padding:10px 12px;" placeholder="उदा. रमेश कुमार मीणा">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:800; color:var(--text-main); display:block; margin-bottom:5px;">
+              Party Code
+            </label>
+            <select id="editCandidateParty" class="form-select" style="font-size:13px; font-weight:700; width:100%; height:40px;">
+              <option value="BJP">BJP (भारतीय जनता पार्टी)</option>
+              <option value="INC">INC (कांग्रेस)</option>
+              <option value="BAP">BAP (भारत आदिवासी पार्टी)</option>
+              <option value="AAP">AAP (आम आदमी पार्टी)</option>
+              <option value="IND">IND (निर्दलीय)</option>
+              <option value="NOTA">NOTA (नोटा)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:12px; font-weight:800; color:var(--text-main); display:block; margin-bottom:5px;">
+              Ballot No (#)
+            </label>
+            <input type="number" id="editCandidateBallotNo" class="form-input" min="1" style="font-size:14px; font-weight:700; width:100%; padding:9px 12px;">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:800; color:var(--text-main); display:block; margin-bottom:5px;">
+            Symbol / चुनाव चिन्ह (Optional)
+          </label>
+          <input type="text" id="editCandidateSymbol" class="form-input" style="font-size:13px; width:100%; padding:8px 12px;" placeholder="उदा. सेब, अलमारी, आदि">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+          <button type="button" onclick="closeEditCandidateModal()" class="btn btn-outline" style="padding:9px 16px; font-weight:700;">
+            Cancel
+          </button>
+          <button type="button" id="btnSaveCandidateEdit" onclick="saveCandidateEdit()" class="btn btn-primary" style="padding:9px 20px; font-weight:800;">
+            💾 Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openEditCandidateModal(candId) {
+      const cand = (masterData.candidates || []).find(c => c.id == candId);
+      if (!cand) {
+        alert('Candidate not found.');
+        return;
+      }
+
+      document.getElementById('editCandidateId').value = cand.id;
+      document.getElementById('editCandidateNameHindi').value = cand.name_hindi || '';
+      document.getElementById('editCandidateParty').value = cand.party || 'IND';
+      document.getElementById('editCandidateBallotNo').value = cand.ballot_no || 1;
+      document.getElementById('editCandidateSymbol').value = cand.symbol || '';
+
+      const scopeText = cand.category === 'ZP' 
+        ? `🏛️ Zilla Parishad — Ward ${cand.ward_no}`
+        : `🏘️ ${cand.block_name} — Ward ${cand.ward_no}`;
+      document.getElementById('editCandidateScope').innerText = scopeText;
+
+      const modal = document.getElementById('editCandidateModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+          document.getElementById('editCandidateNameHindi')?.focus();
+          document.getElementById('editCandidateNameHindi')?.select();
+        }, 100);
+      }
+    }
+
+    function closeEditCandidateModal() {
+      const modal = document.getElementById('editCandidateModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function saveCandidateEdit() {
+      const cid = document.getElementById('editCandidateId').value;
+      const name = document.getElementById('editCandidateNameHindi').value.trim();
+      const party = document.getElementById('editCandidateParty').value.trim();
+      const ballotNo = document.getElementById('editCandidateBallotNo').value.trim();
+      const symbol = document.getElementById('editCandidateSymbol').value.trim();
+
+      if (!name) {
+        alert('Candidate name cannot be empty.');
+        return;
+      }
+
+      const saveBtn = document.getElementById('btnSaveCandidateEdit');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerText = '⏳ Saving...';
+      }
+
+      try {
+        const resp = await fetch('/api/candidates/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          body: JSON.stringify({
+            candidate_id: cid,
+            name_hindi: name,
+            party: party,
+            ballot_no: ballotNo,
+            symbol: symbol
+          })
+        });
+
+        const res = await resp.json();
+        if (resp.ok && res.status === 'success') {
+          showToast(`✅ ${res.message || 'Candidate details updated successfully!'}`);
+          closeEditCandidateModal();
+          await loadMasterData();
+          renderRoundEntrySheet();
+          if (typeof loadManageBlockContestants === 'function') {
+            loadManageBlockContestants();
+          }
+        } else {
+          alert('Error: ' + (res.detail || 'Could not update candidate.'));
+        }
+      } catch (e) {
+        alert('Network connection error: ' + e);
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.innerText = '💾 Save Changes';
+        }
+      }
+    }
+  </script>
+
 </body>
 </html>

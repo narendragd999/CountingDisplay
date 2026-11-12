@@ -1198,6 +1198,151 @@ async def bulk_import_candidates(payload: dict, request: Request):
         'message': f"Successfully imported {count_inserted} contestants for {category} {block}!"
     }
 
+@app.post("/api/candidates/update")
+@app.post("/api/candidate/update")
+async def update_candidate(payload: dict, request: Request):
+    """Allows updating candidate name, party, symbol, ballot_no, etc."""
+    check_auth(request)
+    cid = int(payload.get('candidate_id'))
+    name_hindi = payload.get('name_hindi') or payload.get('name')
+    party = payload.get('party')
+    symbol = payload.get('symbol')
+    ballot_no = payload.get('ballot_no')
+
+    if not name_hindi or not str(name_hindi).strip():
+        raise HTTPException(status_code=400, detail="Candidate name cannot be empty.")
+
+    name_hindi = str(name_hindi).strip()
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name_hindi, party, category, block_name, ward_no FROM candidates WHERE id = ?", (cid,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Candidate not found.")
+
+    old_name = row['name_hindi']
+    cat = row['category']
+    blk = row['block_name']
+    wno = row['ward_no']
+
+    updates = ["name_hindi = ?"]
+    params = [name_hindi]
+
+    if party is not None and str(party).strip():
+        updates.append("party = ?")
+        params.append(str(party).strip())
+
+    if symbol is not None and str(symbol).strip():
+        updates.append("symbol = ?")
+        params.append(str(symbol).strip())
+
+    if ballot_no is not None and str(ballot_no).strip():
+        try:
+            b_val = int(ballot_no)
+            updates.append("ballot_no = ?")
+            params.append(b_val)
+        except ValueError:
+            pass
+
+    params.append(cid)
+    sql = f"UPDATE candidates SET {', '.join(updates)} WHERE id = ?"
+    cursor.execute(sql, params)
+
+    cursor.execute("""
+    INSERT INTO audit_log (action, details)
+    VALUES (?, ?)
+    """, ("UPDATE_CANDIDATE", f"Updated candidate #{cid}: '{old_name}' -> '{name_hindi}' in {cat} {blk} W{wno}"))
+
+    conn.commit()
+
+    # Sync to all_candidates_master.json
+    try:
+        cursor.execute("SELECT id, category, block_name, ward_no, ballot_no, name_hindi, party, symbol, gender, age, candidate_category FROM candidates ORDER BY category, block_name, ward_no, ballot_no")
+        c_all = [dict(r) for r in cursor.fetchall()]
+        with open('all_candidates_master.json', 'w', encoding='utf-8') as jf:
+            json.dump([{
+                'id': r['id'], 'type': r['category'], 'block': r['block_name'], 'wardNo': r['ward_no'],
+                'ballotNo': r['ballot_no'], 'name': r['name_hindi'], 'party': r['party'],
+                'symbol': r['symbol'], 'gender': r['gender'], 'age': r['age'], 'category': r['candidate_category']
+            } for r in c_all], jf, ensure_ascii=False, indent=2)
+    except Exception as ex:
+        print(f"Warning syncing json: {ex}")
+
+    conn.close()
+
+    asyncio.create_task(broadcast_live_update())
+    return {
+        'status': 'success',
+        'message': f"Updated contestant '{name_hindi}' successfully!"
+    }
+
+
+@app.post("/api/candidates/renumber_ward")
+async def renumber_ward_candidates(payload: dict, request: Request):
+    """Sort all candidates in a ward alphabetically (Hindi), put NOTA last, reassign ballot_no 1..N."""
+    check_auth(request)
+    import unicodedata
+
+    category = payload.get('category')
+    block = payload.get('block')
+    ward_no_raw = payload.get('ward_no')
+
+    if not category or not block or ward_no_raw is None:
+        raise HTTPException(status_code=400, detail="category, block, ward_no are required.")
+
+    ward_no = int(ward_no_raw)
+
+    def clean_hi(name):
+        if not name:
+            return ""
+        return unicodedata.normalize('NFKC', name).strip().strip('\u200b\u200c\u200d\ufeff\xa0')
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id, name_hindi, party FROM candidates WHERE category=? AND block_name=? AND ward_no=? AND is_active=1",
+        (category, block, ward_no)
+    )
+    rows = cursor.fetchall()
+    if not rows:
+        conn.close()
+        raise HTTPException(status_code=404, detail=f"No candidates found for {category} {block} Ward {ward_no}.")
+
+    regular = [(r[0], r[1], r[2]) for r in rows if r[2] != 'NOTA' and 'नोटा' not in (r[1] or '')]
+    nota = [(r[0], r[1], r[2]) for r in rows if r[2] == 'NOTA' or 'नोटा' in (r[1] or '')]
+
+    sorted_regular = sorted(regular, key=lambda x: clean_hi(x[1]))
+    ordered = sorted_regular + nota
+
+    for seq, (cid, cname, cparty) in enumerate(ordered, start=1):
+        cursor.execute("UPDATE candidates SET ballot_no = ? WHERE id = ?", (seq, cid))
+
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)",
+                   ("RENUMBER_WARD", f"Re-numbered {len(ordered)} candidates in {category} {block} Ward {ward_no} (Hindi alpha + NOTA last)"))
+    conn.commit()
+
+    # Sync all_candidates_master.json
+    try:
+        cursor.execute("SELECT id, category, block_name, ward_no, ballot_no, name_hindi, party, symbol, gender, age, candidate_category FROM candidates ORDER BY category, block_name, ward_no, ballot_no")
+        all_cands = [dict(zip([d[0] for d in cursor.description], row)) for row in cursor.fetchall()]
+        import json as _json
+        with open('all_candidates_master.json', 'w', encoding='utf-8') as f:
+            _json.dump(all_cands, f, ensure_ascii=False, indent=2)
+    except Exception as ex:
+        print(f"Warning syncing json: {ex}")
+
+    conn.close()
+    asyncio.create_task(broadcast_live_update())
+    return {
+        'status': 'success',
+        'message': f"Re-numbered {len(ordered)} candidates in {category} {block} Ward {ward_no} in Hindi alphabetical order (NOTA last).",
+        'ward_no': ward_no,
+        'total': len(ordered)
+    }
+
+
 @app.post("/api/candidates/delete")
 async def delete_candidate(payload: dict, request: Request):
     """Delete a single candidate and re-index ballot order."""
