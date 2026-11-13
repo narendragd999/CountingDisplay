@@ -977,7 +977,7 @@ async def seed_dummy_test_data(request: Request):
                     cnt = random.randint(200, 350)
                 else:
                     cnt = random.randint(90, 240)
-            cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, ?, ?)", (c['id'], r_key, cnt))
+            cursor.execute("INSERT OR REPLACE INTO votes (candidate_id, round_key, votes_count) VALUES (?, ?, ?)", (c['id'], r_key, cnt))
 
     # 3. Generate realistic multi-round votes for ALL 126 wards (all rounds)
     # Fetch all ward configurations (max_rounds per ward)
@@ -1003,15 +1003,12 @@ async def seed_dummy_test_data(request: Request):
 
     # Add official round declarations for all blocks
     for blk_name in PS_BLOCKS:
-        cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R1', 'DECLARED', 8500)", (blk_name,))
-        cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R2', 'DECLARED', 8300)", (blk_name,))
+        cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R1', 'DECLARED', 8500)", (blk_name,))
+        cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R2', 'DECLARED', 8300)", (blk_name,))
 
-    cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R1', 'DECLARED', 12500)")
-    cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R2', 'DECLARED', 12380)")
-    cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R3', 'DECLARED', 11950)")
-    for b in ['Jaisamand', 'Sarada', 'Semari', 'Salumbar', 'Geengla', 'Lasadiya', 'Jhallara']:
-        cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R1', 'DECLARED', 3400)", (b,))
-        cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R2', 'DECLARED', 3350)", (b,))
+    cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R1', 'DECLARED', 12500)")
+    cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R2', 'DECLARED', 12380)")
+    cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R3', 'DECLARED', 11950)")
 
     cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("SEED_DUMMY_DATA", f"Realistic multi-round test data (R1 to R5) seeded across ZP and PS by {user['username']}"))
     conn.commit()

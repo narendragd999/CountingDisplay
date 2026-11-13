@@ -2224,7 +2224,12 @@
             'X-Auth-Token': token
           }
         });
-        const res = await resp.json();
+        let res = null;
+        try {
+          res = await resp.json();
+        } catch (parseErr) {
+          res = { detail: `Server returned HTTP ${resp.status}` };
+        }
         if (resp.ok) {
           showToast(res.message || '🎲 Dummy test data populated successfully!', 'success');
           await loadMasterData();
@@ -2233,7 +2238,7 @@
           alert('❌ ' + (res.detail || 'Failed to generate test data'));
         }
       } catch (e) {
-        alert('❌ Network error while generating test data');
+        alert('❌ Network error while generating test data: ' + (e.message || e));
       }
     }
 
