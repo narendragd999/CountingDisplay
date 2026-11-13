@@ -3,45 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SALUMBER ELECTION BROADCAST 2026 - प्रो लाइव टीवी स्क्रीन</title>
+  <title>SALUMBER LIVE ELECTION DISPLAY 2026 - प्रो स्मार्ट टीवी स्क्रीन</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800&family=Hind:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Hind:wght@500;600;700&family=Inter:wght@500;600;700;800;900&family=Rajdhani:wght@600;700;800&family=Teko:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================================
-       PRO-LEVEL NEWSROOM BROADCAST GRAPHICS SUITE (SALUMBER ELECTIONS 2026)
-       Modeled after BBC / CNN / Aaj Tak Ultra-High Definition Broadcast Visuals
+       PRO TV BROADCAST WITH SMOOTH CARD TRANSITIONS & HIGH-DENSITY COMPACT GRID
+       Salumber District Elections 2026 • 1080p / 4K / Large TV Displays
        ========================================================================== */
     :root {
       --bg-studio: #05070e;
-      --bg-glass: rgba(14, 21, 38, 0.72);
-      --bg-glass-elevated: rgba(22, 33, 58, 0.88);
-      --border-glass: rgba(255, 255, 255, 0.12);
-      --border-accent: rgba(56, 189, 248, 0.4);
+      --bg-panel: rgba(13, 20, 36, 0.85);
+      --bg-card: rgba(17, 26, 46, 0.94);
+      --bg-card-hover: rgba(24, 37, 66, 0.98);
+
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --border-accent: rgba(56, 189, 248, 0.35);
 
       --gold: #f59e0b;
       --gold-bright: #fbbf24;
-      --gold-glow: rgba(245, 158, 11, 0.45);
+      --gold-glow: rgba(245, 158, 11, 0.4);
 
-      --cyan: #06b6d4;
-      --cyan-bright: #22d3ee;
-      --cyan-glow: rgba(6, 182, 212, 0.4);
+      --cyan-bright: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.35);
 
-      --emerald: #10b981;
-      --emerald-glow: rgba(16, 185, 129, 0.4);
+      --emerald-bright: #34d399;
+      --emerald-glow: rgba(52, 211, 153, 0.35);
 
-      --ruby: #f43f5e;
-      --ruby-glow: rgba(244, 63, 94, 0.4);
-
-      /* Authentic Party Colors */
+      /* Party Identity Colors */
       --party-bjp: #ea580c;
-      --party-bjp-glow: rgba(234, 88, 12, 0.5);
       --party-inc: #0284c7;
-      --party-inc-glow: rgba(2, 132, 199, 0.5);
       --party-bap: #d97706;
-      --party-bap-glow: rgba(217, 119, 6, 0.5);
       --party-aap: #0d9488;
       --party-ind: #64748b;
       --party-nota: #475569;
@@ -55,7 +50,7 @@
 
     html, body {
       width: 100%; height: 100%;
-      background: radial-gradient(circle at 50% 0%, #101a33 0%, #060913 70%, #030408 100%);
+      background: radial-gradient(circle at 50% 0%, #101c38 0%, #060913 75%, #030408 100%);
       color: var(--text-pure);
       font-family: 'Hind', 'Inter', -apple-system, sans-serif;
       overflow: hidden;
@@ -63,35 +58,35 @@
       flex-direction: column;
     }
 
-    /* Ambient Newsroom Studio Lighting Gradients */
+    /* Studio Ambient Lighting */
     body::before {
       content: '';
-      position: absolute; top: -150px; left: 10%; width: 450px; height: 350px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, transparent 70%);
+      position: absolute; top: -140px; left: 15%; width: 440px; height: 280px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.13) 0%, transparent 70%);
       pointer-events: none; z-index: 1; filter: blur(50px);
     }
     body::after {
       content: '';
-      position: absolute; top: -150px; right: 10%; width: 450px; height: 350px;
-      background: radial-gradient(circle, rgba(234, 88, 12, 0.14) 0%, transparent 70%);
+      position: absolute; top: -140px; right: 15%; width: 440px; height: 280px;
+      background: radial-gradient(circle, rgba(234, 88, 12, 0.13) 0%, transparent 70%);
       pointer-events: none; z-index: 1; filter: blur(50px);
     }
 
     /* ==========================================================================
-       1. TOP NEWSROOM HEADER BAR
+       1. TOP NEWSROOM HEADER (COMPACT 44px)
        ========================================================================== */
     .tv-broadcast-header {
       position: relative;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(8, 13, 24, 0.98) 100%);
-      border-bottom: 2px solid rgba(56, 189, 248, 0.3);
-      padding: 8px 24px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(8, 13, 24, 0.98) 100%);
+      border-bottom: 2px solid rgba(56, 189, 248, 0.35);
+      padding: 5px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
       z-index: 50;
       backdrop-filter: blur(12px);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
     }
 
     .tv-broadcast-header::after {
@@ -109,29 +104,30 @@
     .brand-cluster {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .live-bug {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: linear-gradient(135deg, #b91c1c, #dc2626);
       color: #ffffff;
-      padding: 5px 12px;
+      padding: 3px 9px;
       border-radius: 4px;
       font-family: 'Teko', sans-serif;
-      font-size: 1.25rem;
-      letter-spacing: 1.5px;
-      box-shadow: 0 0 16px rgba(220, 38, 38, 0.6);
+      font-size: 1.15rem;
+      letter-spacing: 1.2px;
+      line-height: 1;
+      box-shadow: 0 0 14px rgba(220, 38, 38, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
     .live-bug-dot {
-      width: 9px; height: 9px;
+      width: 7px; height: 7px;
       background: #ffffff;
       border-radius: 50%;
-      box-shadow: 0 0 8px #ffffff;
+      box-shadow: 0 0 6px #ffffff;
       animation: pulseBug 1.2s infinite ease-in-out;
     }
 
@@ -142,9 +138,9 @@
 
     .election-title-unit h1 {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 1.35rem;
+      font-size: 1.12rem;
       font-weight: 800;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.2px;
       background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -152,27 +148,27 @@
     }
 
     .election-title-unit p {
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       color: #94a3b8;
       font-weight: 600;
-      letter-spacing: 0.3px;
-      margin-top: 2px;
+      letter-spacing: 0.2px;
+      line-height: 1.1;
+      margin-top: 1px;
     }
 
     .header-center-stage {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    /* Switcher Pills */
     .stage-mode-selector {
       display: flex;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 4px;
-      border-radius: 8px;
-      gap: 4px;
+      padding: 2px;
+      border-radius: 6px;
+      gap: 2px;
     }
 
     .stage-mode-btn {
@@ -180,15 +176,15 @@
       border: none;
       color: #94a3b8;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 6px 16px;
-      border-radius: 6px;
+      padding: 4px 12px;
+      border-radius: 5px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 6px;
+      transition: all 0.25s ease;
     }
 
     .stage-mode-btn:hover {
@@ -199,24 +195,23 @@
     .stage-mode-btn.active {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #ffffff;
-      box-shadow: 0 0 15px rgba(2, 132, 199, 0.6);
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.6);
       border: 1px solid rgba(56, 189, 248, 0.4);
     }
 
-    /* Auto Rotation Pill */
     .auto-tour-pill {
-      background: rgba(14, 21, 38, 0.8);
+      background: rgba(14, 21, 38, 0.85);
       border: 1px solid rgba(56, 189, 248, 0.3);
       color: #38bdf8;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 8px;
+      padding: 4px 10px;
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.25s ease;
     }
 
@@ -224,18 +219,18 @@
       border-color: #10b981;
       color: #34d399;
       background: rgba(16, 185, 129, 0.15);
-      box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
     }
 
     .tour-pulse-dot {
-      width: 8px; height: 8px;
+      width: 6px; height: 6px;
       background: #38bdf8;
       border-radius: 50%;
     }
 
     .auto-tour-pill.active .tour-pulse-dot {
       background: #10b981;
-      box-shadow: 0 0 8px #10b981;
+      box-shadow: 0 0 6px #10b981;
       animation: pulseTour 1.5s infinite;
     }
 
@@ -247,29 +242,29 @@
     .header-telemetry {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .digital-clock-box {
       font-family: 'Orbitron', monospace;
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--cyan-bright);
-      text-shadow: 0 0 12px var(--cyan-glow);
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
       background: rgba(6, 182, 212, 0.1);
       border: 1px solid rgba(6, 182, 212, 0.3);
-      padding: 4px 14px;
-      border-radius: 6px;
-      letter-spacing: 1.5px;
+      padding: 3px 10px;
+      border-radius: 5px;
+      letter-spacing: 1px;
     }
 
     .btn-fs {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #cbd5e1;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      padding: 4px 9px;
+      border-radius: 5px;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -281,17 +276,17 @@
     }
 
     /* ==========================================================================
-       2. REAL-TIME SCOREBOARD LED STRIP (MAJORITY & TALLIES)
+       2. REAL-TIME SCOREBOARD LED STRIP (COMPACT 32px)
        ========================================================================== */
     .broadcast-scoreboard {
       background: linear-gradient(180deg, #090e1b 0%, #060913 100%);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 8px 24px;
+      padding: 4px 18px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 12px;
       flex-shrink: 0;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     .chamber-tally-bar {
@@ -300,15 +295,15 @@
       justify-content: space-between;
       background: rgba(14, 21, 38, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      padding: 6px 16px;
+      border-radius: 6px;
+      padding: 3px 12px;
       position: relative;
       overflow: hidden;
     }
 
     .chamber-tally-bar::before {
       content: '';
-      position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     }
 
     .bar-zp::before { background: linear-gradient(180deg, #38bdf8, #0284c7); }
@@ -317,46 +312,46 @@
     .chamber-title-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .chamber-name {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.82rem;
       font-weight: 800;
       color: #ffffff;
       letter-spacing: 0.3px;
     }
 
     .majority-badge {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 800;
       background: rgba(255, 255, 255, 0.08);
       color: #94a3b8;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 1px 5px;
+      border-radius: 3px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
     .tally-digits-flex {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
     }
 
     .party-chip-digit {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
-      border-radius: 6px;
+      gap: 4px;
+      padding: 1px 7px;
+      border-radius: 4px;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.92rem;
+      font-size: 0.8rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       border: 1px solid transparent;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.25s ease;
     }
 
     .pchip-bjp { background: rgba(234, 88, 12, 0.2); color: #fb923c; border-color: rgba(234, 88, 12, 0.4); }
@@ -368,23 +363,23 @@
       background: rgba(16, 185, 129, 0.18);
       color: #34d399;
       border: 1px solid rgba(16, 185, 129, 0.4);
-      padding: 3px 10px;
-      border-radius: 6px;
+      padding: 1px 7px;
+      border-radius: 4px;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.76rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
     /* ==========================================================================
-       3. MAIN STAGE VIEWPORTS
+       3. MAIN STAGE VIEWPORTS (HIGH-DENSITY 2-COLUMN CARDS GRID)
        ========================================================================== */
     .tv-main-stage {
       flex: 1;
       display: flex;
       overflow: hidden;
       position: relative;
-      padding: 12px 20px;
+      padding: 6px 12px;
     }
 
     /* Split Arena */
@@ -393,7 +388,7 @@
       height: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 10px;
       overflow: hidden;
     }
 
@@ -407,21 +402,21 @@
     }
 
     .chamber-column-box {
-      background: var(--bg-glass);
+      background: var(--bg-panel);
       border: 1px solid var(--border-glass);
-      border-radius: 12px;
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       min-height: 0;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(16px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(14px);
     }
 
     .column-banner-bar {
       background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(8, 13, 24, 0.95));
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 8px 16px;
+      padding: 5px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -430,21 +425,21 @@
 
     .banner-title-text {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 1.05rem;
+      font-size: 0.88rem;
       font-weight: 800;
       letter-spacing: 0.3px;
       color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .banner-badge-counter {
-      font-size: 0.74rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      padding: 3px 10px;
-      border-radius: 4px;
-      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.4px;
       text-transform: uppercase;
     }
 
@@ -454,8 +449,8 @@
     /* PS Block Navigation Strip */
     .ps-block-nav-strip {
       display: flex;
-      gap: 6px;
-      padding: 6px 14px;
+      gap: 4px;
+      padding: 4px 10px;
       background: rgba(0, 0, 0, 0.5);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       overflow-x: auto;
@@ -469,9 +464,9 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #94a3b8;
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-size: 0.78rem;
+      padding: 2px 9px;
+      border-radius: 4px;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
@@ -487,62 +482,80 @@
       background: linear-gradient(135deg, #0284c7, #0ea5e9);
       color: #ffffff;
       border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+      box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
     }
 
-    /* Cards Scroll Viewport */
+    /* Cards Scroll Viewport with 2-Column Responsive Grid */
     .chamber-cards-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: max-content;
+      gap: 8px;
       min-height: 0;
       scroll-behavior: smooth;
     }
 
-    .chamber-cards-scroll::-webkit-scrollbar { width: 5px; }
+    .chamber-cards-scroll::-webkit-scrollbar { width: 4px; }
     .chamber-cards-scroll::-webkit-scrollbar-track { background: transparent; }
-    .chamber-cards-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 3px; }
+    .chamber-cards-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 2px; }
     .chamber-cards-scroll::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
 
     /* ==========================================================================
-       4. PRO TV BROADCAST WARD CARDS
+       4. ULTRA-COMPACT PRO CARDS WITH SMOOTH HARDWARE-ACCELERATED ANIMATIONS
        ========================================================================== */
     .pro-ward-card {
-      background: linear-gradient(180deg, rgba(19, 31, 56, 0.85) 0%, rgba(13, 21, 38, 0.95) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      flex-shrink: 0;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
       position: relative;
+      /* GPU Smooth Transitions */
+      transform: translateZ(0);
+      will-change: transform, box-shadow, border-color;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                  box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                  border-color 0.25s ease;
+      animation: cardPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
+    @keyframes cardPopIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .pro-ward-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    /* Winner Declared Pulsing Aura */
     .pro-ward-card.declared-win {
-      border: 1.5px solid rgba(245, 158, 11, 0.65);
-      background: linear-gradient(180deg, rgba(30, 41, 68, 0.95) 0%, rgba(18, 26, 45, 0.98) 100%);
-      box-shadow: 0 8px 30px rgba(245, 158, 11, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      border: 1.5px solid rgba(245, 158, 11, 0.7);
+      background: linear-gradient(180deg, rgba(28, 38, 62, 0.95) 0%, rgba(16, 23, 40, 0.98) 100%);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25);
     }
 
     .pro-ward-card.declared-win::before {
       content: '';
-      position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+      position: absolute; top: 0; left: 0; width: 3px; height: 100%;
       background: var(--gold-bright);
-      box-shadow: 0 0 12px var(--gold-bright);
+      box-shadow: 0 0 10px var(--gold-bright);
     }
 
     .pro-ward-card.in-lead {
       border-color: rgba(16, 185, 129, 0.45);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.15);
+      box-shadow: 0 3px 14px rgba(16, 185, 129, 0.12);
     }
 
-    /* Card Top Label Bar */
+    /* Card Top Meta Bar */
     .card-meta-bar {
       background: rgba(0, 0, 0, 0.45);
-      padding: 7px 14px;
+      padding: 4px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -552,42 +565,50 @@
     .ward-identity-title {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      overflow: hidden;
     }
 
     .ward-heading-text {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 1rem;
+      font-size: 0.84rem;
       font-weight: 800;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .reservation-pill {
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       font-weight: 800;
       background: rgba(255, 255, 255, 0.08);
       color: #94a3b8;
-      padding: 1px 6px;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
     }
 
     .status-badge-chip {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.62rem;
       font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 4px;
-      letter-spacing: 0.5px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.3px;
       text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
     }
 
     .badge-win-gold {
       background: rgba(245, 158, 11, 0.25);
       color: #fde047;
       border: 1px solid #f59e0b;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.3);
     }
 
     .badge-lead-green {
@@ -608,96 +629,100 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* Broadcast Leader Bar */
+    /* Broadcast Leader Strip */
     .pro-leader-strap {
-      padding: 6px 14px;
+      padding: 3px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.84rem;
+      font-size: 0.74rem;
       font-weight: 700;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      transition: background 0.3s ease;
     }
 
     .strap-winner {
-      background: linear-gradient(90deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.05));
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.04));
       color: #fef08a;
     }
 
     .strap-leading {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.04));
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.03));
       color: #d1fae5;
     }
 
     .strap-tied {
-      background: linear-gradient(90deg, rgba(234, 88, 12, 0.2), rgba(234, 88, 12, 0.04));
+      background: linear-gradient(90deg, rgba(234, 88, 12, 0.18), rgba(234, 88, 12, 0.03));
       color: #fed7aa;
     }
 
     .strap-margin-bold {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 1rem;
+      font-size: 0.82rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
     }
 
-    /* Broadcast Candidates Table */
+    /* Compact Candidates Table */
     .pro-cand-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.82rem;
+      font-size: 0.74rem;
     }
 
     .pro-cand-table th {
       background: rgba(0, 0, 0, 0.35);
       color: #64748b;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.6rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      padding: 5px 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      letter-spacing: 0.4px;
+      padding: 2.5px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .pro-cand-table td {
-      padding: 5px 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 2.5px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
       vertical-align: middle;
+      transition: background 0.2s ease, color 0.2s ease;
     }
 
     .pro-cand-table tr:last-child td { border-bottom: none; }
 
     .pro-cand-table tr.winner-row-highlight {
-      background: rgba(245, 158, 11, 0.12);
+      background: rgba(245, 158, 11, 0.1);
     }
 
     .cand-name-flex {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 6px;
     }
 
     .cand-name-hindi {
-      font-weight: 700;
+      font-weight: 600;
       color: #ffffff;
-      font-size: 0.88rem;
+      font-size: 0.76rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 190px;
+      max-width: 140px;
     }
 
     .pro-party-badge {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.66rem;
+      font-size: 0.58rem;
       font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 4px;
+      padding: 1px 5px;
+      border-radius: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .pbadge-bjp { background: rgba(234, 88, 12, 0.25); color: #fb923c; border: 1px solid #ea580c; }
@@ -710,10 +735,11 @@
     .round-num-cell {
       text-align: right;
       font-family: 'Rajdhani', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.84rem;
       font-weight: 600;
       color: #94a3b8;
-      width: 44px;
+      width: 36px;
+      transition: color 0.2s ease;
     }
 
     .round-num-cell.active-val {
@@ -724,10 +750,11 @@
     .total-num-cell {
       text-align: right;
       font-family: 'Rajdhani', sans-serif;
-      font-size: 1.12rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: #f8fafc;
-      width: 65px;
+      width: 50px;
+      transition: color 0.25s ease, text-shadow 0.25s ease;
     }
 
     .total-num-cell.top-rank-total {
@@ -737,20 +764,20 @@
 
     .pro-ward-card.declared-win .total-num-cell.top-rank-total {
       color: #fde047;
-      text-shadow: 0 0 10px rgba(253, 224, 71, 0.5);
+      text-shadow: 0 0 6px rgba(253, 224, 71, 0.5);
     }
 
     /* ==========================================================================
-       5. BOTTOM ULTRA-HD BREAKING NEWS TICKER
+       5. BOTTOM BREAKING NEWS TICKER (COMPACT 30px)
        ========================================================================== */
     .pro-news-ticker-bar {
       background: linear-gradient(90deg, #b91c1c 0%, #991b1b 100%);
       color: #ffffff;
-      height: 38px;
+      height: 30px;
       display: flex;
       align-items: center;
       flex-shrink: 0;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 -3px 14px rgba(0, 0, 0, 0.6);
       position: relative;
       z-index: 50;
       overflow: hidden;
@@ -759,14 +786,14 @@
     .ticker-header-flash {
       background: #0f172a;
       color: #f59e0b;
-      padding: 0 18px;
+      padding: 0 12px;
       height: 100%;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-family: 'Teko', sans-serif;
-      font-size: 1.25rem;
-      letter-spacing: 1px;
+      font-size: 1.1rem;
+      letter-spacing: 0.8px;
       flex-shrink: 0;
       border-right: 2px solid #f59e0b;
     }
@@ -780,8 +807,8 @@
 
     .ticker-moving-stream {
       display: inline-flex;
-      gap: 50px;
-      padding-left: 20px;
+      gap: 40px;
+      padding-left: 15px;
       animation: newsStream 40s linear infinite;
     }
 
@@ -791,24 +818,25 @@
     }
 
     .news-bulletin-item {
-      font-size: 0.86rem;
+      font-size: 0.78rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       letter-spacing: 0.2px;
     }
 
     .bulletin-gold {
       color: #fef08a;
-      text-shadow: 0 0 8px rgba(254, 240, 138, 0.4);
+      text-shadow: 0 0 6px rgba(254, 240, 138, 0.4);
     }
 
     .empty-prompt {
-      padding: 50px 20px;
+      grid-column: 1 / -1;
+      padding: 40px 20px;
       text-align: center;
       color: #64748b;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 600;
     }
   </style>
@@ -909,7 +937,7 @@
 
   <script>
     /* ==========================================================================
-       PRO BROADCAST CONTROLLER (ZERO FLICKER DOM DIFFING • REALTIME WEBSOCKET)
+       PRO COMPACT BROADCAST CONTROLLER (ZERO FLICKER • IN-PLACE DOM DIFFING)
        ========================================================================== */
     const ALL_PS_BLOCKS = ['Semari', 'Sarada', 'Salumbar', 'Jaisamand', 'Geengla', 'Lasadiya', 'Jhallara'];
     const HINDI_BLOCK_MAP = {
@@ -1028,14 +1056,14 @@
       if (tourTimer) clearInterval(tourTimer);
       if (!isAutoTourRunning) return;
 
-      // Auto cycle blocks every 15 seconds
+      // Auto cycle blocks every 14 seconds
       tourTimer = setInterval(() => {
         if (!isAutoTourRunning) return;
         const tourList = ['ALL', ...ALL_PS_BLOCKS];
         const nextIdx = (tourList.indexOf(activePsBlock) + 1) % tourList.length;
         activePsBlock = tourList[nextIdx];
         renderActiveStage();
-      }, 15000);
+      }, 14000);
     }
 
     // 6. Gentle Auto-Scroll
@@ -1048,7 +1076,7 @@
             if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 5) {
               scroller.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-              scroller.scrollBy({ top: 130, behavior: 'smooth' });
+              scroller.scrollBy({ top: 110, behavior: 'smooth' });
             }
           }
         });
@@ -1100,7 +1128,7 @@
               <div class="column-banner-bar">
                 <div class="banner-title-text">
                   <span>🏘️ पंचायत समिति सदस्य</span>
-                  <span style="font-size:0.8rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSub"></span>
+                  <span style="font-size:0.75rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSub"></span>
                 </div>
                 <span class="banner-badge-counter bcounter-ps">7 पंचायत समितियां</span>
               </div>
@@ -1135,7 +1163,7 @@
       diffAndRenderCards(document.getElementById('scrollContainerPs'), psWards);
     }
 
-    // Fullscreen ZP Stage
+    // Fullscreen ZP Stage (Dense Responsive Multi-Column Grid)
     function renderSingleZpStage(stage, force) {
       if (!stage.querySelector('#singleZpStage') || force) {
         stage.innerHTML = `
@@ -1143,11 +1171,11 @@
             <div class="chamber-column-box" style="height:100%;">
               <div class="column-banner-bar">
                 <div class="banner-title-text">
-                  <span>🏛️ जिला परिषद सदस्य • सम्पूर्ण 21 वार्ड (Full HD Grid)</span>
+                  <span>🏛️ जिला परिषद सदस्य • सम्पूर्ण 21 वार्ड (Dense High-Definition View)</span>
                 </div>
-                <span class="banner-badge-counter bcounter-zp">21 WARD FULL VIEW</span>
+                <span class="banner-badge-counter bcounter-zp">21 WARD GRID</span>
               </div>
-              <div class="chamber-cards-scroll" id="scrollContainerZpFull" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(430px, 1fr)); gap:14px; align-content:start;"></div>
+              <div class="chamber-cards-scroll" id="scrollContainerZpFull" style="grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));"></div>
             </div>
           </div>
         `;
@@ -1156,7 +1184,7 @@
       diffAndRenderCards(document.getElementById('scrollContainerZpFull'), zpWards);
     }
 
-    // Fullscreen PS Stage
+    // Fullscreen PS Stage (Dense Responsive Multi-Column Grid)
     function renderSinglePsStage(stage, force) {
       if (!stage.querySelector('#singlePsStage') || force) {
         stage.innerHTML = `
@@ -1165,13 +1193,13 @@
               <div class="column-banner-bar">
                 <div class="banner-title-text">
                   <span>🏘️ पंचायत समिति सदस्य • 7 ब्लॉक (105 Wards)</span>
-                  <span style="font-size:0.85rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSubFull"></span>
+                  <span style="font-size:0.8rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSubFull"></span>
                 </div>
                 <div class="ps-block-nav-strip" id="psBlockNavStripFull" style="background:transparent; border:none; padding:0;">
                   ${buildBlockNavPills()}
                 </div>
               </div>
-              <div class="chamber-cards-scroll" id="scrollContainerPsFull" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(430px, 1fr)); gap:14px; align-content:start;"></div>
+              <div class="chamber-cards-scroll" id="scrollContainerPsFull" style="grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));"></div>
             </div>
           </div>
         `;
@@ -1217,7 +1245,7 @@
     }
 
     // ==========================================================================
-    // IN-PLACE CARDS DIFFING (ZERO SCREEN FLICKER)
+    // IN-PLACE CARDS DIFFING (ZERO FLICKER + SMOOTH TRANSITIONS)
     // ==========================================================================
     function diffAndRenderCards(container, wards) {
       if (!container) return;
@@ -1350,16 +1378,16 @@
       // Headers
       let roundThs = '';
       if (hasEarlierRounds) {
-        roundThs += `<th style="text-align:center; width:20px;" title="पूर्व के राउण्ड्स कुल योग में सम्मिलित हैं">...</th>`;
+        roundThs += `<th style="text-align:center; width:16px;" title="पूर्व के राउण्ड्स कुल योग में सम्मिलित हैं">...</th>`;
       }
       displayRoundKeys.forEach(r => {
-        roundThs += `<th style="text-align:right; width:44px;">${r}</th>`;
+        roundThs += `<th style="text-align:right; width:36px;">${r}</th>`;
       });
 
       // Candidate Rows
       let rowsHtml = '';
       if (candTotals.length === 0) {
-        rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:10px;">कोई प्रत्याशी पंजीकृत नहीं</td></tr>`;
+        rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:6px;">कोई प्रत्याशी पंजीकृत नहीं</td></tr>`;
       } else {
         candTotals.forEach((c, idx) => {
           const isWinnerRow = isWinnerDeclared && idx === 0 && c.totalVotes > 0;
@@ -1367,7 +1395,7 @@
 
           let roundTds = '';
           if (hasEarlierRounds) {
-            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:10px;">•</td>`;
+            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:9px;">•</td>`;
           }
           displayRoundKeys.forEach(rKey => {
             const val = vObj[rKey];
@@ -1384,7 +1412,7 @@
 
           rowsHtml += `
             <tr class="${isWinnerRow ? 'winner-row-highlight' : ''}">
-              <td style="color:var(--text-dim); font-size:0.75rem; text-align:center; width:22px; font-weight:700;">${idx + 1}</td>
+              <td style="color:var(--text-dim); font-size:0.7rem; text-align:center; width:18px; font-weight:700;">${idx + 1}</td>
               <td>
                 <div class="cand-name-flex">
                   <span class="cand-name-hindi" title="${c.name_hindi}">${c.name_hindi}</span>
@@ -1405,11 +1433,11 @@
         ? `जिला परिषद वार्ड ${ward.ward_no}`
         : `${HINDI_BLOCK_MAP[ward.block_name] || ward.block_name} वार्ड ${ward.ward_no}`;
 
-      let statusBadge = '<span class="status-badge-chip badge-awaiting-gray">मतगणना प्रतीक्षित</span>';
+      let statusBadge = '<span class="status-badge-chip badge-awaiting-gray">प्रतीक्षित</span>';
       if (isWinnerDeclared) {
-        statusBadge = '<span class="status-badge-chip badge-win-gold">🏆 परिणाम घोषित</span>';
+        statusBadge = '<span class="status-badge-chip badge-win-gold">🏆 घोषित</span>';
       } else if (hasVotes) {
-        statusBadge = `<span class="status-badge-chip badge-counting-blue">राउण्ड ${highestRoundNum} प्रगति पर</span>`;
+        statusBadge = `<span class="status-badge-chip badge-counting-blue">R${highestRoundNum}</span>`;
       }
 
       const cardKey = `${ward.category}_${ward.block_name}_${ward.ward_no}`;
@@ -1428,10 +1456,10 @@
           <table class="pro-cand-table">
             <thead>
               <tr>
-                <th style="width:22px;">#</th>
-                <th style="text-align:left;">प्रत्याशी एवं दल</th>
+                <th style="width:18px;">#</th>
+                <th style="text-align:left;">प्रत्याशी</th>
                 ${roundThs}
-                <th style="text-align:right; width:65px;">कुल योग</th>
+                <th style="text-align:right; width:50px;">योग</th>
               </tr>
             </thead>
             <tbody>
