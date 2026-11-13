@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>सलूम्बर जिला पंचायती राज चुनाव 2026 - स्मार्ट टीवी लाइव परिणाम (Smart Public Display)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       SMART PUBLIC TV BROADCAST DISPLAY (SALUMBER 2026)
+       High-Contrast Newsroom Broadcast Styling • 1080p / 4K / Large TV Ready
+       Clean Hindi Typography • Dynamic View Modes • Zero Screen Flicker
+       ========================================================================== */
+    :root {
+      --bg-base: #060913;
+      --bg-panel: #0d1527;
+      --bg-card: #131f38;
+      --bg-card-hover: #1a2a4c;
+      --bg-stripe: rgba(255, 255, 255, 0.03);
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-bright: rgba(56, 189, 248, 0.28);
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.35);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.35);
+      --gold: #f59e0b;
+      --gold-glow: rgba(245, 158, 11, 0.4);
+      --rose: #f43f5e;
+
+      /* Party Colors */
+      --party-bjp: #ea580c;
+      --party-bjp-bg: rgba(234, 88, 12, 0.18);
+      --party-bjp-border: #f97316;
+
+      --party-inc: #0284c7;
+      --party-inc-bg: rgba(2, 132, 199, 0.18);
+      --party-inc-border: #38bdf8;
+
+      --party-bap: #d97706;
+      --party-bap-bg: rgba(217, 119, 6, 0.18);
+      --party-bap-border: #fbbf24;
+
+      --party-aap: #0d9488;
+      --party-aap-bg: rgba(13, 148, 136, 0.18);
+      --party-aap-border: #2dd4bf;
+
+      --party-ind: #64748b;
+      --party-ind-bg: rgba(100, 116, 139, 0.18);
+      --party-ind-border: #94a3b8;
+
+      --party-nota: #475569;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================================================
+       TOP BROADCAST HEADER
+       ========================================================================== */
+    .broadcast-header {
+      background: linear-gradient(180deg, #0f172a 0%, #090e1a 100%);
+      border-bottom: 2px solid #1e293b;
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      z-index: 50;
+    }
+
+    .broadcast-header::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, #ea580c, #f59e0b, #0284c7, #10b981, #d97706);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .district-crest {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    }
+
+    .title-block h1 {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .title-block h1 .badge-sub {
+      font-size: 0.65rem;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.8px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .title-block p {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Mode Pill Switches */
+    .view-switcher {
+      display: flex;
+      background: #0b1120;
+      border: 1px solid #1e293b;
+      padding: 3px;
+      border-radius: 8px;
+      gap: 4px;
+    }
+
+    .view-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .view-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .view-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
+    }
+
+    /* Auto Cycle Toggle */
+    .auto-cycle-btn {
+      background: #131f38;
+      border: 1px solid #1e293b;
+      color: #38bdf8;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .auto-cycle-btn.active {
+      border-color: #10b981;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .auto-cycle-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #38bdf8;
+    }
+
+    .auto-cycle-btn.active .auto-cycle-dot {
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseGreen 1.5s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    /* Live Badge & Clock */
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(220, 38, 38, 0.15);
+      border: 1px solid rgba(220, 38, 38, 0.4);
+      color: #fca5a5;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .live-indicator-dot {
+      width: 7px; height: 7px;
+      background: #ef4444;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ef4444;
+      animation: pulseRed 1.2s infinite;
+    }
+
+    @keyframes pulseRed {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.85); }
+    }
+
+    .digital-clock {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #38bdf8;
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+      background: #090e1a;
+      border: 1px solid #1e293b;
+      padding: 4px 12px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    .fullscreen-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .fullscreen-btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+
+    /* ==========================================================================
+       TALLY & SCOREBOARD STRIP
+       ========================================================================== */
+    .scoreboard-strip {
+      background: #090e1a;
+      border-bottom: 1px solid #1e293b;
+      padding: 8px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .tally-panel {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 6px 14px;
+      border-radius: 8px;
+    }
+
+    .tally-title {
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .tally-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .score-chip {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .chip-declared {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      font-size: 0.82rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .chip-bjp { background: var(--party-bjp-bg); color: #fb923c; border: 1px solid var(--party-bjp-border); }
+    .chip-inc { background: var(--party-inc-bg); color: #60a5fa; border: 1px solid var(--party-inc-border); }
+    .chip-bap { background: var(--party-bap-bg); color: #fde047; border: 1px solid var(--party-bap-border); }
+    .chip-ind { background: var(--party-ind-bg); color: #cbd5e1; border: 1px solid var(--party-ind-border); }
+
+    /* ==========================================================================
+       MAIN DISPLAY ARENA
+       ========================================================================== */
+    .arena-container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Split Arena Mode (ZP & PS Side-by-Side) */
+    .split-arena {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 14px 20px;
+      overflow: hidden;
+    }
+
+    /* Single Arena Mode (Full ZP or Full PS) */
+    .single-arena {
+      width: 100%;
+      height: 100%;
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .arena-column {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .column-header {
+      background: #0b1120;
+      border-bottom: 1px solid #1e293b;
+      padding: 10px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .column-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .column-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-zp { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-ps { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    /* PS Block Filter Bar inside column */
+    .block-filter-bar {
+      display: flex;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #060913;
+      border-bottom: 1px solid #1e293b;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+
+    .block-filter-bar::-webkit-scrollbar { height: 4px; }
+    .block-filter-bar::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+    .block-chip {
+      background: #131f38;
+      border: 1px solid #1e293b;
+      color: #94a3b8;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .block-chip:hover {
+      color: #ffffff;
+      background: #1a2a4c;
+    }
+
+    .block-chip.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+    }
+
+    /* Cards Scroll Body */
+    .cards-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+      scroll-behavior: smooth;
+    }
+
+    .cards-viewport::-webkit-scrollbar { width: 6px; }
+    .cards-viewport::-webkit-scrollbar-track { background: transparent; }
+    .cards-viewport::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    .cards-viewport::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* ==========================================================================
+       WARD DISPLAY CARDS (BROADCAST QUALITY)
+       ========================================================================== */
+    .tv-ward-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .tv-ward-card.is-declared {
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      background: linear-gradient(180deg, #162444 0%, #101a33 100%);
+    }
+
+    .tv-ward-card.is-close {
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    /* Ward Card Top Header */
+    .card-top-bar {
+      background: #0b1120;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .ward-name-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ward-pill {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 0.3px;
+    }
+
+    .ward-res-tag {
+      font-size: 0.65rem;
+      font-weight: 800;
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card-status-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .badge-status-declared {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+    }
+
+    .badge-status-progress {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .badge-status-awaiting {
+      background: rgba(255, 255, 255, 0.05);
+      color: #64748b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Leader / Winner Banner Strip */
+    .card-leader-strip {
+      padding: 6px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .leader-declared {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.08));
+      color: #fef3c7;
+      border-left: 4px solid #f59e0b;
+    }
+
+    .leader-leading {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.05));
+      color: #d1fae5;
+      border-left: 4px solid #10b981;
+    }
+
+    .leader-tied {
+      background: linear-gradient(90deg, rgba(234, 88, 12, 0.18), rgba(234, 88, 12, 0.05));
+      color: #ffedd5;
+      border-left: 4px solid #ea580c;
+    }
+
+    .leader-margin {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    /* Candidate Table */
+    .card-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .card-table th {
+      background: #080d1a;
+      color: #64748b;
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 5px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .card-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      vertical-align: middle;
+    }
+
+    .card-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .card-table tr.is-winner-row {
+      background: rgba(245, 158, 11, 0.08);
+    }
+
+    .cand-name-cell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .cand-name-text {
+      font-weight: 700;
+      color: #f1f5f9;
+      font-size: 0.84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+
+    .party-tag-pill {
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .ptag-bjp { background: var(--party-bjp-bg); color: #fb923c; border: 1px solid var(--party-bjp-border); }
+    .ptag-inc { background: var(--party-inc-bg); color: #60a5fa; border: 1px solid var(--party-inc-border); }
+    .ptag-bap { background: var(--party-bap-bg); color: #fde047; border: 1px solid var(--party-bap-border); }
+    .ptag-aap { background: var(--party-aap-bg); color: #2dd4bf; border: 1px solid var(--party-aap-border); }
+    .ptag-ind { background: var(--party-ind-bg); color: #cbd5e1; border: 1px solid var(--party-ind-border); }
+    .ptag-nota { background: rgba(71, 85, 105, 0.2); color: #94a3b8; border: 1px solid rgba(71, 85, 105, 0.4); }
+
+    .round-vote-cell {
+      text-align: right;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #94a3b8;
+      width: 44px;
+    }
+
+    .round-vote-cell.has-votes {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .total-vote-cell {
+      text-align: right;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f8fafc;
+      width: 60px;
+    }
+
+    .total-vote-cell.top-total {
+      color: #38bdf8;
+      font-weight: 900;
+    }
+
+    .tv-ward-card.is-declared .total-vote-cell.top-total {
+      color: #fbbf24;
+      text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+    }
+
+    /* ==========================================================================
+       BOTTOM BREAKING NEWS TICKER
+       ========================================================================== */
+    .bottom-ticker-bar {
+      background: #0284c7;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      height: 38px;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 50;
+    }
+
+    .ticker-lead {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 0 16px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+      border-right: 2px solid #38bdf8;
+    }
+
+    .ticker-scroll-content {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .ticker-track {
+      display: inline-flex;
+      gap: 40px;
+      padding-left: 20px;
+      animation: tickerRoll 35s linear infinite;
+    }
+
+    @keyframes tickerRoll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .ticker-item {
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ticker-item.declared-item {
+      color: #fef08a;
+    }
+
+    /* Empty State */
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="broadcast-header">
+    <div class="header-left">
+      <div class="district-crest">🏛️</div>
+      <div class="title-block">
+        <h1>
+          सलूम्बर जिला पंचायती राज चुनाव 2026
+          <span class="badge-sub">Smart TV Display</span>
+        </h1>
+        <p>जिला परिषद (21 वार्ड) एवं 7 पंचायत समितियां (105 वार्ड) • आधिकारिक सार्वजनिक सजीव प्रसारण</p>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- 3 Dynamic View Buttons -->
+      <div class="view-switcher">
+        <button class="view-btn active" id="btnViewSplit" onclick="setViewMode('split')">
+          ⚡ संयुक्त (50/50 Split)
+        </button>
+        <button class="view-btn" id="btnViewZp" onclick="setViewMode('zp')">
+          🏛️ केवल जिला परिषद
+        </button>
+        <button class="view-btn" id="btnViewPs" onclick="setViewMode('ps')">
+          🏘️ केवल पंचायत समिति
+        </button>
+      </div>
+
+      <!-- Auto Rotate Toggle -->
+      <button class="auto-cycle-btn active" id="btnAutoCycle" onclick="toggleAutoCycle()" title="Toggle Auto Screen Rotation">
+        <span class="auto-cycle-dot"></span>
+        <span id="cycleBtnLabel">ऑटो-रोटेशन चालू</span>
+      </button>
+
+      <!-- Live Broadcast Badge -->
+      <div class="live-badge">
+        <span class="live-indicator-dot"></span>
+        <span>LIVE BROADCAST</span>
+      </div>
+
+      <!-- Digital Clock -->
+      <div class="digital-clock" id="liveTvClock">--:--:-- --</div>
+
+      <!-- Fullscreen Toggle -->
+      <button class="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen for Projectors & TVs">
+        ⛶ FULLSCREEN
+      </button>
+    </div>
+  </header>
+
+  <!-- SCOREBOARD / TALLY STRIP -->
+  <section class="scoreboard-strip">
+    <!-- ZP Tally -->
+    <div class="tally-panel">
+      <span class="tally-title">🏛️ जिला परिषद (21):</span>
+      <div class="tally-pills">
+        <span class="score-chip chip-declared" id="zpDeclaredCount">घोषित: 0/21</span>
+        <span class="score-chip chip-bjp" id="zpTallyBJP">BJP: 0</span>
+        <span class="score-chip chip-inc" id="zpTallyINC">INC: 0</span>
+        <span class="score-chip chip-bap" id="zpTallyBAP">BAP: 0</span>
+        <span class="score-chip chip-ind" id="zpTallyIND">IND: 0</span>
+      </div>
+    </div>
+
+    <!-- PS Tally -->
+    <div class="tally-panel">
+      <span class="tally-title">🏘️ पंचायत समितियां (105):</span>
+      <div class="tally-pills">
+        <span class="score-chip chip-declared" id="psDeclaredCount">घोषित: 0/105</span>
+        <span class="score-chip chip-bjp" id="psTallyBJP">BJP: 0</span>
+        <span class="score-chip chip-inc" id="psTallyINC">INC: 0</span>
+        <span class="score-chip chip-bap" id="psTallyBAP">BAP: 0</span>
+        <span class="score-chip chip-ind" id="psTallyIND">IND: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN ARENA -->
+  <main class="arena-container" id="arenaContainer">
+    <!-- Content rendered dynamically: Split, Full ZP, or Full PS -->
+  </main>
+
+  <!-- BREAKING NEWS TICKER -->
+  <footer class="bottom-ticker-bar">
+    <div class="ticker-lead">
+      <span>⚡ त्वरित समाचार</span>
+    </div>
+    <div class="ticker-scroll-content">
+      <div class="ticker-track" id="tickerTrack">
+        <span class="ticker-item">सलूम्बर जिला पंचायती राज चुनाव 2026 की मतगणना निरंतर जारी...</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ==========================================================================
+       SMART TV ENGINE - ZERO FLICKER • IN-PLACE DOM DIFFING • REALTIME WEBSOCKET
+       ========================================================================== */
+    const PS_BLOCKS = ['Semari', 'Sarada', 'Salumbar', 'Jaisamand', 'Geengla', 'Lasadiya', 'Jhallara'];
+    const BLOCK_NAMES_HI = {
+      'Semari': 'सेमारी',
+      'Sarada': 'सराड़ा',
+      'Salumbar': 'सलूम्बर',
+      'Jaisamand': 'जयसमन्द',
+      'Geengla': 'गींगला',
+      'Lasadiya': 'लसाड़िया',
+      'Jhallara': 'झल्लारा'
+    };
+
+    let masterData = {
+      candidates: [],
+      wards: [],
+      roundVotes: {},
+      booths: [],
+      declaredRounds: [],
+      system_mode: 'TEST'
+    };
+
+    let currentViewMode = 'split'; // 'split', 'zp', 'ps'
+    let currentSelectedPsBlock = 'ALL';
+    let isAutoCycleActive = true;
+    let autoCycleTimer = null;
+    let autoScrollTimer = null;
+    let cardContentSignatures = new Map();
+
+    // 1. Initialize Page
+    window.addEventListener('DOMContentLoaded', async () => {
+      startLiveClock();
+      await fetchMasterData();
+      initWebSocket();
+      setupAutoCycle();
+      startSmoothAutoScroll();
+
+      // Fallback Polling every 3.5 seconds
+      setInterval(fetchMasterData, 3500);
+    });
+
+    // 2. Clock
+    function startLiveClock() {
+      function update() {
+        const now = new Date();
+        const str = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const el = document.getElementById('liveTvClock');
+        if (el) el.textContent = str;
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
+    // 3. Fetch Master Data
+    let isFetching = false;
+    async function fetchMasterData() {
+      if (isFetching) return;
+      isFetching = true;
+      try {
+        const resp = await fetch('/api/all_candidates_master?t=' + Date.now(), { cache: 'no-store' });
+        if (resp.ok) {
+          masterData = await resp.json();
+          renderScreen();
+          updateScoreboards();
+          updateTickerBar();
+        }
+      } catch (e) {
+        console.warn('Network issue fetching master data:', e);
+      } finally {
+        isFetching = false;
+      }
+    }
+
+    // 4. WebSocket for Instant 0ms Refresh
+    function initWebSocket() {
+      try {
+        const loc = window.location;
+        const wsUrl = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host + '/ws';
+        const ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => console.log('⚡ Smart TV Display WebSocket Connected!');
+        ws.onmessage = () => fetchMasterData();
+        ws.onerror = () => { try { ws.close(); } catch(e) {} };
+        ws.onclose = () => setTimeout(initWebSocket, 2500);
+      } catch (e) {
+        setTimeout(initWebSocket, 2500);
+      }
+    }
+
+    // 5. View Switcher
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      if (mode === 'split') document.getElementById('btnViewSplit').classList.add('active');
+      else if (mode === 'zp') document.getElementById('btnViewZp').classList.add('active');
+      else if (mode === 'ps') document.getElementById('btnViewPs').classList.add('active');
+
+      renderScreen(true);
+    }
+
+    function toggleAutoCycle() {
+      isAutoCycleActive = !isAutoCycleActive;
+      const btn = document.getElementById('btnAutoCycle');
+      const label = document.getElementById('cycleBtnLabel');
+      if (isAutoCycleActive) {
+        btn.classList.add('active');
+        label.textContent = 'ऑटो-रोटेशन चालू';
+        setupAutoCycle();
+      } else {
+        btn.classList.remove('active');
+        label.textContent = 'ऑटो-रोटेशन बंद';
+        if (autoCycleTimer) clearInterval(autoCycleTimer);
+      }
+    }
+
+    function setupAutoCycle() {
+      if (autoCycleTimer) clearInterval(autoCycleTimer);
+      if (!isAutoCycleActive) return;
+
+      // Rotate PS blocks every 16 seconds if in PS view or Split view
+      autoCycleTimer = setInterval(() => {
+        if (!isAutoCycleActive) return;
+        const blocksWithAll = ['ALL', ...PS_BLOCKS];
+        const nextIdx = (blocksWithAll.indexOf(currentSelectedPsBlock) + 1) % blocksWithAll.length;
+        currentSelectedPsBlock = blocksWithAll[nextIdx];
+        renderScreen();
+      }, 16000);
+    }
+
+    // 6. Smooth Auto-Scroll for High Volume Displays
+    function startSmoothAutoScroll() {
+      if (autoScrollTimer) clearInterval(autoScrollTimer);
+
+      autoScrollTimer = setInterval(() => {
+        document.querySelectorAll('.cards-viewport').forEach(vp => {
+          if (vp.scrollHeight > vp.clientHeight) {
+            if (vp.scrollTop + vp.clientHeight >= vp.scrollHeight - 5) {
+              vp.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              vp.scrollBy({ top: 120, behavior: 'smooth' });
+            }
+          }
+        });
+      }, 4500);
+    }
+
+    // 7. Fullscreen Toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // ==========================================================================
+    // SCREEN RENDER DISPATCHER
+    // ==========================================================================
+    function renderScreen(force = false) {
+      const arena = document.getElementById('arenaContainer');
+      if (!arena) return;
+
+      if (currentViewMode === 'split') {
+        renderSplitArena(arena, force);
+      } else if (currentViewMode === 'zp') {
+        renderSingleZpArena(arena, force);
+      } else if (currentViewMode === 'ps') {
+        renderSinglePsArena(arena, force);
+      }
+    }
+
+    // Split View (ZP 50% + PS 50%)
+    function renderSplitArena(container, force) {
+      if (!container.querySelector('.split-arena') || force) {
+        container.innerHTML = `
+          <div class="split-arena">
+            <!-- Left Column: ZP -->
+            <div class="arena-column">
+              <div class="column-header">
+                <div class="column-title">
+                  <span>🏛️ जिला परिषद सदस्य</span>
+                </div>
+                <span class="column-badge badge-zp">सभी 21 वार्ड</span>
+              </div>
+              <div class="cards-viewport" id="viewportZp"></div>
+            </div>
+
+            <!-- Right Column: PS -->
+            <div class="arena-column">
+              <div class="column-header">
+                <div class="column-title">
+                  <span>🏘️ पंचायत समिति सदस्य</span>
+                  <span style="font-size:0.75rem; color:#94a3b8; font-weight:600;" id="psActiveBlockLabel"></span>
+                </div>
+                <span class="column-badge badge-ps">7 पंचायत समितियां</span>
+              </div>
+              <div class="block-filter-bar" id="psBlockFilterBar">
+                ${renderBlockFilterChips()}
+              </div>
+              <div class="cards-viewport" id="viewportPs"></div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Update block chips active state
+      updateBlockFilterChipsState();
+      const label = document.getElementById('psActiveBlockLabel');
+      if (label) {
+        label.textContent = currentSelectedPsBlock === 'ALL' ? '(सभी 105 वार्ड)' : `(${BLOCK_NAMES_HI[currentSelectedPsBlock] || currentSelectedPsBlock})`;
+      }
+
+      // Populate ZP Wards
+      const zpWards = masterData.wards.filter(w => w.category === 'ZP').sort((a,b) => a.ward_no - b.ward_no);
+      reconcileCardsInViewport(document.getElementById('viewportZp'), zpWards);
+
+      // Populate PS Wards
+      let psWards = masterData.wards.filter(w => w.category === 'PS');
+      if (currentSelectedPsBlock !== 'ALL') {
+        psWards = psWards.filter(w => w.block_name === currentSelectedPsBlock);
+      }
+      psWards.sort((a,b) => {
+        if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
+        return a.ward_no - b.ward_no;
+      });
+      reconcileCardsInViewport(document.getElementById('viewportPs'), psWards);
+    }
+
+    // Single Full ZP Arena
+    function renderSingleZpArena(container, force) {
+      if (!container.querySelector('#singleZpArena') || force) {
+        container.innerHTML = `
+          <div class="single-arena" id="singleZpArena">
+            <div class="arena-column" style="height:100%;">
+              <div class="column-header">
+                <div class="column-title">
+                  <span>🏛️ जिला परिषद सदस्य - सम्पूर्ण जिला (All 21 Wards)</span>
+                </div>
+                <span class="column-badge badge-zp">FULL BROADCAST VIEW</span>
+              </div>
+              <div class="cards-viewport" id="viewportZpFull" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap:14px; align-content:start;"></div>
+            </div>
+          </div>
+        `;
+      }
+      const zpWards = masterData.wards.filter(w => w.category === 'ZP').sort((a,b) => a.ward_no - b.ward_no);
+      reconcileCardsInViewport(document.getElementById('viewportZpFull'), zpWards);
+    }
+
+    // Single Full PS Arena
+    function renderSinglePsArena(container, force) {
+      if (!container.querySelector('#singlePsArena') || force) {
+        container.innerHTML = `
+          <div class="single-arena" id="singlePsArena">
+            <div class="arena-column" style="height:100%;">
+              <div class="column-header">
+                <div class="column-title">
+                  <span>🏘️ पंचायत समिति सदस्य (Panchayat Samitis)</span>
+                  <span style="font-size:0.8rem; color:#94a3b8; font-weight:600;" id="psActiveBlockLabelFull"></span>
+                </div>
+                <div class="block-filter-bar" id="psBlockFilterBarFull" style="background:transparent; border:none; padding:0;">
+                  ${renderBlockFilterChips()}
+                </div>
+              </div>
+              <div class="cards-viewport" id="viewportPsFull" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap:14px; align-content:start;"></div>
+            </div>
+          </div>
+        `;
+      }
+      updateBlockFilterChipsState();
+      const label = document.getElementById('psActiveBlockLabelFull');
+      if (label) {
+        label.textContent = currentSelectedPsBlock === 'ALL' ? '(सभी ब्लॉक • 105 वार्ड)' : `(ब्लॉक: ${BLOCK_NAMES_HI[currentSelectedPsBlock] || currentSelectedPsBlock})`;
+      }
+
+      let psWards = masterData.wards.filter(w => w.category === 'PS');
+      if (currentSelectedPsBlock !== 'ALL') {
+        psWards = psWards.filter(w => w.block_name === currentSelectedPsBlock);
+      }
+      psWards.sort((a,b) => {
+        if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
+        return a.ward_no - b.ward_no;
+      });
+      reconcileCardsInViewport(document.getElementById('viewportPsFull'), psWards);
+    }
+
+    function renderBlockFilterChips() {
+      let html = `<button class="block-chip ${currentSelectedPsBlock === 'ALL' ? 'active' : ''}" onclick="selectBlock('ALL')">सभी ब्लॉक</button>`;
+      PS_BLOCKS.forEach(b => {
+        const nameHi = BLOCK_NAMES_HI[b] || b;
+        html += `<button class="block-chip ${currentSelectedPsBlock === b ? 'active' : ''}" onclick="selectBlock('${b}')">${nameHi}</button>`;
+      });
+      return html;
+    }
+
+    function updateBlockFilterChipsState() {
+      document.querySelectorAll('.block-chip').forEach(btn => {
+        const isAll = btn.textContent === 'सभी ब्लॉक' && currentSelectedPsBlock === 'ALL';
+        const isBlock = BLOCK_NAMES_HI[currentSelectedPsBlock] === btn.textContent;
+        btn.classList.toggle('active', isAll || isBlock);
+      });
+    }
+
+    function selectBlock(b) {
+      currentSelectedPsBlock = b;
+      renderScreen();
+    }
+
+    // ==========================================================================
+    // RECONCILE CARDS (ZERO FLICKER)
+    // ==========================================================================
+    function reconcileCardsInViewport(viewport, wards) {
+      if (!viewport) return;
+      if (!wards || wards.length === 0) {
+        viewport.innerHTML = '<div class="empty-state">कोई वार्ड डेटा उपलब्ध नहीं है</div>';
+        return;
+      }
+
+      const existingCards = new Map();
+      viewport.querySelectorAll('.tv-ward-card').forEach(el => {
+        const key = el.dataset.wardKey;
+        if (key) existingCards.set(key, el);
+      });
+
+      const activeKeys = new Set();
+      wards.forEach(w => {
+        const key = `${w.category}_${w.block_name}_${w.ward_no}`;
+        activeKeys.add(key);
+
+        const cardData = buildWardCardHtml(w);
+        const existingEl = existingCards.get(key);
+
+        if (existingEl) {
+          const oldSig = cardContentSignatures.get(key);
+          if (oldSig !== cardData.signature) {
+            existingEl.outerHTML = cardData.html;
+            cardContentSignatures.set(key, cardData.signature);
+          }
+        } else {
+          const temp = document.createElement('div');
+          temp.innerHTML = cardData.html;
+          const newEl = temp.firstElementChild;
+          viewport.appendChild(newEl);
+          cardContentSignatures.set(key, cardData.signature);
+        }
+      });
+
+      // Remove obsolete cards
+      existingCards.forEach((el, key) => {
+        if (!activeKeys.has(key)) {
+          el.remove();
+          cardContentSignatures.delete(key);
+        }
+      });
+    }
+
+    // ==========================================================================
+    // WARD CARD HTML BUILDER (WITH 3-ROUND TRUNCATION & HINDI NAMES)
+    // ==========================================================================
+    function buildWardCardHtml(ward) {
+      const isDeclared = (ward.status === 'DECLARED');
+      const cands = masterData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
+
+      // Collect Rounds with votes
+      const roundsWithVotes = new Set();
+      const candTotals = cands.map(c => {
+        let sum = 0;
+        const vObj = masterData.roundVotes[c.id] || {};
+        for (const [rKey, count] of Object.entries(vObj)) {
+          const cnt = Number(count) || 0;
+          sum += cnt;
+          const upperKey = rKey.toUpperCase();
+          if (upperKey.startsWith('R') || upperKey === 'PB') {
+            roundsWithVotes.add(upperKey);
+          }
+        }
+        return { ...c, totalVotes: sum };
+      });
+
+      candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
+      const hasVotes = candTotals.some(c => c.totalVotes > 0);
+
+      // Order Active Rounds
+      let activeRoundKeys = Array.from(roundsWithVotes).sort((a, b) => {
+        if (a === 'PB') return -1;
+        if (b === 'PB') return 1;
+        const numA = parseInt(a.replace(/\D/g, '')) || 0;
+        const numB = parseInt(b.replace(/\D/g, '')) || 0;
+        return numA - numB;
+      });
+      if (activeRoundKeys.length === 0) activeRoundKeys = ['R1'];
+
+      // Find latest completed round
+      let highestRoundNum = 0;
+      activeRoundKeys.forEach(r => {
+        if (r.startsWith('R')) {
+          const num = parseInt(r.replace('R', '')) || 0;
+          if (num > highestRoundNum) highestRoundNum = num;
+        }
+      });
+
+      // Leaders & Margins
+      const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+      const leader = validCands[0] || candTotals[0];
+      const runnerUp = validCands[1] || candTotals[1];
+      const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+      const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
+
+      // Leader Banner Strip HTML
+      let leaderHtml = '';
+      if (isDeclared && leader && leader.totalVotes > 0) {
+        leaderHtml = `
+          <div class="card-leader-strip leader-declared">
+            <span>🏆 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) विजयी घोषित</span>
+            <span class="leader-margin">${margin > 0 ? `+${margin} मतों से विजय` : 'लॉट द्वारा निर्णय'}</span>
+          </div>
+        `;
+      } else if (isTie) {
+        leaderHtml = `
+          <div class="card-leader-strip leader-tied">
+            <span>⚖️ <strong>बराबरी (TIED): ${leader.name_hindi} & ${runnerUp.name_hindi}</strong></span>
+            <span class="leader-margin">समान मत: ${leader.totalVotes}</span>
+          </div>
+        `;
+      } else if (hasVotes && leader && leader.totalVotes > 0) {
+        leaderHtml = `
+          <div class="card-leader-strip leader-leading">
+            <span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) आगे</span>
+            <span class="leader-margin">+${margin} मतों की बढ़त</span>
+          </div>
+        `;
+      }
+
+      // Display ONLY the LAST 3 active rounds
+      let displayRoundKeys = activeRoundKeys;
+      const hasEarlierRounds = activeRoundKeys.length > 3;
+      if (hasEarlierRounds) {
+        displayRoundKeys = activeRoundKeys.slice(-3);
+      }
+
+      // Table Headers
+      let roundThs = '';
+      if (hasEarlierRounds) {
+        roundThs += `<th style="text-align:center; width:20px;" title="पूर्व के राउण्ड्स कुल योग में सम्मिलित हैं">...</th>`;
+      }
+      displayRoundKeys.forEach(r => {
+        roundThs += `<th style="text-align:right; width:44px;">${r}</th>`;
+      });
+
+      // Table Rows
+      let rowsHtml = '';
+      if (candTotals.length === 0) {
+        rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:10px;">कोई प्रत्याशी पंजीकृत नहीं</td></tr>`;
+      } else {
+        candTotals.forEach((c, idx) => {
+          const isWinner = isDeclared && idx === 0 && c.totalVotes > 0;
+          const vObj = masterData.roundVotes[c.id] || {};
+
+          let roundTds = '';
+          if (hasEarlierRounds) {
+            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:10px;">•</td>`;
+          }
+          displayRoundKeys.forEach(rKey => {
+            const val = vObj[rKey];
+            const displayVal = (val !== undefined && val !== null) ? val : '-';
+            roundTds += `
+              <td class="round-vote-cell ${val > 0 ? 'has-votes' : ''}">
+                ${displayVal}
+              </td>
+            `;
+          });
+
+          const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
+          const pCls = isNota ? 'ptag-nota' : (`ptag-${(c.party || 'IND').toLowerCase()}`);
+
+          rowsHtml += `
+            <tr class="${isWinner ? 'is-winner-row' : ''}">
+              <td style="color:var(--text-dim); font-size:0.75rem; text-align:center; width:22px;">${idx + 1}</td>
+              <td>
+                <div class="cand-name-cell">
+                  <span class="cand-name-text" title="${c.name_hindi}">${c.name_hindi}</span>
+                  <span class="party-tag-pill ${pCls}">${c.party || 'IND'}</span>
+                </div>
+              </td>
+              ${roundTds}
+              <td class="total-vote-cell ${idx === 0 && c.totalVotes > 0 ? 'top-total' : ''}">
+                ${c.totalVotes}
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      // Ward Display Title
+      const displayName = ward.category === 'ZP' 
+        ? `जिला परिषद वार्ड ${ward.ward_no}` 
+        : `${BLOCK_NAMES_HI[ward.block_name] || ward.block_name} वार्ड ${ward.ward_no}`;
+
+      let statusBadge = '<span class="card-status-badge badge-status-awaiting">मतगणना प्रतीक्षित</span>';
+      if (isDeclared) {
+        statusBadge = '<span class="card-status-badge badge-status-declared">🏆 परिणाम घोषित</span>';
+      } else if (hasVotes) {
+        statusBadge = `<span class="card-status-badge badge-status-progress">राउण्ड ${highestRoundNum} प्रगति पर</span>`;
+      }
+
+      const cardKey = `${ward.category}_${ward.block_name}_${ward.ward_no}`;
+      const cardClass = `tv-ward-card ${isDeclared ? 'is-declared' : ''} ${!isDeclared && margin > 0 && margin < 150 ? 'is-close' : ''}`;
+
+      const html = `
+        <div class="${cardClass}" data-ward-key="${cardKey}">
+          <div class="card-top-bar">
+            <div class="ward-name-box">
+              <span class="ward-pill">${displayName}</span>
+              <span class="ward-res-tag">${ward.reservation || 'ST'}</span>
+            </div>
+            ${statusBadge}
+          </div>
+          ${leaderHtml}
+          <table class="card-table">
+            <thead>
+              <tr>
+                <th style="width:22px;">#</th>
+                <th style="text-align:left;">प्रत्याशी एवं दल</th>
+                ${roundThs}
+                <th style="text-align:right; width:60px;">कुल योग</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      // Deterministic signature for diffing
+      const signature = JSON.stringify({
+        status: ward.status,
+        cands: candTotals.map(c => [c.id, c.totalVotes]),
+        rounds: displayRoundKeys
+      });
+
+      return { html, signature };
+    }
+
+    // ==========================================================================
+    // SCOREBOARD UPDATE
+    // ==========================================================================
+    function updateScoreboards() {
+      const tally = {
+        ZP: { BJP: 0, INC: 0, BAP: 0, IND: 0, declared: 0 },
+        PS: { BJP: 0, INC: 0, BAP: 0, IND: 0, declared: 0 }
+      };
+
+      masterData.wards.forEach(w => {
+        if (w.status === 'DECLARED') {
+          if (tally[w.category]) tally[w.category].declared++;
+        }
+        const cands = masterData.candidates.filter(c => c.category === w.category && c.block_name === w.block_name && c.ward_no === w.ward_no);
+        const totals = cands.map(c => {
+          let sum = 0;
+          const vObj = masterData.roundVotes[c.id] || {};
+          for (const cnt of Object.values(vObj)) sum += (Number(cnt) || 0);
+          return { ...c, sum };
+        });
+
+        const valid = totals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+        valid.sort((a,b) => b.sum - a.sum);
+
+        if (valid.length > 0 && valid[0].sum > 0) {
+          const topParty = valid[0].party || 'IND';
+          if (tally[w.category][topParty] !== undefined) {
+            tally[w.category][topParty]++;
+          } else {
+            tally[w.category].IND++;
+          }
+        }
+      });
+
+      // Update ZP
+      const zpDec = document.getElementById('zpDeclaredCount');
+      if (zpDec) zpDec.textContent = `घोषित: ${tally.ZP.declared}/21`;
+      document.getElementById('zpTallyBJP').textContent = `BJP: ${tally.ZP.BJP}`;
+      document.getElementById('zpTallyINC').textContent = `INC: ${tally.ZP.INC}`;
+      document.getElementById('zpTallyBAP').textContent = `BAP: ${tally.ZP.BAP}`;
+      document.getElementById('zpTallyIND').textContent = `IND: ${tally.ZP.IND}`;
+
+      // Update PS
+      const psDec = document.getElementById('psDeclaredCount');
+      if (psDec) psDec.textContent = `घोषित: ${tally.PS.declared}/105`;
+      document.getElementById('psTallyBJP').textContent = `BJP: ${tally.PS.BJP}`;
+      document.getElementById('psTallyINC').textContent = `INC: ${tally.PS.INC}`;
+      document.getElementById('psTallyBAP').textContent = `BAP: ${tally.PS.BAP}`;
+      document.getElementById('psTallyIND').textContent = `IND: ${tally.PS.IND}`;
+    }
+
+    // ==========================================================================
+    // TICKER BAR UPDATE
+    // ==========================================================================
+    function updateTickerBar() {
+      const track = document.getElementById('tickerTrack');
+      if (!track) return;
+
+      const declaredWards = masterData.wards.filter(w => w.status === 'DECLARED');
+      let items = [];
+
+      declaredWards.forEach(w => {
+        const cands = masterData.candidates.filter(c => c.category === w.category && c.block_name === w.block_name && c.ward_no === w.ward_no);
+        const valid = cands.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+        const totals = valid.map(c => {
+          let sum = 0;
+          const vObj = masterData.roundVotes[c.id] || {};
+          for (const cnt of Object.values(vObj)) sum += (Number(cnt) || 0);
+          return { ...c, sum };
+        });
+        totals.sort((a,b) => b.sum - a.sum);
+
+        if (totals.length > 0 && totals[0].sum > 0) {
+          const wName = w.category === 'ZP' ? `जिला परिषद वार्ड ${w.ward_no}` : `${BLOCK_NAMES_HI[w.block_name] || w.block_name} वार्ड ${w.ward_no}`;
+          items.push(`🏆 ${wName}: ${totals[0].name_hindi} (${totals[0].party || 'IND'}) विजयी घोषित!`);
+        }
+      });
+
+      if (items.length === 0) {
+        items.push('सलूम्बर जिला पंचायती राज चुनाव 2026: मतगणना सजीव प्रसारण जारी है...');
+        items.push('डाक मतपत्र एवं ईवीएम मतों की गणना सुचारू रूप से प्रगति पर है।');
+      }
+
+      // Seamless infinite loop
+      const html = items.map(t => `<span class="ticker-item declared-item">${t}</span>`).join(' • ');
+      track.innerHTML = html + ' • ' + html;
+    }
+  </script>
+</body>
+</html>

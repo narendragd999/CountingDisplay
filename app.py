@@ -1908,6 +1908,14 @@ def serve_tv_display():
         return FileResponse("index.html")
     return "<h1>TV Display not found</h1>"
 
+@app.get("/tv", response_class=HTMLResponse)
+@app.get("/smart", response_class=HTMLResponse)
+def serve_smart_tv_display():
+    """Serves the smart better TV display screen for showing results to public domain."""
+    if os.path.exists("public/smart_tv.html"):
+        return FileResponse("public/smart_tv.html")
+    return "<h1>Smart TV Display not found</h1>"
+
 @app.get("/entry", response_class=HTMLResponse)
 @app.get("/entry.html", response_class=HTMLResponse)
 def serve_entry_console():
