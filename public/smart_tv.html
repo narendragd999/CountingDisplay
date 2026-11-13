@@ -1833,10 +1833,22 @@
 
       // Find Leader and Runner-Up
       const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
-      const leader = validCands[0] || candTotals[0];
-      const runnerUp = validCands[1] || candTotals[1];
-      const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
-      const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
+      let leader;
+      let runnerUp;
+      let isTie = false;
+      let margin = 0;
+
+      if (isWinnerDeclared) {
+        leader = validCands[0] || candTotals[0];
+        runnerUp = validCands[1] || candTotals[1];
+        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
+      } else {
+        leader = candTotals[0];
+        runnerUp = candTotals[1];
+        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
+      }
 
       // Broadcast Leader Ribbon
       let leaderRibbonHtml = '';
@@ -1855,12 +1867,22 @@
           </div>
         `;
       } else if (hasVotes && leader && leader.totalVotes > 0) {
-        leaderRibbonHtml = `
-          <div class="pro-leader-strap strap-leading">
-            <span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) आगे</span>
-            <span class="strap-margin-bold">+${margin} मतों की बढ़त</span>
-          </div>
-        `;
+        const isNotaLeader = (leader.party === 'NOTA' || (leader.name_hindi || '').includes('नोटा'));
+        if (isNotaLeader) {
+          leaderRibbonHtml = `
+            <div class="pro-leader-strap strap-leading" style="background:rgba(100,116,139,0.15); border-color:#94a3b8; color:#cbd5e1;">
+              <span>⚪ <strong>${leader.name_hindi || 'नोटा (NOTA)'}</strong> आगे</span>
+              <span class="strap-margin-bold">+${margin} मतों की बढ़त</span>
+            </div>
+          `;
+        } else {
+          leaderRibbonHtml = `
+            <div class="pro-leader-strap strap-leading">
+              <span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) आगे</span>
+              <span class="strap-margin-bold">+${margin} मतों की बढ़त</span>
+            </div>
+          `;
+        }
       }
 
       const cardKey = `${ward.category}_${ward.block_name}_${ward.ward_no}`;
@@ -2017,9 +2039,6 @@
       };
 
       electionData.wards.forEach(w => {
-        if (w.status === 'DECLARED') {
-          if (chamberTally[w.category]) chamberTally[w.category].declared++;
-        }
         const cands = electionData.candidates.filter(c => c.category === w.category && c.block_name === w.block_name && c.ward_no === w.ward_no);
         const totals = cands.map(c => {
           let sum = 0;
@@ -2028,15 +2047,31 @@
           return { ...c, sum };
         });
 
-        const valid = totals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
-        valid.sort((a,b) => b.sum - a.sum);
-
-        if (valid.length > 0 && valid[0].sum > 0) {
-          const topParty = valid[0].party || 'IND';
-          if (chamberTally[w.category][topParty] !== undefined) {
-            chamberTally[w.category][topParty]++;
-          } else {
-            chamberTally[w.category].IND++;
+        if (w.status === 'DECLARED') {
+          if (chamberTally[w.category]) chamberTally[w.category].declared++;
+          const valid = totals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+          valid.sort((a,b) => b.sum - a.sum);
+          if (valid.length > 0 && valid[0].sum > 0) {
+            const topParty = valid[0].party || 'IND';
+            if (chamberTally[w.category][topParty] !== undefined) {
+              chamberTally[w.category][topParty]++;
+            } else {
+              chamberTally[w.category].IND++;
+            }
+          }
+        } else {
+          // Live counting: only credit party lead if its candidate is strictly ahead of all options including NOTA
+          totals.sort((a,b) => b.sum - a.sum);
+          if (totals.length > 0 && totals[0].sum > 0) {
+            const isNotaTop = (totals[0].party === 'NOTA' || (totals[0].name_hindi || '').includes('नोटा'));
+            if (!isNotaTop) {
+              const topParty = totals[0].party || 'IND';
+              if (chamberTally[w.category][topParty] !== undefined) {
+                chamberTally[w.category][topParty]++;
+              } else {
+                chamberTally[w.category].IND++;
+              }
+            }
           }
         }
       });

@@ -392,15 +392,24 @@ def calculate_full_state():
         # Sort candidates: by total_votes DESC; on tie or 0 votes, by ballot_no ASC (Hindi alphabetical)
         cands.sort(key=lambda x: (x['total_votes'], -(x.get('ballot_no') or 99)), reverse=True)
 
-        # Pick valid candidates (excluding NOTA) for winner & runner-up determination
+        # Pick winner/leader & runner-up determination
         valid_cands = [c for c in cands if c.get('party') != 'NOTA' and 'नोटा' not in (c.get('name_hindi') or '')]
-        c1 = valid_cands[0] if len(valid_cands) > 0 else (cands[0] if len(cands) > 0 else {'name_hindi': 'प्रत्याशी 1', 'party': 'BAP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}})
-        c2 = valid_cands[1] if len(valid_cands) > 1 else (cands[1] if len(cands) > 1 else {'name_hindi': 'प्रत्याशी 2', 'party': 'BJP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}})
+        
+        # Check if votes exist
+        has_votes = any((c.get('total_votes') or 0) > 0 for c in cands)
+        is_declared = (w['status'] == 'DECLARED' and has_votes)
+
+        if is_declared:
+            c1 = valid_cands[0] if len(valid_cands) > 0 else (cands[0] if len(cands) > 0 else {'name_hindi': 'प्रत्याशी 1', 'party': 'BAP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}})
+            c2 = valid_cands[1] if len(valid_cands) > 1 else (cands[1] if len(cands) > 1 else {'name_hindi': 'प्रत्याशी 2', 'party': 'BJP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}})
+        else:
+            c1 = cands[0] if len(cands) > 0 else {'name_hindi': 'प्रत्याशी 1', 'party': 'BAP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}}
+            c2 = cands[1] if len(cands) > 1 else {'name_hindi': 'प्रत्याशी 2', 'party': 'BJP', 'total_votes': 0, 'pb_votes': 0, 'roundVotes': {}}
 
         c1_tot = c1['total_votes']
         c2_tot = c2['total_votes']
-        has_votes = (c1_tot > 0 or c2_tot > 0)
         margin = max(0, c1_tot - c2_tot)
+        c1_is_nota = (c1.get('party') == 'NOTA' or 'नोटा' in (c1.get('name_hindi') or ''))
 
         # Detect completed rounds
         completed_rounds = 0
@@ -487,18 +496,23 @@ def calculate_full_state():
         target_tally = zp_tally if w['category'] == 'ZP' else ps_tally
         if has_votes:
             if is_declared:
-                target_tally[c1_party]['won'] += 1
-                target_tally[c1_party]['total'] += 1
-            elif margin > 0:
-                target_tally[c1_party]['lead'] += 1
-                target_tally[c1_party]['total'] += 1
+                if c1_party in target_tally:
+                    target_tally[c1_party]['won'] += 1
+                    target_tally[c1_party]['total'] += 1
+            elif margin > 0 and not c1_is_nota:
+                if c1_party in target_tally:
+                    target_tally[c1_party]['lead'] += 1
+                    target_tally[c1_party]['total'] += 1
 
         if is_declared:
             if w['category'] == 'ZP': zp_declared_count += 1
             else: ps_declared_count += 1
             ticker_items.append(f"🏆 {w['block_name']} वार्ड {w['ward_no']} विजयी: {c1['name_hindi']} ({c1_party}) घोषित! (+{margin:,} मत)")
-        elif has_votes and margin > 150:
-            ticker_items.append(f"⚡ {w['block_name']} वार्ड {w['ward_no']}: {c1['name_hindi']} ({c1_party}) बढ़त +{margin:,} मत (राउंड {completed_rounds}/{w['max_rounds']})")
+        elif has_votes and margin > 0:
+            if c1_is_nota:
+                ticker_items.append(f"⚡ {w['block_name']} वार्ड {w['ward_no']}: नोटा (NOTA) आगे +{margin:,} मत (राउंड {completed_rounds}/{w['max_rounds']})")
+            elif margin > 150:
+                ticker_items.append(f"⚡ {w['block_name']} वार्ड {w['ward_no']}: {c1['name_hindi']} ({c1_party}) बढ़त +{margin:,} मत (राउंड {completed_rounds}/{w['max_rounds']})")
 
         if w['category'] == 'ZP':
             zp_wards.append(ward_obj)

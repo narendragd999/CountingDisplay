@@ -1035,7 +1035,7 @@
       });
     }
 
-    // Render ZP Cards - Displays ALL 21 ZP wards unconditionally (never filtered by PS or RO center)
+    // Render ZP Cards - Displays only active ZP wards that have entered votes or declared
     let lastZpFingerprint = '';
     function renderZpCards(force = false) {
       const zpContainer = document.getElementById('zpCardsContainer');
@@ -1051,18 +1051,24 @@
       }
       lastZpFingerprint = currentZpFingerprint;
 
-      const zpWards = (masterData.wards || []).filter(w => w.category === 'ZP');
+      const zpWards = (masterData.wards || []).filter(w => {
+        if (w.category !== 'ZP') return false;
+        return wardHasEnteredVotes(w);
+      });
       zpWards.sort((a, b) => a.ward_no - b.ward_no);
 
       const zpTitleEl = document.getElementById('zpColumnTitle');
       if (zpTitleEl) {
-        zpTitleEl.innerHTML = '<span>🏛️</span> Zilla Parishad (All 21 Wards)';
+        zpTitleEl.innerHTML = zpWards.length > 0 
+          ? `<span>🏛️</span> Zilla Parishad (${zpWards.length}/21 Wards Active)`
+          : `<span>🏛️</span> Zilla Parishad (All 21 Wards)`;
       }
 
       const emptyHtml = `
         <div class="empty-placeholder" style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #64748b;">
           <div style="font-size: 36px; margin-bottom: 8px;">🏛️ ⏳</div>
-          <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद (सभी 21 वार्ड): लोडिंग...</div>
+          <div style="font-size: 16px; font-weight: 800; color: #1e293b;">जिला परिषद: परिणाम प्रविष्टि की प्रतीक्षा है</div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Awaiting entered round votes for Zilla Parishad wards</div>
         </div>
       `;
 
@@ -1166,10 +1172,23 @@
       }
 
       const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
-      const leader = validCands[0] || candTotals[0];
-      const runnerUp = validCands[1] || candTotals[1];
-      const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
-      const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
+      
+      let leader;
+      let runnerUp;
+      let isTie = false;
+      let margin = 0;
+
+      if (isDeclared) {
+        leader = validCands[0] || candTotals[0];
+        runnerUp = validCands[1] || candTotals[1];
+        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
+      } else {
+        leader = candTotals[0];
+        runnerUp = candTotals[1];
+        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
+      }
 
       let leaderHtml = '';
       if (isDeclared && leader && leader.totalVotes > 0) {
@@ -1187,12 +1206,22 @@
           </div>
         `;
       } else if (hasVotes && leader && leader.totalVotes > 0) {
-        leaderHtml = `
-          <div class="leader-strip">
-            <span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) Leading</span>
-            <span>Margin: +${margin} votes</span>
-          </div>
-        `;
+        const isNotaLeader = (leader.party === 'NOTA' || (leader.name_hindi || '').includes('नोटा'));
+        if (isNotaLeader) {
+          leaderHtml = `
+            <div class="leader-strip" style="background:#f1f5f9; border-color:#94a3b8; color:#475569;">
+              <span>⚪ <strong>${leader.name_hindi || 'नोटा (NOTA)'}</strong> Leading</span>
+              <span>Margin: +${margin} votes</span>
+            </div>
+          `;
+        } else {
+          leaderHtml = `
+            <div class="leader-strip">
+              <span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) Leading</span>
+              <span>Margin: +${margin} votes</span>
+            </div>
+          `;
+        }
       }
 
       let displayRoundKeys = activeRoundKeys;
@@ -1236,7 +1265,9 @@
         rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:10px;">No contestants registered</td></tr>`;
       } else {
         candTotals.forEach((c, idx) => {
-          const isLeader = !isTie && idx === 0 && c.totalVotes > 0;
+          const isLeader = isDeclared 
+            ? (leader && c.id === leader.id && c.totalVotes > 0) 
+            : (!isTie && idx === 0 && c.totalVotes > 0);
           const isTied = isTie && (c.totalVotes === leader.totalVotes);
           const vObj = masterData.roundVotes[c.id] || {};
 
@@ -1327,9 +1358,6 @@
       };
 
       masterData.wards.forEach(w => {
-        if (w.status === 'DECLARED') {
-          if (tally[w.category]) tally[w.category].declared++;
-        }
         const cands = masterData.candidates.filter(c => c.category === w.category && c.block_name === w.block_name && c.ward_no === w.ward_no);
         const totals = cands.map(c => {
           let sum = 0;
@@ -1337,14 +1365,32 @@
           for (const [r, cnt] of Object.entries(vObj)) sum += (cnt || 0);
           return { ...c, sum };
         });
-        const validTotals = totals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
-        validTotals.sort((a, b) => b.sum - a.sum);
-        if (validTotals.length > 0 && validTotals[0].sum > 0) {
-          const topParty = validTotals[0].party || 'IND';
-          if (tally[w.category][topParty] !== undefined) {
-            tally[w.category][topParty]++;
-          } else {
-            tally[w.category].IND++;
+
+        if (w.status === 'DECLARED') {
+          if (tally[w.category]) tally[w.category].declared++;
+          const validTotals = totals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+          validTotals.sort((a, b) => b.sum - a.sum);
+          if (validTotals.length > 0 && validTotals[0].sum > 0) {
+            const topParty = validTotals[0].party || 'IND';
+            if (tally[w.category][topParty] !== undefined) {
+              tally[w.category][topParty]++;
+            } else {
+              tally[w.category].IND++;
+            }
+          }
+        } else {
+          // Live counting: only credit party lead if its candidate is strictly ahead of all options including NOTA
+          totals.sort((a, b) => b.sum - a.sum);
+          if (totals.length > 0 && totals[0].sum > 0) {
+            const isNotaTop = (totals[0].party === 'NOTA' || (totals[0].name_hindi || '').includes('नोटा'));
+            if (!isNotaTop) {
+              const topParty = totals[0].party || 'IND';
+              if (tally[w.category][topParty] !== undefined) {
+                tally[w.category][topParty]++;
+              } else {
+                tally[w.category].IND++;
+              }
+            }
           }
         }
       });
