@@ -79,14 +79,14 @@
       position: relative;
       background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(8, 13, 24, 0.98) 100%);
       border-bottom: 2px solid rgba(56, 189, 248, 0.35);
-      padding: 5px 18px;
+      padding: 3px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
       z-index: 50;
       backdrop-filter: blur(12px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
     }
 
     .tv-broadcast-header::after {
@@ -176,15 +176,15 @@
       border: none;
       color: #94a3b8;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 5px;
+      padding: 3px 9px;
+      border-radius: 4px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.25s ease;
+      gap: 4px;
+      transition: all 0.2s ease;
     }
 
     .stage-mode-btn:hover {
@@ -204,15 +204,29 @@
       border: 1px solid rgba(56, 189, 248, 0.3);
       color: #38bdf8;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 3px 8px;
+      border-radius: 4px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.25s ease;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .filter-active-pill {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .auto-tour-pill.active {
@@ -894,8 +908,13 @@
       <!-- Auto Tour Toggle -->
       <button class="auto-tour-pill active" id="btnAutoTour" onclick="toggleAutoTour()" title="Auto Tour through all Panchayat Samitis">
         <span class="tour-pulse-dot"></span>
-        <span id="tourStatusText">ऑटो-टूर चालू</span>
+        <span id="tourStatusText">ऑटो-टूर</span>
       </button>
+
+      <!-- Active Entries Filter Badge -->
+      <div class="filter-active-pill" title="केवल वे वार्ड प्रदर्शित हैं जिनमें कम से कम 1 मत प्रविष्ट है या परिणाम घोषित है">
+        <span>⚡ केवल प्रविष्ट परिणाम</span>
+      </div>
     </div>
 
     <div class="header-telemetry">
@@ -1114,6 +1133,19 @@
     }
 
     // ==========================================================================
+    // Check if ward has entered votes (greater than zero) or officially declared
+    function wardHasEnteredVotes(ward) {
+      if (ward.status === 'DECLARED') return true;
+      const cands = electionData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
+      for (const c of cands) {
+        const vObj = electionData.roundVotes[c.id] || {};
+        for (const cnt of Object.values(vObj)) {
+          if (Number(cnt) > 0) return true;
+        }
+      }
+      return false;
+    }
+
     // STAGE RENDER DISPATCHER
     // ==========================================================================
     function renderActiveStage(force = false) {
@@ -1187,12 +1219,12 @@
         subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त 105 वार्ड)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
       }
 
-      // Populate ZP Wards
-      const zpWards = electionData.wards.filter(w => w.category === 'ZP').sort((a,b) => a.ward_no - b.ward_no);
-      diffAndRenderCards(document.getElementById('scrollContainerZp'), zpWards);
+      // Populate ONLY ZP Wards with entered votes or declared
+      const zpWards = electionData.wards.filter(w => w.category === 'ZP' && wardHasEnteredVotes(w)).sort((a,b) => a.ward_no - b.ward_no);
+      diffAndRenderCards(document.getElementById('scrollContainerZp'), zpWards, 'ZP में अभी कोई मत प्रविष्टि नहीं है');
 
-      // Populate PS Wards
-      let psWards = electionData.wards.filter(w => w.category === 'PS');
+      // Populate ONLY PS Wards with entered votes or declared
+      let psWards = electionData.wards.filter(w => w.category === 'PS' && wardHasEnteredVotes(w));
       if (activePsBlock !== 'ALL') {
         psWards = psWards.filter(w => w.block_name === activePsBlock);
       }
@@ -1200,7 +1232,7 @@
         if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
         return a.ward_no - b.ward_no;
       });
-      diffAndRenderCards(document.getElementById('scrollContainerPs'), psWards);
+      diffAndRenderCards(document.getElementById('scrollContainerPs'), psWards, 'PS में अभी कोई मत प्रविष्टि नहीं है');
     }
 
     // Fullscreen ZP Stage (Dense Responsive Multi-Column Grid)
@@ -1220,8 +1252,8 @@
           </div>
         `;
       }
-      const zpWards = electionData.wards.filter(w => w.category === 'ZP').sort((a,b) => a.ward_no - b.ward_no);
-      diffAndRenderCards(document.getElementById('scrollContainerZpFull'), zpWards);
+      const zpWards = electionData.wards.filter(w => w.category === 'ZP' && wardHasEnteredVotes(w)).sort((a,b) => a.ward_no - b.ward_no);
+      diffAndRenderCards(document.getElementById('scrollContainerZpFull'), zpWards, 'जिला परिषद में अभी कोई मत प्रविष्टि नहीं है');
     }
 
     // Fullscreen PS Stage (Dense Responsive Multi-Column Grid)
@@ -1251,7 +1283,7 @@
         subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त ब्लॉक • 105 वार्ड)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
       }
 
-      let psWards = electionData.wards.filter(w => w.category === 'PS');
+      let psWards = electionData.wards.filter(w => w.category === 'PS' && wardHasEnteredVotes(w));
       if (activePsBlock !== 'ALL') {
         psWards = psWards.filter(w => w.block_name === activePsBlock);
       }
@@ -1259,7 +1291,7 @@
         if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
         return a.ward_no - b.ward_no;
       });
-      diffAndRenderCards(document.getElementById('scrollContainerPsFull'), psWards);
+      diffAndRenderCards(document.getElementById('scrollContainerPsFull'), psWards, 'पंचायत समिति में अभी कोई मत प्रविष्टि नहीं है');
     }
 
     function buildBlockNavPills() {
@@ -1287,10 +1319,10 @@
     // ==========================================================================
     // IN-PLACE CARDS DIFFING (ZERO FLICKER + SMOOTH TRANSITIONS)
     // ==========================================================================
-    function diffAndRenderCards(container, wards) {
+    function diffAndRenderCards(container, wards, emptyMsg = 'कोई परिणाम डेटा उपलब्ध नहीं है') {
       if (!container) return;
       if (!wards || wards.length === 0) {
-        container.innerHTML = '<div class="empty-prompt">कोई परिणाम डेटा उपलब्ध नहीं है</div>';
+        container.innerHTML = `<div class="empty-prompt"><span style="font-size:1.5rem; display:block; margin-bottom:6px;">📊</span>${emptyMsg}</div>`;
         return;
       }
 
