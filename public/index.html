@@ -295,11 +295,8 @@
       align-content: start;
       align-items: start;
       scroll-behavior: auto !important;
+      overflow-anchor: none;
       -webkit-overflow-scrolling: touch;
-      will-change: scroll-position;
-      transform: translateZ(0);
-      backface-visibility: hidden;
-      contain: layout paint;
     }
 
     .cards-scroll-body::-webkit-scrollbar {
@@ -814,9 +811,8 @@
         else if (roName !== 'ALL' && p.textContent.includes(roName)) p.classList.add('active');
         else p.classList.remove('active');
       });
-      // Do NOT touch ZP! Zila Parishad scroll runs regularly on the left.
-      const psEl = document.getElementById('psCardsContainer');
-      if (psEl) psEl.scrollTop = 0;
+      // Do NOT touch ZP! Reset PS scroll smoothly
+      resetPsScroll();
       resetCycleProgressBar();
       renderPsCards(true);
     }
@@ -861,8 +857,7 @@
           else p.classList.remove('active');
         });
         // Auto-cycle applies ONLY to Panchayat Samiti on the right side!
-        const psEl = document.getElementById('psCardsContainer');
-        if (psEl) psEl.scrollTop = 0;
+        resetPsScroll();
         resetCycleProgressBar();
         renderPsCards(true);
       }, durMs);
@@ -1017,7 +1012,6 @@
             cardEl.innerHTML = cardData.innerHTML;
             cardEl.dataset.contentSig = cardData.innerHTML;
           }
-          container.appendChild(cardEl); // Preserves element instance in-place
         } else {
           cardEl = document.createElement('div');
           cardEl.className = cardData.className;
@@ -1031,6 +1025,15 @@
       existingCards.forEach((el, key) => {
         if (!currentKeys.has(key)) {
           el.remove();
+        }
+      });
+
+      // Maintain order without moving elements unnecessarily
+      wards.forEach((w, targetIdx) => {
+        const key = `${w.category}_${w.block_name}_${w.ward_no}`;
+        const el = container.querySelector(`[data-ward-key="${key}"]`);
+        if (el && container.children[targetIdx] !== el) {
+          container.insertBefore(el, container.children[targetIdx] || null);
         }
       });
     }
@@ -1460,6 +1463,26 @@
       }
     }
 
+    // Global scroll trackers with top & bottom pauses to prevent sudden jumps / flickers
+    let zpAcc = 0;
+    let psAcc = 0;
+    let zpPauseTimer = 2.0;
+    let psPauseTimer = 2.0;
+
+    function resetPsScroll() {
+      psAcc = 0;
+      psPauseTimer = 2.0;
+      const psEl = document.getElementById('psCardsContainer');
+      if (psEl) psEl.scrollTop = 0;
+    }
+
+    function resetZpScroll() {
+      zpAcc = 0;
+      zpPauseTimer = 2.0;
+      const zpEl = document.getElementById('zpCardsContainer');
+      if (zpEl) zpEl.scrollTop = 0;
+    }
+
     // High-Performance Hardware-Accelerated 60/120 FPS Auto-Scroll (No Stutter, No Flickering)
     function startAutoScrollLoop() {
       const zpEl = document.getElementById('zpCardsContainer');
@@ -1468,8 +1491,8 @@
       attachScrollInteractionHandlers();
 
       let lastTime = performance.now();
-      let zpAcc = zpEl ? zpEl.scrollTop : 0;
-      let psAcc = psEl ? psEl.scrollTop : 0;
+      if (zpEl) zpAcc = zpEl.scrollTop;
+      if (psEl) psAcc = psEl.scrollTop;
 
       const SPEED = 22; // Pixels per second: optimal broadcast readability speed
 
@@ -1479,31 +1502,67 @@
 
         // --- ZP CONTAINER SCROLL ---
         if (zpEl) {
+          const maxScroll = Math.max(0, zpEl.scrollHeight - zpEl.clientHeight);
           if (zpUserInteracting) {
-            zpAcc = zpEl.scrollTop; // Stay synced with user's manual scroll position
-          } else if (zpAutoScroll && zpEl.scrollHeight > zpEl.clientHeight + 15) {
-            zpAcc += SPEED * dt;
-            if (zpAcc + zpEl.clientHeight >= zpEl.scrollHeight - 6) {
-              zpAcc = 0;
-              zpEl.scrollTop = 0;
-            } else {
-              zpEl.scrollTop = zpAcc;
+            zpAcc = zpEl.scrollTop;
+            zpPauseTimer = 0;
+          } else if (zpAutoScroll && maxScroll > 35) {
+            if (Math.abs(zpEl.scrollTop - zpAcc) > 12) {
+              zpAcc = zpEl.scrollTop;
             }
+            if (zpPauseTimer > 0) {
+              zpPauseTimer -= dt;
+            } else {
+              zpAcc += SPEED * dt;
+              if (zpAcc >= maxScroll) {
+                zpAcc = maxScroll;
+                zpEl.scrollTop = maxScroll;
+                zpPauseTimer = 3.0; // Pause at bottom before resetting
+                setTimeout(() => {
+                  if (!zpUserInteracting && zpAutoScroll) {
+                    resetZpScroll();
+                  }
+                }, 3000);
+              } else {
+                zpEl.scrollTop = Math.round(zpAcc);
+              }
+            }
+          } else if (!zpUserInteracting && maxScroll <= 35 && zpEl.scrollTop !== 0) {
+            zpEl.scrollTop = 0;
+            zpAcc = 0;
           }
         }
 
         // --- PS CONTAINER SCROLL ---
         if (psEl) {
+          const maxScroll = Math.max(0, psEl.scrollHeight - psEl.clientHeight);
           if (psUserInteracting) {
-            psAcc = psEl.scrollTop; // Stay synced with user's manual scroll position
-          } else if (psAutoScroll && psEl.scrollHeight > psEl.clientHeight + 15) {
-            psAcc += SPEED * dt;
-            if (psAcc + psEl.clientHeight >= psEl.scrollHeight - 6) {
-              psAcc = 0;
-              psEl.scrollTop = 0;
-            } else {
-              psEl.scrollTop = psAcc;
+            psAcc = psEl.scrollTop;
+            psPauseTimer = 0;
+          } else if (psAutoScroll && maxScroll > 35) {
+            if (Math.abs(psEl.scrollTop - psAcc) > 12) {
+              psAcc = psEl.scrollTop;
             }
+            if (psPauseTimer > 0) {
+              psPauseTimer -= dt;
+            } else {
+              psAcc += SPEED * dt;
+              if (psAcc >= maxScroll) {
+                psAcc = maxScroll;
+                psEl.scrollTop = maxScroll;
+                psPauseTimer = 3.0; // Pause at bottom before resetting
+                setTimeout(() => {
+                  if (!psUserInteracting && psAutoScroll) {
+                    resetPsScroll();
+                  }
+                }, 3000);
+              } else {
+                psEl.scrollTop = Math.round(psAcc);
+              }
+            }
+          } else if (!psUserInteracting && maxScroll <= 35 && psEl.scrollTop !== 0) {
+            psEl.scrollTop = 0;
+            psAcc = 0;
           }
         }
 
