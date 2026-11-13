@@ -382,7 +382,7 @@
       padding: 6px 12px;
     }
 
-    /* Split Arena */
+    /* Split Arena 50/50 */
     .arena-split-grid {
       width: 100%;
       height: 100%;
@@ -390,6 +390,24 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       overflow: hidden;
+    }
+
+    /* 1:3 Split Arena (ZP 25-28% Compact + PS 72-75% Expanded 3-Column Grid) */
+    .arena-split-1-3 {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 28% 72%;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .arena-split-1-3 .zp-compact-col .chamber-cards-scroll {
+      grid-template-columns: 1fr !important; /* Single column compact for ZP */
+    }
+
+    .arena-split-1-3 .ps-expanded-col .chamber-cards-scroll {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important; /* 3-columns for PS */
     }
 
     /* Single Chamber Viewport */
@@ -860,7 +878,10 @@
       <!-- 3 Stage View Switches -->
       <div class="stage-mode-selector">
         <button class="stage-mode-btn active" id="btnModeSplit" onclick="setScreenView('split')">
-          ⚡ संयुक्त (50/50 Split)
+          ⚡ 50/50 स्प्लिट
+        </button>
+        <button class="stage-mode-btn" id="btnModeSplit13" onclick="setScreenView('split13')" title="1:3 स्प्लिट: ZP कॉम्पैक्ट + PS विस्तृत 3-कॉलम ग्रिड">
+          📐 1:3 स्प्लिट
         </button>
         <button class="stage-mode-btn" id="btnModeZp" onclick="setScreenView('zp')">
           🏛️ जिला परिषद (21)
@@ -1031,6 +1052,7 @@
       activeStageMode = mode;
       document.querySelectorAll('.stage-mode-btn').forEach(btn => btn.classList.remove('active'));
       if (mode === 'split') document.getElementById('btnModeSplit').classList.add('active');
+      else if (mode === 'split13') document.getElementById('btnModeSplit13').classList.add('active');
       else if (mode === 'zp') document.getElementById('btnModeZp').classList.add('active');
       else if (mode === 'ps') document.getElementById('btnModePs').classList.add('active');
 
@@ -1098,8 +1120,20 @@
       const stage = document.getElementById('tvMainStage');
       if (!stage) return;
 
+      // Adjust scoreboard grid according to view mode
+      const scoreboard = document.querySelector('.broadcast-scoreboard');
+      if (scoreboard) {
+        if (activeStageMode === 'split13') {
+          scoreboard.style.gridTemplateColumns = '28% 72%';
+        } else {
+          scoreboard.style.gridTemplateColumns = '1fr 1fr';
+        }
+      }
+
       if (activeStageMode === 'split') {
-        renderSplitStage(stage, force);
+        renderSplitStage(stage, force, '50-50');
+      } else if (activeStageMode === 'split13') {
+        renderSplitStage(stage, force, '1-3');
       } else if (activeStageMode === 'zp') {
         renderSingleZpStage(stage, force);
       } else if (activeStageMode === 'ps') {
@@ -1107,30 +1141,36 @@
       }
     }
 
-    // Split Stage (ZP 50% + PS 50%)
-    function renderSplitStage(stage, force) {
-      if (!stage.querySelector('.arena-split-grid') || force) {
+    // Split Stage (50/50 or 1:3 Split)
+    function renderSplitStage(stage, force, layout = '50-50') {
+      const is13 = (layout === '1-3');
+      const gridClass = is13 ? 'arena-split-1-3' : 'arena-split-grid';
+      const zpColClass = is13 ? 'chamber-column-box zp-compact-col' : 'chamber-column-box';
+      const psColClass = is13 ? 'chamber-column-box ps-expanded-col' : 'chamber-column-box';
+      const psBadge = is13 ? '1:3 विस्तृत ग्रिड • 7 ब्लॉक' : '7 पंचायत समितियां';
+
+      if (!stage.querySelector(`.${gridClass}`) || force) {
         stage.innerHTML = `
-          <div class="arena-split-grid">
+          <div class="${gridClass}">
             <!-- Left: Zilla Parishad -->
-            <div class="chamber-column-box">
+            <div class="${zpColClass}">
               <div class="column-banner-bar">
                 <div class="banner-title-text">
-                  <span>🏛️ जिला परिषद सदस्य</span>
+                  <span>🏛️ जिला परिषद</span>
                 </div>
-                <span class="banner-badge-counter bcounter-zp">21 वार्ड (सम्पूर्ण जिला)</span>
+                <span class="banner-badge-counter bcounter-zp">21 वार्ड</span>
               </div>
               <div class="chamber-cards-scroll" id="scrollContainerZp"></div>
             </div>
 
             <!-- Right: Panchayat Samiti -->
-            <div class="chamber-column-box">
+            <div class="${psColClass}">
               <div class="column-banner-bar">
                 <div class="banner-title-text">
                   <span>🏘️ पंचायत समिति सदस्य</span>
                   <span style="font-size:0.75rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSub"></span>
                 </div>
-                <span class="banner-badge-counter bcounter-ps">7 पंचायत समितियां</span>
+                <span class="banner-badge-counter bcounter-ps">${psBadge}</span>
               </div>
               <div class="ps-block-nav-strip" id="psBlockNavStrip">
                 ${buildBlockNavPills()}
