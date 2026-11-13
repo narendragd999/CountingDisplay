@@ -11,16 +11,16 @@
 
   <style>
     /* ==========================================================================
-       PRO TV BROADCAST WITH SMOOTH CARD TRANSITIONS & HIGH-DENSITY COMPACT GRID
-       Salumber District Elections 2026 • 1080p / 4K / Large TV Displays
+       PRO TV BROADCAST ARCHITECTURE & CINEMATIC CARD ANIMATIONS
+       Salumber District Elections 2026 • Standalone Live Results Portal
        ========================================================================== */
     :root {
       --bg-studio: #05070e;
-      --bg-panel: rgba(13, 20, 36, 0.85);
-      --bg-card: rgba(17, 26, 46, 0.94);
-      --bg-card-hover: rgba(24, 37, 66, 0.98);
+      --bg-panel: rgba(13, 20, 36, 0.88);
+      --bg-card: rgba(16, 25, 46, 0.94);
+      --bg-card-hover: rgba(23, 36, 65, 0.98);
 
-      --border-glass: rgba(255, 255, 255, 0.1);
+      --border-glass: rgba(255, 255, 255, 0.09);
       --border-accent: rgba(56, 189, 248, 0.35);
 
       --gold: #f59e0b;
@@ -58,40 +58,41 @@
       flex-direction: column;
     }
 
-    /* Studio Ambient Lighting */
+    /* Ambient Lighting Overlays */
     body::before {
       content: '';
-      position: absolute; top: -140px; left: 15%; width: 440px; height: 280px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.13) 0%, transparent 70%);
+      position: absolute; top: -120px; left: 10%; width: 450px; height: 240px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
       pointer-events: none; z-index: 1; filter: blur(50px);
     }
     body::after {
       content: '';
-      position: absolute; top: -140px; right: 15%; width: 440px; height: 280px;
-      background: radial-gradient(circle, rgba(234, 88, 12, 0.13) 0%, transparent 70%);
+      position: absolute; top: -120px; right: 10%; width: 450px; height: 240px;
+      background: radial-gradient(circle, rgba(234, 88, 12, 0.12) 0%, transparent 70%);
       pointer-events: none; z-index: 1; filter: blur(50px);
     }
 
     /* ==========================================================================
-       1. TOP NEWSROOM HEADER (COMPACT 44px)
+       1. ULTRA-COMPACT SLIM TOP HEADER (ONLY ~28px HEIGHT)
        ========================================================================== */
     .tv-broadcast-header {
       position: relative;
       background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(8, 13, 24, 0.98) 100%);
-      border-bottom: 2px solid rgba(56, 189, 248, 0.35);
-      padding: 3px 14px;
+      border-bottom: 1.5px solid rgba(56, 189, 248, 0.35);
+      padding: 2px 10px;
+      height: 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
       z-index: 50;
       backdrop-filter: blur(12px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
     .tv-broadcast-header::after {
       content: '';
-      position: absolute; bottom: -2px; left: 0; right: 0; height: 2px;
+      position: absolute; bottom: -1.5px; left: 0; right: 0; height: 1.5px;
       background: linear-gradient(90deg, 
         transparent 0%, 
         var(--party-bjp) 20%, 
@@ -104,30 +105,31 @@
     .brand-cluster {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .live-bug {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: linear-gradient(135deg, #b91c1c, #dc2626);
       color: #ffffff;
-      padding: 3px 9px;
-      border-radius: 4px;
+      padding: 1px 6px;
+      height: 20px;
+      border-radius: 3px;
       font-family: 'Teko', sans-serif;
-      font-size: 1.15rem;
-      letter-spacing: 1.2px;
+      font-size: 0.95rem;
+      letter-spacing: 0.8px;
       line-height: 1;
-      box-shadow: 0 0 14px rgba(220, 38, 38, 0.6);
+      box-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
     .live-bug-dot {
-      width: 7px; height: 7px;
+      width: 5px; height: 5px;
       background: #ffffff;
       border-radius: 50%;
-      box-shadow: 0 0 6px #ffffff;
+      box-shadow: 0 0 5px #ffffff;
       animation: pulseBug 1.2s infinite ease-in-out;
     }
 
@@ -136,39 +138,46 @@
       50% { opacity: 0.3; transform: scale(0.7); }
     }
 
-    .election-title-unit h1 {
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 1.12rem;
-      font-weight: 800;
-      letter-spacing: -0.2px;
-      background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1.1;
+    .election-title-unit {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .election-title-unit p {
-      font-size: 0.72rem;
+    .election-title-unit h1 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 60%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .election-title-unit .sub-tag {
+      font-size: 0.65rem;
       color: #94a3b8;
       font-weight: 600;
-      letter-spacing: 0.2px;
-      line-height: 1.1;
-      margin-top: 1px;
+      white-space: nowrap;
     }
 
     .header-center-stage {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
     }
 
+    /* Ultra-Compact Button Cluster */
     .stage-mode-selector {
       display: flex;
       background: rgba(0, 0, 0, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 2px;
-      border-radius: 6px;
-      gap: 2px;
+      padding: 1px;
+      border-radius: 5px;
+      gap: 1px;
+      height: 22px;
     }
 
     .stage-mode-btn {
@@ -176,26 +185,28 @@
       border: none;
       color: #94a3b8;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.64rem;
       font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 4px;
+      padding: 1px 7px;
+      border-radius: 3px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
-      transition: all 0.2s ease;
+      gap: 3px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      line-height: 1;
     }
 
     .stage-mode-btn:hover {
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.08);
     }
 
     .stage-mode-btn.active {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(2, 132, 199, 0.6);
+      box-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
       border: 1px solid rgba(56, 189, 248, 0.4);
     }
 
@@ -204,15 +215,18 @@
       border: 1px solid rgba(56, 189, 248, 0.3);
       color: #38bdf8;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.64rem;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 1px 7px;
+      height: 22px;
       border-radius: 4px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
-      transition: all 0.2s ease;
+      gap: 4px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      line-height: 1;
     }
 
     .filter-active-pill {
@@ -220,31 +234,34 @@
       border: 1px solid rgba(16, 185, 129, 0.35);
       color: #34d399;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.64rem;
       font-weight: 800;
-      padding: 3px 8px;
+      padding: 1px 7px;
+      height: 22px;
       border-radius: 4px;
       display: flex;
       align-items: center;
       gap: 4px;
+      white-space: nowrap;
+      line-height: 1;
     }
 
     .auto-tour-pill.active {
       border-color: #10b981;
       color: #34d399;
       background: rgba(16, 185, 129, 0.15);
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
     }
 
     .tour-pulse-dot {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       background: #38bdf8;
       border-radius: 50%;
     }
 
     .auto-tour-pill.active .tour-pulse-dot {
       background: #10b981;
-      box-shadow: 0 0 6px #10b981;
+      box-shadow: 0 0 5px #10b981;
       animation: pulseTour 1.5s infinite;
     }
 
@@ -256,32 +273,41 @@
     .header-telemetry {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .digital-clock-box {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.95rem;
+      font-family: 'Rajdhani', monospace;
+      font-size: 0.85rem;
       font-weight: 800;
       color: var(--cyan-bright);
-      text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
       background: rgba(6, 182, 212, 0.1);
-      border: 1px solid rgba(6, 182, 212, 0.3);
-      padding: 3px 10px;
-      border-radius: 5px;
-      letter-spacing: 1px;
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      padding: 1px 7px;
+      height: 22px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
     }
 
     .btn-fs {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #cbd5e1;
-      padding: 4px 9px;
-      border-radius: 5px;
-      font-size: 0.72rem;
+      padding: 1px 7px;
+      height: 22px;
+      border-radius: 4px;
+      font-size: 0.66rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
     .btn-fs:hover {
@@ -290,17 +316,20 @@
     }
 
     /* ==========================================================================
-       2. REAL-TIME SCOREBOARD LED STRIP (COMPACT 32px)
+       2. REAL-TIME SCOREBOARD LED STRIP (COMPACT ~24px)
        ========================================================================== */
     .broadcast-scoreboard {
       background: linear-gradient(180deg, #090e1b 0%, #060913 100%);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 4px 18px;
+      padding: 2px 10px;
+      height: 26px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 8px;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      transition: grid-template-columns 0.3s ease;
+      align-items: center;
     }
 
     .chamber-tally-bar {
@@ -309,8 +338,9 @@
       justify-content: space-between;
       background: rgba(14, 21, 38, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 6px;
-      padding: 3px 12px;
+      border-radius: 4px;
+      padding: 1px 8px;
+      height: 22px;
       position: relative;
       overflow: hidden;
     }
@@ -326,46 +356,49 @@
     .chamber-title-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .chamber-name {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.74rem;
       font-weight: 800;
       color: #ffffff;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
     }
 
     .majority-badge {
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       font-weight: 800;
       background: rgba(255, 255, 255, 0.08);
       color: #94a3b8;
-      padding: 1px 5px;
-      border-radius: 3px;
+      padding: 0 4px;
+      border-radius: 2px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
     }
 
     .tally-digits-flex {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
 
     .party-chip-digit {
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 1px 7px;
-      border-radius: 4px;
+      gap: 3px;
+      padding: 0 5px;
+      border-radius: 3px;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 800;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       border: 1px solid transparent;
-      transition: transform 0.25s ease;
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     .pchip-bjp { background: rgba(234, 88, 12, 0.2); color: #fb923c; border-color: rgba(234, 88, 12, 0.4); }
@@ -377,23 +410,31 @@
       background: rgba(16, 185, 129, 0.18);
       color: #34d399;
       border: 1px solid rgba(16, 185, 129, 0.4);
-      padding: 1px 7px;
-      border-radius: 4px;
+      padding: 0 6px;
+      border-radius: 3px;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.76rem;
+      font-size: 0.7rem;
       font-weight: 800;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     /* ==========================================================================
-       3. MAIN STAGE VIEWPORTS (HIGH-DENSITY 2-COLUMN CARDS GRID)
+       3. MAIN STAGE VIEWPORTS (ARENAS)
        ========================================================================== */
     .tv-main-stage {
       flex: 1;
       display: flex;
       overflow: hidden;
       position: relative;
-      padding: 6px 12px;
+      padding: 4px 8px;
+      animation: stageFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes stageFadeIn {
+      from { opacity: 0; transform: scale(0.995); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     /* Split Arena 50/50 */
@@ -402,17 +443,17 @@
       height: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
       overflow: hidden;
     }
 
-    /* 1:3 Split Arena (ZP 25-28% Compact + PS 72-75% Expanded 3-Column Grid) */
+    /* 1:3 Split Arena (ZP 28% Compact + PS 72% Expanded 3-Column Grid) */
     .arena-split-1-3 {
       width: 100%;
       height: 100%;
       display: grid;
       grid-template-columns: 28% 72%;
-      gap: 10px;
+      gap: 8px;
       overflow: hidden;
     }
 
@@ -436,43 +477,46 @@
     .chamber-column-box {
       background: var(--bg-panel);
       border: 1px solid var(--border-glass);
-      border-radius: 8px;
+      border-radius: 6px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       min-height: 0;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(14px);
     }
 
     .column-banner-bar {
       background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(8, 13, 24, 0.95));
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 5px 12px;
+      padding: 3px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
+      height: 25px;
     }
 
     .banner-title-text {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.88rem;
+      font-size: 0.8rem;
       font-weight: 800;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      white-space: nowrap;
     }
 
     .banner-badge-counter {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       font-weight: 800;
-      padding: 2px 7px;
+      padding: 1px 6px;
       border-radius: 3px;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .bcounter-zp { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
@@ -481,28 +525,31 @@
     /* PS Block Navigation Strip */
     .ps-block-nav-strip {
       display: flex;
-      gap: 4px;
-      padding: 4px 10px;
+      gap: 3px;
+      padding: 3px 6px;
       background: rgba(0, 0, 0, 0.5);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       overflow-x: auto;
       flex-shrink: 0;
+      height: 25px;
+      align-items: center;
     }
 
-    .ps-block-nav-strip::-webkit-scrollbar { height: 3px; }
+    .ps-block-nav-strip::-webkit-scrollbar { height: 2px; }
     .ps-block-nav-strip::-webkit-scrollbar-thumb { background: #334155; }
 
     .block-nav-chip {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #94a3b8;
-      padding: 2px 9px;
-      border-radius: 4px;
-      font-size: 0.72rem;
+      padding: 1px 7px;
+      border-radius: 3px;
+      font-size: 0.66rem;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
+      line-height: 1.2;
     }
 
     .block-nav-chip:hover {
@@ -514,18 +561,18 @@
       background: linear-gradient(135deg, #0284c7, #0ea5e9);
       color: #ffffff;
       border-color: #38bdf8;
-      box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
+      box-shadow: 0 0 6px rgba(14, 165, 233, 0.5);
     }
 
     /* Cards Scroll Viewport with 2-Column Responsive Grid */
     .chamber-cards-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 8px;
+      padding: 6px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-auto-rows: max-content;
-      gap: 8px;
+      gap: 6px;
       min-height: 0;
       scroll-behavior: smooth;
     }
@@ -536,40 +583,102 @@
     .chamber-cards-scroll::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
 
     /* ==========================================================================
-       4. ULTRA-COMPACT PRO CARDS WITH SMOOTH HARDWARE-ACCELERATED ANIMATIONS
+       4. PRO CARDS ARCHITECTURE & SMOOTH BROADCAST ANIMATIONS
        ========================================================================== */
     .pro-ward-card {
       background: var(--bg-card);
       border: 1px solid rgba(255, 255, 255, 0.09);
       border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
       position: relative;
-      /* GPU Smooth Transitions */
+      /* GPU Acceleration */
       transform: translateZ(0);
       will-change: transform, box-shadow, border-color;
-      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                  box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                  border-color 0.25s ease;
-      animation: cardPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                  box-shadow 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                  border-color 0.22s ease;
     }
 
-    @keyframes cardPopIn {
-      from { opacity: 0; transform: translateY(8px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    /* Staggered Card Entrance Animation */
+    .pro-ward-card.card-enter {
+      animation: cardEnterFly 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes cardEnterFly {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+        filter: blur(2px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+      }
+    }
+
+    /* Card Live Updating Pulse Animation */
+    .pro-ward-card.card-updating {
+      animation: cardPulseGlow 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    @keyframes cardPulseGlow {
+      0% {
+        box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      30% {
+        box-shadow: 0 0 18px rgba(56, 189, 248, 0.55), inset 0 0 8px rgba(56, 189, 248, 0.15);
+        border-color: rgba(56, 189, 248, 0.85);
+        transform: scale(1.012);
+      }
+      100% {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1);
+      }
+    }
+
+    /* Value Change Flash Indicator */
+    .val-change-flash {
+      display: inline-block;
+      animation: valFlash 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes valFlash {
+      0% {
+        color: #38bdf8 !important;
+        text-shadow: 0 0 10px rgba(56, 189, 248, 0.9) !important;
+        background: rgba(56, 189, 248, 0.28) !important;
+        border-radius: 2px;
+        transform: scale(1.15);
+      }
+      100% {
+        color: inherit;
+        text-shadow: none;
+        background: transparent;
+        transform: scale(1);
+      }
     }
 
     .pro-ward-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.3);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px rgba(56, 189, 248, 0.18);
+      border-color: rgba(56, 189, 248, 0.35);
     }
 
-    /* Winner Declared Pulsing Aura */
+    /* Winner Declared Golden Aura & Shimmer */
     .pro-ward-card.declared-win {
-      border: 1.5px solid rgba(245, 158, 11, 0.7);
-      background: linear-gradient(180deg, rgba(28, 38, 62, 0.95) 0%, rgba(16, 23, 40, 0.98) 100%);
-      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25);
+      border: 1.5px solid rgba(245, 158, 11, 0.8) !important;
+      background: linear-gradient(180deg, rgba(28, 38, 62, 0.96) 0%, rgba(16, 23, 40, 0.98) 100%);
+      box-shadow: 0 3px 14px rgba(245, 158, 11, 0.3) !important;
+      animation: goldAuraPulse 2.8s infinite alternate ease-in-out;
+    }
+
+    @keyframes goldAuraPulse {
+      0% { box-shadow: 0 2px 12px rgba(245, 158, 11, 0.25); }
+      100% { box-shadow: 0 4px 18px rgba(251, 191, 36, 0.5), inset 0 0 8px rgba(251, 191, 36, 0.15); }
     }
 
     .pro-ward-card.declared-win::before {
@@ -581,13 +690,13 @@
 
     .pro-ward-card.in-lead {
       border-color: rgba(16, 185, 129, 0.45);
-      box-shadow: 0 3px 14px rgba(16, 185, 129, 0.12);
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.12);
     }
 
     /* Card Top Meta Bar */
     .card-meta-bar {
       background: rgba(0, 0, 0, 0.45);
-      padding: 4px 8px;
+      padding: 3px 7px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -597,13 +706,13 @@
     .ward-identity-title {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       overflow: hidden;
     }
 
     .ward-heading-text {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       font-weight: 800;
       letter-spacing: 0.2px;
       color: #ffffff;
@@ -613,34 +722,35 @@
     }
 
     .reservation-pill {
-      font-size: 0.58rem;
+      font-size: 0.55rem;
       font-weight: 800;
       background: rgba(255, 255, 255, 0.08);
       color: #94a3b8;
-      padding: 1px 4px;
-      border-radius: 3px;
+      padding: 0 3px;
+      border-radius: 2px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       flex-shrink: 0;
     }
 
     .status-badge-chip {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 800;
-      padding: 1px 6px;
+      padding: 1px 5px;
       border-radius: 3px;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       text-transform: uppercase;
       white-space: nowrap;
       flex-shrink: 0;
       transition: all 0.2s ease;
+      line-height: 1.1;
     }
 
     .badge-win-gold {
       background: rgba(245, 158, 11, 0.25);
       color: #fde047;
       border: 1px solid #f59e0b;
-      box-shadow: 0 0 6px rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 5px rgba(245, 158, 11, 0.35);
     }
 
     .badge-lead-green {
@@ -663,36 +773,42 @@
 
     /* Broadcast Leader Strip */
     .pro-leader-strap {
-      padding: 3px 8px;
+      padding: 2.5px 7px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       transition: background 0.3s ease;
+      animation: strapSlideIn 0.3s ease-out;
+    }
+
+    @keyframes strapSlideIn {
+      from { opacity: 0; transform: translateY(-3px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .strap-winner {
-      background: linear-gradient(90deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.04));
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.05));
       color: #fef08a;
     }
 
     .strap-leading {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.03));
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.04));
       color: #d1fae5;
     }
 
     .strap-tied {
-      background: linear-gradient(90deg, rgba(234, 88, 12, 0.18), rgba(234, 88, 12, 0.03));
+      background: linear-gradient(90deg, rgba(234, 88, 12, 0.2), rgba(234, 88, 12, 0.04));
       color: #fed7aa;
     }
 
     .strap-margin-bold {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 800;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       white-space: nowrap;
     }
 
@@ -700,61 +816,62 @@
     .pro-cand-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
     }
 
     .pro-cand-table th {
       background: rgba(0, 0, 0, 0.35);
       color: #64748b;
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
-      padding: 2.5px 6px;
+      letter-spacing: 0.3px;
+      padding: 2px 5px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .pro-cand-table td {
-      padding: 2.5px 6px;
+      padding: 2px 5px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.03);
       vertical-align: middle;
-      transition: background 0.2s ease, color 0.2s ease;
+      transition: background 0.18s ease, color 0.18s ease;
     }
 
     .pro-cand-table tr:last-child td { border-bottom: none; }
 
     .pro-cand-table tr.winner-row-highlight {
-      background: rgba(245, 158, 11, 0.1);
+      background: rgba(245, 158, 11, 0.12);
     }
 
     .cand-name-flex {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 5px;
     }
 
     .cand-name-hindi {
       font-weight: 600;
       color: #ffffff;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 140px;
+      max-width: 130px;
     }
 
     .pro-party-badge {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.58rem;
+      font-size: 0.55rem;
       font-weight: 800;
-      padding: 1px 5px;
-      border-radius: 3px;
+      padding: 0 4px;
+      border-radius: 2px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       white-space: nowrap;
       flex-shrink: 0;
+      line-height: 1.2;
     }
 
     .pbadge-bjp { background: rgba(234, 88, 12, 0.25); color: #fb923c; border: 1px solid #ea580c; }
@@ -767,11 +884,11 @@
     .round-num-cell {
       text-align: right;
       font-family: 'Rajdhani', sans-serif;
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: #94a3b8;
-      width: 36px;
-      transition: color 0.2s ease;
+      width: 34px;
+      transition: color 0.18s ease;
     }
 
     .round-num-cell.active-val {
@@ -782,11 +899,11 @@
     .total-num-cell {
       text-align: right;
       font-family: 'Rajdhani', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 800;
       color: #f8fafc;
-      width: 50px;
-      transition: color 0.25s ease, text-shadow 0.25s ease;
+      width: 48px;
+      transition: color 0.2s ease, text-shadow 0.2s ease;
     }
 
     .total-num-cell.top-rank-total {
@@ -799,17 +916,66 @@
       text-shadow: 0 0 6px rgba(253, 224, 71, 0.5);
     }
 
+    /* Modern Standby Empty Indicator */
+    .modern-standby-box {
+      grid-column: 1 / -1;
+      padding: 40px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #64748b;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      margin: 15px auto;
+      max-width: 440px;
+      animation: standbyPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes standbyPulse {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.01); border-color: rgba(56, 189, 248, 0.3); }
+    }
+
+    .standby-radar-ring {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(56, 189, 248, 0.3);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spinRadar 2s linear infinite;
+    }
+
+    @keyframes spinRadar {
+      to { transform: rotate(360deg); }
+    }
+
+    .standby-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+
+    .standby-sub {
+      font-size: 0.72rem;
+      color: #64748b;
+      line-height: 1.35;
+    }
+
     /* ==========================================================================
-       5. BOTTOM BREAKING NEWS TICKER (COMPACT 30px)
+       5. BOTTOM BREAKING NEWS TICKER (COMPACT 26px)
        ========================================================================== */
     .pro-news-ticker-bar {
       background: linear-gradient(90deg, #b91c1c 0%, #991b1b 100%);
       color: #ffffff;
-      height: 30px;
+      height: 26px;
       display: flex;
       align-items: center;
       flex-shrink: 0;
-      box-shadow: 0 -3px 14px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.6);
       position: relative;
       z-index: 50;
       overflow: hidden;
@@ -818,14 +984,14 @@
     .ticker-header-flash {
       background: #0f172a;
       color: #f59e0b;
-      padding: 0 12px;
+      padding: 0 10px;
       height: 100%;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-family: 'Teko', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.8px;
+      font-size: 1rem;
+      letter-spacing: 0.6px;
       flex-shrink: 0;
       border-right: 2px solid #f59e0b;
     }
@@ -839,8 +1005,8 @@
 
     .ticker-moving-stream {
       display: inline-flex;
-      gap: 40px;
-      padding-left: 15px;
+      gap: 35px;
+      padding-left: 12px;
       animation: newsStream 40s linear infinite;
     }
 
@@ -850,58 +1016,49 @@
     }
 
     .news-bulletin-item {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       letter-spacing: 0.2px;
     }
 
     .bulletin-gold {
       color: #fef08a;
-      text-shadow: 0 0 6px rgba(254, 240, 138, 0.4);
-    }
-
-    .empty-prompt {
-      grid-column: 1 / -1;
-      padding: 40px 20px;
-      text-align: center;
-      color: #64748b;
-      font-size: 0.85rem;
-      font-weight: 600;
+      text-shadow: 0 0 5px rgba(254, 240, 138, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. TOP NEWSROOM HEADER -->
+  <!-- 1. ULTRA-COMPACT SLIM TOP HEADER (28px) -->
   <header class="tv-broadcast-header">
     <div class="brand-cluster">
       <div class="live-bug">
         <span class="live-bug-dot"></span>
-        <span>LIVE ELECTION BROADCAST</span>
+        <span>LIVE</span>
       </div>
       <div class="election-title-unit">
-        <h1>SALUMBER DISTRICT PANCHAYATI RAJ 2026</h1>
-        <p>सलूम्बर जिला परिषद एवं 7 पंचायत समितियां • आधिकारिक सजीव मतगणना प्रसारण</p>
+        <h1>SALUMBER 2026</h1>
+        <span class="sub-tag">जिला परिषद एवं 7 पंचायत समितियां</span>
       </div>
     </div>
 
     <div class="header-center-stage">
-      <!-- 3 Stage View Switches -->
+      <!-- 4 Compact Stage View Switches -->
       <div class="stage-mode-selector">
-        <button class="stage-mode-btn active" id="btnModeSplit" onclick="setScreenView('split')">
-          ⚡ 50/50 स्प्लिट
+        <button class="stage-mode-btn active" id="btnModeSplit" onclick="setScreenView('split')" title="50/50 समान स्प्लिट">
+          ⚡ 50:50
         </button>
-        <button class="stage-mode-btn" id="btnModeSplit13" onclick="setScreenView('split13')" title="1:3 स्प्लिट: ZP कॉम्पैक्ट + PS विस्तृत 3-कॉलम ग्रिड">
+        <button class="stage-mode-btn" id="btnModeSplit13" onclick="setScreenView('split13')" title="1:3 स्प्लिट: ZP कॉम्पैक्ट 1-कॉलम + PS विस्तृत 3-कॉलम ग्रिड">
           📐 1:3 स्प्लिट
         </button>
-        <button class="stage-mode-btn" id="btnModeZp" onclick="setScreenView('zp')">
-          🏛️ जिला परिषद (21)
+        <button class="stage-mode-btn" id="btnModeZp" onclick="setScreenView('zp')" title="सम्पूर्ण जिला परिषद 21 वार्ड">
+          🏛️ ZP (21)
         </button>
-        <button class="stage-mode-btn" id="btnModePs" onclick="setScreenView('ps')">
-          🏘️ पंचायत समिति (105)
+        <button class="stage-mode-btn" id="btnModePs" onclick="setScreenView('ps')" title="सम्पूर्ण पंचायत समिति 105 वार्ड">
+          🏘️ PS (105)
         </button>
       </div>
 
@@ -913,24 +1070,24 @@
 
       <!-- Active Entries Filter Badge -->
       <div class="filter-active-pill" title="केवल वे वार्ड प्रदर्शित हैं जिनमें कम से कम 1 मत प्रविष्ट है या परिणाम घोषित है">
-        <span>⚡ केवल प्रविष्ट परिणाम</span>
+        <span id="activeFilterBadge">⚡ प्रविष्ट परिणाम</span>
       </div>
     </div>
 
     <div class="header-telemetry">
-      <div class="digital-clock-box" id="broadcastClock">00:00:00 --</div>
+      <div class="digital-clock-box" id="broadcastClock">00:00:00</div>
       <button class="btn-fs" onclick="toggleScreenFullscreen()" title="Toggle Fullscreen for Projectors">
-        ⛶ FULLSCREEN
+        ⛶ FULL
       </button>
     </div>
   </header>
 
-  <!-- 2. REAL-TIME SCOREBOARD STRIP -->
+  <!-- 2. REAL-TIME SCOREBOARD STRIP (26px) -->
   <section class="broadcast-scoreboard">
     <!-- ZP Chamber -->
     <div class="chamber-tally-bar bar-zp">
       <div class="chamber-title-group">
-        <span class="chamber-name">🏛️ जिला परिषद सदस्य (21)</span>
+        <span class="chamber-name">🏛️ जिला परिषद (21)</span>
         <span class="majority-badge">बहुमत: 11</span>
       </div>
       <div class="tally-digits-flex">
@@ -945,7 +1102,7 @@
     <!-- PS Chamber -->
     <div class="chamber-tally-bar bar-ps">
       <div class="chamber-title-group">
-        <span class="chamber-name">🏘️ पंचायत समिति सदस्य (105)</span>
+        <span class="chamber-name">🏘️ पंचायत समिति (105)</span>
         <span class="majority-badge">7 ब्लॉक</span>
       </div>
       <div class="tally-digits-flex">
@@ -963,7 +1120,7 @@
     <!-- View content rendered dynamically -->
   </main>
 
-  <!-- 4. ULTRA-HD NEWS TICKER -->
+  <!-- 4. ULTRA-HD NEWS TICKER (26px) -->
   <footer class="pro-news-ticker-bar">
     <div class="ticker-header-flash">
       <span>BREAKING NEWS</span>
@@ -977,7 +1134,7 @@
 
   <script>
     /* ==========================================================================
-       PRO COMPACT BROADCAST CONTROLLER (ZERO FLICKER • IN-PLACE DOM DIFFING)
+       PRO COMPACT BROADCAST CONTROLLER (ZERO FLICKER • IN-PLACE ANIMATED DIFFING)
        ========================================================================== */
     const ALL_PS_BLOCKS = ['Semari', 'Sarada', 'Salumbar', 'Jaisamand', 'Geengla', 'Lasadiya', 'Jhallara'];
     const HINDI_BLOCK_MAP = {
@@ -999,7 +1156,7 @@
       system_mode: 'TEST'
     };
 
-    let activeStageMode = 'split'; // 'split', 'zp', 'ps'
+    let activeStageMode = 'split'; // 'split', 'split13', 'zp', 'ps'
     let activePsBlock = 'ALL';
     let isAutoTourRunning = true;
     let tourTimer = null;
@@ -1022,7 +1179,7 @@
     function initDigitalClock() {
       function refresh() {
         const d = new Date();
-        const str = d.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const str = d.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
         const el = document.getElementById('broadcastClock');
         if (el) el.textContent = str;
       }
@@ -1042,6 +1199,7 @@
           renderActiveStage();
           updateLiveScoreboard();
           updateBreakingNewsTicker();
+          updateActiveFilterCount();
         }
       } catch (err) {
         console.warn('Network issue loading master payload:', err);
@@ -1084,11 +1242,11 @@
       const label = document.getElementById('tourStatusText');
       if (isAutoTourRunning) {
         btn.classList.add('active');
-        label.textContent = 'ऑटो-टूर चालू';
+        label.textContent = 'ऑटो-टूर';
         initAutoTour();
       } else {
         btn.classList.remove('active');
-        label.textContent = 'ऑटो-टूर बंद';
+        label.textContent = 'टूर बंद';
         if (tourTimer) clearInterval(tourTimer);
       }
     }
@@ -1146,6 +1304,15 @@
       return false;
     }
 
+    function updateActiveFilterCount() {
+      const activeWards = (electionData.wards || []).filter(wardHasEnteredVotes);
+      const badge = document.getElementById('activeFilterBadge');
+      if (badge) {
+        badge.textContent = `⚡ सक्रिय (${activeWards.length})`;
+      }
+    }
+
+    // ==========================================================================
     // STAGE RENDER DISPATCHER
     // ==========================================================================
     function renderActiveStage(force = false) {
@@ -1179,7 +1346,7 @@
       const gridClass = is13 ? 'arena-split-1-3' : 'arena-split-grid';
       const zpColClass = is13 ? 'chamber-column-box zp-compact-col' : 'chamber-column-box';
       const psColClass = is13 ? 'chamber-column-box ps-expanded-col' : 'chamber-column-box';
-      const psBadge = is13 ? '1:3 विस्तृत ग्रिड • 7 ब्लॉक' : '7 पंचायत समितियां';
+      const psBadge = is13 ? '1:3 ग्रिड • 7 ब्लॉक' : '7 ब्लॉक';
 
       if (!stage.querySelector(`.${gridClass}`) || force) {
         stage.innerHTML = `
@@ -1188,7 +1355,8 @@
             <div class="${zpColClass}">
               <div class="column-banner-bar">
                 <div class="banner-title-text">
-                  <span>🏛️ जिला परिषद</span>
+                  <span>🏛️ जिला परिषद सदस्य</span>
+                  <span style="font-size:0.7rem; color:#38bdf8; font-weight:700;" id="zpActiveCount"></span>
                 </div>
                 <span class="banner-badge-counter bcounter-zp">21 वार्ड</span>
               </div>
@@ -1200,7 +1368,7 @@
               <div class="column-banner-bar">
                 <div class="banner-title-text">
                   <span>🏘️ पंचायत समिति सदस्य</span>
-                  <span style="font-size:0.75rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSub"></span>
+                  <span style="font-size:0.7rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSub"></span>
                 </div>
                 <span class="banner-badge-counter bcounter-ps">${psBadge}</span>
               </div>
@@ -1216,12 +1384,14 @@
       updateBlockNavActive();
       const subLabel = document.getElementById('psCurrentBlockSub');
       if (subLabel) {
-        subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त 105 वार्ड)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
+        subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त 105)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
       }
 
       // Populate ONLY ZP Wards with entered votes or declared
       const zpWards = electionData.wards.filter(w => w.category === 'ZP' && wardHasEnteredVotes(w)).sort((a,b) => a.ward_no - b.ward_no);
-      diffAndRenderCards(document.getElementById('scrollContainerZp'), zpWards, 'ZP में अभी कोई मत प्रविष्टि नहीं है');
+      const zpCountEl = document.getElementById('zpActiveCount');
+      if (zpCountEl) zpCountEl.textContent = `(${zpWards.length} सक्रिय)`;
+      diffAndRenderCards(document.getElementById('scrollContainerZp'), zpWards, 'जिला परिषद: अभी किसी वार्ड में मत प्रविष्टि नहीं हुई है');
 
       // Populate ONLY PS Wards with entered votes or declared
       let psWards = electionData.wards.filter(w => w.category === 'PS' && wardHasEnteredVotes(w));
@@ -1232,10 +1402,10 @@
         if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
         return a.ward_no - b.ward_no;
       });
-      diffAndRenderCards(document.getElementById('scrollContainerPs'), psWards, 'PS में अभी कोई मत प्रविष्टि नहीं है');
+      diffAndRenderCards(document.getElementById('scrollContainerPs'), psWards, 'पंचायत समिति: चयनित ब्लॉक में अभी कोई मत प्रविष्टि नहीं है');
     }
 
-    // Fullscreen ZP Stage (Dense Responsive Multi-Column Grid)
+    // Fullscreen ZP Stage
     function renderSingleZpStage(stage, force) {
       if (!stage.querySelector('#singleZpStage') || force) {
         stage.innerHTML = `
@@ -1243,9 +1413,10 @@
             <div class="chamber-column-box" style="height:100%;">
               <div class="column-banner-bar">
                 <div class="banner-title-text">
-                  <span>🏛️ जिला परिषद सदस्य • सम्पूर्ण 21 वार्ड (Dense High-Definition View)</span>
+                  <span>🏛️ जिला परिषद सदस्य • सम्पूर्ण 21 वार्ड</span>
+                  <span style="font-size:0.72rem; color:#38bdf8; font-weight:700;" id="zpFullActiveCount"></span>
                 </div>
-                <span class="banner-badge-counter bcounter-zp">21 WARD GRID</span>
+                <span class="banner-badge-counter bcounter-zp">21 WARD</span>
               </div>
               <div class="chamber-cards-scroll" id="scrollContainerZpFull" style="grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));"></div>
             </div>
@@ -1253,10 +1424,12 @@
         `;
       }
       const zpWards = electionData.wards.filter(w => w.category === 'ZP' && wardHasEnteredVotes(w)).sort((a,b) => a.ward_no - b.ward_no);
-      diffAndRenderCards(document.getElementById('scrollContainerZpFull'), zpWards, 'जिला परिषद में अभी कोई मत प्रविष्टि नहीं है');
+      const countEl = document.getElementById('zpFullActiveCount');
+      if (countEl) countEl.textContent = `(${zpWards.length} सक्रिय)`;
+      diffAndRenderCards(document.getElementById('scrollContainerZpFull'), zpWards, 'जिला परिषद: अभी किसी वार्ड में मत प्रविष्टि नहीं हुई है');
     }
 
-    // Fullscreen PS Stage (Dense Responsive Multi-Column Grid)
+    // Fullscreen PS Stage
     function renderSinglePsStage(stage, force) {
       if (!stage.querySelector('#singlePsStage') || force) {
         stage.innerHTML = `
@@ -1265,7 +1438,7 @@
               <div class="column-banner-bar">
                 <div class="banner-title-text">
                   <span>🏘️ पंचायत समिति सदस्य • 7 ब्लॉक (105 Wards)</span>
-                  <span style="font-size:0.8rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSubFull"></span>
+                  <span style="font-size:0.75rem; color:#38bdf8; font-weight:700;" id="psCurrentBlockSubFull"></span>
                 </div>
                 <div class="ps-block-nav-strip" id="psBlockNavStripFull" style="background:transparent; border:none; padding:0;">
                   ${buildBlockNavPills()}
@@ -1280,7 +1453,7 @@
       updateBlockNavActive();
       const subLabel = document.getElementById('psCurrentBlockSubFull');
       if (subLabel) {
-        subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त ब्लॉक • 105 वार्ड)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
+        subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त ब्लॉक)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
       }
 
       let psWards = electionData.wards.filter(w => w.category === 'PS' && wardHasEnteredVotes(w));
@@ -1291,7 +1464,7 @@
         if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
         return a.ward_no - b.ward_no;
       });
-      diffAndRenderCards(document.getElementById('scrollContainerPsFull'), psWards, 'पंचायत समिति में अभी कोई मत प्रविष्टि नहीं है');
+      diffAndRenderCards(document.getElementById('scrollContainerPsFull'), psWards, 'पंचायत समिति: चयनित ब्लॉक में अभी कोई मत प्रविष्टि नहीं है');
     }
 
     function buildBlockNavPills() {
@@ -1317,14 +1490,24 @@
     }
 
     // ==========================================================================
-    // IN-PLACE CARDS DIFFING (ZERO FLICKER + SMOOTH TRANSITIONS)
+    // IN-PLACE CARDS DIFFING & CINEMATIC BROADCAST ANIMATIONS
     // ==========================================================================
     function diffAndRenderCards(container, wards, emptyMsg = 'कोई परिणाम डेटा उपलब्ध नहीं है') {
       if (!container) return;
       if (!wards || wards.length === 0) {
-        container.innerHTML = `<div class="empty-prompt"><span style="font-size:1.5rem; display:block; margin-bottom:6px;">📊</span>${emptyMsg}</div>`;
+        container.innerHTML = `
+          <div class="modern-standby-box">
+            <div class="standby-radar-ring"></div>
+            <div class="standby-title">${emptyMsg}</div>
+            <div class="standby-sub">मतगणना चक्र 1 प्रविष्टि प्रतीक्षित है • जैसे ही ऑपरेटर द्वारा मतगणना प्रविष्ट होगी, परिणाम तुरंत लाइव प्रदर्शित होंगे।</div>
+          </div>
+        `;
         return;
       }
+
+      // Remove standby box if present
+      const standby = container.querySelector('.modern-standby-box');
+      if (standby) standby.remove();
 
       const existingCards = new Map();
       container.querySelectorAll('.pro-ward-card').forEach(el => {
@@ -1333,7 +1516,7 @@
       });
 
       const currentActiveKeys = new Set();
-      wards.forEach(w => {
+      wards.forEach((w, idx) => {
         const key = `${w.category}_${w.block_name}_${w.ward_no}`;
         currentActiveKeys.add(key);
 
@@ -1343,13 +1526,29 @@
         if (existingEl) {
           const oldSig = domCardSignatures.get(key);
           if (oldSig !== cardObject.signature) {
-            existingEl.outerHTML = cardObject.html;
+            // Apply live update pulse animation
+            existingEl.classList.remove('card-updating');
+            void existingEl.offsetWidth; // Trigger reflow for animation restart
+            existingEl.classList.add('card-updating');
+
+            // Update card HTML content smoothly
+            existingEl.innerHTML = cardObject.innerHtml;
+            existingEl.className = cardObject.cardCss + ' card-updating';
+
+            // Flash updated numbers
+            existingEl.querySelectorAll('.total-num-cell, .round-num-cell.active-val').forEach(cell => {
+              cell.classList.add('val-change-flash');
+            });
+
             domCardSignatures.set(key, cardObject.signature);
           }
         } else {
-          const wrapper = document.createElement('div');
-          wrapper.innerHTML = cardObject.html;
-          const newCardEl = wrapper.firstElementChild;
+          // New Card Entrance with staggered animation
+          const newCardEl = document.createElement('div');
+          newCardEl.className = cardObject.cardCss + ' card-enter';
+          newCardEl.dataset.cardKey = key;
+          newCardEl.style.animationDelay = `${(idx % 8) * 40}ms`;
+          newCardEl.innerHTML = cardObject.innerHtml;
           container.appendChild(newCardEl);
           domCardSignatures.set(key, cardObject.signature);
         }
@@ -1450,16 +1649,16 @@
       // Headers
       let roundThs = '';
       if (hasEarlierRounds) {
-        roundThs += `<th style="text-align:center; width:16px;" title="पूर्व के राउण्ड्स कुल योग में सम्मिलित हैं">...</th>`;
+        roundThs += `<th style="text-align:center; width:14px;" title="पूर्व के राउण्ड्स कुल योग में सम्मिलित हैं">...</th>`;
       }
       displayRoundKeys.forEach(r => {
-        roundThs += `<th style="text-align:right; width:36px;">${r}</th>`;
+        roundThs += `<th style="text-align:right; width:34px;">${r}</th>`;
       });
 
       // Candidate Rows
       let rowsHtml = '';
       if (candTotals.length === 0) {
-        rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:6px;">कोई प्रत्याशी पंजीकृत नहीं</td></tr>`;
+        rowsHtml = `<tr><td colspan="${3 + displayRoundKeys.length + (hasEarlierRounds ? 1 : 0)}" style="text-align:center; color:var(--text-dim); padding:4px;">कोई प्रत्याशी पंजीकृत नहीं</td></tr>`;
       } else {
         candTotals.forEach((c, idx) => {
           const isWinnerRow = isWinnerDeclared && idx === 0 && c.totalVotes > 0;
@@ -1467,7 +1666,7 @@
 
           let roundTds = '';
           if (hasEarlierRounds) {
-            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:9px;">•</td>`;
+            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:8px;">•</td>`;
           }
           displayRoundKeys.forEach(rKey => {
             const val = vObj[rKey];
@@ -1484,7 +1683,7 @@
 
           rowsHtml += `
             <tr class="${isWinnerRow ? 'winner-row-highlight' : ''}">
-              <td style="color:var(--text-dim); font-size:0.7rem; text-align:center; width:18px; font-weight:700;">${idx + 1}</td>
+              <td style="color:var(--text-dim); font-size:0.65rem; text-align:center; width:16px; font-weight:700;">${idx + 1}</td>
               <td>
                 <div class="cand-name-flex">
                   <span class="cand-name-hindi" title="${c.name_hindi}">${c.name_hindi}</span>
@@ -1512,33 +1711,30 @@
         statusBadge = `<span class="status-badge-chip badge-counting-blue">R${highestRoundNum}</span>`;
       }
 
-      const cardKey = `${ward.category}_${ward.block_name}_${ward.ward_no}`;
       const cardCss = `pro-ward-card ${isWinnerDeclared ? 'declared-win' : (hasVotes && margin > 0 ? 'in-lead' : '')}`;
 
-      const html = `
-        <div class="${cardCss}" data-card-key="${cardKey}">
-          <div class="card-meta-bar">
-            <div class="ward-identity-title">
-              <span class="ward-heading-text">${wardNameLabel}</span>
-              <span class="reservation-pill">${ward.reservation || 'ST'}</span>
-            </div>
-            ${statusBadge}
+      const innerHtml = `
+        <div class="card-meta-bar">
+          <div class="ward-identity-title">
+            <span class="ward-heading-text">${wardNameLabel}</span>
+            <span class="reservation-pill">${ward.reservation || 'ST'}</span>
           </div>
-          ${leaderRibbonHtml}
-          <table class="pro-cand-table">
-            <thead>
-              <tr>
-                <th style="width:18px;">#</th>
-                <th style="text-align:left;">प्रत्याशी</th>
-                ${roundThs}
-                <th style="text-align:right; width:50px;">योग</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
+          ${statusBadge}
         </div>
+        ${leaderRibbonHtml}
+        <table class="pro-cand-table">
+          <thead>
+            <tr>
+              <th style="width:16px;">#</th>
+              <th style="text-align:left;">प्रत्याशी</th>
+              ${roundThs}
+              <th style="text-align:right; width:48px;">योग</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
       `;
 
       const signature = JSON.stringify({
@@ -1547,7 +1743,7 @@
         rounds: displayRoundKeys
       });
 
-      return { html, signature };
+      return { innerHtml, cardCss, signature };
     }
 
     // ==========================================================================
