@@ -1031,7 +1031,216 @@
       color: #fef08a;
       text-shadow: 0 0 5px rgba(254, 240, 138, 0.4);
     }
+
+    /* ==========================================================================
+       6. ROUND NAVIGATION CONTROLS & FULL WARD BREAKDOWN MODAL
+       ========================================================================== */
+    .round-nav-cluster {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: auto;
+    }
+
+    .round-nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #38bdf8;
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+      transition: all 0.15s ease;
+    }
+
+    .round-nav-btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.25);
+      color: #ffffff;
+      border-color: #38bdf8;
+    }
+
+    .round-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.05);
+      color: #64748b;
+    }
+
+    .card-inspect-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 1px 5px;
+      height: 19px;
+      border-radius: 3px;
+      font-size: 0.58rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s ease;
+      line-height: 1;
+    }
+
+    .card-inspect-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+      color: #ffffff;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Modal Backdrop */
+    .tv-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(3, 6, 15, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tv-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .tv-modal-content {
+      background: linear-gradient(180deg, #0e172a 0%, #080d1a 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 980px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.2);
+      transform: scale(0.96) translateY(10px);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tv-modal-overlay.active .tv-modal-content {
+      transform: scale(1) translateY(0);
+    }
+
+    .tv-modal-header {
+      background: rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .modal-title-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-ward-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.3px;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #dc2626;
+      border-color: #ef4444;
+      transform: rotate(90deg);
+    }
+
+    .modal-body-scroll {
+      flex: 1;
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .modal-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+    }
+
+    .modal-cand-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .modal-cand-table th {
+      background: #0f172a;
+      color: #94a3b8;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .modal-cand-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: middle;
+    }
+
+    .modal-cand-table tr:hover td {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .modal-cand-table tr.winner-row td {
+      background: rgba(245, 158, 11, 0.12);
+    }
+
+    .modal-timer-line {
+      height: 3px;
+      background: linear-gradient(90deg, #38bdf8, #0284c7);
+      width: 100%;
+      transform-origin: left;
+      transition: transform 0.1s linear;
+    }
   </style>
+
 </head>
 <body>
 
@@ -1049,6 +1258,16 @@
     </div>
 
     <div class="header-center-stage">
+      <!-- Global Rounds Switcher (Recent 3 vs All Rounds) -->
+      <div class="stage-mode-selector" title="राउण्ड प्रदर्शन शैली">
+        <button class="stage-mode-btn active" id="btnRoundsRecent3" onclick="setGlobalRoundsMode('recent3')">
+          ⚡ हालिया 3
+        </button>
+        <button class="stage-mode-btn" id="btnRoundsAll" onclick="setGlobalRoundsMode('all')">
+          📜 समस्त चक्र
+        </button>
+      </div>
+
       <!-- 4 Compact Stage View Switches -->
       <div class="stage-mode-selector">
         <button class="stage-mode-btn active" id="btnModeSplit" onclick="setScreenView('split')" title="50/50 समान स्प्लिट">
@@ -1160,6 +1379,10 @@
     };
 
     let activeStageMode = 'split'; // 'split', 'split13', 'zp', 'ps'
+    let globalRoundsMode = 'recent3'; // 'recent3' or 'all'
+    let cardRoundOffsets = new Map(); // key -> offset (start index for visible 3 rounds)
+    let modalTimer = null;
+    let modalSecondsLeft = 40;
     let activePsBlock = 'ALL';
     let isAutoTourRunning = true;
     let tourTimer = null;
@@ -1228,6 +1451,21 @@
     }
 
     // 5. Stage Mode Switching
+
+    function setGlobalRoundsMode(mode) {
+      globalRoundsMode = mode;
+      document.getElementById('btnRoundsRecent3').classList.toggle('active', mode === 'recent3');
+      document.getElementById('btnRoundsAll').classList.toggle('active', mode === 'all');
+      renderActiveStage(true);
+    }
+
+    function shiftCardRounds(key, delta, ev) {
+      if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+      const current = cardRoundOffsets.get(key) || 0;
+      cardRoundOffsets.set(key, Math.max(0, current + delta));
+      renderActiveStage();
+    }
+
     function setScreenView(mode) {
       activeStageMode = mode;
       document.querySelectorAll('.stage-mode-btn').forEach(btn => btn.classList.remove('active'));
@@ -1642,21 +1880,50 @@
         `;
       }
 
-      // Display ONLY the LAST 3 Active Rounds
+      const cardKey = `${ward.category}_${ward.block_name}_${ward.ward_no}`;
+      const totalRoundsCount = activeRoundKeys.length;
+
       let displayRoundKeys = activeRoundKeys;
-      const hasEarlierRounds = activeRoundKeys.length > 3;
-      if (hasEarlierRounds) {
-        displayRoundKeys = activeRoundKeys.slice(-3);
+      let hasEarlierRounds = false;
+      let hasLaterRounds = false;
+      let curOffset = 0;
+
+      if (globalRoundsMode === 'all') {
+        displayRoundKeys = activeRoundKeys;
+      } else {
+        // 3-round window with interactive offset
+        const maxOffset = Math.max(0, totalRoundsCount - 3);
+        if (!cardRoundOffsets.has(cardKey)) {
+          cardRoundOffsets.set(cardKey, maxOffset); // Default: show latest 3 rounds
+        }
+        curOffset = Math.min(maxOffset, Math.max(0, cardRoundOffsets.get(cardKey)));
+        displayRoundKeys = activeRoundKeys.slice(curOffset, curOffset + 3);
+        hasEarlierRounds = curOffset > 0;
+        hasLaterRounds = (curOffset + 3) < totalRoundsCount;
       }
 
-      // Headers
+      // Headers with Interactive Older Round Navigation
       let roundThs = '';
-      if (hasEarlierRounds) {
-        roundThs += `<th style="text-align:center; width:14px;" title="पूर्व के राउण्ड्स कुल योग में सम्मिलित हैं">...</th>`;
+      if (globalRoundsMode !== 'all' && totalRoundsCount > 3) {
+        const prevDisabled = !hasEarlierRounds ? 'disabled' : '';
+        const nextDisabled = !hasLaterRounds ? 'disabled' : '';
+        roundThs += `
+          <th style="width:20px; text-align:center; padding:1px;">
+            <button class="round-nav-btn" ${prevDisabled} onclick="shiftCardRounds('${cardKey}', -1, event)" title="पूर्व चक्र देखें (Older rounds)">◀</button>
+          </th>
+        `;
       }
       displayRoundKeys.forEach(r => {
         roundThs += `<th style="text-align:right; width:34px;">${r}</th>`;
       });
+      if (globalRoundsMode !== 'all' && totalRoundsCount > 3) {
+        const nextDisabled = !hasLaterRounds ? 'disabled' : '';
+        roundThs += `
+          <th style="width:20px; text-align:center; padding:1px;">
+            <button class="round-nav-btn" ${nextDisabled} onclick="shiftCardRounds('${cardKey}', 1, event)" title="अगला चक्र देखें (Newer rounds)">▶</button>
+          </th>
+        `;
+      }
 
       // Candidate Rows
       let rowsHtml = '';
@@ -1668,8 +1935,8 @@
           const vObj = electionData.roundVotes[c.id] || {};
 
           let roundTds = '';
-          if (hasEarlierRounds) {
-            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:8px;">•</td>`;
+          if (globalRoundsMode !== 'all' && totalRoundsCount > 3) {
+            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:8px; width:20px;">•</td>`;
           }
           displayRoundKeys.forEach(rKey => {
             const val = vObj[rKey];
@@ -1680,6 +1947,9 @@
               </td>
             `;
           });
+          if (globalRoundsMode !== 'all' && totalRoundsCount > 3) {
+            roundTds += `<td style="text-align:center; color:var(--text-dim); font-size:8px; width:20px;">•</td>`;
+          }
 
           const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
           const pCls = isNota ? 'pbadge-nota' : (`pbadge-${(c.party || 'IND').toLowerCase()}`);
@@ -1717,12 +1987,17 @@
       const cardCss = `pro-ward-card ${isWinnerDeclared ? 'declared-win' : (hasVotes && margin > 0 ? 'in-lead' : '')}`;
 
       const innerHtml = `
-        <div class="card-meta-bar">
+        <div class="card-meta-bar" onclick="openWardDetailModal('${ward.category}', '${ward.block_name}', ${ward.ward_no})" style="cursor:pointer;" title="क्लिक करें: समस्त चक्रवार विस्तृत विवरण देखें">
           <div class="ward-identity-title">
             <span class="ward-heading-text">${wardNameLabel}</span>
             <span class="reservation-pill">${ward.reservation || 'ST'}</span>
           </div>
-          ${statusBadge}
+          <div style="display:flex; align-items:center; gap:5px;">
+            ${statusBadge}
+            <button class="card-inspect-btn" onclick="openWardDetailModal('${ward.category}', '${ward.block_name}', ${ward.ward_no}); event.stopPropagation();" title="समस्त चक्रवार परिणाम खोलें">
+              🔍 विवरण
+            </button>
+          </div>
         </div>
         ${leaderRibbonHtml}
         <table class="pro-cand-table">
@@ -1833,6 +2108,172 @@
       const html = bulletins.map(b => `<span class="news-bulletin-item bulletin-gold">${b}</span>`).join(' • ');
       stream.innerHTML = html + ' • ' + html;
     }
+
+    // ==========================================================================
+    // FULL WARD ROUNDS BREAKDOWN MODAL CONTROLLER
+    // ==========================================================================
+    function openWardDetailModal(category, blockName, wardNo) {
+      const ward = electionData.wards.find(w => w.category === category && w.block_name === blockName && w.ward_no === wardNo);
+      if (!ward) return;
+
+      const wardNameLabel = ward.category === 'ZP'
+        ? `जिला परिषद वार्ड ${ward.ward_no}`
+        : `${HINDI_BLOCK_MAP[ward.block_name] || ward.block_name} वार्ड ${ward.ward_no}`;
+
+      document.getElementById('modalWardTitle').textContent = `🏛️ ${wardNameLabel} - सम्पूर्ण चक्रवार परिणाम`;
+      document.getElementById('modalWardRes').textContent = ward.reservation || 'सामान्य';
+
+      const statusEl = document.getElementById('modalWardStatus');
+      if (ward.status === 'DECLARED') {
+        statusEl.className = 'status-badge-chip badge-win-gold';
+        statusEl.textContent = '🏆 परिणाम घोषित';
+      } else {
+        statusEl.className = 'status-badge-chip badge-counting-blue';
+        statusEl.textContent = 'मतगणना जारी';
+      }
+
+      // Collect ALL candidates and rounds
+      const cands = electionData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
+      const allRoundsSet = new Set();
+
+      const candTotals = cands.map(c => {
+        let sum = 0;
+        const vObj = electionData.roundVotes[c.id] || {};
+        for (const [rKey, count] of Object.entries(vObj)) {
+          const cnt = Number(count) || 0;
+          sum += cnt;
+          const upper = rKey.toUpperCase();
+          if (upper.startsWith('R') || upper === 'PB') allRoundsSet.add(upper);
+        }
+        return { ...c, totalVotes: sum };
+      });
+
+      candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
+
+      let sortedAllRounds = Array.from(allRoundsSet).sort((a, b) => {
+        if (a === 'PB') return -1;
+        if (b === 'PB') return 1;
+        return (parseInt(a.replace(/\D/g, '')) || 0) - (parseInt(b.replace(/\D/g, '')) || 0);
+      });
+      if (sortedAllRounds.length === 0) sortedAllRounds = ['R1'];
+
+      // Leader Strap
+      const leader = candTotals[0];
+      const runnerUp = candTotals[1];
+      const margin = (leader && runnerUp) ? (leader.totalVotes - runnerUp.totalVotes) : (leader ? leader.totalVotes : 0);
+      let strapHtml = '';
+      if (ward.status === 'DECLARED' && leader && leader.totalVotes > 0) {
+        strapHtml = `<div class="pro-leader-strap strap-winner" style="border-radius:4px; padding:6px 12px; font-size:0.88rem;"><span>🏆 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) विजयी घोषित</span><span class="strap-margin-bold">+${margin} मतों से विजय</span></div>`;
+      } else if (leader && leader.totalVotes > 0) {
+        strapHtml = `<div class="pro-leader-strap strap-leading" style="border-radius:4px; padding:6px 12px; font-size:0.88rem;"><span>🟢 <strong>${leader.name_hindi}</strong> (${leader.party || 'IND'}) आगे</span><span class="strap-margin-bold">+${margin} मतों की बढ़त</span></div>`;
+      }
+      document.getElementById('modalLeaderStrap').innerHTML = strapHtml;
+
+      // Table Header: Rank, Candidate Name, Party, All Rounds..., Total
+      let thHtml = '<tr><th style="width:25px; text-align:center;">#</th><th style="text-align:left;">प्रत्याशी</th><th style="text-align:center; width:60px;">दल</th>';
+      sortedAllRounds.forEach(r => {
+        thHtml += `<th style="text-align:right; width:55px;">${r}</th>`;
+      });
+      thHtml += '<th style="text-align:right; width:75px; color:#38bdf8;">कुल योग</th></tr>';
+      document.getElementById('modalTableHead').innerHTML = thHtml;
+
+      // Table Body
+      let tbodyHtml = '';
+      candTotals.forEach((c, idx) => {
+        const isWinRow = (ward.status === 'DECLARED' && idx === 0 && c.totalVotes > 0);
+        const vObj = electionData.roundVotes[c.id] || {};
+        const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
+        const pCls = isNota ? 'pbadge-nota' : (`pbadge-${(c.party || 'IND').toLowerCase()}`);
+
+        let rCells = '';
+        sortedAllRounds.forEach(r => {
+          const count = vObj[r];
+          const display = (count !== undefined && count !== null) ? count : '-';
+          rCells += `<td style="text-align:right; font-family:'Rajdhani', sans-serif; font-size:1.05rem; font-weight:700; color:${count > 0 ? '#ffffff' : '#64748b'};">${display}</td>`;
+        });
+
+        tbodyHtml += `
+          <tr class="${isWinRow ? 'winner-row' : ''}">
+            <td style="text-align:center; color:#64748b; font-weight:700;">${idx + 1}</td>
+            <td style="font-weight:700; color:#ffffff; font-size:0.95rem;">${c.name_hindi}</td>
+            <td style="text-align:center;"><span class="pro-party-badge ${pCls}">${c.party || 'IND'}</span></td>
+            ${rCells}
+            <td style="text-align:right; font-family:'Rajdhani', sans-serif; font-size:1.2rem; font-weight:800; color:${idx === 0 && c.totalVotes > 0 ? '#38bdf8' : '#f8fafc'};">${c.totalVotes}</td>
+          </tr>
+        `;
+      });
+      document.getElementById('modalTableBody').innerHTML = tbodyHtml;
+
+      // Show Modal
+      const overlay = document.getElementById('wardDetailModalOverlay');
+      overlay.classList.add('active');
+
+      // Start 45s countdown timer
+      startModalTimer();
+    }
+
+    function closeWardDetailModal() {
+      const overlay = document.getElementById('wardDetailModalOverlay');
+      if (overlay) overlay.classList.remove('active');
+      if (modalTimer) clearInterval(modalTimer);
+    }
+
+    function handleModalOverlayClick(ev) {
+      if (ev.target.id === 'wardDetailModalOverlay') {
+        closeWardDetailModal();
+      }
+    }
+
+    function startModalTimer() {
+      if (modalTimer) clearInterval(modalTimer);
+      modalSecondsLeft = 45;
+      const timerText = document.getElementById('modalTimerText');
+      const timerBar = document.getElementById('modalTimerBar');
+
+      modalTimer = setInterval(() => {
+        modalSecondsLeft--;
+        if (timerText) timerText.textContent = `ऑटो-क्लोज़: ${modalSecondsLeft}s`;
+        if (timerBar) timerBar.style.transform = `scaleX(${modalSecondsLeft / 45})`;
+
+        if (modalSecondsLeft <= 0) {
+          closeWardDetailModal();
+        }
+      }, 1000);
+    }
+
+    // Keyboard support: Escape closes modal
+    window.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') closeWardDetailModal();
+    });
+
   </script>
+
+  <!-- 5. FULL WARD BREAKDOWN MODAL DIALOG -->
+  <div class="tv-modal-overlay" id="wardDetailModalOverlay" onclick="handleModalOverlayClick(event)">
+    <div class="tv-modal-content">
+      <div class="tv-modal-header">
+        <div class="modal-title-cluster">
+          <span class="modal-ward-title" id="modalWardTitle">वार्ड चक्रवार विस्तृत परिणाम</span>
+          <span class="reservation-pill" id="modalWardRes" style="font-size:0.7rem; padding:2px 6px;">ST</span>
+          <span class="status-badge-chip badge-counting-blue" id="modalWardStatus" style="font-size:0.75rem; padding:2px 8px;">R3</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:0.7rem; color:#64748b;" id="modalTimerText">ऑटो-क्लोज़: 40s</span>
+          <button class="modal-close-btn" onclick="closeWardDetailModal()" title="Close (Esc)">✕</button>
+        </div>
+      </div>
+      <div class="modal-timer-line" id="modalTimerBar"></div>
+      <div class="modal-body-scroll">
+        <div id="modalLeaderStrap" style="margin-bottom:12px;"></div>
+        <div class="modal-table-wrapper">
+          <table class="modal-cand-table">
+            <thead id="modalTableHead"></thead>
+            <tbody id="modalTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
