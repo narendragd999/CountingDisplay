@@ -1258,16 +1258,6 @@
     </div>
 
     <div class="header-center-stage">
-      <!-- Global Rounds Switcher (Recent 3 vs All Rounds) -->
-      <div class="stage-mode-selector" title="राउण्ड प्रदर्शन शैली">
-        <button class="stage-mode-btn active" id="btnRoundsRecent3" onclick="setGlobalRoundsMode('recent3')">
-          ⚡ हालिया 3
-        </button>
-        <button class="stage-mode-btn" id="btnRoundsAll" onclick="setGlobalRoundsMode('all')">
-          📜 समस्त चक्र
-        </button>
-      </div>
-
       <!-- 4 Compact Stage View Switches -->
       <div class="stage-mode-selector">
         <button class="stage-mode-btn active" id="btnModeSplit" onclick="setScreenView('split')" title="50/50 समान स्प्लिट">
@@ -1451,13 +1441,6 @@
     }
 
     // 5. Stage Mode Switching
-
-    function setGlobalRoundsMode(mode) {
-      globalRoundsMode = mode;
-      document.getElementById('btnRoundsRecent3').classList.toggle('active', mode === 'recent3');
-      document.getElementById('btnRoundsAll').classList.toggle('active', mode === 'all');
-      renderActiveStage(true);
-    }
 
     function shiftCardRounds(key, delta, ev) {
       if (ev) { ev.stopPropagation(); ev.preventDefault(); }
