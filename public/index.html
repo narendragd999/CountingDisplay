@@ -847,6 +847,15 @@
         btn.innerText = `🔄 Auto-Cycle PS: ON (${cycleDurationSeconds}s)`;
       }
       autoRotateROInterval = setInterval(() => {
+        // Approach A: Completion Guarantee
+        // If content is overflowing and bottom wards are still scrolling into view, wait until full view completes!
+        const psEl = document.getElementById('psCardsContainer');
+        const maxScroll = psEl ? Math.max(0, psEl.scrollHeight - psEl.clientHeight) : 0;
+        if (maxScroll > 35 && !psScrollCompleted) {
+          // Wait briefly for smooth glide to finish so no ward is ever skipped
+          return;
+        }
+
         currentROIndex = (currentROIndex + 1) % roCentersList.length;
         const nextRO = roCentersList[currentROIndex];
         activeROCenter = nextRO;
@@ -1468,10 +1477,12 @@
     let psAcc = 0;
     let zpPauseTimer = 2.0;
     let psPauseTimer = 2.0;
+    let psScrollCompleted = false; // Flag for Approach A: Completion Guarantee
 
     function resetPsScroll() {
       psAcc = 0;
       psPauseTimer = 2.0;
+      psScrollCompleted = false;
       const psEl = document.getElementById('psCardsContainer');
       if (psEl) psEl.scrollTop = 0;
     }
@@ -1483,7 +1494,7 @@
       if (zpEl) zpEl.scrollTop = 0;
     }
 
-    // High-Performance Hardware-Accelerated 60/120 FPS Auto-Scroll (No Stutter, No Flickering)
+    // High-Performance Hardware-Accelerated 60/120 FPS Auto-Scroll (Approach A: Adaptive Pacing & Completion Guarantee)
     function startAutoScrollLoop() {
       const zpEl = document.getElementById('zpCardsContainer');
       const psEl = document.getElementById('psCardsContainer');
@@ -1493,8 +1504,6 @@
       let lastTime = performance.now();
       if (zpEl) zpAcc = zpEl.scrollTop;
       if (psEl) psAcc = psEl.scrollTop;
-
-      const SPEED = 22; // Pixels per second: optimal broadcast readability speed
 
       function step(now) {
         const dt = Math.min((now - lastTime) / 1000, 0.1);
@@ -1513,7 +1522,7 @@
             if (zpPauseTimer > 0) {
               zpPauseTimer -= dt;
             } else {
-              zpAcc += SPEED * dt;
+              zpAcc += 24 * dt;
               if (zpAcc >= maxScroll) {
                 zpAcc = maxScroll;
                 zpEl.scrollTop = maxScroll;
@@ -1533,7 +1542,7 @@
           }
         }
 
-        // --- PS CONTAINER SCROLL ---
+        // --- PS CONTAINER SCROLL (Approach A: Adaptive Pacing to selected interval) ---
         if (psEl) {
           const maxScroll = Math.max(0, psEl.scrollHeight - psEl.clientHeight);
           if (psUserInteracting) {
@@ -1543,26 +1552,43 @@
             if (Math.abs(psEl.scrollTop - psAcc) > 12) {
               psAcc = psEl.scrollTop;
             }
+
+            // Calculate adaptive pacing speed based on selected cycle duration
+            const cycleSec = (typeof cycleDurationSeconds === 'number' && cycleDurationSeconds > 0) ? cycleDurationSeconds : 15;
+            // 2.0s top pause + 2.5s bottom pause = 4.5s reading pauses
+            const activeTravelTime = Math.max(3.0, cycleSec - 4.5);
+            // Adaptive speed ensuring all wards scroll through in the exact interval
+            let adaptiveSpeed = maxScroll / activeTravelTime;
+            // Bound speed between 20 px/s (gentle) and 48 px/s (crisp readable ceiling)
+            adaptiveSpeed = Math.min(48, Math.max(20, adaptiveSpeed));
+
             if (psPauseTimer > 0) {
               psPauseTimer -= dt;
             } else {
-              psAcc += SPEED * dt;
+              psAcc += adaptiveSpeed * dt;
               if (psAcc >= maxScroll) {
                 psAcc = maxScroll;
                 psEl.scrollTop = maxScroll;
-                psPauseTimer = 3.0; // Pause at bottom before resetting
+                psScrollCompleted = true; // Bottom wards reached & fully visible!
+                psPauseTimer = 2.5; // Pause 2.5s at bottom so viewers can read the final wards
                 setTimeout(() => {
-                  if (!psUserInteracting && psAutoScroll) {
-                    resetPsScroll();
+                  if (!psUserInteracting && psAutoScroll && psAcc >= maxScroll) {
+                    if (!autoRotateROInterval) {
+                      resetPsScroll();
+                    }
                   }
-                }, 3000);
+                }, 2500);
               } else {
                 psEl.scrollTop = Math.round(psAcc);
               }
             }
-          } else if (!psUserInteracting && maxScroll <= 35 && psEl.scrollTop !== 0) {
-            psEl.scrollTop = 0;
-            psAcc = 0;
+          } else {
+            // Fits entirely on screen: all wards already visible
+            psScrollCompleted = true;
+            if (!psUserInteracting && psEl.scrollTop !== 0) {
+              psEl.scrollTop = 0;
+              psAcc = 0;
+            }
           }
         }
 

@@ -222,31 +222,23 @@ export default {
       (MASTER_DATA.candidates || []).forEach((c, idx) => {
         const vObj = {};
         const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
-        const wNo = c.ward_no;
-        const isZp = (c.category === 'ZP');
+        const w = (MASTER_DATA.wards || []).find(wd => wd.category === c.category && wd.block_name === c.block_name && wd.ward_no === c.ward_no);
+        const maxR = (w && w.max_rounds) ? w.max_rounds : 5;
 
         // PB
         vObj['PB'] = isNota ? 5 : (12 + (idx % 18));
         
-        if (isZp) {
-          if (wNo <= 17) vObj['R1'] = isNota ? 12 : (220 + (idx * 23) % 200);
-          if ([1,2,3,4,5,6,7,8,9,10,11,12,13,14].includes(wNo)) vObj['R2'] = isNota ? 10 : (240 + (idx * 17) % 210);
-          if ([1,2,3,4,5,7,8,9,10,12].includes(wNo)) vObj['R3'] = isNota ? 8 : (230 + (idx * 19) % 200);
-          if ([1,2,3,7,8,10].includes(wNo)) vObj['R4'] = isNota ? 7 : (250 + (idx * 29) % 220);
-          if ([1,2,8].includes(wNo)) vObj['R5'] = isNota ? 6 : (260 + (idx * 31) % 230);
-        } else {
-          if (wNo <= 8) vObj['R1'] = isNota ? 12 : (200 + (idx * 23) % 190);
-          if (wNo <= 7) vObj['R2'] = isNota ? 10 : (210 + (idx * 17) % 180);
-          if (wNo <= 5) vObj['R3'] = isNota ? 8 : (220 + (idx * 19) % 190);
-          if (wNo <= 4) vObj['R4'] = isNota ? 7 : (230 + (idx * 29) % 200);
-          if (wNo <= 2) vObj['R5'] = isNota ? 6 : (240 + (idx * 31) % 210);
+        // Fill ALL rounds up to max_rounds
+        for (let r = 1; r <= maxR; r++) {
+          vObj[`R${r}`] = isNota ? (8 + (r * 2)) : (220 + ((idx * 23 + r * 17) % 210));
         }
+
         MASTER_DATA.roundVotes[c.id] = vObj;
       });
       (MASTER_DATA.wards || []).forEach(w => {
-        if (w.category === 'ZP' && [1, 3, 8].includes(w.ward_no)) {
+        if (w.category === 'ZP' && [1, 3, 5, 8, 11, 14, 18, 21].includes(w.ward_no)) {
           w.status = 'DECLARED';
-        } else if (w.category === 'PS' && [1, 3].includes(w.ward_no)) {
+        } else if (w.category === 'PS' && ([1, 3, 6, 9, 12, 15].includes(w.ward_no) || (w.ward_no % 3 === 0))) {
           w.status = 'DECLARED';
         } else {
           w.status = 'COUNTING';

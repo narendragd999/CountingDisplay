@@ -979,67 +979,33 @@ async def seed_dummy_test_data(request: Request):
                     cnt = random.randint(90, 240)
             cursor.execute("INSERT INTO votes (candidate_id, round_key, votes_count) VALUES (?, ?, ?)", (c['id'], r_key, cnt))
 
-    # 3. Generate realistic multi-round votes for Zilla Parishad
-    # Showcasing progression across rounds:
-    # Wards 1, 3, 8: 5 Rounds (PB, R1, R2, R3, R4, R5) -> DECLARED WINNER
-    # Wards 2, 7, 10: 4 Rounds (PB, R1, R2, R3, R4) -> Round 4 in progress
-    # Wards 4, 5, 9, 12: 3 Rounds (PB, R1, R2, R3) -> Round 3 in progress
-    # Wards 6, 11, 13, 14: 2 Rounds (PB, R1, R2) -> Round 2 in progress
-    # Wards 15, 16, 17: 1 Round (PB, R1) -> Round 1 in progress
-    # Wards 18+: PB only or Awaiting votes
-    zp_declared_winner_wards = {1, 3, 8}
+    # 3. Generate realistic multi-round votes for ALL 126 wards (all rounds)
+    # Fetch all ward configurations (max_rounds per ward)
+    cursor.execute("SELECT category, block_name, ward_no, max_rounds FROM wards")
+    ward_max_rounds = {(r['category'], r['block_name'], r['ward_no']): (r['max_rounds'] or 5) for r in cursor.fetchall()}
+
     for key, c_list in wards_cands.items():
         cat, blk, w_no = key
-        if cat == 'ZP':
-            # Postal Ballots for all active wards
-            insert_round_votes(c_list, 'PB', is_pb=True)
+        max_r = ward_max_rounds.get(key, 5)
 
-            # R1 for wards 1 to 17
-            if w_no <= 17:
-                insert_round_votes(c_list, 'R1')
-            # R2 for wards with >= 2 rounds
-            if w_no in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}:
-                insert_round_votes(c_list, 'R2')
-            # R3 for wards with >= 3 rounds
-            if w_no in {1, 2, 3, 4, 5, 7, 8, 9, 10, 12}:
-                insert_round_votes(c_list, 'R3')
-            # R4 for wards with >= 4 rounds (shows R2, R3, R4!)
-            if w_no in {1, 2, 3, 7, 8, 10}:
-                insert_round_votes(c_list, 'R4')
-            # R5 for wards with 5 rounds (shows R3, R4, R5!)
-            if w_no in {1, 2, 8}:
-                insert_round_votes(c_list, 'R5')
+        # 1. Postal Ballot (PB) for all wards
+        insert_round_votes(c_list, 'PB', is_pb=True)
 
-            if w_no in zp_declared_winner_wards:
-                cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'ZP' AND ward_no = ?", (w_no,))
-        
-        elif cat == 'PS':
-            # For Panchayat Samiti: Realistic multi-round progression across all 7 blocks
-            # Ward 1: 5 Rounds (PB, R1, R2, R3, R4, R5) -> DECLARED WINNER
-            # Ward 2: 5 Rounds (PB, R1, R2, R3, R4, R5) -> R5 in progress
-            # Ward 3: 4 Rounds (PB, R1, R2, R3, R4) -> DECLARED WINNER
-            # Ward 4: 4 Rounds (PB, R1, R2, R3, R4) -> R4 in progress
-            # Ward 5: 3 Rounds (PB, R1, R2, R3) -> R3 in progress
-            # Ward 6: 2 Rounds (PB, R1, R2) -> R2 in progress
-            # Ward 7: 2 Rounds (PB, R1, R2) -> R2 in progress
-            # Ward 8: 1 Round (PB, R1) -> R1 in progress
-            # Ward 9+: Awaiting votes
-            if w_no <= 8:
-                insert_round_votes(c_list, 'PB', is_pb=True)
-                insert_round_votes(c_list, 'R1')
-            if w_no <= 7:
-                insert_round_votes(c_list, 'R2')
-            if w_no <= 5:
-                insert_round_votes(c_list, 'R3')
-            if w_no <= 4:
-                insert_round_votes(c_list, 'R4')
-            if w_no in {1, 2}:
-                insert_round_votes(c_list, 'R5')
+        # 2. Fill ALL rounds from R1 up to max_rounds
+        for r_num in range(1, max_r + 1):
+            insert_round_votes(c_list, f"R{r_num}")
 
-            if w_no in {1, 3}:
-                cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'PS' AND block_name = ? AND ward_no = ?", (blk, w_no))
+        # Declare winner on a realistic subset of wards (~30-40% declared, rest counting with all rounds entered)
+        if cat == 'ZP' and w_no in {1, 3, 5, 8, 11, 14, 18, 21}:
+            cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'ZP' AND ward_no = ?", (w_no,))
+        elif cat == 'PS' and (w_no in {1, 3, 6, 9, 12, 15} or (w_no % 3 == 0)):
+            cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'PS' AND block_name = ? AND ward_no = ?", (blk, w_no))
 
-    # Add official round declarations
+    # Add official round declarations for all blocks
+    for blk_name in PS_BLOCKS:
+        cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R1', 'DECLARED', 8500)", (blk_name,))
+        cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R2', 'DECLARED', 8300)", (blk_name,))
+
     cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R1', 'DECLARED', 12500)")
     cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R2', 'DECLARED', 12380)")
     cursor.execute("INSERT INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R3', 'DECLARED', 11950)")

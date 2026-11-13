@@ -1475,35 +1475,89 @@
       }
     }
 
+    // 6. Approach A: Adaptive Pacing Auto-Scroll & Completion Guarantee
+    let smartTvScrollCompleted = false;
+
     function initAutoTour() {
       if (tourTimer) clearInterval(tourTimer);
       if (!isAutoTourRunning) return;
 
-      // Auto cycle blocks every 14 seconds
+      // Auto cycle blocks with Completion Guarantee
       tourTimer = setInterval(() => {
         if (!isAutoTourRunning) return;
+        const psScroller = document.getElementById('scrollContainerPs') || document.getElementById('scrollContainerPsFull');
+        if (psScroller) {
+          const maxScroll = Math.max(0, psScroller.scrollHeight - psScroller.clientHeight);
+          if (maxScroll > 35 && !smartTvScrollCompleted) {
+            // Still smoothly gliding to show bottom wards; wait until completion
+            return;
+          }
+        }
+        smartTvScrollCompleted = false;
         const tourList = ['ALL', ...ALL_PS_BLOCKS];
         const nextIdx = (tourList.indexOf(activePsBlock) + 1) % tourList.length;
         activePsBlock = tourList[nextIdx];
         renderActiveStage();
-      }, 14000);
+      }, 15000);
     }
 
-    // 6. Gentle Auto-Scroll
+    // High-Performance Hardware-Accelerated 60/120 FPS Auto-Scroll with Adaptive Pacing
     function initGentleAutoScroll() {
-      if (autoScrollInterval) clearInterval(autoScrollInterval);
+      if (autoScrollInterval) cancelAnimationFrame(autoScrollInterval);
 
-      autoScrollInterval = setInterval(() => {
+      let lastTime = performance.now();
+      let scrollMap = new WeakMap();
+
+      function step(now) {
+        const dt = Math.min((now - lastTime) / 1000, 0.1);
+        lastTime = now;
+
         document.querySelectorAll('.chamber-cards-scroll').forEach(scroller => {
-          if (scroller.scrollHeight > scroller.clientHeight) {
-            if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 5) {
-              scroller.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-              scroller.scrollBy({ top: 110, behavior: 'smooth' });
+          const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+          if (maxScroll > 35) {
+            let state = scrollMap.get(scroller);
+            if (!state) {
+              state = { acc: scroller.scrollTop, topPause: 2.0, bottomPause: 2.5 };
+              scrollMap.set(scroller, state);
             }
+
+            if (Math.abs(scroller.scrollTop - state.acc) > 15) {
+              state.acc = scroller.scrollTop;
+            }
+
+            // Adaptive Paced Speed: guarantees traversing all wards smoothly within 15 seconds
+            const activeDuration = Math.max(3.0, 15 - 4.5);
+            let adaptiveSpeed = Math.min(48, Math.max(20, maxScroll / activeDuration));
+
+            if (state.topPause > 0) {
+              state.topPause -= dt;
+            } else {
+              state.acc += adaptiveSpeed * dt;
+              if (state.acc >= maxScroll) {
+                state.acc = maxScroll;
+                scroller.scrollTop = maxScroll;
+                smartTvScrollCompleted = true; // All cards reached and viewable!
+                if (state.bottomPause > 0) {
+                  state.bottomPause -= dt;
+                } else {
+                  state.acc = 0;
+                  scroller.scrollTop = 0;
+                  state.topPause = 2.0;
+                  state.bottomPause = 2.5;
+                }
+              } else {
+                scroller.scrollTop = Math.round(state.acc);
+              }
+            }
+          } else {
+            smartTvScrollCompleted = true;
           }
         });
-      }, 4200);
+
+        autoScrollInterval = requestAnimationFrame(step);
+      }
+
+      autoScrollInterval = requestAnimationFrame(step);
     }
 
     function toggleScreenFullscreen() {
