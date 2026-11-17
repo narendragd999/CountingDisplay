@@ -881,11 +881,12 @@ async def declare_ward(payload: dict, request: Request):
     FROM candidates c
     JOIN votes v ON c.id = v.candidate_id
     WHERE c.category = ? AND c.block_name = ? AND c.ward_no = ?
+      AND c.party != 'NOTA' AND c.name_hindi NOT LIKE '%नोटा%'
     """, (category, block, ward_no))
-    total_ward_votes = cursor.fetchone()[0]
-    if total_ward_votes <= 0:
+    total_candidate_votes = cursor.fetchone()[0]
+    if total_candidate_votes <= 0:
         conn.close()
-        raise HTTPException(status_code=400, detail="Cannot declare ward without entered votes! At least one round of votes must be counted.")
+        raise HTTPException(status_code=400, detail="Cannot declare ward winner: No candidate has received votes yet! (Only NOTA or zero votes entered).")
 
     # Ensure at least one round is entered
 

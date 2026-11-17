@@ -1858,6 +1858,7 @@
 
       // Find Leader and Runner-Up
       const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+      const hasCandidateVotes = validCands.some(c => c.totalVotes > 0);
       let leader;
       let runnerUp;
       let isTie = false;
@@ -1866,12 +1867,13 @@
       if (isWinnerDeclared) {
         leader = validCands[0] || candTotals[0];
         runnerUp = validCands[1] || candTotals[1];
-        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        // Tie can ONLY exist if BOTH candidates have received actual votes (> 0) and have equal votes!
+        isTie = Boolean(leader && runnerUp && leader.totalVotes > 0 && (leader.totalVotes === runnerUp.totalVotes));
         margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
       } else {
         leader = candTotals[0];
         runnerUp = candTotals[1];
-        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        isTie = Boolean(leader && runnerUp && leader.totalVotes > 0 && (leader.totalVotes === runnerUp.totalVotes));
         margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
       }
 
@@ -1884,7 +1886,7 @@
             <span class="strap-margin-bold">${margin > 0 ? `+${margin} मतों से विजय` : 'लॉट द्वारा निर्णय'}</span>
           </div>
         `;
-      } else if (isTie) {
+      } else if (isTie && leader && leader.totalVotes > 0) {
         leaderRibbonHtml = `
           <div class="pro-leader-strap strap-tied">
             <span>⚖️ <strong>बराबरी (TIED): ${leader.name_hindi} व ${runnerUp.name_hindi}</strong></span>
@@ -1908,6 +1910,14 @@
             </div>
           `;
         }
+      } else if (hasVotes && candTotals[0] && candTotals[0].totalVotes > 0) {
+        // Candidate leader has 0 votes, but NOTA has votes entered
+        leaderRibbonHtml = `
+          <div class="pro-leader-strap strap-leading" style="background:rgba(100,116,139,0.15); border-color:#94a3b8; color:#cbd5e1;">
+            <span>⚪ <strong>${candTotals[0].name_hindi || 'नोटा (NOTA)'}</strong> ${isWinnerDeclared ? 'प्राप्त मत' : 'आगे'}</span>
+            <span class="strap-margin-bold">${candTotals[0].totalVotes} मत</span>
+          </div>
+        `;
       }
 
       const cardKey = `${ward.category}_${ward.block_name}_${ward.ward_no}`;

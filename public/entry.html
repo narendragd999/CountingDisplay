@@ -1489,14 +1489,58 @@
         bannerText.innerHTML = `📍 <strong>${cat === 'ZP' ? '🏛️ Zila Parishad' : '🏘️ ' + blk} — ${wLabel} — ${rLabel}</strong>`;
       }
 
+      // Check if current round has existing saved entries
+      let hasExistingRoundVotes = false;
+      let checkWards = [];
+      if (cat === 'ZP') {
+        checkWards = (masterData.wards || []).filter(w => w.category === 'ZP');
+      } else {
+        checkWards = (masterData.wards || []).filter(w => w.category === 'PS' && w.block_name === blk);
+      }
+      if (currentSelectedWardFilter !== 'ALL') {
+        checkWards = checkWards.filter(w => String(w.ward_no) === String(currentSelectedWardFilter));
+      }
+      for (const w of checkWards) {
+        const cands = (masterData.candidates || []).filter(c => {
+          if (cat === 'ZP') return c.category === 'ZP' && Number(c.ward_no) === w.ward_no;
+          return c.category === 'PS' && c.block_name === blk && Number(c.ward_no) === w.ward_no;
+        });
+        for (const c of cands) {
+          const v = ((masterData.roundVotes && masterData.roundVotes[c.id]) || {})[currentSelectedRound];
+          if (v !== undefined && v !== null) {
+            hasExistingRoundVotes = true;
+            break;
+          }
+        }
+        if (hasExistingRoundVotes) break;
+      }
+
       const badge = document.getElementById('roundActiveBadge');
       if (badge) {
-        badge.innerText = isPB ? '✉️ Postal Ballots Active' : `⚡ ${rLabel} Active`;
+        if (hasExistingRoundVotes) {
+          badge.innerHTML = `✓ ${rLabel} Entry Completed`;
+          badge.style.background = '#e0f2fe';
+          badge.style.color = '#0369a1';
+          badge.style.borderColor = '#7dd3fc';
+        } else {
+          badge.innerText = isPB ? '✉️ Postal Ballots Active' : `⚡ ${rLabel} Active`;
+          badge.style.background = '#eff6ff';
+          badge.style.color = '#1d4ed8';
+          badge.style.borderColor = '#bfdbfe';
+        }
       }
 
       const saveBtn = document.getElementById('btnSaveVotes');
       if (saveBtn) {
-        saveBtn.innerText = isPB ? '💾 SAVE PB VOTES' : `💾 SAVE ${rLabel} VOTES`;
+        if (hasExistingRoundVotes) {
+          saveBtn.innerText = isPB ? '💾 UPDATE PB VOTES' : `💾 UPDATE ${rLabel} VOTES`;
+          saveBtn.style.background = '#0284c7';
+          saveBtn.style.borderColor = '#0284c7';
+        } else {
+          saveBtn.innerText = isPB ? '💾 SAVE PB VOTES' : `💾 SAVE ${rLabel} VOTES`;
+          saveBtn.style.background = '#15803d';
+          saveBtn.style.borderColor = '#15803d';
+        }
       }
 
       updateRoundDeclarationUI();
@@ -2061,6 +2105,24 @@
         return;
       }
 
+      // Check if round entry already completed previously (2nd time entry confirmation)
+      let alreadyHasSavedVotes = false;
+      const cidsToSave = Object.keys(votesMap);
+      for (const cid of cidsToSave) {
+        const existingVal = ((masterData.roundVotes && masterData.roundVotes[cid]) || {})[currentSelectedRound];
+        if (existingVal !== undefined && existingVal !== null) {
+          alreadyHasSavedVotes = true;
+          break;
+        }
+      }
+
+      if (alreadyHasSavedVotes) {
+        const confirmMsg = "This Round Entry Comleted, Do you want to Update this Round Entry?\n\n(इस चक्र [" + currentSelectedRound + "] की प्रविष्टि पहले से पूर्ण है। क्या आप इसे अपडेट/संशोधित करना चाहते हैं?)";
+        if (!confirm(confirmMsg)) {
+          return;
+        }
+      }
+
       const saveBtn = document.getElementById('btnSaveVotes');
       saveBtn.disabled = true;
       saveBtn.innerText = '⏳ Saving...';
@@ -2137,10 +2199,12 @@
         });
 
         candTotals.sort((a, b) => b.totalVotes - a.totalVotes);
-        const leader = candTotals[0];
-        const runnerUp = candTotals[1];
+        const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+        const leader = validCands[0] || candTotals[0];
+        const runnerUp = validCands[1] || candTotals[1];
         const hasVotes = leader && leader.totalVotes > 0;
-        const isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        // Tie can ONLY exist if BOTH candidates have received actual votes (> 0) and have equal votes!
+        const isTie = Boolean(leader && runnerUp && leader.totalVotes > 0 && (leader.totalVotes === runnerUp.totalVotes));
         const margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
 
         // Total booths for this ward

@@ -1187,6 +1187,7 @@
       }
 
       const validCands = candTotals.filter(c => c.party !== 'NOTA' && !c.name_hindi.includes('नोटा'));
+      const hasCandidateVotes = validCands.some(c => c.totalVotes > 0);
       
       let leader;
       let runnerUp;
@@ -1196,12 +1197,13 @@
       if (isDeclared) {
         leader = validCands[0] || candTotals[0];
         runnerUp = validCands[1] || candTotals[1];
-        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        // Tie can ONLY exist if BOTH candidates have received actual votes (> 0) and have equal votes!
+        isTie = Boolean(leader && runnerUp && leader.totalVotes > 0 && (leader.totalVotes === runnerUp.totalVotes));
         margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
       } else {
         leader = candTotals[0];
         runnerUp = candTotals[1];
-        isTie = hasVotes && runnerUp && (leader.totalVotes === runnerUp.totalVotes);
+        isTie = Boolean(leader && runnerUp && leader.totalVotes > 0 && (leader.totalVotes === runnerUp.totalVotes));
         margin = isTie ? 0 : (leader && runnerUp ? (leader.totalVotes - runnerUp.totalVotes) : (leader?.totalVotes || 0));
       }
 
@@ -1213,7 +1215,7 @@
             <span>${margin > 0 ? `Margin: +${margin} votes` : 'Decided by Draw of Lots'}</span>
           </div>
         `;
-      } else if (isTie) {
+      } else if (isTie && leader && leader.totalVotes > 0) {
         leaderHtml = `
           <div class="leader-strip" style="background:#fffbeb; border-color:#f59e0b; color:#b45309;">
             <span>⚖️ <strong>TIED: ${leader.name_hindi} & ${runnerUp.name_hindi}</strong></span>
@@ -1237,6 +1239,14 @@
             </div>
           `;
         }
+      } else if (hasVotes && candTotals[0] && candTotals[0].totalVotes > 0) {
+        // Candidate leader has 0 votes, but NOTA has votes entered
+        leaderHtml = `
+          <div class="leader-strip" style="background:#f1f5f9; border-color:#94a3b8; color:#475569;">
+            <span>⚪ <strong>${candTotals[0].name_hindi || 'नोटा (NOTA)'}</strong> ${isDeclared ? 'प्राप्त मत' : 'Leading'}</span>
+            <span>${candTotals[0].totalVotes} votes</span>
+          </div>
+        `;
       }
 
       let displayRoundKeys = activeRoundKeys;
