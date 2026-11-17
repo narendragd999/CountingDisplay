@@ -50,26 +50,29 @@
 
     html, body {
       width: 100%; height: 100%;
-      background: radial-gradient(circle at 50% 0%, #101c38 0%, #060913 75%, #030408 100%);
+      background: #090d16;
       color: var(--text-pure);
       font-family: 'Hind', 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    /* Ambient Lighting Overlays */
+    /* Soft Subtle Ambient Overlays (Zero Blur Filters for 100% Crisp TV Rendering) */
     body::before {
       content: '';
-      position: absolute; top: -120px; left: 10%; width: 450px; height: 240px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
-      pointer-events: none; z-index: 1; filter: blur(50px);
+      position: absolute; top: -100px; left: 10%; width: 450px; height: 200px;
+      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
     }
     body::after {
       content: '';
-      position: absolute; top: -120px; right: 10%; width: 450px; height: 240px;
-      background: radial-gradient(circle, rgba(234, 88, 12, 0.12) 0%, transparent 70%);
-      pointer-events: none; z-index: 1; filter: blur(50px);
+      position: absolute; top: -100px; right: 10%; width: 450px; height: 200px;
+      background: radial-gradient(ellipse at center, rgba(234, 88, 12, 0.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
     }
 
     /* ==========================================================================
@@ -86,7 +89,7 @@
       align-items: center;
       flex-shrink: 0;
       z-index: 50;
-      backdrop-filter: blur(12px);
+      /* backdrop-filter removed for crisp display */
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
@@ -141,7 +144,7 @@
     .election-title-unit {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
     }
 
     .election-title-unit h1 {
@@ -273,7 +276,7 @@
     .header-telemetry {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
     }
 
     .digital-clock-box {
@@ -356,7 +359,7 @@
     .chamber-title-group {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
     }
 
     .chamber-name {
@@ -483,7 +486,7 @@
       overflow: hidden;
       min-height: 0;
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(14px);
+      /* backdrop-filter removed for crisp display */
     }
 
     .column-banner-bar {
@@ -505,7 +508,7 @@
       color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
       white-space: nowrap;
     }
 
@@ -568,11 +571,11 @@
     .chamber-cards-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 6px;
+      padding: 8px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-auto-rows: max-content;
-      gap: 6px;
+      gap: 10px;
       min-height: 0;
       scroll-behavior: smooth;
     }
@@ -586,107 +589,75 @@
        4. PRO CARDS ARCHITECTURE & SMOOTH BROADCAST ANIMATIONS
        ========================================================================== */
     .pro-ward-card {
-      background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: 6px;
+      background: #111827;
+      border: 1.5px solid #1f293d;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
       position: relative;
-      /* GPU Acceleration */
-      transform: translateZ(0);
-      will-change: transform, box-shadow, border-color;
-      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                  box-shadow 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                  border-color 0.22s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* Staggered Card Entrance Animation */
+    /* Staggered Card Entrance Animation (Smooth opacity without blur) */
     .pro-ward-card.card-enter {
-      animation: cardEnterFly 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: cardEnterFly 0.28s ease-out both;
     }
 
     @keyframes cardEnterFly {
       0% {
         opacity: 0;
-        transform: translateY(14px) scale(0.97);
-        filter: blur(2px);
+        transform: translateY(6px);
       }
       100% {
         opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0px);
+        transform: translateY(0);
       }
     }
 
-    /* Card Live Updating Pulse Animation */
+    /* Subtle Card Live Updating Indicator */
     .pro-ward-card.card-updating {
-      animation: cardPulseGlow 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+      border-color: #38bdf8 !important;
     }
 
-    @keyframes cardPulseGlow {
-      0% {
-        box-shadow: 0 0 0 rgba(56, 189, 248, 0);
-        border-color: rgba(255, 255, 255, 0.1);
-      }
-      30% {
-        box-shadow: 0 0 18px rgba(56, 189, 248, 0.55), inset 0 0 8px rgba(56, 189, 248, 0.15);
-        border-color: rgba(56, 189, 248, 0.85);
-        transform: scale(1.012);
-      }
-      100% {
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
-        border-color: rgba(255, 255, 255, 0.1);
-        transform: scale(1);
-      }
-    }
-
-    /* Value Change Flash Indicator - PRESERVE TABLE-CELL DISPLAY */
+    /* Value Change Flash Indicator */
     .val-change-flash {
-      animation: valCellFlash 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: valCellFlash 0.75s ease-out;
     }
 
     @keyframes valCellFlash {
       0% {
-        color: #38bdf8 !important;
-        text-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
-        background-color: rgba(56, 189, 248, 0.28) !important;
+        background-color: rgba(250, 204, 21, 0.45) !important;
+        color: #ffffff !important;
       }
       100% {
-        color: inherit;
-        text-shadow: none;
         background-color: transparent;
       }
     }
 
     .pro-ward-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px rgba(56, 189, 248, 0.18);
-      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      border-color: rgba(56, 189, 248, 0.45);
     }
 
-    /* Winner Declared Golden Aura & Shimmer */
+    /* Winner Declared - Crisp Calm Broadcast Golden Frame (Zero Flicker / Zero Pulsing) */
     .pro-ward-card.declared-win {
-      border: 1.5px solid rgba(245, 158, 11, 0.8) !important;
-      background: linear-gradient(180deg, rgba(28, 38, 62, 0.96) 0%, rgba(16, 23, 40, 0.98) 100%);
-      box-shadow: 0 3px 14px rgba(245, 158, 11, 0.3) !important;
-      animation: goldAuraPulse 2.8s infinite alternate ease-in-out;
-    }
-
-    @keyframes goldAuraPulse {
-      0% { box-shadow: 0 2px 12px rgba(245, 158, 11, 0.25); }
-      100% { box-shadow: 0 4px 18px rgba(251, 191, 36, 0.5), inset 0 0 8px rgba(251, 191, 36, 0.15); }
+      border: 1.5px solid #f59e0b !important;
+      background: linear-gradient(180deg, #1c1f2e 0%, #111827 100%) !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
     }
 
     .pro-ward-card.declared-win::before {
       content: '';
-      position: absolute; top: 0; left: 0; width: 3px; height: 100%;
-      background: var(--gold-bright);
-      box-shadow: 0 0 10px var(--gold-bright);
+      position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+      background: #f59e0b;
     }
 
     .pro-ward-card.in-lead {
-      border-color: rgba(16, 185, 129, 0.45);
-      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.6);
+      box-shadow: 0 3px 12px rgba(16, 185, 129, 0.15);
     }
 
     /* Card Top Meta Bar */
@@ -808,115 +779,112 @@
       white-space: nowrap;
     }
 
-    /* Compact Candidates Table with Strict Fixed Layout (Never Scatters) */
+    /* High-Legibility Candidates Table - Crisp High-Contrast Fonts */
     .pro-cand-table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      font-size: 0.72rem;
+      font-size: 0.84rem;
     }
 
     .pro-cand-table th {
-      background: rgba(0, 0, 0, 0.35);
-      color: #64748b;
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.58rem;
-      font-weight: 800;
+      background: rgba(0, 0, 0, 0.45);
+      color: #94a3b8;
+      font-family: 'Rajdhani', 'Chakra Petch', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
-      padding: 2.5px 5px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      letter-spacing: 0.5px;
+      padding: 3.5px 7px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       white-space: nowrap;
     }
 
     .pro-cand-table td {
-      padding: 2.5px 5px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 3.5px 7px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       vertical-align: middle;
       white-space: nowrap;
-      transition: background 0.18s ease, color 0.18s ease;
     }
 
     .pro-cand-table tr:last-child td { border-bottom: none; }
 
     .pro-cand-table tr.winner-row-highlight {
-      background: rgba(245, 158, 11, 0.12);
+      background: rgba(245, 158, 11, 0.16);
     }
 
     .cand-name-flex {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 4px;
+      gap: 10px;
       min-width: 0;
       overflow: hidden;
       width: 100%;
     }
 
     .cand-name-hindi {
-      font-weight: 600;
-      color: #ffffff;
-      font-size: 0.74rem;
+      font-weight: 700;
+      color: #f8fafc;
+      font-size: 0.88rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       min-width: 0;
       flex: 1;
+      letter-spacing: 0.1px;
     }
 
     .pro-party-badge {
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.55rem;
+      font-family: 'Rajdhani', 'Chakra Petch', sans-serif;
+      font-size: 0.70rem;
       font-weight: 800;
-      padding: 0 4px;
-      border-radius: 2px;
+      padding: 1px 5px;
+      border-radius: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.3px;
       white-space: nowrap;
       flex-shrink: 0;
-      line-height: 1.2;
+      line-height: 1.1;
     }
 
-    .pbadge-bjp { background: rgba(234, 88, 12, 0.25); color: #fb923c; border: 1px solid #ea580c; }
-    .pbadge-inc { background: rgba(2, 132, 199, 0.25); color: #38bdf8; border: 1px solid #0284c7; }
-    .pbadge-bap { background: rgba(217, 119, 6, 0.25); color: #fde047; border: 1px solid #d97706; }
-    .pbadge-aap { background: rgba(13, 148, 136, 0.25); color: #2dd4bf; border: 1px solid #0d9488; }
-    .pbadge-ind { background: rgba(100, 116, 139, 0.25); color: #cbd5e1; border: 1px solid #64748b; }
-    .pbadge-nota { background: rgba(71, 85, 105, 0.25); color: #94a3b8; border: 1px solid #475569; }
+    .pbadge-bjp { background: rgba(234, 88, 12, 0.3); color: #fdba74; border: 1px solid #ea580c; }
+    .pbadge-inc { background: rgba(2, 132, 199, 0.3); color: #7dd3fc; border: 1px solid #0284c7; }
+    .pbadge-bap { background: rgba(217, 119, 6, 0.3); color: #fde047; border: 1px solid #d97706; }
+    .pbadge-aap { background: rgba(13, 148, 136, 0.3); color: #5eead4; border: 1px solid #0d9488; }
+    .pbadge-ind { background: rgba(100, 116, 139, 0.3); color: #e2e8f0; border: 1px solid #64748b; }
+    .pbadge-nota { background: rgba(71, 85, 105, 0.3); color: #cbd5e1; border: 1px solid #475569; }
 
     .round-num-cell {
       text-align: right;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #94a3b8;
-      width: 34px;
-      transition: color 0.18s ease;
+      font-family: 'Rajdhani', monospace;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      width: 38px;
     }
 
     .round-num-cell.active-val {
       color: #ffffff;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .total-num-cell {
       text-align: right;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 0.92rem;
-      font-weight: 800;
-      color: #f8fafc;
-      width: 48px;
-      transition: color 0.2s ease, text-shadow 0.2s ease;
+      font-family: 'Rajdhani', monospace;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #38bdf8;
+      width: 52px;
     }
 
     .total-num-cell.top-rank-total {
-      color: #38bdf8;
+      color: #fde047;
       font-weight: 900;
     }
 
     .pro-ward-card.declared-win .total-num-cell.top-rank-total {
       color: #fde047;
-      text-shadow: 0 0 6px rgba(253, 224, 71, 0.5);
     }
 
     /* Modern Standby Empty Indicator */
@@ -1005,12 +973,15 @@
       white-space: nowrap;
       position: relative;
     }
+    .ticker-slider-window:hover .ticker-moving-stream {
+      animation-play-state: paused;
+    }
 
     .ticker-moving-stream {
       display: inline-flex;
       gap: 35px;
       padding-left: 12px;
-      animation: newsStream 40s linear infinite;
+      animation: newsStream 120s linear infinite;
     }
 
     @keyframes newsStream {
@@ -1101,7 +1072,7 @@
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(3, 6, 15, 0.85);
-      backdrop-filter: blur(12px);
+      /* backdrop-filter removed for crisp display */
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -1696,7 +1667,7 @@
                 </div>
                 <span class="banner-badge-counter bcounter-zp">21 WARD</span>
               </div>
-              <div class="chamber-cards-scroll" id="scrollContainerZpFull" style="grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));"></div>
+              <div class="chamber-cards-scroll" id="scrollContainerZpFull" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));"></div>
             </div>
           </div>
         `;
@@ -1722,7 +1693,7 @@
                   ${buildBlockNavPills()}
                 </div>
               </div>
-              <div class="chamber-cards-scroll" id="scrollContainerPsFull" style="grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));"></div>
+              <div class="chamber-cards-scroll" id="scrollContainerPsFull" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));"></div>
             </div>
           </div>
         `;
@@ -1806,7 +1777,7 @@
           if (oldSig !== cardObject.signature) {
             // Apply live update pulse animation
             existingEl.classList.remove('card-updating');
-            void existingEl.offsetWidth; // Trigger reflow for animation restart
+            // smooth transition
             existingEl.classList.add('card-updating');
 
             // Update card HTML content smoothly
@@ -2179,6 +2150,8 @@
 
       const html = bulletins.map(b => `<span class="news-bulletin-item bulletin-gold">${b}</span>`).join(' • ');
       stream.innerHTML = html + ' • ' + html;
+      const crawlSeconds = Math.max(90, bulletins.length * 8);
+      stream.style.animationDuration = crawlSeconds + 's';
     }
 
     // ==========================================================================

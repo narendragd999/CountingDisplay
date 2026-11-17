@@ -509,10 +509,13 @@
       white-space: nowrap;
       flex: 1;
     }
+    .ticker-content:hover .ticker-text {
+      animation-play-state: paused;
+    }
 
     .ticker-text {
       display: inline-block;
-      animation: tickerMarquee 40s linear infinite;
+      animation: tickerMarquee 110s linear infinite;
     }
 
     @keyframes tickerMarquee {
