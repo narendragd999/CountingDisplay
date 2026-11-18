@@ -1320,6 +1320,18 @@
         </select>
       </div>
 
+      <!-- Breaking News Speed Controller -->
+      <div class="tv-control-box" title="ब्रेकिंग न्यूज़ टिकर गति नियंत्रक (Breaking News Ticker Speed)">
+        <span>📢 न्यूज़:</span>
+        <select id="tickerSpeedSelect" class="tv-ctrl-select" onchange="changeTickerSpeed(this.value)">
+          <option value="0">⏸️ पॉज</option>
+          <option value="0.5">🐢 0.5x</option>
+          <option value="1" selected>🚶 1x</option>
+          <option value="1.5">🏃 1.5x</option>
+          <option value="2">⚡ 2x</option>
+        </select>
+      </div>
+
       <!-- Active Entries Filter Badge -->
       <div class="filter-active-pill" title="केवल वे वार्ड प्रदर्शित हैं जिनमें कम से कम 1 मत प्रविष्ट है या परिणाम घोषित है">
         <span id="activeFilterBadge">⚡ प्रविष्ट परिणाम</span>
@@ -1419,17 +1431,23 @@
     let autoScrollInterval = null;
     let domCardSignatures = new Map();
 
-    // User-controlled dynamic PS cycle interval & scroll speed multiplier
+    // User-controlled dynamic PS cycle interval & scroll/ticker speed multipliers
     let psTourIntervalSeconds = parseInt(localStorage.getItem('smart_tv_ps_interval'), 10) || 15;
     let scrollSpeedMultiplier = (localStorage.getItem('smart_tv_scroll_speed') !== null)
       ? parseFloat(localStorage.getItem('smart_tv_scroll_speed'))
       : 1.0;
+    let tickerSpeedMultiplier = (localStorage.getItem('smart_tv_ticker_speed') !== null)
+      ? parseFloat(localStorage.getItem('smart_tv_ticker_speed'))
+      : 1.0;
+    let currentBaseTickerDuration = 120;
 
     function initControlDropdowns() {
       const intervalSel = document.getElementById('psTourIntervalSelect');
       if (intervalSel) intervalSel.value = String(psTourIntervalSeconds);
       const speedSel = document.getElementById('scrollSpeedSelect');
       if (speedSel) speedSel.value = String(scrollSpeedMultiplier);
+      const tickerSel = document.getElementById('tickerSpeedSelect');
+      if (tickerSel) tickerSel.value = String(tickerSpeedMultiplier);
     }
 
     function changePsTourInterval(val) {
@@ -1445,6 +1463,29 @@
       if (isNaN(spd)) return;
       scrollSpeedMultiplier = spd;
       localStorage.setItem('smart_tv_scroll_speed', spd);
+    }
+
+    function changeTickerSpeed(val) {
+      const spd = parseFloat(val);
+      if (isNaN(spd)) return;
+      tickerSpeedMultiplier = spd;
+      localStorage.setItem('smart_tv_ticker_speed', spd);
+      applyTickerSpeed();
+    }
+
+    function applyTickerSpeed(baseSec) {
+      const stream = document.getElementById('tickerMovingStream');
+      if (!stream) return;
+      if (typeof baseSec === 'number' && baseSec > 0) {
+        currentBaseTickerDuration = baseSec;
+      }
+      if (tickerSpeedMultiplier <= 0) {
+        stream.style.animationPlayState = 'paused';
+      } else {
+        stream.style.animationPlayState = 'running';
+        const finalSec = Math.max(15, Math.round(currentBaseTickerDuration / tickerSpeedMultiplier));
+        stream.style.animationDuration = finalSec + 's';
+      }
     }
 
     // 1. Initial Launch
@@ -2265,9 +2306,12 @@
       }
 
       const html = bulletins.map(b => `<span class="news-bulletin-item bulletin-gold">${b}</span>`).join(' • ');
-      stream.innerHTML = html + ' • ' + html;
-      const crawlSeconds = Math.max(90, bulletins.length * 8);
-      stream.style.animationDuration = crawlSeconds + 's';
+      const fullHtml = html + ' • ' + html;
+      if (stream.innerHTML !== fullHtml) {
+        stream.innerHTML = fullHtml;
+      }
+      const baseDuration = Math.max(90, bulletins.length * 8);
+      applyTickerSpeed(baseDuration);
     }
 
     // ==========================================================================

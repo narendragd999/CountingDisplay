@@ -648,6 +648,18 @@
           </select>
         </div>
 
+        <!-- Breaking News Speed Selector -->
+        <div style="display: flex; align-items: center; gap: 5px; background: #f8fafc; border: 1px solid var(--border-main); border-radius: 6px; padding: 2px 8px;" title="Breaking News ticker speed controller">
+          <label for="tickerSpeedSelectIdx" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">📢 News:</label>
+          <select id="tickerSpeedSelectIdx" class="filter-select" style="padding: 2px 6px; font-size: 12px; font-weight: 700; height: 26px; border: none; background: transparent; cursor: pointer;" onchange="changeTickerSpeedIndex(this.value)">
+            <option value="0">⏸️ Pause</option>
+            <option value="0.5">🐢 Slow (0.5x)</option>
+            <option value="1" selected>🚶 Normal (1x)</option>
+            <option value="1.5">🏃 Fast (1.5x)</option>
+            <option value="2">⚡ Ultra (2x)</option>
+          </select>
+        </div>
+
         <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; font-weight:800; font-size:12px; padding:5px 12px; transition: all 0.2s;" onclick="toggleAutoRotateRO()">
           🔄 Auto-Cycle PS: ON (10s)
         </button>
@@ -777,12 +789,39 @@
     let scrollSpeedMultiplierIndex = (localStorage.getItem('index_scroll_speed') !== null)
       ? parseFloat(localStorage.getItem('index_scroll_speed'))
       : 1.0;
+    let tickerSpeedMultiplierIndex = (localStorage.getItem('index_ticker_speed') !== null)
+      ? parseFloat(localStorage.getItem('index_ticker_speed'))
+      : 1.0;
+    let baseTickerDurationIndex = 110;
 
     function changeScrollSpeedIndex(val) {
       const spd = parseFloat(val);
       if (isNaN(spd)) return;
       scrollSpeedMultiplierIndex = spd;
       localStorage.setItem('index_scroll_speed', spd);
+    }
+
+    function changeTickerSpeedIndex(val) {
+      const spd = parseFloat(val);
+      if (isNaN(spd)) return;
+      tickerSpeedMultiplierIndex = spd;
+      localStorage.setItem('index_ticker_speed', spd);
+      applyTickerSpeedIndex();
+    }
+
+    function applyTickerSpeedIndex(baseSec) {
+      const el = document.getElementById('tickerText');
+      if (!el) return;
+      if (typeof baseSec === 'number' && baseSec > 0) {
+        baseTickerDurationIndex = baseSec;
+      }
+      if (tickerSpeedMultiplierIndex <= 0) {
+        el.style.animationPlayState = 'paused';
+      } else {
+        el.style.animationPlayState = 'running';
+        const finalSec = Math.max(15, Math.round(baseTickerDurationIndex / tickerSpeedMultiplierIndex));
+        el.style.animationDuration = finalSec + 's';
+      }
     }
     const roCentersList = ['ALL', 'Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
     let currentROIndex = 0;
@@ -916,6 +955,11 @@
       if (speedSelIdx) {
         speedSelIdx.value = String(scrollSpeedMultiplierIndex);
       }
+      const tickerSelIdx = document.getElementById('tickerSpeedSelectIdx');
+      if (tickerSelIdx) {
+        tickerSelIdx.value = String(tickerSpeedMultiplierIndex);
+      }
+      applyTickerSpeedIndex();
       startAutoRotateRO();
       checkPortalLock();
       populateFilterOptions();
@@ -1164,6 +1208,42 @@
     function renderCards(force = false) {
       renderZpCards(force);
       renderPsCards(force);
+      updateProjectorTicker();
+    }
+
+    function updateProjectorTicker() {
+      const el = document.getElementById('tickerText');
+      if (!el) return;
+      const declaredWards = (masterData.wards || []).filter(w => w.status === 'DECLARED');
+      let bulletins = [];
+      declaredWards.forEach(w => {
+        const cands = (masterData.candidates || []).filter(c => c.category === w.category && c.block_name === w.block_name && c.ward_no === w.ward_no);
+        const valid = cands.filter(c => c.party !== 'NOTA' && !(c.name_hindi || '').includes('नोटा'));
+        const totals = valid.map(c => {
+          let sum = 0;
+          const vObj = masterData.roundVotes[c.id] || {};
+          for (const cnt of Object.values(vObj)) sum += (Number(cnt) || 0);
+          return { ...c, sum };
+        });
+        totals.sort((a,b) => b.sum - a.sum);
+        if (totals.length > 0 && totals[0].sum > 0) {
+          const wName = w.category === 'ZP' ? `जिला परिषद वार्ड ${w.ward_no}` : `${w.block_name} वार्ड ${w.ward_no}`;
+          bulletins.push(`🏆 <strong>${wName}</strong>: ${totals[0].name_hindi} (${totals[0].party || 'IND'}) विजयी घोषित!`);
+        }
+      });
+
+      if (bulletins.length === 0) {
+        bulletins.push("★ सलूंबर जिला पंचायती राज चुनाव 2026: मतगणना सजीव प्रसारण जारी है...");
+        bulletins.push("ईवीएम एवं डाक मतपत्रों की गणना शांतिपूर्ण प्रगति पर है।");
+      }
+
+      const text = bulletins.join(' ••• ');
+      const fullText = text + ' ••• ' + text;
+      if (el.innerHTML !== fullText) {
+        el.innerHTML = fullText;
+      }
+      const baseSec = Math.max(90, bulletins.length * 8);
+      applyTickerSpeedIndex(baseSec);
     }
 
     function buildWardCardData(ward, idx = 0) {
