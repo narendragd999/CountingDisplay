@@ -339,10 +339,20 @@ export default {
         if (mode === 'PRODUCTION' || mode === 'TEST') {
           SYSTEM_MODE = mode;
           MASTER_DATA.system_mode = SYSTEM_MODE;
+          if (mode === 'PRODUCTION') {
+            // Automatically clear all mock/testing data when transitioning to PRODUCTION mode
+            MASTER_DATA.roundVotes = {};
+            MASTER_DATA.declaredRounds = [];
+            (MASTER_DATA.wards || []).forEach(w => {
+              w.status = 'COUNTING';
+            });
+          }
           return jsonResponse({
             status: 'success',
             system_mode: SYSTEM_MODE,
-            message: `System switched to ${SYSTEM_MODE} mode successfully!`
+            message: mode === 'PRODUCTION'
+              ? 'System switched to PRODUCTION mode! All test data has been cleared for Live Election.'
+              : `System switched to ${SYSTEM_MODE} mode successfully!`
           });
         }
         return jsonResponse({ detail: 'Invalid mode' }, 400);

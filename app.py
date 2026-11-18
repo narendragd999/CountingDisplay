@@ -693,12 +693,25 @@ async def set_system_mode(payload: dict, request: Request):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('system_mode', ?)", (target_mode,))
-    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("SET_SYSTEM_MODE", f"System mode changed to {target_mode} by {user['username']}"))
+    
+    cleared_info = ""
+    if target_mode == "PRODUCTION":
+        # Automatically wipe all test votes and mock round declarations when transitioning to PRODUCTION mode
+        cursor.execute("DELETE FROM votes")
+        cursor.execute("DELETE FROM round_declarations")
+        cursor.execute("UPDATE wards SET status = 'COUNTING'")
+        cleared_info = " All test votes and round declarations cleared for Live Election."
+
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", 
+                   ("SET_SYSTEM_MODE", f"System mode changed to {target_mode} by {user['username']}.{cleared_info}"))
     conn.commit()
     conn.close()
 
     asyncio.create_task(broadcast_live_update())
-    return {"status": "success", "system_mode": target_mode, "message": f"System switched to {target_mode} mode successfully!"}
+    msg = f"System switched to {target_mode} mode successfully!"
+    if target_mode == "PRODUCTION":
+        msg += " All test data cleared for Live Election."
+    return {"status": "success", "system_mode": target_mode, "message": msg}
 
 @app.get("/api/state")
 def get_state():

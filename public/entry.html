@@ -1296,8 +1296,8 @@
       const targetMode = currentSystemMode === 'PRODUCTION' ? 'TEST' : 'PRODUCTION';
       
       const confirmMsg = targetMode === 'PRODUCTION'
-        ? "Switch to 🟢 PRODUCTION MODE?\n\nIn Production Mode, the 'Reset Data' button will be completely hidden and data wipe APIs will be blocked for safety on counting day."
-        : "Switch to 🟠 TEST MODE?\n\nIn Test Mode, you will be able to reset mock votes and test the portal freely.";
+        ? "Switch to 🟢 PRODUCTION MODE?\n\n⚠️ IMPORTANT: Switching to Production Mode will CLEAR ALL TEST VOTES AND MOCK DECLARATIONS so that the system is completely clean for Live Election counting!\n\nIn Production Mode, 'Reset Data' and 'Fill Test Data' will be locked. Proceed?"
+        : "Switch to 🟠 TEST MODE?\n\nIn Test Mode, you will be able to populate test rounds, test the live displays, and reset mock data freely.";
       
       if (!confirm(confirmMsg)) return;
 
@@ -1312,6 +1312,14 @@
           currentSystemMode = res.system_mode;
           applyUserScopeAndMode();
           showToast(`✅ ${res.message}`);
+          await loadMasterData();
+          renderRoundEntrySheet();
+          if (typeof loadDeclareWardsTable === 'function') {
+            loadDeclareWardsTable();
+          }
+          if (typeof loadManageBlockContestants === 'function') {
+            loadManageBlockContestants();
+          }
         } else {
           alert('Error: ' + (res.detail || 'Could not change mode.'));
         }
