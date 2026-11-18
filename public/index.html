@@ -657,6 +657,9 @@
             <option value="1" selected>🚶 Normal (1x)</option>
             <option value="1.5">🏃 Fast (1.5x)</option>
             <option value="2">⚡ Ultra (2x)</option>
+            <option value="3">🚀 Super (3x)</option>
+            <option value="4">🏎️ Hyper (4x)</option>
+            <option value="5">🔥 Max (5x)</option>
           </select>
         </div>
 
@@ -819,7 +822,7 @@
         el.style.animationPlayState = 'paused';
       } else {
         el.style.animationPlayState = 'running';
-        const finalSec = Math.max(15, Math.round(baseTickerDurationIndex / tickerSpeedMultiplierIndex));
+        const finalSec = Math.max(5, Math.round(baseTickerDurationIndex / tickerSpeedMultiplierIndex));
         el.style.animationDuration = finalSec + 's';
       }
     }

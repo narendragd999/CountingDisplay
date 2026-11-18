@@ -1329,6 +1329,9 @@
           <option value="1" selected>🚶 1x</option>
           <option value="1.5">🏃 1.5x</option>
           <option value="2">⚡ 2x</option>
+          <option value="3">🚀 3x</option>
+          <option value="4">🏎️ 4x</option>
+          <option value="5">🔥 5x</option>
         </select>
       </div>
 
@@ -1483,7 +1486,7 @@
         stream.style.animationPlayState = 'paused';
       } else {
         stream.style.animationPlayState = 'running';
-        const finalSec = Math.max(15, Math.round(currentBaseTickerDuration / tickerSpeedMultiplier));
+        const finalSec = Math.max(5, Math.round(currentBaseTickerDuration / tickerSpeedMultiplier));
         stream.style.animationDuration = finalSec + 's';
       }
     }
