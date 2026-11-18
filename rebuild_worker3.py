@@ -109,6 +109,163 @@ export default {
       return jsonResponse({ status: 'success', wards: MASTER_DATA.wards });
     }
 
+    // HALL & TABLES SETUP ENDPOINTS
+    if (path === '/api/hall_summary') {
+      const psWards = MASTER_DATA.wards.filter(w => w.category === 'PS');
+      const blocksMap = {};
+      psWards.forEach(w => {
+        const blk = w.block_name;
+        if (!blocksMap[blk]) {
+          blocksMap[blk] = {
+            category: 'PS',
+            block_name: blk,
+            total_wards: 0,
+            total_booths: 0,
+            min_booths: Infinity,
+            max_booths: -Infinity,
+            min_tables: Infinity,
+            max_tables: -Infinity,
+            min_rounds: Infinity,
+            max_rounds: -Infinity
+          };
+        }
+        const b = blocksMap[blk];
+        b.total_wards += 1;
+        const booths = Number(w.total_booths) || 5;
+        const tables = Number(w.counting_tables) || 5;
+        const rounds = Number(w.max_rounds) || Math.ceil(booths / tables);
+        b.total_booths += booths;
+        if (booths < b.min_booths) b.min_booths = booths;
+        if (booths > b.max_booths) b.max_booths = booths;
+        if (tables < b.min_tables) b.min_tables = tables;
+        if (tables > b.max_tables) b.max_tables = tables;
+        if (rounds < b.min_rounds) b.min_rounds = rounds;
+        if (rounds > b.max_rounds) b.max_rounds = rounds;
+      });
+      const halls = Object.values(blocksMap).sort((a,b) => a.block_name.localeCompare(b.block_name));
+      return jsonResponse({ status: 'success', halls });
+    }
+
+    if (path === '/api/save_ward_config' && request.method === 'POST') {
+      try {
+        const body = await request.json();
+        const { category, block, ward_no, total_booths, counting_tables, max_rounds, reservation } = body;
+        const ward = MASTER_DATA.wards.find(w => w.category === category && w.block_name === block && Number(w.ward_no) === Number(ward_no));
+        if (ward) {
+          if (total_booths !== undefined) ward.total_booths = Number(total_booths);
+          if (counting_tables !== undefined) ward.counting_tables = Number(counting_tables);
+          if (max_rounds !== undefined) ward.max_rounds = Number(max_rounds);
+          if (reservation !== undefined) ward.reservation = reservation;
+          return jsonResponse({ status: 'success', message: 'Ward configuration updated successfully!' });
+        }
+        return jsonResponse({ detail: 'Ward not found' }, 404);
+      } catch (e) {
+        return jsonResponse({ detail: e.message }, 500);
+      }
+    }
+
+    if (path === '/api/bulk_apply_hall_config' && request.method === 'POST') {
+      try {
+        const body = await request.json();
+        const { category, block, counting_tables } = body;
+        const tables = Math.max(1, Number(counting_tables) || 5);
+        MASTER_DATA.wards.forEach(w => {
+          let match = false;
+          if (category === 'ALL') match = true;
+          else if (category === 'ZP' && w.category === 'ZP') match = true;
+          else if (w.category === 'PS' && (!block || w.block_name === block)) match = true;
+          if (match) {
+            w.counting_tables = tables;
+            const booths = Number(w.total_booths) || 5;
+            w.max_rounds = Math.max(1, Math.ceil(booths / tables));
+          }
+        });
+        return jsonResponse({ status: 'success', message: 'Bulk configuration applied successfully!' });
+      } catch (e) {
+        return jsonResponse({ detail: e.message }, 500);
+      }
+    }
+
+    // ROUND DECLARATION & EKZAI
+    if (path === '/api/declare_round' && request.method === 'POST') {
+      try {
+        const body = await request.json();
+        const { category, block, round_key } = body;
+        if (!MASTER_DATA.declaredRounds) MASTER_DATA.declaredRounds = [];
+        const existing = MASTER_DATA.declaredRounds.find(r => r.category === category && r.block_name === block && r.round_key === round_key);
+        if (!existing) {
+          MASTER_DATA.declaredRounds.push({ category, block_name: block, round_key, status: 'DECLARED', declared_at: new Date().toISOString() });
+        }
+        return jsonResponse({ status: 'success', message: `Round ${round_key} declared successfully!` });
+      } catch (e) {
+        return jsonResponse({ detail: e.message }, 500);
+      }
+    }
+
+    if (path === '/api/reopen_round' && request.method === 'POST') {
+      try {
+        const body = await request.json();
+        const { category, block, round_key } = body;
+        if (MASTER_DATA.declaredRounds) {
+          MASTER_DATA.declaredRounds = MASTER_DATA.declaredRounds.filter(r => !(r.category === category && r.block_name === block && r.round_key === round_key));
+        }
+        return jsonResponse({ status: 'success', message: `Round ${round_key} reopened successfully!` });
+      } catch (e) {
+        return jsonResponse({ detail: e.message }, 500);
+      }
+    }
+
+    if (path === '/api/round_ekzai') {
+      const category = url.searchParams.get('category') || 'PS';
+      const block = url.searchParams.get('block') || 'Semari';
+      const round_key = (url.searchParams.get('round_key') || 'R1').toUpperCase();
+
+      const decl = (MASTER_DATA.declaredRounds || []).find(r => r.category === category && r.block_name === block && r.round_key === round_key);
+      const is_declared = Boolean(decl);
+
+      const cand_rows = MASTER_DATA.candidates
+        .filter(c => c.category === category && c.block_name === block)
+        .map(c => {
+          const vObj = MASTER_DATA.roundVotes[c.id] || {};
+          const curVotes = Number(vObj[round_key]) || 0;
+          return { ...c, current_round_votes: curVotes };
+        });
+
+      const order = ['PB', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10'];
+      const target_idx = order.indexOf(round_key);
+      const preceding_keys = target_idx > 0 ? order.slice(0, target_idx) : [];
+
+      const wards_map = {};
+      cand_rows.forEach(c => {
+        const vObj = MASTER_DATA.roundVotes[c.id] || {};
+        let prev_total = 0;
+        preceding_keys.forEach(pk => {
+          prev_total += (Number(vObj[pk]) || 0);
+        });
+        const cumul = prev_total + c.current_round_votes;
+        const wNo = c.ward_no;
+        if (!wards_map[wNo]) wards_map[wNo] = [];
+        wards_map[wNo].push({
+          candidate_id: c.id,
+          name_hindi: c.name_hindi,
+          party: c.party,
+          ballot_no: c.ballot_no,
+          prev_cumulative: prev_total,
+          round_votes: c.current_round_votes,
+          cumulative: cumul
+        });
+      });
+
+      return jsonResponse({
+        status: 'success',
+        round_key,
+        category,
+        block,
+        is_declared,
+        wards: wards_map
+      });
+    }
+
     // AUTH LOGIN
     if (path === '/api/auth/login' && request.method === 'POST') {
       try {
@@ -376,6 +533,11 @@ export default {
       } catch (e) {
         return jsonResponse({ detail: 'Import failed: ' + e.message }, 400);
       }
+    }
+
+    // API 404 Guard: Never return HTML for an API request!
+    if (path.startsWith('/api/')) {
+      return jsonResponse({ detail: `API endpoint ${path} not found` }, 404);
     }
 
     // SERVE DEFAULT TV DISPLAY (index.html)

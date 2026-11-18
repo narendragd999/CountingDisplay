@@ -2184,15 +2184,22 @@
 
         const cands = masterData.candidates.filter(c => c.category === cat && c.block_name === blk && c.ward_no === w);
         
-        // Count votes and active entries
-        const entryKeys = new Set();
+        // Count votes and active EVM rounds (PB is postal ballot, NOT an EVM polling booth)
+        const evmRoundsWithVotes = new Set();
+        let hasPbVotes = false;
         const candTotals = cands.map(c => {
           let sum = 0;
           const vObj = masterData.roundVotes[c.id] || {};
           for (const [k, v] of Object.entries(vObj)) {
-            if (v > 0) {
-              sum += v;
-              entryKeys.add(k);
+            const count = Number(v) || 0;
+            if (count > 0) {
+              sum += count;
+              const uKey = k.toUpperCase();
+              if (uKey === 'PB') {
+                hasPbVotes = true;
+              } else if (uKey.startsWith('R')) {
+                evmRoundsWithVotes.add(uKey);
+              }
             }
           }
           return { ...c, totalVotes: sum };
@@ -2216,7 +2223,19 @@
         }
         if (!totalBooths || totalBooths < 1) totalBooths = wInfo ? (wInfo.total_booths || 5) : 5;
 
-        const countedBooths = entryKeys.size;
+        // Counted EVM booths: accurately mapped, never exceed totalBooths, PB never counts as a booth
+        const maxRounds = Math.max(1, wInfo ? (wInfo.max_rounds || totalBooths) : totalBooths);
+        const evmCount = evmRoundsWithVotes.size;
+        
+        let countedBooths = 0;
+        if (isDeclared || evmCount >= maxRounds) {
+          countedBooths = totalBooths;
+        } else if (maxRounds === totalBooths) {
+          countedBooths = Math.min(totalBooths, evmCount);
+        } else {
+          countedBooths = Math.min(totalBooths, Math.round((evmCount / maxRounds) * totalBooths));
+        }
+
         const isComplete = (countedBooths >= totalBooths && totalBooths > 0);
 
         let statusBadge = '';
@@ -2744,9 +2763,15 @@
 
       try {
         const resp = await fetch('/api/hall_summary');
-        const data = await resp.json();
+        let data = null;
+        try {
+          data = await resp.json();
+        } catch (jsonErr) {
+          container.innerHTML = `<div style="color:var(--danger); padding:20px;">⚠️ Could not parse hall summary response (HTTP ${resp.status}).</div>`;
+          return;
+        }
         if (!resp.ok || data.status !== 'success') {
-          container.innerHTML = '<div style="color:var(--danger); padding:20px;">Could not load hall summary.</div>';
+          container.innerHTML = `<div style="color:var(--danger); padding:20px;">⚠️ Could not load hall summary: ${data?.detail || 'Server error'}</div>`;
           return;
         }
 
