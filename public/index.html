@@ -621,6 +621,7 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 8px;">
+        <!-- PS Cycle Interval Selector -->
         <div style="display: flex; align-items: center; gap: 5px; background: #f8fafc; border: 1px solid var(--border-main); border-radius: 6px; padding: 2px 8px;">
           <label for="cycleTimeSelect" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">⏱ Interval:</label>
           <select id="cycleTimeSelect" class="filter-select" style="padding: 2px 6px; font-size: 12px; font-weight: 700; height: 26px; border: none; background: transparent; cursor: pointer;" onchange="changeCycleDuration(this.value)">
@@ -634,6 +635,19 @@
             <option value="60">60s</option>
           </select>
         </div>
+
+        <!-- Scroller Speed Selector -->
+        <div style="display: flex; align-items: center; gap: 5px; background: #f8fafc; border: 1px solid var(--border-main); border-radius: 6px; padding: 2px 8px;" title="Auto-scroll speed controller">
+          <label for="scrollSpeedSelectIdx" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">📜 Scroll:</label>
+          <select id="scrollSpeedSelectIdx" class="filter-select" style="padding: 2px 6px; font-size: 12px; font-weight: 700; height: 26px; border: none; background: transparent; cursor: pointer;" onchange="changeScrollSpeedIndex(this.value)">
+            <option value="0">⏸️ Pause</option>
+            <option value="0.5">🐢 Slow (0.5x)</option>
+            <option value="1" selected>🚶 Normal (1x)</option>
+            <option value="1.5">🏃 Fast (1.5x)</option>
+            <option value="2">⚡ Ultra (2x)</option>
+          </select>
+        </div>
+
         <button id="btnAutoRotateRO" class="btn-scroll-toggle" style="background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; font-weight:800; font-size:12px; padding:5px 12px; transition: all 0.2s;" onclick="toggleAutoRotateRO()">
           🔄 Auto-Cycle PS: ON (10s)
         </button>
@@ -760,6 +774,16 @@
     let cycleTimeElapsed = 0;
     let cycleDurationSeconds = parseInt(localStorage.getItem('tv_cycle_seconds') || '10', 10);
     if (isNaN(cycleDurationSeconds) || cycleDurationSeconds < 3) cycleDurationSeconds = 10;
+    let scrollSpeedMultiplierIndex = (localStorage.getItem('index_scroll_speed') !== null)
+      ? parseFloat(localStorage.getItem('index_scroll_speed'))
+      : 1.0;
+
+    function changeScrollSpeedIndex(val) {
+      const spd = parseFloat(val);
+      if (isNaN(spd)) return;
+      scrollSpeedMultiplierIndex = spd;
+      localStorage.setItem('index_scroll_speed', spd);
+    }
     const roCentersList = ['ALL', 'Jaisamand', 'Sarada', 'Salumbar', 'Semari', 'Lasadiya', 'Geengla', 'Jhallara'];
     let currentROIndex = 0;
 
@@ -887,6 +911,10 @@
       const cycleSel = document.getElementById('cycleTimeSelect');
       if (cycleSel && cycleDurationSeconds) {
         cycleSel.value = String(cycleDurationSeconds);
+      }
+      const speedSelIdx = document.getElementById('scrollSpeedSelectIdx');
+      if (speedSelIdx) {
+        speedSelIdx.value = String(scrollSpeedMultiplierIndex);
       }
       startAutoRotateRO();
       checkPortalLock();
@@ -1532,10 +1560,13 @@
             if (Math.abs(zpEl.scrollTop - zpAcc) > 12) {
               zpAcc = zpEl.scrollTop;
             }
+            if (scrollSpeedMultiplierIndex <= 0) {
+              return;
+            }
             if (zpPauseTimer > 0) {
-              zpPauseTimer -= dt;
+              zpPauseTimer -= dt * scrollSpeedMultiplierIndex;
             } else {
-              zpAcc += 24 * dt;
+              zpAcc += (24 * scrollSpeedMultiplierIndex) * dt;
               if (zpAcc >= maxScroll) {
                 zpAcc = maxScroll;
                 zpEl.scrollTop = maxScroll;
@@ -1575,10 +1606,13 @@
             // Bound speed between 20 px/s (gentle) and 48 px/s (crisp readable ceiling)
             adaptiveSpeed = Math.min(48, Math.max(20, adaptiveSpeed));
 
+            if (scrollSpeedMultiplierIndex <= 0) {
+              return;
+            }
             if (psPauseTimer > 0) {
-              psPauseTimer -= dt;
+              psPauseTimer -= dt * scrollSpeedMultiplierIndex;
             } else {
-              psAcc += adaptiveSpeed * dt;
+              psAcc += (adaptiveSpeed * scrollSpeedMultiplierIndex) * dt;
               if (psAcc >= maxScroll) {
                 psAcc = maxScroll;
                 psEl.scrollTop = maxScroll;

@@ -232,6 +232,49 @@
       line-height: 1;
     }
 
+    .tv-control-box {
+      background: rgba(14, 21, 38, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #94a3b8;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0 5px;
+      height: 22px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      line-height: 1;
+      transition: border-color 0.15s ease;
+    }
+
+    .tv-control-box:hover {
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+
+    .tv-ctrl-select {
+      background: transparent;
+      border: none;
+      color: #38bdf8;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
+      padding: 0 2px;
+      height: 100%;
+    }
+
+    .tv-ctrl-select option {
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
     .filter-active-pill {
       background: rgba(16, 185, 129, 0.15);
       border: 1px solid rgba(16, 185, 129, 0.35);
@@ -1248,8 +1291,34 @@
       <!-- Auto Tour Toggle -->
       <button class="auto-tour-pill active" id="btnAutoTour" onclick="toggleAutoTour()" title="Auto Tour through all Panchayat Samitis">
         <span class="tour-pulse-dot"></span>
-        <span id="tourStatusText">ऑटो-टूर</span>
+        <span id="tourStatusText">ऑटो-टूर: चालू</span>
       </button>
+
+      <!-- PS Auto-Cycle Interval Controller -->
+      <div class="tv-control-box" title="PS ब्लॉक चक्र समय अंतराल (Auto-tour cycle interval for PS blocks)">
+        <span>⏱️ PS अंतराल:</span>
+        <select id="psTourIntervalSelect" class="tv-ctrl-select" onchange="changePsTourInterval(this.value)">
+          <option value="8">8s</option>
+          <option value="10">10s</option>
+          <option value="15" selected>15s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+          <option value="45">45s</option>
+          <option value="60">60s</option>
+        </select>
+      </div>
+
+      <!-- Scroller Speed Controller -->
+      <div class="tv-control-box" title="वर्टिकल ऑटो-स्क्रोल गति नियंत्रक (Auto-scroll speed controller)">
+        <span>📜 स्क्रोल:</span>
+        <select id="scrollSpeedSelect" class="tv-ctrl-select" onchange="changeScrollSpeed(this.value)">
+          <option value="0">⏸️ पॉज</option>
+          <option value="0.5">🐢 0.5x</option>
+          <option value="1" selected>🚶 1x</option>
+          <option value="1.5">🏃 1.5x</option>
+          <option value="2">⚡ 2x</option>
+        </select>
+      </div>
 
       <!-- Active Entries Filter Badge -->
       <div class="filter-active-pill" title="केवल वे वार्ड प्रदर्शित हैं जिनमें कम से कम 1 मत प्रविष्ट है या परिणाम घोषित है">
@@ -1350,9 +1419,38 @@
     let autoScrollInterval = null;
     let domCardSignatures = new Map();
 
+    // User-controlled dynamic PS cycle interval & scroll speed multiplier
+    let psTourIntervalSeconds = parseInt(localStorage.getItem('smart_tv_ps_interval'), 10) || 15;
+    let scrollSpeedMultiplier = (localStorage.getItem('smart_tv_scroll_speed') !== null)
+      ? parseFloat(localStorage.getItem('smart_tv_scroll_speed'))
+      : 1.0;
+
+    function initControlDropdowns() {
+      const intervalSel = document.getElementById('psTourIntervalSelect');
+      if (intervalSel) intervalSel.value = String(psTourIntervalSeconds);
+      const speedSel = document.getElementById('scrollSpeedSelect');
+      if (speedSel) speedSel.value = String(scrollSpeedMultiplier);
+    }
+
+    function changePsTourInterval(val) {
+      const sec = parseInt(val, 10);
+      if (isNaN(sec) || sec < 5) return;
+      psTourIntervalSeconds = sec;
+      localStorage.setItem('smart_tv_ps_interval', sec);
+      initAutoTour();
+    }
+
+    function changeScrollSpeed(val) {
+      const spd = parseFloat(val);
+      if (isNaN(spd)) return;
+      scrollSpeedMultiplier = spd;
+      localStorage.setItem('smart_tv_scroll_speed', spd);
+    }
+
     // 1. Initial Launch
     window.addEventListener('DOMContentLoaded', async () => {
       initDigitalClock();
+      initControlDropdowns();
       await fetchLiveMaster();
       connectWebSocket();
       initAutoTour();
@@ -1437,11 +1535,11 @@
       const label = document.getElementById('tourStatusText');
       if (isAutoTourRunning) {
         btn.classList.add('active');
-        label.textContent = 'ऑटो-टूर';
+        label.textContent = 'ऑटो-टूर: चालू';
         initAutoTour();
       } else {
         btn.classList.remove('active');
-        label.textContent = 'टूर बंद';
+        label.textContent = 'ऑटो-टूर: बंद';
         if (tourTimer) clearInterval(tourTimer);
       }
     }
@@ -1452,6 +1550,8 @@
     function initAutoTour() {
       if (tourTimer) clearInterval(tourTimer);
       if (!isAutoTourRunning) return;
+
+      const intervalMs = psTourIntervalSeconds * 1000;
 
       // Auto cycle blocks with Completion Guarantee
       tourTimer = setInterval(() => {
@@ -1469,7 +1569,7 @@
         const nextIdx = (tourList.indexOf(activePsBlock) + 1) % tourList.length;
         activePsBlock = tourList[nextIdx];
         renderActiveStage();
-      }, 15000);
+      }, intervalMs);
     }
 
     // High-Performance Hardware-Accelerated 60/120 FPS Auto-Scroll with Adaptive Pacing
@@ -1496,12 +1596,18 @@
               state.acc = scroller.scrollTop;
             }
 
-            // Adaptive Paced Speed: guarantees traversing all wards smoothly within 15 seconds
-            const activeDuration = Math.max(3.0, 15 - 4.5);
-            let adaptiveSpeed = Math.min(48, Math.max(20, maxScroll / activeDuration));
+            // Paused via Speed Controller
+            if (scrollSpeedMultiplier <= 0) {
+              return;
+            }
+
+            // Adaptive Paced Speed: guarantees traversing all wards smoothly within the selected PS interval
+            const activeDuration = Math.max(3.0, psTourIntervalSeconds - 4.0);
+            let baseSpeed = Math.max(16, maxScroll / activeDuration);
+            let adaptiveSpeed = Math.min(65, baseSpeed * scrollSpeedMultiplier);
 
             if (state.topPause > 0) {
-              state.topPause -= dt;
+              state.topPause -= dt * scrollSpeedMultiplier;
             } else {
               state.acc += adaptiveSpeed * dt;
               if (state.acc >= maxScroll) {
@@ -1509,7 +1615,7 @@
                 scroller.scrollTop = maxScroll;
                 smartTvScrollCompleted = true; // All cards reached and viewable!
                 if (state.bottomPause > 0) {
-                  state.bottomPause -= dt;
+                  state.bottomPause -= dt * scrollSpeedMultiplier;
                 } else {
                   state.acc = 0;
                   scroller.scrollTop = 0;
