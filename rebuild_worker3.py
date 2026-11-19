@@ -432,6 +432,113 @@ export default {
       });
     }
 
+    // UPDATE CANDIDATE DETAILS (Name, Party, Ballot No, Symbol)
+    if ((path === '/api/candidates/update' || path === '/api/candidate/update') && request.method === 'POST') {
+      try {
+        const token = request.headers.get('X-Auth-Token') || request.headers.get('Authorization')?.replace('Bearer ', '') || '';
+        if (!token.includes('_cftoken_') && !token.includes('_')) {
+          return jsonResponse({ detail: 'Authentication required. Please log in.' }, 401);
+        }
+        const body = await request.json();
+        const cid = Number(body.candidate_id || body.id || body.cid);
+        const name_hindi = (body.name_hindi || body.name || '').trim();
+        const party = (body.party || '').trim();
+        const symbol = (body.symbol || '').trim();
+        const ballot_no = body.ballot_no ? Number(body.ballot_no) : null;
+
+        if (!cid) {
+          return jsonResponse({ detail: 'candidate_id is required.' }, 400);
+        }
+        if (!name_hindi) {
+          return jsonResponse({ detail: 'Candidate name cannot be empty.' }, 400);
+        }
+
+        const cand = (MASTER_DATA.candidates || []).find(c => Number(c.id) === cid);
+        if (!cand) {
+          return jsonResponse({ detail: 'Candidate not found.' }, 404);
+        }
+
+        cand.name_hindi = name_hindi;
+        if (party) cand.party = party;
+        if (symbol) cand.symbol = symbol;
+        if (ballot_no !== null && !isNaN(ballot_no)) cand.ballot_no = ballot_no;
+
+        return jsonResponse({
+          status: 'success',
+          message: `Updated contestant '${name_hindi}' successfully!`,
+          candidate: cand
+        });
+      } catch (e) {
+        return jsonResponse({ detail: 'Bad request: ' + e.message }, 400);
+      }
+    }
+
+    // DELETE CANDIDATE
+    if (path === '/api/candidates/delete' && request.method === 'POST') {
+      try {
+        const token = request.headers.get('X-Auth-Token') || request.headers.get('Authorization')?.replace('Bearer ', '') || '';
+        if (!token.includes('_cftoken_') && !token.includes('_')) {
+          return jsonResponse({ detail: 'Authentication required. Please log in.' }, 401);
+        }
+        const body = await request.json();
+        const cid = Number(body.candidate_id || body.id || body.cid);
+        if (!cid) {
+          return jsonResponse({ detail: 'candidate_id is required.' }, 400);
+        }
+        const idx = (MASTER_DATA.candidates || []).findIndex(c => Number(c.id) === cid);
+        if (idx === -1) {
+          return jsonResponse({ detail: 'Candidate not found.' }, 404);
+        }
+        const removed = MASTER_DATA.candidates.splice(idx, 1)[0];
+        if (MASTER_DATA.roundVotes && MASTER_DATA.roundVotes[cid]) {
+          delete MASTER_DATA.roundVotes[cid];
+        }
+        return jsonResponse({
+          status: 'success',
+          message: `Deleted candidate '${removed.name_hindi || cid}'.`
+        });
+      } catch (e) {
+        return jsonResponse({ detail: 'Bad request: ' + e.message }, 400);
+      }
+    }
+
+    // RENUMBER WARD CANDIDATES
+    if (path === '/api/candidates/renumber_ward' && request.method === 'POST') {
+      try {
+        const token = request.headers.get('X-Auth-Token') || request.headers.get('Authorization')?.replace('Bearer ', '') || '';
+        if (!token.includes('_cftoken_') && !token.includes('_')) {
+          return jsonResponse({ detail: 'Authentication required. Please log in.' }, 401);
+        }
+        const body = await request.json();
+        const { category, block, ward_no } = body;
+        const wNo = Number(ward_no);
+        const STATE_PARTIES = ['BJP', 'INC', 'BSP', 'CPIM', 'CPI(M)', 'AAP', 'BAP'];
+
+        const wardCands = (MASTER_DATA.candidates || []).filter(c => 
+          c.category === category && (category === 'ZP' || c.block_name === block) && Number(c.ward_no) === wNo
+        );
+
+        const isNota = (c) => (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
+        const isInd = (c) => !STATE_PARTIES.includes(c.party) && !isNota(c);
+
+        const stateParty = wardCands.filter(c => !isNota(c) && !isInd(c)).sort((a,b) => (a.name_hindi || '').localeCompare(b.name_hindi || '', 'hi'));
+        const indParty = wardCands.filter(c => isInd(c)).sort((a,b) => (a.name_hindi || '').localeCompare(b.name_hindi || '', 'hi'));
+        const notaParty = wardCands.filter(c => isNota(c));
+
+        const ordered = [...stateParty, ...indParty, ...notaParty];
+        ordered.forEach((c, i) => {
+          c.ballot_no = i + 1;
+        });
+
+        return jsonResponse({
+          status: 'success',
+          message: `Re-numbered ${ordered.length} candidates in ${category} ${block} Ward ${wNo}.`
+        });
+      } catch (e) {
+        return jsonResponse({ detail: 'Bad request: ' + e.message }, 400);
+      }
+    }
+
     // SAVE VOTES
     if (path === '/api/save_votes' && request.method === 'POST') {
       try {

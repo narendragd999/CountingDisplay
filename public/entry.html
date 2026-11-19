@@ -2570,11 +2570,16 @@
     async function deleteContestant(cid, name) {
       if (!confirm(`Delete candidate "${name}"?\n\nThis will remove the candidate and automatically re-index ballot numbers for this ward.`)) return;
 
+      const token = authToken || localStorage.getItem('salumber_auth_token') || '';
       try {
         const resp = await fetch('/api/candidates/delete', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
-          body: JSON.stringify({ candidate_id: cid })
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'X-Auth-Token': token
+          },
+          body: JSON.stringify({ candidate_id: cid, id: cid })
         });
         const res = await resp.json();
         if (resp.ok && res.status === 'success') {
@@ -3100,7 +3105,7 @@
 
   <script>
     function openEditCandidateModal(candId) {
-      const cand = (masterData.candidates || []).find(c => c.id == candId);
+      const cand = (masterData.candidates || []).find(c => String(c.id) === String(candId));
       if (!cand) {
         alert('Candidate not found.');
         return;
@@ -3108,7 +3113,19 @@
 
       document.getElementById('editCandidateId').value = cand.id;
       document.getElementById('editCandidateNameHindi').value = cand.name_hindi || '';
-      document.getElementById('editCandidateParty').value = cand.party || 'IND';
+      
+      const partySel = document.getElementById('editCandidateParty');
+      if (partySel) {
+        const hasParty = Array.from(partySel.options).some(o => o.value === cand.party);
+        if (!hasParty && cand.party) {
+          const opt = document.createElement('option');
+          opt.value = cand.party;
+          opt.textContent = `${cand.party} (${cand.party})`;
+          partySel.appendChild(opt);
+        }
+        partySel.value = cand.party || 'IND';
+      }
+
       document.getElementById('editCandidateBallotNo').value = cand.ballot_no || 1;
       document.getElementById('editCandidateSymbol').value = cand.symbol || '';
 
@@ -3150,15 +3167,23 @@
         saveBtn.innerText = '⏳ Saving...';
       }
 
+      const token = authToken || localStorage.getItem('salumber_auth_token') || '';
+
       try {
         const resp = await fetch('/api/candidates/update', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': authToken },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'X-Auth-Token': token
+          },
           body: JSON.stringify({
-            candidate_id: cid,
+            candidate_id: Number(cid),
+            id: Number(cid),
             name_hindi: name,
+            name: name,
             party: party,
-            ballot_no: ballotNo,
+            ballot_no: ballotNo ? Number(ballotNo) : null,
             symbol: symbol
           })
         });

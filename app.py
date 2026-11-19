@@ -1194,7 +1194,14 @@ async def bulk_import_candidates(payload: dict, request: Request):
 async def update_candidate(payload: dict, request: Request):
     """Allows updating candidate name, party, symbol, ballot_no, etc."""
     check_auth(request)
-    cid = int(payload.get('candidate_id'))
+    cid_raw = payload.get('candidate_id') or payload.get('id') or payload.get('cid')
+    if not cid_raw:
+        raise HTTPException(status_code=400, detail="candidate_id is required.")
+    try:
+        cid = int(cid_raw)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=400, detail="Invalid candidate_id format.")
+
     name_hindi = payload.get('name_hindi') or payload.get('name')
     party = payload.get('party')
     symbol = payload.get('symbol')
