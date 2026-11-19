@@ -1716,26 +1716,25 @@
               return;
             }
 
-            // Adaptive Paced Speed: smooth progression across cards
-            const activeDuration = Math.max(3.0, psTourIntervalSeconds - 2.5);
-            let baseSpeed = Math.max(22, maxScroll / activeDuration);
-            let adaptiveSpeed = Math.min(110, baseSpeed * scrollSpeedMultiplier);
+            // Uniform Speed across all sections (ZP and PS) based on ZP section standard: 24 px/s
+            const UNIFORM_SPEED_PX = 24;
+            const uniformSpeed = UNIFORM_SPEED_PX * scrollSpeedMultiplier;
 
             if (state.topPause > 0) {
-              state.topPause -= dt * scrollSpeedMultiplier;
+              state.topPause -= dt * (scrollSpeedMultiplier || 1);
             } else {
-              state.acc += adaptiveSpeed * dt;
+              state.acc += uniformSpeed * dt;
               if (state.acc >= maxScroll) {
                 state.acc = maxScroll;
                 scroller.scrollTop = maxScroll;
                 smartTvScrollCompleted = true; // All bottom cards reached and viewable!
                 if (state.bottomPause > 0) {
-                  state.bottomPause -= dt * scrollSpeedMultiplier;
+                  state.bottomPause -= dt * (scrollSpeedMultiplier || 1);
                 } else {
                   state.acc = 0;
                   scroller.scrollTop = 0;
                   state.topPause = 1.0;
-                  state.bottomPause = 1.5;
+                  state.bottomPause = 2.0;
                 }
               } else {
                 scroller.scrollTop = Math.round(state.acc);

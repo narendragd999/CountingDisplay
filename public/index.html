@@ -1752,22 +1752,16 @@
               psAcc = psEl.scrollTop;
             }
 
-            // Calculate adaptive pacing speed based on selected cycle duration
-            const cycleSec = (typeof cycleDurationSeconds === 'number' && cycleDurationSeconds > 0) ? cycleDurationSeconds : 15;
-            // 2.0s top pause + 2.5s bottom pause = 4.5s reading pauses
-            const activeTravelTime = Math.max(3.0, cycleSec - 4.5);
-            // Adaptive speed ensuring all wards scroll through in the exact interval
-            let adaptiveSpeed = maxScroll / activeTravelTime;
-            // Bound speed between 20 px/s (gentle) and 48 px/s (crisp readable ceiling)
-            adaptiveSpeed = Math.min(48, Math.max(20, adaptiveSpeed));
+            // Uniform Speed matching ZP section standard: 24 px/s
+            const uniformSpeed = 24 * scrollSpeedMultiplierIndex;
 
             if (scrollSpeedMultiplierIndex <= 0) {
               return;
             }
             if (psPauseTimer > 0) {
-              psPauseTimer -= dt * scrollSpeedMultiplierIndex;
+              psPauseTimer -= dt * (scrollSpeedMultiplierIndex || 1);
             } else {
-              psAcc += (adaptiveSpeed * scrollSpeedMultiplierIndex) * dt;
+              psAcc += uniformSpeed * dt;
               if (psAcc >= maxScroll) {
                 psAcc = maxScroll;
                 psEl.scrollTop = maxScroll;
