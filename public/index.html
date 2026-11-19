@@ -1184,7 +1184,7 @@
 
       const zpWards = (masterData.wards || []).filter(w => {
         if (w.category !== 'ZP') return false;
-        return true; // Display all data
+        return wardHasEnteredVotes(w);
       });
       zpWards.sort((a, b) => a.ward_no - b.ward_no);
 
@@ -1233,7 +1233,7 @@
       const psWards = (masterData.wards || []).filter(w => {
         if (w.category !== 'PS') return false;
         if (activeROCenter !== 'ALL' && w.block_name !== activeROCenter) return false;
-        return true; // Display all data
+        return wardHasEnteredVotes(w);
       });
       psWards.sort((a, b) => a.block_name.localeCompare(b.block_name) || a.ward_no - b.ward_no);
 

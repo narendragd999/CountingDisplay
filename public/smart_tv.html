@@ -1392,7 +1392,7 @@
 
       <!-- Active Entries / All Data Filter Toggle Button -->
       <button class="filter-active-pill" id="btnToggleDisplayFilter" onclick="toggleDataDisplayFilter()" style="cursor:pointer; background:rgba(14,165,233,0.18); border:1px solid #0284c7; color:#38bdf8; outline:none; transition:all 0.15s;" title="क्लिक करें: समस्त डेटा या केवल सक्रिय परिणाम देखें (Toggle All Data / Active Only)">
-        <span id="activeFilterBadge">🌐 समस्त 126 वार्ड</span>
+        <span id="activeFilterBadge">⚡ केवल सक्रिय परिणाम</span>
       </button>
     </div>
 
@@ -1784,7 +1784,7 @@
     // ==========================================================================
     // ALL DATA DISPLAY TOGGLE & ACTIVE VOTES FILTER
     // ==========================================================================
-    let displayAllData = true; // DEFAULT: Show ALL data (all 126 wards) as requested
+    let displayAllData = false; // Default: Only show active wards with entered votes or declared results
 
     function wardHasEnteredVotes(ward) {
       if (ward.status === 'DECLARED') return true;
@@ -1806,7 +1806,7 @@
         if (displayAllData) {
           badge.textContent = `🌐 समस्त 126 वार्ड`;
         } else {
-          badge.textContent = `⚡ केवल सक्रिय (${activeWards.length})`;
+          badge.textContent = activeWards.length > 0 ? `⚡ केवल सक्रिय (${activeWards.length})` : `⚡ केवल सक्रिय परिणाम`;
         }
       }
     }
