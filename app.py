@@ -2016,7 +2016,13 @@ async def reopen_round(payload: dict, request: Request):
 @app.get("/api/round_ekzai")
 def get_round_ekzai(category: str, block: str, round_key: str):
     """Generates official Consolidated Ekzai (एकजाई) Statement for a specific round."""
-    round_key = round_key.upper()
+    round_key = (round_key or 'R1').upper()
+    category = (category or 'PS').upper()
+    if category == 'ZP':
+        block = 'Salumber ZP'
+    else:
+        block = block or 'Semari'
+
     conn = get_db()
     cursor = conn.cursor()
 
@@ -2098,6 +2104,32 @@ def get_round_ekzai(category: str, block: str, round_key: str):
         'declared_at': declared_at,
         'wards': ekzai_wards
     }
+
+@app.get("/api/round_ekzai/csv")
+def get_round_ekzai_csv(category: str, block: str, round_key: str):
+    """Downloads official Consolidated Ekzai (एकजाई) Statement as a CSV file."""
+    data = get_round_ekzai(category, block, round_key)
+    lines = [
+        f"Official Consolidated Ekzai Statement (प्रारूप-एकजाई पत्रक) - Salumber Elections 2026",
+        f"Category: {data['category']}, Entity: {data['block_name']}, Round: {data['round_key']}, Status: {'DECLARED' if data['is_declared'] else 'DRAFT'}",
+        f"Generated At: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+        "",
+        "Ward No,Ballot No,Candidate Name,Party,Previous Cumulative Votes,Current Round Votes,Progressive Total Votes,Standing / Lead"
+    ]
+    for w in data['wards']:
+        for c in w['candidates']:
+            is_lead = (c['name_hindi'] == w['leader_name'] and w['margin'] > 0)
+            lead_str = f"LEAD (+{w['margin']})" if is_lead else "-"
+            name_clean = f'"{c["name_hindi"]}"' if ',' in c['name_hindi'] else c['name_hindi']
+            lines.append(f"{w['ward_no']},{c.get('ballot_no') or '-'},{name_clean},{c['party']},{c['prev_votes']},{c['current_round_votes']},{c['cumul_votes']},{lead_str}")
+
+    csv_data = "\n".join(lines)
+    filename = f"Ekzai_{data['category']}_{data['block_name']}_{data['round_key']}.csv"
+    return Response(
+        content=csv_data,
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
 
 if __name__ == "__main__":
     import sys

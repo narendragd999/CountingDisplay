@@ -139,15 +139,130 @@
     .btn-danger { background: var(--danger); color: #ffffff; }
     .btn-danger:hover { background: #991b1b; }
 
-    /* 3 NAVIGATION TABS */
+    /* 5 NAVIGATION TABS */
     .nav-tabs {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 6px;
       background: #e2e8f0;
       padding: 5px;
       border-radius: 10px;
       border: 1px solid var(--border-main);
+    }
+
+    @media (max-width: 960px) {
+      .nav-tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* OFFICIAL PRINTABLE REPORT STYLING */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 11pt !important;
+      }
+      header, nav, .header-card, .nav-tabs, .ready-declare-alert, #toast, .no-print, button, .header-actions, .filter-select, .round-pill, .ward-filter-strip {
+        display: none !important;
+      }
+      #ekzaiModal {
+        display: block !important;
+        position: static !important;
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .modal-card, .card {
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      .ekzai-ward-card, .ekzai-ward-table-box {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 20px !important;
+        border: 1.5px solid #1e293b !important;
+      }
+      .print-show {
+        display: block !important;
+      }
+      .table th, .table td {
+        border-color: #cbd5e1 !important;
+        padding: 6px 8px !important;
+      }
+      .official-sig-block {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        margin-top: 35px !important;
+        padding-top: 20px !important;
+      }
+    }
+
+    .ekzai-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .ekzai-kpi-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ekzai-kpi-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .ekzai-kpi-value {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .ekzai-ward-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-main);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .ekzai-ward-header {
+      background: #f8fafc;
+      border-bottom: 1.5px solid var(--border-subtle);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .ekzai-num-cell {
+      text-align: right;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .ekzai-total-row {
+      background: #f1f5f9;
+      font-weight: 800;
+      border-top: 2px solid var(--border-main);
     }
 
     .nav-tab-btn {
@@ -664,7 +779,7 @@
       </div>
     </header>
 
-    <!-- 3 SIMPLE TABS -->
+    <!-- 5 NAVIGATION TABS -->
     <nav class="nav-tabs">
       <button id="tabBtnEntry" class="nav-tab-btn active" onclick="switchNavTab('entry')">
         🗳️ Direct Vote Entry
@@ -677,6 +792,9 @@
       </button>
       <button id="tabBtnHalls" class="nav-tab-btn" onclick="switchNavTab('halls')">
         🏛️ Halls & Tables Setup
+      </button>
+      <button id="tabBtnReports" class="nav-tab-btn" onclick="switchNavTab('reports')">
+        📊 Reports & Statements
       </button>
     </nav>
 
@@ -981,29 +1099,126 @@
       </div>
     </section>
 
+    <!-- =====================================================================
+         TAB 5: REPORTS & STATEMENTS CENTER (निर्वाचन रिपोर्ट्स एवं एकजाई केंद्र)
+         ===================================================================== -->
+    <section id="panelReports" class="card" style="display:none; padding-bottom: 24px;">
+      <div class="card-head">
+        <div class="card-title">
+          <span>📊</span> Reports & Statements Center (निर्वाचन रिपोर्ट्स केंद्र)
+        </div>
+        <div class="badge badge-primary">
+          Official Statements & Analytics
+        </div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="no-print" style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:10px; padding:14px 16px; margin: 4px 0 16px 0; display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; justify-content:space-between;">
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end;">
+          <div class="form-group" style="min-width:170px;">
+            <label class="form-label">Category (संस्था)</label>
+            <select id="reportCategory" class="form-select" onchange="onReportCategoryChange()">
+              <option value="PS">Panchayat Samiti (पंचायत समिति)</option>
+              <option value="ZP">Zilla Parishad (जिला परिषद)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="min-width:170px;" id="reportBlockGroup">
+            <label class="form-label">Block / Samiti (ब्लॉक)</label>
+            <select id="reportBlock" class="form-select" onchange="loadActiveReport()">
+              <option value="Semari">Semari (सेमारी)</option>
+              <option value="Sarada">Sarada (सराड़ा)</option>
+              <option value="Salumbar">Salumbar (सलूम्बर)</option>
+              <option value="Jaisamand">Jaisamand (जयसमन्द)</option>
+              <option value="Geengla">Geengla (गींगला)</option>
+              <option value="Lasadiya">Lasadiya (लसाड़िया)</option>
+              <option value="Jhallara">Jhallara (झल्लारा)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="min-width:270px;">
+            <label class="form-label">Report Type (रिपोर्ट का प्रकार)</label>
+            <select id="reportType" class="form-select" onchange="onReportTypeChange()">
+              <option value="ekzai">1. प्रारूप-एकजाई पत्रक (Official Form 17-C Round Ekzai)</option>
+              <option value="master_lifecycle">2. सम्पूर्ण परिणाम एवं चक्रवार मास्टर विवरण (Complete Matrix)</option>
+              <option value="party_analytics">3. दल-वार रुझान एवं सीट विश्लेषण (Party Vote Share & Seats)</option>
+              <option value="progress_summary">4. बूथ एवं मतगणना चक्र प्रगति सारांश (Counting Progress)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="min-width:130px;" id="reportRoundGroup">
+            <label class="form-label">Round (चक्र)</label>
+            <select id="reportRound" class="form-select" onchange="loadActiveReport()">
+              <option value="PB">Postal Ballot (PB)</option>
+              <option value="R1" selected>Round 1 (R1)</option>
+              <option value="R2">Round 2 (R2)</option>
+              <option value="R3">Round 3 (R3)</option>
+              <option value="R4">Round 4 (R4)</option>
+              <option value="R5">Round 5 (R5)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button onclick="loadActiveReport()" class="btn btn-outline" style="font-weight:700; padding:8px 14px;">
+            🔄 Refresh
+          </button>
+          <button onclick="exportCurrentReportCsv()" class="btn btn-outline" style="color:#0369a1; border-color:#7dd3fc; font-weight:700; padding:8px 14px;" title="Download CSV file">
+            📥 Export CSV
+          </button>
+          <button onclick="printActiveReport()" class="btn btn-primary" style="font-weight:800; padding:8px 16px;">
+            🖨️ Print Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Report Output Display Container -->
+      <div id="reportContainer" style="background:#ffffff; border:1px solid var(--border-main); border-radius:10px; padding:20px; min-height:360px;">
+        <div style="text-align:center; padding:40px; color:var(--text-dim);">
+          Select a report and click Refresh to view.
+        </div>
+      </div>
+    </section>
+
     <!-- EKZAI MODAL (OFFICIAL ROUND CONSOLIDATED STATEMENT) -->
     <div id="ekzaiModal" class="modal-overlay" style="display:none;">
-      <div class="modal-card" style="max-width:920px; max-height:90vh; overflow-y:auto; padding:24px;">
+      <div class="modal-card" style="max-width:1050px; max-height:92vh; overflow-y:auto; padding:24px;">
+        <!-- Header -->
         <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid var(--border-main); padding-bottom:12px; margin-bottom:14px;">
           <div>
-            <div style="font-size:12px; font-weight:800; color:var(--text-muted); letter-spacing:0.5px;">
-              राजस्थान राज्य निर्वाचन आयोग • पंचायती राज आम चुनाव 2026
+            <div style="font-size:12px; font-weight:800; color:var(--text-muted); letter-spacing:0.5px; display:flex; align-items:center; gap:6px;">
+              <span>🏛️</span> राजस्थान राज्य निर्वाचन आयोग • पंचायती राज आम चुनाव 2026
             </div>
-            <h2 id="ekzaiTitle" style="font-size:18px; font-weight:800; color:#0f172a; margin-top:2px;">
-              दौर एकजाई पत्रक (Consolidated Round Statement)
+            <h2 id="ekzaiTitle" style="font-size:19px; font-weight:800; color:#0f172a; margin-top:3px;">
+              प्रारूप-एकजाई पत्रक (Consolidated Round Statement)
             </h2>
-            <div id="ekzaiSubtitle" style="font-size:13px; color:var(--text-dim); margin-top:2px; font-weight:600;">
+            <div id="ekzaiSubtitle" style="font-size:13px; color:var(--text-dim); margin-top:3px; font-weight:600; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
               Loading...
             </div>
           </div>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <button onclick="window.print()" class="btn btn-outline" style="padding:6px 14px; font-size:12px; font-weight:700;">
+          <div class="no-print" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button onclick="copyEkzaiSummary()" class="btn btn-outline" style="padding:6px 12px; font-size:12px; font-weight:700;" title="Copy summary for WhatsApp">
+              📋 Copy Summary
+            </button>
+            <button onclick="exportEkzaiCsv()" class="btn btn-outline" style="padding:6px 12px; font-size:12px; font-weight:700; color:#0369a1; border-color:#7dd3fc;" title="Download CSV">
+              📥 Export CSV
+            </button>
+            <button onclick="window.print()" class="btn btn-primary" style="padding:6px 14px; font-size:12px; font-weight:800;">
               🖨️ Print / PDF
             </button>
-            <button onclick="closeRoundEkzaiModal()" class="btn btn-outline" style="padding:6px 12px; font-size:14px;">
+            <button onclick="closeRoundEkzaiModal()" class="btn btn-outline" style="padding:6px 12px; font-size:14px; font-weight:700;">
               ✕
             </button>
           </div>
+        </div>
+
+        <!-- Interactive Round Switcher Pills inside Modal -->
+        <div class="no-print" style="margin-bottom:14px; background:#f8fafc; border:1px solid var(--border-subtle); border-radius:8px; padding:8px 12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">चक्र बदलें (Switch Round):</span>
+            <div id="ekzaiModalRoundTabs" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+          </div>
+          <div id="ekzaiModalStatusPill"></div>
         </div>
 
         <div id="ekzaiContent">
@@ -1385,6 +1600,10 @@
         document.getElementById('tabBtnHalls').classList.add('active');
         document.getElementById('panelHalls').style.display = 'flex';
         loadHallsConfigDashboard();
+      } else if (tab === 'reports') {
+        document.getElementById('tabBtnReports').classList.add('active');
+        document.getElementById('panelReports').style.display = 'block';
+        initReportsPanel();
       }
     }
 
@@ -2691,78 +2910,821 @@
       }
     }
 
-    async function openRoundEkzaiModal() {
-      const cat = document.getElementById('entryCategory').value;
-      const blk = cat === 'ZP' ? 'Salumber ZP' : document.getElementById('entryBlock').value;
-      const rKey = currentSelectedRound;
+    let currentModalEkzaiRound = 'R1';
+    let currentEkzaiData = null;
+
+    // =========================================================================
+    // SMART & ALIGNED EKZAI SHEET (FORM 17-C CONSOLIDATED ROUND STATEMENT)
+    // =========================================================================
+    function renderEkzaiSheetHtml(data, rKey, cat, blk) {
+      if (!data || !data.wards || data.wards.length === 0) {
+        return `<div style="text-align:center; padding:36px; color:var(--text-muted);">कोई डेटा उपलब्ध नहीं है (No data found for this round).</div>`;
+      }
+
+      let totalWards = data.wards.length;
+      let totalRoundVotes = 0;
+      let totalCumulVotes = 0;
+      let totalPrevVotes = 0;
+      let partyLeads = {};
+
+      data.wards.forEach(w => {
+        if (w.margin > 0 && w.leader_party && w.leader_party !== '-') {
+          partyLeads[w.leader_party] = (partyLeads[w.leader_party] || 0) + 1;
+        }
+        (w.candidates || []).forEach(c => {
+          totalRoundVotes += (Number(c.current_round_votes) || 0);
+          totalCumulVotes += (Number(c.cumul_votes) || 0);
+          totalPrevVotes += (Number(c.prev_votes) || 0);
+        });
+      });
+
+      const leadSummaryArr = Object.entries(partyLeads).map(([p, count]) => `${p}: ${count}`);
+      const leadSummaryStr = leadSummaryArr.length > 0 ? leadSummaryArr.join(' • ') : 'शून्य / समतुल्य';
+
+      let html = `
+        <!-- Top Branding Box for Print and Display -->
+        <div style="background:#f8fafc; border:1.5px solid var(--border-main); border-radius:10px; padding:14px 18px; margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:0.8px; text-transform:uppercase;">
+                🏛️ राजस्थान राज्य निर्वाचन आयोग • पंचायती राज आम चुनाव 2026
+              </div>
+              <div style="font-size:18px; font-weight:900; color:#0f172a; margin-top:2px;">
+                प्रारूप-एकजाई पत्रक (Consolidated Round Statement / Form 17-C)
+              </div>
+              <div style="font-size:13px; font-weight:700; color:#334155; margin-top:3px;">
+                ${cat === 'ZP' ? 'जिला परिषद सलूम्बर (Salumber ZP)' : 'पंचायत समिति ' + blk} &nbsp;•&nbsp; 
+                मतगणना चक्र: <span style="color:#0284c7;">${rKey === 'PB' ? 'डाक मतपत्र (Postal Ballots)' : 'दौर ' + rKey}</span>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge" style="font-size:12px; padding:6px 12px; font-weight:800; background:${data.is_declared ? '#dcfce7; color:#15803d; border:1px solid #86efac;' : '#fef3c7; color:#b45309; border:1px solid #fde68a;'}">
+                ${data.is_declared ? '🟢 विधिवत घोषित (OFFICIALLY DECLARED)' : '⏳ अंतरिम / अप्रमाणित (DRAFT)'}
+              </span>
+              ${data.declared_at ? `<div style="font-size:11px; font-weight:600; color:#64748b; margin-top:4px;">घोषित समय: ${data.declared_at}</div>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Executive KPI Badges -->
+        <div class="ekzai-kpi-grid">
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">कुल वार्ड (Total Wards)</span>
+            <span class="ekzai-kpi-value">${totalWards}</span>
+          </div>
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">इस चक्र में गिने मत (Round Votes)</span>
+            <span class="ekzai-kpi-value" style="color:#0284c7;">${totalRoundVotes.toLocaleString()}</span>
+          </div>
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">प्रगतिशील कुल मत (Progressive Total)</span>
+            <span class="ekzai-kpi-value" style="color:#0f766e;">${totalCumulVotes.toLocaleString()}</span>
+          </div>
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">अग्रणी रुझान (Leading Trends)</span>
+            <span class="ekzai-kpi-value" style="font-size:15px; color:#b45309; padding-top:4px;">${leadSummaryStr}</span>
+          </div>
+        </div>
+      `;
+
+      data.wards.forEach(w => {
+        let wPrevSum = 0;
+        let wRoundSum = 0;
+        let wCumulSum = 0;
+
+        html += `
+          <div class="ekzai-ward-card">
+            <div class="ekzai-ward-header">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:15px; font-weight:900; color:#0f172a;">वार्ड संख्या: ${w.ward_no}</span>
+                <span style="font-size:11px; font-weight:700; color:#64748b; background:#e2e8f0; padding:2px 8px; border-radius:4px;">
+                  ${cat === 'ZP' ? 'जिला परिषद' : 'पं.स. ' + blk}
+                </span>
+              </div>
+              <div>
+                ${w.margin > 0 ? `
+                  <span class="badge" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; font-size:12px; font-weight:800; padding:4px 10px;">
+                    🟢 बढ़त: ${w.leader_name} (${w.leader_party}) &nbsp;+${w.margin} मत
+                  </span>
+                ` : ((w.candidates || []).some(c => c.cumul_votes > 0) ? `
+                  <span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-size:12px; font-weight:800; padding:4px 10px;">
+                    ⚖️ स्थिति: बराबरी (Tied)
+                  </span>
+                ` : `
+                  <span class="badge" style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; font-size:12px; font-weight:700; padding:4px 10px;">
+                    ⚪ मतगणना प्रतीक्षित
+                  </span>
+                `)}
+              </div>
+            </div>
+
+            <table class="table" style="margin:0; width:100%;">
+              <thead>
+                <tr style="background:#f8fafc; border-bottom:1.5px solid var(--border-main);">
+                  <th style="width:65px; text-align:center;">मतपत्र #</th>
+                  <th>प्रत्याशी का नाम (Candidate Name)</th>
+                  <th style="width:85px; text-align:center;">दल (Party)</th>
+                  <th style="width:130px; text-align:right;">पूर्व चक्र तक कुल</th>
+                  <th style="width:130px; text-align:right; color:#0284c7; background:rgba(2,132,199,0.06);">वर्तमान चक्र (${rKey})</th>
+                  <th style="width:140px; text-align:right; color:#0f766e; background:rgba(15,118,110,0.06);">प्रगतिशील कुल योग</th>
+                  <th style="width:120px; text-align:center;">स्थिति / अंतर</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        (w.candidates || []).forEach(c => {
+          const isLead = (c.name_hindi === w.leader_name && w.margin > 0);
+          const cRound = Number(c.current_round_votes) || 0;
+          const cPrev = Number(c.prev_votes) || 0;
+          const cCumul = Number(c.cumul_votes) || 0;
+
+          wPrevSum += cPrev;
+          wRoundSum += cRound;
+          wCumulSum += cCumul;
+
+          const isNota = c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा');
+
+          let standingBadge = '-';
+          if (isLead) {
+            standingBadge = `<span class="badge" style="background:#dcfce7; color:#15803d; font-weight:800;">आगे (+${w.margin})</span>`;
+          } else if (!isNota && w.margin > 0 && cCumul > 0) {
+            standingBadge = `<span class="badge" style="background:#f1f5f9; color:#64748b; font-weight:700;">-${w.margin}</span>`;
+          }
+
+          html += `
+            <tr style="${isLead ? 'background:#f0fdf4;' : ''}">
+              <td style="text-align:center; font-weight:700; color:#64748b;">#${c.ballot_no || '-'}</td>
+              <td style="font-weight:700; color:#0f172a;">
+                ${c.name_hindi} ${isLead ? '🟢' : ''}
+              </td>
+              <td style="text-align:center;">
+                <span class="party-pill party-${c.party || 'IND'}">${c.party || 'IND'}</span>
+              </td>
+              <td class="ekzai-num-cell" style="color:#475569;">${cPrev.toLocaleString()}</td>
+              <td class="ekzai-num-cell" style="color:#0284c7; font-weight:800; background:rgba(2,132,199,0.03);">${cRound.toLocaleString()}</td>
+              <td class="ekzai-num-cell" style="color:#0f766e; font-weight:900; background:rgba(15,118,110,0.03);">${cCumul.toLocaleString()}</td>
+              <td style="text-align:center;">${standingBadge}</td>
+            </tr>
+          `;
+        });
+
+        // Ward Total Row (Form 17-C Total)
+        html += `
+            <tr class="ekzai-total-row">
+              <td colspan="3" style="text-align:right; font-weight:800; color:#1e293b; padding-right:14px;">
+                वार्ड कुल योग (Form 17-C Total):
+              </td>
+              <td class="ekzai-num-cell" style="font-weight:900; color:#334155;">${wPrevSum.toLocaleString()}</td>
+              <td class="ekzai-num-cell" style="font-weight:900; color:#0284c7;">${wRoundSum.toLocaleString()}</td>
+              <td class="ekzai-num-cell" style="font-weight:900; color:#0f766e;">${wCumulSum.toLocaleString()}</td>
+              <td style="text-align:center; font-size:11px; font-weight:700; color:#64748b;">✓ सत्यापित</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        `;
+      });
+
+      // Official 3-Column Signature Block
+      html += `
+        <div class="official-sig-block" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-top:30px; padding:18px; background:#f8fafc; border:1px dashed var(--border-main); border-radius:8px; text-align:center;">
+          <div style="border-top:1.5px solid #64748b; padding-top:8px;">
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">हस्ताक्षर गणना पर्यवेक्षक</div>
+            <div style="font-size:11px; color:#64748b;">(Counting Supervisor)</div>
+          </div>
+          <div style="border-top:1.5px solid #64748b; padding-top:8px;">
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">हस्ताक्षर सहायक रिटर्निंग अधिकारी</div>
+            <div style="font-size:11px; color:#64748b;">(Assistant Returning Officer - ARO)</div>
+          </div>
+          <div style="border-top:1.5px solid #64748b; padding-top:8px;">
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">हस्ताक्षर रिटर्निंग अधिकारी / प्रेक्षक</div>
+            <div style="font-size:11px; color:#64748b;">(Returning Officer / Observer)</div>
+          </div>
+        </div>
+      `;
+
+      return html;
+    }
+
+    async function openRoundEkzaiModal(roundKeyOverride) {
+      const cat = currentSelectedCategory || document.getElementById('entryCategory')?.value || 'PS';
+      const blk = (cat === 'ZP') ? 'Salumber ZP' : (document.getElementById('entryBlock')?.value || 'Semari');
+      const rKey = (roundKeyOverride || currentSelectedRound || 'R1').toUpperCase();
+      currentModalEkzaiRound = rKey;
 
       document.getElementById('ekzaiModal').style.display = 'flex';
-      document.getElementById('ekzaiTitle').innerText = `${cat === 'ZP' ? 'जिला परिषद' : 'पंचायत समिति'} ${blk} — ${rKey === 'PB' ? 'डाक मतपत्र (Postal Ballots)' : rKey} एकजाई पत्रक`;
-      document.getElementById('ekzaiSubtitle').innerText = `Loading compiled round data...`;
+      document.getElementById('ekzaiTitle').innerText = `प्रारूप-एकजाई पत्रक — ${cat === 'ZP' ? 'जिला परिषद सलूम्बर' : 'पं.स. ' + blk} (${rKey === 'PB' ? 'डाक मतपत्र' : rKey})`;
+      document.getElementById('ekzaiSubtitle').innerText = `डेटा लोड हो रहा है (Loading compiled round data)...`;
+      document.getElementById('ekzaiContent').innerHTML = `<div style="text-align:center; padding:30px; color:#64748b;">⏳ लोड हो रहा है...</div>`;
+
+      renderEkzaiModalRoundPills(rKey);
 
       try {
-        const resp = await fetch(`/api/round_ekzai?category=${cat}&block=${blk}&round_key=${rKey}`);
+        const resp = await fetch(`/api/round_ekzai?category=${cat}&block=${encodeURIComponent(blk)}&round_key=${rKey}`);
         const data = await resp.json();
         if (!resp.ok || data.status !== 'success') {
           document.getElementById('ekzaiContent').innerHTML = `<p style="color:var(--danger); padding:20px;">Could not load Ekzai: ${data.detail || 'Error'}</p>`;
           return;
         }
+        currentEkzaiData = data;
 
         const isDecl = data.is_declared;
         document.getElementById('ekzaiSubtitle').innerHTML = `
-          <span>Status: <strong>${isDecl ? '🟢 OFFICIALLY DECLARED (घोषित)' : '⏳ DRAFT / IN-PROGRESS'}</strong></span>
-          ${data.declared_at ? `<span style="margin-left:12px;">Declared At: ${data.declared_at}</span>` : ''}
+          <span>स्थिति: <strong>${isDecl ? '🟢 विधिवत घोषित (OFFICIALLY DECLARED)' : '⏳ अंतरिम / प्रगति पर (DRAFT / IN-PROGRESS)'}</strong></span>
+          ${data.declared_at ? `<span style="margin-left:12px;">घोषित समय: ${data.declared_at}</span>` : ''}
         `;
 
-        let html = '';
-        data.wards.forEach(w => {
-          html += `
-            <div style="background:#ffffff; border:1px solid var(--border-main); border-radius:8px; margin-bottom:14px; overflow:hidden;">
-              <div style="background:#f8fafc; border-bottom:1px solid var(--border-subtle); padding:8px 14px; display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:14px; font-weight:800; color:#0f172a;">वार्ड संख्या: ${w.ward_no}</span>
-                <span style="font-size:12px; font-weight:700; color:${w.margin > 0 ? '#15803d' : '#64748b'};">
-                  ${w.margin > 0 ? `🟢 बढ़त: ${w.leader_name} (${w.leader_party}) +${w.margin} मत` : 'स्थिति: बराबरी / कोई मत नहीं'}
-                </span>
-              </div>
-              <table class="table" style="margin:0;">
-                <thead>
-                  <tr style="background:#f1f5f9;">
-                    <th style="width:50px;">#</th>
-                    <th>प्रत्याशी का नाम (Candidate)</th>
-                    <th style="width:75px;">दल</th>
-                    <th style="width:110px; text-align:right;">पूर्व दौर तक कुल</th>
-                    <th style="width:120px; text-align:right; color:var(--primary);">इस दौर के मत</th>
-                    <th style="width:120px; text-align:right; color:#0369a1;">प्रगतिशील कुल मत</th>
-                  </tr>
-                </thead>
-                <tbody>
-          `;
-
-          w.candidates.forEach(c => {
-            const isLeader = (c.name_hindi === w.leader_name && w.margin > 0);
-            html += `
-              <tr style="${isLeader ? 'background:#f0fdf4;' : ''}">
-                <td style="font-weight:700;">#${c.ballot_no || '-'}</td>
-                <td style="font-weight:700;">${c.name_hindi} ${isLeader ? '🟢' : ''}</td>
-                <td><span class="party-pill party-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
-                <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:700;">${c.prev_votes}</td>
-                <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:800; color:var(--primary);">${c.current_round_votes}</td>
-                <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:800; color:#0369a1;">${c.cumul_votes}</td>
-              </tr>
-            `;
-          });
-
-          html += `</tbody></table></div>`;
-        });
-
-        document.getElementById('ekzaiContent').innerHTML = html;
+        document.getElementById('ekzaiContent').innerHTML = renderEkzaiSheetHtml(data, rKey, cat, blk);
       } catch (e) {
         document.getElementById('ekzaiContent').innerHTML = `<p style="color:var(--danger); padding:20px;">Error loading Ekzai: ${e}</p>`;
       }
     }
 
+    function renderEkzaiModalRoundPills(activeRound) {
+      const container = document.getElementById('ekzaiModalRoundTabs');
+      if (!container) return;
+
+      const rounds = ['PB', 'R1', 'R2', 'R3', 'R4', 'R5'];
+      let pillsHtml = '';
+      rounds.forEach(r => {
+        const isActive = (r === activeRound);
+        pillsHtml += `
+          <button type="button" onclick="openRoundEkzaiModal('${r}')" class="round-pill ${isActive ? 'active' : ''}" style="padding:4px 10px; font-size:12px;">
+            ${r}
+          </button>
+        `;
+      });
+      container.innerHTML = pillsHtml;
+    }
+
     function closeRoundEkzaiModal() {
       document.getElementById('ekzaiModal').style.display = 'none';
+    }
+
+    function copyEkzaiSummary() {
+      if (!currentEkzaiData || !currentEkzaiData.wards) {
+        showToast('No Ekzai data to copy!');
+        return;
+      }
+      const d = currentEkzaiData;
+      let text = `🏛️ सलूम्बर चुनाव 2026 - एकजाई पत्रक (${d.round_key})\n`;
+      text += `संस्था: ${d.category === 'ZP' ? 'जिला परिषद' : 'पं.स. ' + d.block_name}\n`;
+      text += `स्थिति: ${d.is_declared ? '🟢 विधिवत घोषित' : '⏳ अनौपचारिक / रुझान'}\n`;
+      text += `------------------------------------\n`;
+
+      d.wards.forEach(w => {
+        if (w.margin > 0) {
+          text += `वार्ड ${w.ward_no}: 🟢 बढ़त ${w.leader_name} (${w.leader_party}) +${w.margin} मत\n`;
+        } else {
+          text += `वार्ड ${w.ward_no}: ⚖️ बराबरी / कोई बढ़त नहीं\n`;
+        }
+      });
+      text += `------------------------------------\n`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✅ एकजाई सारांश क्लिपबोर्ड में कॉपी हो गया!');
+      }).catch(() => {
+        alert(text);
+      });
+    }
+
+    function exportEkzaiCsv() {
+      if (!currentEkzaiData || !currentEkzaiData.wards) {
+        showToast('No Ekzai data to export!');
+        return;
+      }
+      const d = currentEkzaiData;
+      const lines = [
+        `Official Consolidated Ekzai Statement (प्रारूप-एकजाई पत्रक) - Salumber Elections 2026`,
+        `Category: ${d.category}, Entity: ${d.block_name}, Round: ${d.round_key}, Status: ${d.is_declared ? 'DECLARED' : 'DRAFT'}`,
+        `Generated At: ${new Date().toLocaleString()}`,
+        "",
+        "Ward No,Ballot No,Candidate Name,Party,Previous Cumulative Votes,Current Round Votes,Progressive Total Votes,Standing / Lead"
+      ];
+      d.wards.forEach(w => {
+        (w.candidates || []).forEach(c => {
+          const isLead = (c.name_hindi === w.leader_name && w.margin > 0);
+          const leadStr = isLead ? `LEAD (+${w.margin})` : "-";
+          const nameSafe = c.name_hindi.includes(',') ? `"${c.name_hindi}"` : c.name_hindi;
+          lines.push(`${w.ward_no},${c.ballot_no || '-'},${nameSafe},${c.party || 'IND'},${c.prev_votes || 0},${c.current_round_votes || 0},${c.cumul_votes || 0},${leadStr}`);
+        });
+      });
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Ekzai_${d.category}_${d.block_name}_${d.round_key}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`✅ CSV downloaded: ${a.download}`);
+    }
+
+    // =========================================================================
+    // TAB 5: REPORTS & STATEMENTS CENTER CONTROLLER
+    // =========================================================================
+    let activeReportsDataCache = null;
+
+    function initReportsPanel() {
+      const repCat = document.getElementById('reportCategory');
+      if (repCat) repCat.value = currentSelectedCategory || 'PS';
+      onReportCategoryChange();
+    }
+
+    function onReportCategoryChange() {
+      const cat = document.getElementById('reportCategory').value;
+      const blkGroup = document.getElementById('reportBlockGroup');
+      if (cat === 'ZP') {
+        if (blkGroup) blkGroup.style.display = 'none';
+      } else {
+        if (blkGroup) blkGroup.style.display = 'flex';
+      }
+      loadActiveReport();
+    }
+
+    function onReportTypeChange() {
+      const rType = document.getElementById('reportType').value;
+      const rGroup = document.getElementById('reportRoundGroup');
+      if (rType === 'ekzai') {
+        if (rGroup) rGroup.style.display = 'flex';
+      } else {
+        if (rGroup) rGroup.style.display = 'none';
+      }
+      loadActiveReport();
+    }
+
+    async function loadActiveReport() {
+      const cat = document.getElementById('reportCategory').value;
+      const blk = (cat === 'ZP') ? 'Salumber ZP' : document.getElementById('reportBlock').value;
+      const rType = document.getElementById('reportType').value;
+      const rKey = (document.getElementById('reportRound')?.value || 'R1').toUpperCase();
+      const container = document.getElementById('reportContainer');
+
+      container.innerHTML = `<div style="text-align:center; padding:40px; color:#64748b;">⏳ रिपोर्ट लोड हो रही है (Generating report)...</div>`;
+
+      if (rType === 'ekzai') {
+        try {
+          const resp = await fetch(`/api/round_ekzai?category=${cat}&block=${encodeURIComponent(blk)}&round_key=${rKey}`);
+          const data = await resp.json();
+          if (!resp.ok || data.status !== 'success') {
+            container.innerHTML = `<p style="color:var(--danger); padding:20px;">Could not load Ekzai Report: ${data.detail || 'Error'}</p>`;
+            return;
+          }
+          activeReportsDataCache = { type: 'ekzai', data: data, cat, blk, rKey };
+          container.innerHTML = renderEkzaiSheetHtml(data, rKey, cat, blk);
+        } catch (e) {
+          container.innerHTML = `<p style="color:var(--danger); padding:20px;">Error: ${e}</p>`;
+        }
+      } else if (rType === 'master_lifecycle') {
+        renderMasterLifecycleMatrix(cat, blk);
+      } else if (rType === 'party_analytics') {
+        renderPartyAnalytics(cat, blk);
+      } else if (rType === 'progress_summary') {
+        renderProgressSummary(cat, blk);
+      }
+    }
+
+    function renderMasterLifecycleMatrix(cat, blk) {
+      const container = document.getElementById('reportContainer');
+      const cands = (masterData.candidates || []).filter(c => c.category === cat && (cat === 'ZP' || c.block_name === blk));
+      const vMap = masterData.roundVotes || {};
+
+      if (!cands || cands.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:#64748b;">No contestants found for ${cat} ${blk}.</div>`;
+        return;
+      }
+
+      // Group candidates by ward
+      const wardsMap = {};
+      cands.forEach(c => {
+        const w = c.ward_no;
+        if (!wardsMap[w]) wardsMap[w] = [];
+        wardsMap[w].push(c);
+      });
+
+      const sortedWardNos = Object.keys(wardsMap).map(Number).sort((a,b) => a - b);
+      const rounds = ['PB', 'R1', 'R2', 'R3', 'R4', 'R5'];
+
+      let html = `
+        <div style="background:#f8fafc; border:1.5px solid var(--border-main); border-radius:10px; padding:14px 18px; margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:0.8px;">
+            🏛️ राजस्थान राज्य निर्वाचन आयोग • पंचायती राज आम चुनाव 2026
+          </div>
+          <div style="font-size:18px; font-weight:900; color:#0f172a; margin-top:2px;">
+            सम्पूर्ण परिणाम एवं चक्रवार मास्टर विवरण (Complete Lifecycle Matrix)
+          </div>
+          <div style="font-size:13px; font-weight:700; color:#334155; margin-top:3px;">
+            ${cat === 'ZP' ? 'जिला परिषद सलूम्बर (Salumber ZP)' : 'पंचायत समिति ' + blk} &nbsp;•&nbsp; कुल वार्ड: ${sortedWardNos.length}
+          </div>
+        </div>
+      `;
+
+      sortedWardNos.forEach(wNo => {
+        const cList = wardsMap[wNo];
+        // calculate total for each candidate
+        cList.forEach(c => {
+          const cv = vMap[c.id] || {};
+          let tot = 0;
+          rounds.forEach(r => { tot += (Number(cv[r]) || 0); });
+          c._calcTotal = tot;
+        });
+
+        // Determine leader / winner
+        const validList = cList.filter(x => x.party !== 'NOTA' && !(x.name_hindi || '').includes('नोटा'));
+        validList.sort((a, b) => b._calcTotal - a._calcTotal);
+        const leader = validList[0] || null;
+        const runner = validList[1] || null;
+        const margin = (leader && runner) ? (leader._calcTotal - runner._calcTotal) : (leader ? leader._calcTotal : 0);
+
+        // Check if ward declared
+        const wKey = `${cat}_${blk}_${wNo}`;
+        const wWinner = (masterData.wardWinners && masterData.wardWinners[wKey]) || null;
+        const isWardDeclared = Boolean(wWinner);
+
+        let roundSums = { 'PB': 0, 'R1': 0, 'R2': 0, 'R3': 0, 'R4': 0, 'R5': 0, 'total': 0 };
+
+        html += `
+          <div class="ekzai-ward-card" style="margin-bottom:16px;">
+            <div class="ekzai-ward-header">
+              <span style="font-size:14px; font-weight:800; color:#0f172a;">वार्ड संख्या: ${wNo}</span>
+              <div>
+                ${isWardDeclared ? `
+                  <span class="badge" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; font-size:12px; font-weight:800;">
+                    🏆 घोषित विजेता: ${wWinner.name_hindi} (${wWinner.party}) +${wWinner.lead_margin || margin} मत
+                  </span>
+                ` : (margin > 0 ? `
+                  <span class="badge" style="background:#f0f9ff; color:#0369a1; border:1px solid #bae6fd; font-size:12px; font-weight:700;">
+                    🟢 बढ़त: ${leader.name_hindi} (${leader.party}) +${margin} मत
+                  </span>
+                ` : `<span class="badge" style="background:#f1f5f9; color:#64748b;">मतगणना जारी / समान</span>`)}
+              </div>
+            </div>
+
+            <table class="table" style="margin:0; width:100%;">
+              <thead>
+                <tr style="background:#f8fafc; font-size:12px;">
+                  <th style="width:50px; text-align:center;">#</th>
+                  <th>प्रत्याशी का नाम</th>
+                  <th style="width:75px; text-align:center;">दल</th>
+                  <th style="width:70px; text-align:right;">डाक (PB)</th>
+                  <th style="width:70px; text-align:right;">दौर 1</th>
+                  <th style="width:70px; text-align:right;">दौर 2</th>
+                  <th style="width:70px; text-align:right;">दौर 3</th>
+                  <th style="width:70px; text-align:right;">दौर 4</th>
+                  <th style="width:70px; text-align:right;">दौर 5</th>
+                  <th style="width:90px; text-align:right; color:#0f766e; font-weight:800;">कुल मत</th>
+                  <th style="width:110px; text-align:center;">स्थिति</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        cList.forEach(c => {
+          const cv = vMap[c.id] || {};
+          const isWinner = isWardDeclared && (wWinner.candidate_id === c.id || wWinner.name_hindi === c.name_hindi);
+          const isLead = !isWardDeclared && (leader && leader.id === c.id && margin > 0);
+
+          rounds.forEach(r => { roundSums[r] += (Number(cv[r]) || 0); });
+          roundSums.total += c._calcTotal;
+
+          html += `
+            <tr style="${isWinner ? 'background:#dcfce7;' : (isLead ? 'background:#f0fdf4;' : '')}">
+              <td style="text-align:center; font-weight:700; color:#64748b;">${c.ballot_no || '-'}</td>
+              <td style="font-weight:700;">${c.name_hindi} ${isWinner ? '🏆' : (isLead ? '🟢' : '')}</td>
+              <td style="text-align:center;"><span class="party-pill party-${c.party || 'IND'}">${c.party || 'IND'}</span></td>
+              <td class="ekzai-num-cell">${Number(cv['PB']) || 0}</td>
+              <td class="ekzai-num-cell">${Number(cv['R1']) || 0}</td>
+              <td class="ekzai-num-cell">${Number(cv['R2']) || 0}</td>
+              <td class="ekzai-num-cell">${Number(cv['R3']) || 0}</td>
+              <td class="ekzai-num-cell">${Number(cv['R4']) || 0}</td>
+              <td class="ekzai-num-cell">${Number(cv['R5']) || 0}</td>
+              <td class="ekzai-num-cell" style="color:#0f766e; font-weight:900;">${c._calcTotal.toLocaleString()}</td>
+              <td style="text-align:center;">
+                ${isWinner ? `<span class="badge" style="background:#15803d; color:#fff;">विजेता</span>` : 
+                 (isLead ? `<span class="badge" style="background:#dcfce7; color:#15803d;">बढ़त (+${margin})</span>` : '-')}
+              </td>
+            </tr>
+          `;
+        });
+
+        // Ward Subtotal Row
+        html += `
+            <tr class="ekzai-total-row" style="font-size:12px;">
+              <td colspan="3" style="text-align:right; font-weight:800; color:#1e293b;">वार्ड कुल मत:</td>
+              <td class="ekzai-num-cell">${roundSums['PB'].toLocaleString()}</td>
+              <td class="ekzai-num-cell">${roundSums['R1'].toLocaleString()}</td>
+              <td class="ekzai-num-cell">${roundSums['R2'].toLocaleString()}</td>
+              <td class="ekzai-num-cell">${roundSums['R3'].toLocaleString()}</td>
+              <td class="ekzai-num-cell">${roundSums['R4'].toLocaleString()}</td>
+              <td class="ekzai-num-cell">${roundSums['R5'].toLocaleString()}</td>
+              <td class="ekzai-num-cell" style="font-weight:900; color:#0f766e;">${roundSums.total.toLocaleString()}</td>
+              <td style="text-align:center; font-size:11px; font-weight:700; color:#64748b;">✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        `;
+      });
+
+      activeReportsDataCache = { type: 'master_lifecycle', cat, blk, wardsMap, sortedWardNos };
+      container.innerHTML = html;
+    }
+
+    function renderPartyAnalytics(cat, blk) {
+      const container = document.getElementById('reportContainer');
+      const cands = (masterData.candidates || []).filter(c => c.category === cat && (cat === 'ZP' || c.block_name === blk));
+      const vMap = masterData.roundVotes || {};
+      const wWinners = masterData.wardWinners || {};
+
+      const rounds = ['PB', 'R1', 'R2', 'R3', 'R4', 'R5'];
+      const partyStats = {};
+
+      const wardsMap = {};
+      cands.forEach(c => {
+        const w = c.ward_no;
+        if (!wardsMap[w]) wardsMap[w] = [];
+        wardsMap[w].push(c);
+
+        const p = c.party || 'IND';
+        if (!partyStats[p]) partyStats[p] = { won: 0, leading: 0, votes: 0 };
+        const cv = vMap[c.id] || {};
+        rounds.forEach(r => { partyStats[p].votes += (Number(cv[r]) || 0); });
+      });
+
+      // Assess seat status
+      Object.keys(wardsMap).forEach(wNo => {
+        const cList = wardsMap[wNo];
+        const wKey = `${cat}_${blk}_${wNo}`;
+        const wWin = wWinners[wKey];
+
+        if (wWin && wWin.party) {
+          if (!partyStats[wWin.party]) partyStats[wWin.party] = { won: 0, leading: 0, votes: 0 };
+          partyStats[wWin.party].won++;
+        } else {
+          cList.forEach(c => {
+            const cv = vMap[c.id] || {};
+            let tot = 0;
+            rounds.forEach(r => { tot += (Number(cv[r]) || 0); });
+            c._calcTotal = tot;
+          });
+          const valid = cList.filter(x => x.party !== 'NOTA' && !(x.name_hindi || '').includes('नोटा'));
+          valid.sort((a,b) => b._calcTotal - a._calcTotal);
+          if (valid[0] && valid[0]._calcTotal > 0) {
+            const p = valid[0].party || 'IND';
+            if (!partyStats[p]) partyStats[p] = { won: 0, leading: 0, votes: 0 };
+            partyStats[p].leading++;
+          }
+        }
+      });
+
+      let totalPolledVotes = 0;
+      Object.values(partyStats).forEach(s => { totalPolledVotes += s.votes; });
+
+      const sortedParties = Object.keys(partyStats).sort((a,b) => (partyStats[b].won + partyStats[b].leading) - (partyStats[a].won + partyStats[a].leading));
+
+      let html = `
+        <div style="background:#f8fafc; border:1.5px solid var(--border-main); border-radius:10px; padding:14px 18px; margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:0.8px;">
+            🏛️ राजस्थान राज्य निर्वाचन आयोग • पंचायती राज आम चुनाव 2026
+          </div>
+          <div style="font-size:18px; font-weight:900; color:#0f172a; margin-top:2px;">
+            दल-वार रुझान एवं सीट विश्लेषण (Party-wise Seat & Vote Share Analysis)
+          </div>
+          <div style="font-size:13px; font-weight:700; color:#334155; margin-top:3px;">
+            ${cat === 'ZP' ? 'जिला परिषद सलूम्बर (Salumber ZP)' : 'पंचायत समिति ' + blk} &nbsp;•&nbsp; कुल गिने गए मत: ${totalPolledVotes.toLocaleString()}
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:20px;">
+      `;
+
+      sortedParties.forEach(p => {
+        const s = partyStats[p];
+        const share = totalPolledVotes > 0 ? ((s.votes / totalPolledVotes) * 100).toFixed(1) : 0;
+        const totalSeats = s.won + s.leading;
+
+        html += `
+          <div style="background:#ffffff; border:1.5px solid var(--border-main); border-radius:10px; padding:14px 16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="party-pill party-${p}" style="font-size:14px; padding:4px 10px;">${p}</span>
+              <span style="font-size:18px; font-weight:900; color:#0f172a;">${totalSeats} <span style="font-size:11px; color:#64748b;">सीटें</span></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-top:8px; color:#475569;">
+              <span>🏆 जीतीं: <strong>${s.won}</strong></span>
+              <span>🟢 बढ़त: <strong>${s.leading}</strong></span>
+            </div>
+            <div style="margin-top:10px;">
+              <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:#64748b;">
+                <span>मत: ${s.votes.toLocaleString()}</span>
+                <span>${share}%</span>
+              </div>
+              <div style="background:#e2e8f0; border-radius:6px; height:7px; overflow:hidden; margin-top:4px;">
+                <div style="background:var(--primary); height:100%; width:${share}%;"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+
+      // Full Party Summary Table
+      html += `
+        <table class="table" style="width:100%; border:1px solid var(--border-main); border-radius:8px; overflow:hidden;">
+          <thead>
+            <tr style="background:#f8fafc;">
+              <th>राजनैतिक दल (Party)</th>
+              <th style="width:100px; text-align:center;">🏆 जीतीं (Won)</th>
+              <th style="width:100px; text-align:center;">🟢 बढ़त (Lead)</th>
+              <th style="width:120px; text-align:center; font-weight:800;">कुल सीटें (Total)</th>
+              <th style="width:140px; text-align:right;">कुल प्राप्त मत</th>
+              <th style="width:120px; text-align:right;">मत प्रतिशत (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      sortedParties.forEach(p => {
+        const s = partyStats[p];
+        const share = totalPolledVotes > 0 ? ((s.votes / totalPolledVotes) * 100).toFixed(2) : '0.00';
+        html += `
+          <tr>
+            <td style="font-weight:700;"><span class="party-pill party-${p}">${p}</span></td>
+            <td style="text-align:center; font-weight:800; color:#15803d;">${s.won}</td>
+            <td style="text-align:center; font-weight:800; color:#0284c7;">${s.leading}</td>
+            <td style="text-align:center; font-family:'Rajdhani',sans-serif; font-size:18px; font-weight:900; color:#0f172a;">${s.won + s.leading}</td>
+            <td class="ekzai-num-cell">${s.votes.toLocaleString()}</td>
+            <td class="ekzai-num-cell" style="font-weight:800; color:var(--primary);">${share}%</td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+      activeReportsDataCache = { type: 'party_analytics', cat, blk, partyStats, totalPolledVotes, sortedParties };
+      container.innerHTML = html;
+    }
+
+    function renderProgressSummary(cat, blk) {
+      const container = document.getElementById('reportContainer');
+      const wardsList = (masterData.wards || []).filter(w => w.category === cat && (cat === 'ZP' || w.block_name === blk));
+      const wWinners = masterData.wardWinners || {};
+
+      let totalWards = wardsList.length;
+      let declaredCount = 0;
+      let totalBoothsSum = 0;
+
+      wardsList.forEach(w => {
+        const wKey = `${cat}_${blk}_${w.ward_no}`;
+        if (wWinners[wKey] || w.status === 'DECLARED') declaredCount++;
+        totalBoothsSum += (Number(w.total_booths) || 0);
+      });
+
+      const pct = totalWards > 0 ? Math.round((declaredCount / totalWards) * 100) : 0;
+
+      let html = `
+        <div style="background:#f8fafc; border:1.5px solid var(--border-main); border-radius:10px; padding:14px 18px; margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:800; color:#64748b; letter-spacing:0.8px;">
+            🏛️ राजस्थान राज्य निर्वाचन आयोग • पंचायती राज आम चुनाव 2026
+          </div>
+          <div style="font-size:18px; font-weight:900; color:#0f172a; margin-top:2px;">
+            बूथ एवं मतगणना चक्र प्रगति सारांश (Counting & Tables Progress Summary)
+          </div>
+          <div style="font-size:13px; font-weight:700; color:#334155; margin-top:3px;">
+            ${cat === 'ZP' ? 'जिला परिषद सलूम्बर (Salumber ZP)' : 'पंचायत समिति ' + blk} &nbsp;•&nbsp; कुल बूथ: ${totalBoothsSum}
+          </div>
+        </div>
+
+        <div class="ekzai-kpi-grid">
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">कुल वार्ड (Total Wards)</span>
+            <span class="ekzai-kpi-value">${totalWards}</span>
+          </div>
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">घोषित परिणाम (Declared)</span>
+            <span class="ekzai-kpi-value" style="color:#15803d;">${declaredCount}</span>
+          </div>
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">प्रगति पर (In Progress)</span>
+            <span class="ekzai-kpi-value" style="color:#0284c7;">${totalWards - declaredCount}</span>
+          </div>
+          <div class="ekzai-kpi-card">
+            <span class="ekzai-kpi-label">परिणाम प्रतिशत (Completion)</span>
+            <span class="ekzai-kpi-value" style="color:#0f766e;">${pct}%</span>
+          </div>
+        </div>
+
+        <table class="table" style="width:100%; border:1px solid var(--border-main); border-radius:8px;">
+          <thead>
+            <tr style="background:#f8fafc; font-size:12px;">
+              <th style="width:65px; text-align:center;">वार्ड #</th>
+              <th style="width:90px; text-align:center;">कुल बूथ</th>
+              <th style="width:100px; text-align:center;">गणना टेबल</th>
+              <th style="width:100px; text-align:center;">अधिकतम चक्र</th>
+              <th style="width:120px; text-align:center;">घोषणा स्थिति</th>
+              <th>विजेता / अग्रणी प्रत्याशी</th>
+              <th style="width:120px; text-align:center;">जीत का अंतर</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      wardsList.sort((a,b) => a.ward_no - b.ward_no).forEach(w => {
+        const wKey = `${cat}_${blk}_${w.ward_no}`;
+        const wWin = wWinners[wKey];
+        const isDecl = Boolean(wWin) || w.status === 'DECLARED';
+
+        html += `
+          <tr>
+            <td style="text-align:center; font-weight:800;">वार्ड ${w.ward_no}</td>
+            <td style="text-align:center; font-family:'Rajdhani',sans-serif; font-weight:700;">${w.total_booths || '-'}</td>
+            <td style="text-align:center; font-family:'Rajdhani',sans-serif; font-weight:700;">${w.counting_tables || '-'}</td>
+            <td style="text-align:center; font-family:'Rajdhani',sans-serif; font-weight:700;">${w.max_rounds || '-'}</td>
+            <td style="text-align:center;">
+              <span class="badge" style="background:${isDecl ? '#dcfce7; color:#15803d;' : '#fef3c7; color:#b45309;'}">
+                ${isDecl ? '✓ घोषित' : '⏳ गणना जारी'}
+              </span>
+            </td>
+            <td style="font-weight:700;">
+              ${wWin ? `🏆 ${wWin.name_hindi} (${wWin.party})` : '—'}
+            </td>
+            <td style="text-align:center; font-family:'Rajdhani',sans-serif; font-weight:800; color:#15803d;">
+              ${wWin && wWin.lead_margin ? `+${wWin.lead_margin} मत` : '—'}
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+      activeReportsDataCache = { type: 'progress_summary', cat, blk, wardsList, totalWards, declaredCount, totalBoothsSum };
+      container.innerHTML = html;
+    }
+
+    function exportCurrentReportCsv() {
+      const rType = document.getElementById('reportType').value;
+      if (rType === 'ekzai') {
+        exportEkzaiCsv();
+        return;
+      }
+
+      if (!activeReportsDataCache) {
+        showToast('No report data to export.');
+        return;
+      }
+
+      const d = activeReportsDataCache;
+      let lines = [];
+
+      if (d.type === 'master_lifecycle') {
+        lines.push(`Master Lifecycle Report - ${d.cat} ${d.blk}`);
+        lines.push(`Generated: ${new Date().toLocaleString()}`);
+        lines.push("");
+        lines.push("Ward No,Ballot No,Candidate Name,Party,PB,R1,R2,R3,R4,R5,Total Votes");
+        d.sortedWardNos.forEach(wNo => {
+          (d.wardsMap[wNo] || []).forEach(c => {
+            const cv = (masterData.roundVotes && masterData.roundVotes[c.id]) || {};
+            const nameClean = c.name_hindi.includes(',') ? `"${c.name_hindi}"` : c.name_hindi;
+            lines.push(`${wNo},${c.ballot_no || '-'},${nameClean},${c.party || 'IND'},${cv['PB'] || 0},${cv['R1'] || 0},${cv['R2'] || 0},${cv['R3'] || 0},${cv['R4'] || 0},${cv['R5'] || 0},${c._calcTotal || 0}`);
+          });
+        });
+      } else if (d.type === 'party_analytics') {
+        lines.push(`Party Analytics Report - ${d.cat} ${d.blk}`);
+        lines.push(`Total Polled: ${d.totalPolledVotes}`);
+        lines.push("");
+        lines.push("Party,Seats Won,Seats Leading,Total Seats,Total Votes,Vote Share %");
+        d.sortedParties.forEach(p => {
+          const s = d.partyStats[p];
+          const sh = d.totalPolledVotes > 0 ? ((s.votes / d.totalPolledVotes) * 100).toFixed(2) : '0.00';
+          lines.push(`${p},${s.won},${s.leading},${s.won + s.leading},${s.votes},${sh}%`);
+        });
+      } else if (d.type === 'progress_summary') {
+        lines.push(`Counting Progress Summary - ${d.cat} ${d.blk}`);
+        lines.push(`Total Wards: ${d.totalWards}, Declared: ${d.declaredCount}, Total Booths: ${d.totalBoothsSum}`);
+        lines.push("");
+        lines.push("Ward No,Total Booths,Counting Tables,Max Rounds,Status,Winner,Margin");
+        d.wardsList.forEach(w => {
+          const wKey = `${d.cat}_${d.blk}_${w.ward_no}`;
+          const win = (masterData.wardWinners && masterData.wardWinners[wKey]) || null;
+          const wName = win ? `"${win.name_hindi} (${win.party})"` : "-";
+          const marginStr = win && win.lead_margin ? `+${win.lead_margin}` : "-";
+          lines.push(`${w.ward_no},${w.total_booths || '-'},${w.counting_tables || '-'},${w.max_rounds || '-'},${win ? 'DECLARED' : 'COUNTING'},${wName},${marginStr}`);
+        });
+      }
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Report_${d.type}_${d.cat}_${d.blk}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`✅ CSV downloaded: ${a.download}`);
+    }
+
+    function printActiveReport() {
+      window.print();
     }
 
 

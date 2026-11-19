@@ -216,15 +216,15 @@ export default {
     }
 
     if (path === '/api/round_ekzai') {
-      const category = url.searchParams.get('category') || 'PS';
-      const block = url.searchParams.get('block') || 'Semari';
+      const category = (url.searchParams.get('category') || 'PS').toUpperCase();
+      const block = category === 'ZP' ? 'Salumber ZP' : (url.searchParams.get('block') || 'Semari');
       const round_key = (url.searchParams.get('round_key') || 'R1').toUpperCase();
 
       const decl = (MASTER_DATA.declaredRounds || []).find(r => r.category === category && r.block_name === block && r.round_key === round_key);
       const is_declared = Boolean(decl);
 
       const cand_rows = MASTER_DATA.candidates
-        .filter(c => c.category === category && c.block_name === block)
+        .filter(c => c.category === category && (category === 'ZP' || c.block_name === block))
         .map(c => {
           const vObj = MASTER_DATA.roundVotes[c.id] || {};
           const curVotes = Number(vObj[round_key]) || 0;
@@ -246,23 +246,44 @@ export default {
         const wNo = c.ward_no;
         if (!wards_map[wNo]) wards_map[wNo] = [];
         wards_map[wNo].push({
-          candidate_id: c.id,
+          id: c.id,
+          ward_no: wNo,
           name_hindi: c.name_hindi,
           party: c.party,
           ballot_no: c.ballot_no,
-          prev_cumulative: prev_total,
-          round_votes: c.current_round_votes,
-          cumulative: cumul
+          prev_votes: prev_total,
+          current_round_votes: c.current_round_votes,
+          cumul_votes: cumul
+        });
+      });
+
+      const ekzai_wards = [];
+      const sortedWardNos = Object.keys(wards_map).map(Number).sort((a,b) => a - b);
+      sortedWardNos.forEach(w_no => {
+        const cands = wards_map[w_no];
+        const valid_cands = cands.filter(x => x.party !== 'NOTA' && !(x.name_hindi || '').includes('नोटा'));
+        valid_cands.sort((a, b) => b.cumul_votes - a.cumul_votes);
+        const leader = valid_cands[0] || null;
+        const runner = valid_cands[1] || null;
+        const margin = (leader && runner) ? (leader.cumul_votes - runner.cumul_votes) : (leader ? leader.cumul_votes : 0);
+
+        ekzai_wards.push({
+          ward_no: w_no,
+          leader_name: leader ? leader.name_hindi : '-',
+          leader_party: leader ? leader.party : '-',
+          margin: margin,
+          candidates: cands
         });
       });
 
       return jsonResponse({
         status: 'success',
-        round_key,
         category,
-        block,
+        block_name: block,
+        round_key,
         is_declared,
-        wards: wards_map
+        declared_at: decl ? decl.declared_at : null,
+        wards: ekzai_wards
       });
     }
 
