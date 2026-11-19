@@ -231,6 +231,38 @@
       box-shadow: var(--shadow-sm);
     }
 
+    /* Distinct Zilla Parishad (ZP) Column Theme */
+    .zp-column-box {
+      background: linear-gradient(180deg, #f0f7ff 0%, #e6f0fa 100%) !important;
+      border: 1.5px solid #93c5fd !important;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.09) !important;
+    }
+
+    .zp-column-box .column-head {
+      background: linear-gradient(90deg, #e0f2fe 0%, #f0f9ff 100%) !important;
+      border-bottom: 1.5px solid #bae6fd !important;
+    }
+
+    .zp-column-box .column-title {
+      color: #0369a1 !important;
+    }
+
+    .zp-column-box .ward-card {
+      background: #ffffff;
+      border: 1.5px solid #bfdbfe;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08);
+    }
+
+    .zp-column-box .ward-card:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.16);
+    }
+
+    .zp-column-box .ward-card-head {
+      background: #f0f9ff;
+      border-bottom: 1px solid #e0f2fe;
+    }
+
     .column-head {
       background: #f8fafc;
       border-bottom: 1px solid var(--border-subtle);
@@ -687,7 +719,7 @@
   <main class="split-container">
     
     <!-- LEFT COLUMN: ZILLA PARISHAD (ALL 21 WARDS DISPLAYED) -->
-    <section class="column-box">
+    <section class="column-box zp-column-box">
       <div class="column-head">
         <div class="column-title" id="zpColumnTitle">
           <span>🏛️</span> Zilla Parishad (All 21 Wards)
