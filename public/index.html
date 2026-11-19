@@ -1387,13 +1387,44 @@
         totalFontSize = '15px';
       }
 
+      // Find max vote count in this ward
+      let maxVoteInWard = 0;
+      candTotals.forEach(c => {
+        if (c.totalVotes > maxVoteInWard) maxVoteInWard = c.totalVotes;
+        const vObj = masterData.roundVotes[c.id] || {};
+        displayRoundKeys.forEach(r => {
+          const v = Number(vObj[r]) || 0;
+          if (v > maxVoteInWard) maxVoteInWard = v;
+        });
+      });
+      const is5Digit = maxVoteInWard >= 10000;
+
+      if (is5Digit) {
+        roundFontSize = '11.5px';
+        totalFontSize = '13.5px';
+      }
+
+      const numRounds = displayRoundKeys.length;
+      let roundColWidth = 44;
+      let totalColWidth = 65;
+      if (numRounds === 1) {
+        roundColWidth = is5Digit ? 68 : 56;
+        totalColWidth = is5Digit ? 74 : 65;
+      } else if (numRounds === 2) {
+        roundColWidth = is5Digit ? 58 : 48;
+        totalColWidth = is5Digit ? 68 : 62;
+      } else {
+        roundColWidth = is5Digit ? 50 : 44;
+        totalColWidth = is5Digit ? 65 : 60;
+      }
+
       let roundThs = '';
       if (hasEarlierRounds) {
         roundThs += `<th style="text-align:center; padding:5px 2px; width:18px; font-weight:800; color:var(--text-dim); font-size:9px;" title="Earlier rounds included in Total">...</th>`;
       }
       displayRoundKeys.forEach(r => {
         const label = r === 'PB' ? 'PB' : r;
-        roundThs += `<th style="text-align:right; padding:5px 6px; width:44px; font-weight:800; color:var(--text-muted); font-size:10px;">${label}</th>`;
+        roundThs += `<th style="text-align:right; padding:5px 4px; width:${roundColWidth}px; font-weight:800; color:var(--text-muted); font-size:10px;">${label}</th>`;
       });
 
       let rowsHtml = '';
@@ -1435,7 +1466,7 @@
                 </div>
               </td>
               ${roundTds}
-              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:${totalFontSize}; font-weight:800; color:${isLeader ? 'var(--primary)' : 'inherit'}; width:65px; padding:${rowPadding};">
+              <td style="text-align:right; font-family:'Rajdhani',sans-serif; font-size:${totalFontSize}; font-weight:800; color:${isLeader ? 'var(--primary)' : 'inherit'}; width:${totalColWidth}px; padding:${rowPadding};">
                 ${c.totalVotes}
               </td>
             </tr>
@@ -1461,7 +1492,7 @@
               <th style="width:26px;">#</th>
               <th>Candidate & Party</th>
               ${roundThs}
-              <th style="text-align:right; width:65px;">Total</th>
+              <th style="text-align:right; width:${totalColWidth}px;">Total</th>
             </tr>
           </thead>
           <tbody>

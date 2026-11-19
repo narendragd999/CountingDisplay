@@ -838,16 +838,18 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 3.5px 7px;
+      padding: 3.5px 4px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       white-space: nowrap;
+      box-sizing: border-box;
     }
 
     .pro-cand-table td {
-      padding: 3.5px 7px;
+      padding: 3.5px 4px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       vertical-align: middle;
       white-space: nowrap;
+      box-sizing: border-box;
     }
 
     .pro-cand-table tr:last-child td { border-bottom: none; }
@@ -860,7 +862,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 6px;
       min-width: 0;
       overflow: hidden;
       width: 100%;
@@ -904,7 +906,10 @@
       font-size: 0.94rem;
       font-weight: 700;
       color: #cbd5e1;
-      width: 38px;
+      font-variant-numeric: tabular-nums;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 3.5px 3px !important;
     }
 
     .round-num-cell.active-val {
@@ -918,7 +923,10 @@
       font-size: 1.05rem;
       font-weight: 900;
       color: #38bdf8;
-      width: 52px;
+      font-variant-numeric: tabular-nums;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 3.5px 3px !important;
     }
 
     .total-num-cell.top-rank-total {
@@ -2092,6 +2100,38 @@
         hasLaterRounds = (curOffset + 3) < totalRoundsCount;
       }
 
+      // Check max vote count in this ward to smartly size columns & auto-scale fonts
+      let maxVoteInWard = 0;
+      candTotals.forEach(c => {
+        if (c.totalVotes > maxVoteInWard) maxVoteInWard = c.totalVotes;
+        const vObj = electionData.roundVotes[c.id] || {};
+        displayRoundKeys.forEach(r => {
+          const v = Number(vObj[r]) || 0;
+          if (v > maxVoteInWard) maxVoteInWard = v;
+        });
+      });
+      const is5Digit = maxVoteInWard >= 10000;
+      const is6Digit = maxVoteInWard >= 100000;
+
+      // Smart dynamic column widths for round and total
+      const numRounds = displayRoundKeys.length;
+      let roundColWidth = 44;
+      let totalColWidth = 54;
+
+      if (numRounds === 1) {
+        roundColWidth = is5Digit ? 68 : 58;
+        totalColWidth = is5Digit ? 74 : 64;
+      } else if (numRounds === 2) {
+        roundColWidth = is5Digit ? 58 : 50;
+        totalColWidth = is5Digit ? 66 : 58;
+      } else if (numRounds === 3) {
+        roundColWidth = is5Digit ? 50 : 44;
+        totalColWidth = is5Digit ? 60 : 54;
+      } else {
+        roundColWidth = is5Digit ? 46 : 38;
+        totalColWidth = is5Digit ? 58 : 50;
+      }
+
       // Headers with Interactive Older Round Navigation
       let roundThs = '';
       if (globalRoundsMode !== 'all' && totalRoundsCount > 3) {
@@ -2104,7 +2144,7 @@
         `;
       }
       displayRoundKeys.forEach(r => {
-        roundThs += `<th style="text-align:right; width:34px;">${r}</th>`;
+        roundThs += `<th style="text-align:right; width:${roundColWidth}px;">${r}</th>`;
       });
       if (globalRoundsMode !== 'all' && totalRoundsCount > 3) {
         const nextDisabled = !hasLaterRounds ? 'disabled' : '';
@@ -2131,8 +2171,15 @@
           displayRoundKeys.forEach(rKey => {
             const val = vObj[rKey];
             const displayVal = (val !== undefined && val !== null) ? val : '-';
+            const numVal = Number(val) || 0;
+            let numStyle = '';
+            if (numVal >= 100000) {
+              numStyle = 'font-size:0.76rem; letter-spacing:-0.4px;';
+            } else if (numVal >= 10000) {
+              numStyle = 'font-size:0.83rem; letter-spacing:-0.2px;';
+            }
             roundTds += `
-              <td class="round-num-cell ${val > 0 ? 'active-val' : ''}">
+              <td class="round-num-cell ${val > 0 ? 'active-val' : ''}" style="${numStyle}">
                 ${displayVal}
               </td>
             `;
@@ -2144,17 +2191,24 @@
           const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
           const pCls = isNota ? 'pbadge-nota' : (`pbadge-${(c.party || 'IND').toLowerCase()}`);
 
+          let totalNumStyle = '';
+          if (c.totalVotes >= 100000) {
+            totalNumStyle = 'font-size:0.84rem; letter-spacing:-0.4px;';
+          } else if (c.totalVotes >= 10000) {
+            totalNumStyle = 'font-size:0.90rem; letter-spacing:-0.2px;';
+          }
+
           rowsHtml += `
             <tr class="${isWinnerRow ? 'winner-row-highlight' : ''}">
               <td style="color:var(--text-dim); font-size:0.65rem; text-align:center; width:16px; font-weight:700;">${idx + 1}</td>
-              <td>
+              <td style="min-width:0;">
                 <div class="cand-name-flex">
                   <span class="cand-name-hindi" title="${c.name_hindi}">${c.name_hindi}</span>
                   <span class="pro-party-badge ${pCls}">${c.party || 'IND'}</span>
                 </div>
               </td>
               ${roundTds}
-              <td class="total-num-cell ${idx === 0 && c.totalVotes > 0 ? 'top-rank-total' : ''}">
+              <td class="total-num-cell ${idx === 0 && c.totalVotes > 0 ? 'top-rank-total' : ''}" style="${totalNumStyle}">
                 ${c.totalVotes}
               </td>
             </tr>
@@ -2196,7 +2250,7 @@
               <th style="width:16px;">#</th>
               <th style="text-align:left;">प्रत्याशी</th>
               ${roundThs}
-              <th style="text-align:right; width:48px;">योग</th>
+              <th style="text-align:right; width:${totalColWidth}px;">योग</th>
             </tr>
           </thead>
           <tbody>
