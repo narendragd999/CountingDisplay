@@ -620,7 +620,7 @@
       grid-auto-rows: max-content;
       gap: 10px;
       min-height: 0;
-      scroll-behavior: smooth;
+      scroll-behavior: auto; /* auto allows silky-smooth 60fps rAF auto-scroll without browser compositor locking in fullscreen */
     }
 
     .chamber-cards-scroll::-webkit-scrollbar { width: 4px; }
@@ -1343,10 +1343,10 @@
         </select>
       </div>
 
-      <!-- Active Entries Filter Badge -->
-      <div class="filter-active-pill" title="केवल वे वार्ड प्रदर्शित हैं जिनमें कम से कम 1 मत प्रविष्ट है या परिणाम घोषित है">
-        <span id="activeFilterBadge">⚡ प्रविष्ट परिणाम</span>
-      </div>
+      <!-- Active Entries / All Data Filter Toggle Button -->
+      <button class="filter-active-pill" id="btnToggleDisplayFilter" onclick="toggleDataDisplayFilter()" style="cursor:pointer; background:rgba(14,165,233,0.18); border:1px solid #0284c7; color:#38bdf8; outline:none; transition:all 0.15s;" title="क्लिक करें: समस्त डेटा या केवल सक्रिय परिणाम देखें (Toggle All Data / Active Only)">
+        <span id="activeFilterBadge">🌐 समस्त 126 वार्ड</span>
+      </button>
     </div>
 
     <div class="header-telemetry">
@@ -1579,6 +1579,7 @@
       else if (mode === 'ps') document.getElementById('btnModePs').classList.add('active');
 
       renderActiveStage(true);
+      if (typeof resetPsScrollerPosition === 'function') resetPsScrollerPosition();
     }
 
     function toggleAutoTour() {
@@ -1598,6 +1599,20 @@
 
     // 6. Approach A: Adaptive Pacing Auto-Scroll & Completion Guarantee
     let smartTvScrollCompleted = false;
+    let globalScrollMap = new WeakMap();
+
+    function resetPsScrollerPosition() {
+      const psScroller = document.getElementById('scrollContainerPs') || document.getElementById('scrollContainerPsFull');
+      if (psScroller) {
+        psScroller.scrollTop = 0;
+        const state = globalScrollMap.get(psScroller);
+        if (state) {
+          state.acc = 0;
+          state.topPause = 1.0;
+          state.bottomPause = 1.5;
+        }
+      }
+    }
 
     function initAutoTour() {
       if (tourTimer) clearInterval(tourTimer);
@@ -1611,7 +1626,7 @@
         const psScroller = document.getElementById('scrollContainerPs') || document.getElementById('scrollContainerPsFull');
         if (psScroller) {
           const maxScroll = Math.max(0, psScroller.scrollHeight - psScroller.clientHeight);
-          if (maxScroll > 35 && !smartTvScrollCompleted) {
+          if (maxScroll > 15 && !smartTvScrollCompleted) {
             // Still smoothly gliding to show bottom wards; wait until completion
             return;
           }
@@ -1621,6 +1636,7 @@
         const nextIdx = (tourList.indexOf(activePsBlock) + 1) % tourList.length;
         activePsBlock = tourList[nextIdx];
         renderActiveStage();
+        resetPsScrollerPosition();
       }, intervalMs);
     }
 
@@ -1629,7 +1645,6 @@
       if (autoScrollInterval) cancelAnimationFrame(autoScrollInterval);
 
       let lastTime = performance.now();
-      let scrollMap = new WeakMap();
 
       function step(now) {
         const dt = Math.min((now - lastTime) / 1000, 0.1);
@@ -1637,14 +1652,15 @@
 
         document.querySelectorAll('.chamber-cards-scroll').forEach(scroller => {
           const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
-          if (maxScroll > 35) {
-            let state = scrollMap.get(scroller);
+          if (maxScroll > 10) {
+            let state = globalScrollMap.get(scroller);
             if (!state) {
-              state = { acc: scroller.scrollTop, topPause: 2.0, bottomPause: 2.5 };
-              scrollMap.set(scroller, state);
+              state = { acc: scroller.scrollTop, topPause: 1.0, bottomPause: 1.5 };
+              globalScrollMap.set(scroller, state);
             }
 
-            if (Math.abs(scroller.scrollTop - state.acc) > 15) {
+            // Sync with external or manual scroll if shifted significantly
+            if (Math.abs(scroller.scrollTop - state.acc) > 25) {
               state.acc = scroller.scrollTop;
             }
 
@@ -1653,10 +1669,10 @@
               return;
             }
 
-            // Adaptive Paced Speed: guarantees traversing all wards smoothly within the selected PS interval
-            const activeDuration = Math.max(3.0, psTourIntervalSeconds - 4.0);
-            let baseSpeed = Math.max(16, maxScroll / activeDuration);
-            let adaptiveSpeed = Math.min(65, baseSpeed * scrollSpeedMultiplier);
+            // Adaptive Paced Speed: smooth progression across cards
+            const activeDuration = Math.max(3.0, psTourIntervalSeconds - 2.5);
+            let baseSpeed = Math.max(22, maxScroll / activeDuration);
+            let adaptiveSpeed = Math.min(110, baseSpeed * scrollSpeedMultiplier);
 
             if (state.topPause > 0) {
               state.topPause -= dt * scrollSpeedMultiplier;
@@ -1665,14 +1681,14 @@
               if (state.acc >= maxScroll) {
                 state.acc = maxScroll;
                 scroller.scrollTop = maxScroll;
-                smartTvScrollCompleted = true; // All cards reached and viewable!
+                smartTvScrollCompleted = true; // All bottom cards reached and viewable!
                 if (state.bottomPause > 0) {
                   state.bottomPause -= dt * scrollSpeedMultiplier;
                 } else {
                   state.acc = 0;
                   scroller.scrollTop = 0;
-                  state.topPause = 2.0;
-                  state.bottomPause = 2.5;
+                  state.topPause = 1.0;
+                  state.bottomPause = 1.5;
                 }
               } else {
                 scroller.scrollTop = Math.round(state.acc);
@@ -1689,6 +1705,27 @@
       autoScrollInterval = requestAnimationFrame(step);
     }
 
+    // Listen to Fullscreen and window Resize events so auto-scroll smoothly resyncs
+    document.addEventListener('fullscreenchange', () => {
+      document.querySelectorAll('.chamber-cards-scroll').forEach(scroller => {
+        const state = globalScrollMap.get(scroller);
+        if (state) {
+          state.acc = scroller.scrollTop;
+          state.topPause = 0.5;
+        }
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.chamber-cards-scroll').forEach(scroller => {
+        const state = globalScrollMap.get(scroller);
+        if (state) {
+          const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+          if (state.acc > maxScroll) state.acc = maxScroll;
+        }
+      });
+    });
+
     function toggleScreenFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => {});
@@ -1698,12 +1735,15 @@
     }
 
     // ==========================================================================
-    // Check if ward has entered votes (greater than zero) or officially declared
+    // ALL DATA DISPLAY TOGGLE & ACTIVE VOTES FILTER
+    // ==========================================================================
+    let displayAllData = true; // DEFAULT: Show ALL data (all 126 wards) as requested
+
     function wardHasEnteredVotes(ward) {
       if (ward.status === 'DECLARED') return true;
-      const cands = electionData.candidates.filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
+      const cands = (electionData.candidates || []).filter(c => c.category === ward.category && c.block_name === ward.block_name && c.ward_no === ward.ward_no);
       for (const c of cands) {
-        const vObj = electionData.roundVotes[c.id] || {};
+        const vObj = (electionData.roundVotes || {})[c.id] || {};
         for (const cnt of Object.values(vObj)) {
           if (Number(cnt) > 0) return true;
         }
@@ -1713,10 +1753,22 @@
 
     function updateActiveFilterCount() {
       const activeWards = (electionData.wards || []).filter(wardHasEnteredVotes);
+      const totalWards = (electionData.wards || []).length;
       const badge = document.getElementById('activeFilterBadge');
       if (badge) {
-        badge.textContent = `⚡ सक्रिय (${activeWards.length})`;
+        if (displayAllData) {
+          badge.textContent = `🌐 समस्त 126 वार्ड`;
+        } else {
+          badge.textContent = `⚡ केवल सक्रिय (${activeWards.length})`;
+        }
       }
+    }
+
+    function toggleDataDisplayFilter() {
+      displayAllData = !displayAllData;
+      updateActiveFilterCount();
+      renderActiveStage(true);
+      resetPsScrollerPosition();
     }
 
     // ==========================================================================
@@ -1794,14 +1846,17 @@
         subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त 105)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
       }
 
-      // Populate ONLY ZP Wards with entered votes or declared
-      const zpWards = electionData.wards.filter(w => w.category === 'ZP' && wardHasEnteredVotes(w)).sort((a,b) => a.ward_no - b.ward_no);
+      // Populate ZP Wards (All 21 Wards or Active only)
+      const zpWards = (electionData.wards || [])
+        .filter(w => w.category === 'ZP' && (displayAllData || wardHasEnteredVotes(w)))
+        .sort((a,b) => a.ward_no - b.ward_no);
       const zpCountEl = document.getElementById('zpActiveCount');
-      if (zpCountEl) zpCountEl.textContent = `(${zpWards.length} सक्रिय)`;
-      diffAndRenderCards(document.getElementById('scrollContainerZp'), zpWards, 'जिला परिषद: अभी किसी वार्ड में मत प्रविष्टि नहीं हुई है');
+      if (zpCountEl) zpCountEl.textContent = displayAllData ? `(${zpWards.length} कुल वार्ड)` : `(${zpWards.length} सक्रिय)`;
+      diffAndRenderCards(document.getElementById('scrollContainerZp'), zpWards, 'जिला परिषद: कोई वार्ड डेटा उपलब्ध नहीं है');
 
-      // Populate ONLY PS Wards with entered votes or declared
-      let psWards = electionData.wards.filter(w => w.category === 'PS' && wardHasEnteredVotes(w));
+      // Populate PS Wards (All Wards of selected Block or Active only)
+      let psWards = (electionData.wards || [])
+        .filter(w => w.category === 'PS' && (displayAllData || wardHasEnteredVotes(w)));
       if (activePsBlock !== 'ALL') {
         psWards = psWards.filter(w => w.block_name === activePsBlock);
       }
@@ -1809,7 +1864,7 @@
         if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
         return a.ward_no - b.ward_no;
       });
-      diffAndRenderCards(document.getElementById('scrollContainerPs'), psWards, 'पंचायत समिति: चयनित ब्लॉक में अभी कोई मत प्रविष्टि नहीं है');
+      diffAndRenderCards(document.getElementById('scrollContainerPs'), psWards, 'पंचायत समिति: चयनित ब्लॉक में कोई वार्ड डेटा उपलब्ध नहीं है');
     }
 
     // Fullscreen ZP Stage
@@ -1830,10 +1885,12 @@
           </div>
         `;
       }
-      const zpWards = electionData.wards.filter(w => w.category === 'ZP' && wardHasEnteredVotes(w)).sort((a,b) => a.ward_no - b.ward_no);
+      const zpWards = (electionData.wards || [])
+        .filter(w => w.category === 'ZP' && (displayAllData || wardHasEnteredVotes(w)))
+        .sort((a,b) => a.ward_no - b.ward_no);
       const countEl = document.getElementById('zpFullActiveCount');
-      if (countEl) countEl.textContent = `(${zpWards.length} सक्रिय)`;
-      diffAndRenderCards(document.getElementById('scrollContainerZpFull'), zpWards, 'जिला परिषद: अभी किसी वार्ड में मत प्रविष्टि नहीं हुई है');
+      if (countEl) countEl.textContent = displayAllData ? `(${zpWards.length} कुल वार्ड)` : `(${zpWards.length} सक्रिय)`;
+      diffAndRenderCards(document.getElementById('scrollContainerZpFull'), zpWards, 'जिला परिषद: कोई वार्ड डेटा उपलब्ध नहीं है');
     }
 
     // Fullscreen PS Stage
@@ -1863,7 +1920,8 @@
         subLabel.textContent = activePsBlock === 'ALL' ? '(समस्त ब्लॉक)' : `(${HINDI_BLOCK_MAP[activePsBlock] || activePsBlock})`;
       }
 
-      let psWards = electionData.wards.filter(w => w.category === 'PS' && wardHasEnteredVotes(w));
+      let psWards = (electionData.wards || [])
+        .filter(w => w.category === 'PS' && (displayAllData || wardHasEnteredVotes(w)));
       if (activePsBlock !== 'ALL') {
         psWards = psWards.filter(w => w.block_name === activePsBlock);
       }
@@ -1871,7 +1929,7 @@
         if (a.block_name !== b.block_name) return a.block_name.localeCompare(b.block_name);
         return a.ward_no - b.ward_no;
       });
-      diffAndRenderCards(document.getElementById('scrollContainerPsFull'), psWards, 'पंचायत समिति: चयनित ब्लॉक में अभी कोई मत प्रविष्टि नहीं है');
+      diffAndRenderCards(document.getElementById('scrollContainerPsFull'), psWards, 'पंचायत समिति: चयनित ब्लॉक में कोई वार्ड डेटा उपलब्ध नहीं है');
     }
 
     function buildBlockNavPills() {
@@ -1894,6 +1952,7 @@
     function changePsBlock(b) {
       activePsBlock = b;
       renderActiveStage();
+      if (typeof resetPsScrollerPosition === 'function') resetPsScrollerPosition();
     }
 
     // ==========================================================================
