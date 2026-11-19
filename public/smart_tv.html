@@ -1312,7 +1312,12 @@
           <option value="20">20s</option>
           <option value="30">30s</option>
           <option value="45">45s</option>
-          <option value="60">60s</option>
+          <option value="60">60s (1m)</option>
+          <option value="90">90s (1.5m)</option>
+          <option value="120">120s (2m)</option>
+          <option value="180">180s (3m)</option>
+          <option value="240">240s (4m)</option>
+          <option value="300">300s (5m)</option>
         </select>
       </div>
 
@@ -1321,10 +1326,14 @@
         <span>📜 स्क्रोल:</span>
         <select id="scrollSpeedSelect" class="tv-ctrl-select" onchange="changeScrollSpeed(this.value)">
           <option value="0">⏸️ पॉज</option>
+          <option value="0.25">🐌 0.25x</option>
           <option value="0.5">🐢 0.5x</option>
+          <option value="0.75">🚶‍♂️ 0.75x</option>
           <option value="1" selected>🚶 1x</option>
+          <option value="1.25">🏃‍♂️ 1.25x</option>
           <option value="1.5">🏃 1.5x</option>
           <option value="2">⚡ 2x</option>
+          <option value="3">🚀 3x</option>
         </select>
       </div>
 
@@ -2178,17 +2187,17 @@
       let totalColWidth = 54;
 
       if (numRounds === 1) {
-        roundColWidth = is5Digit ? 68 : 58;
-        totalColWidth = is5Digit ? 74 : 64;
+        roundColWidth = is6Digit ? 74 : (is5Digit ? 68 : 58);
+        totalColWidth = is6Digit ? 82 : (is5Digit ? 74 : 64);
       } else if (numRounds === 2) {
-        roundColWidth = is5Digit ? 58 : 50;
-        totalColWidth = is5Digit ? 66 : 58;
+        roundColWidth = is6Digit ? 64 : (is5Digit ? 58 : 50);
+        totalColWidth = is6Digit ? 72 : (is5Digit ? 66 : 58);
       } else if (numRounds === 3) {
-        roundColWidth = is5Digit ? 50 : 44;
-        totalColWidth = is5Digit ? 60 : 54;
+        roundColWidth = is6Digit ? 54 : (is5Digit ? 50 : 44);
+        totalColWidth = is6Digit ? 66 : (is5Digit ? 60 : 54);
       } else {
-        roundColWidth = is5Digit ? 46 : 38;
-        totalColWidth = is5Digit ? 58 : 50;
+        roundColWidth = is6Digit ? 50 : (is5Digit ? 46 : 38);
+        totalColWidth = is6Digit ? 62 : (is5Digit ? 58 : 50);
       }
 
       // Headers with Interactive Older Round Navigation

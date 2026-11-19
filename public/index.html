@@ -632,7 +632,12 @@
             <option value="20">20s</option>
             <option value="30">30s</option>
             <option value="45">45s</option>
-            <option value="60">60s</option>
+            <option value="60">60s (1m)</option>
+            <option value="90">90s (1.5m)</option>
+            <option value="120">120s (2m)</option>
+            <option value="180">180s (3m)</option>
+            <option value="240">240s (4m)</option>
+            <option value="300">300s (5m)</option>
           </select>
         </div>
 
@@ -641,10 +646,14 @@
           <label for="scrollSpeedSelectIdx" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">📜 Scroll:</label>
           <select id="scrollSpeedSelectIdx" class="filter-select" style="padding: 2px 6px; font-size: 12px; font-weight: 700; height: 26px; border: none; background: transparent; cursor: pointer;" onchange="changeScrollSpeedIndex(this.value)">
             <option value="0">⏸️ Pause</option>
+            <option value="0.25">🐌 0.25x</option>
             <option value="0.5">🐢 Slow (0.5x)</option>
+            <option value="0.75">🚶‍♂️ 0.75x</option>
             <option value="1" selected>🚶 Normal (1x)</option>
+            <option value="1.25">🏃‍♂️ 1.25x</option>
             <option value="1.5">🏃 Fast (1.5x)</option>
             <option value="2">⚡ Ultra (2x)</option>
+            <option value="3">🚀 Super (3x)</option>
           </select>
         </div>
 
