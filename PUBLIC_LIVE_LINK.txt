@@ -1,0 +1,11 @@
+SALUMBER ELECTIONS 2026 - LIVE PUBLIC BROADCAST LINKS
+====================================================
+
+PUBLIC TV DISPLAY (Open on other computer / Projector / Mobiles):
+https://cat-brochure-patrick-edt.trycloudflare.com/tv
+
+OPERATOR ENTRY (Any computer):
+https://cat-brochure-patrick-edt.trycloudflare.com/entry
+
+LOCAL OPERATOR (This computer):
+http://localhost:8082/entry
