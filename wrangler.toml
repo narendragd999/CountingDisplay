@@ -2,3 +2,8 @@ name = "countingdisplay"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare KV Binding for Global Multi-System Real-Time Sync
+[[kv_namespaces]]
+binding = "ELECTION_KV"
+id = "election_kv_salumber"

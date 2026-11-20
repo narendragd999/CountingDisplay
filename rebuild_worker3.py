@@ -66,8 +66,58 @@ let MASTER_DATA = __MASTER_DATA__;
 const USERS_LIST = __USERS_LIST__;
 let SYSTEM_MODE = "__SYSTEM_MODE__";
 
+function getKV(env) {
+  if (!env) return null;
+  if (env.ELECTION_KV && typeof env.ELECTION_KV.get === 'function') return env.ELECTION_KV;
+  for (const k of Object.keys(env)) {
+    if (env[k] && typeof env[k].get === 'function' && typeof env[k].put === 'function') {
+      return env[k];
+    }
+  }
+  return null;
+}
+
+async function syncStateFromKV(env) {
+  const kv = getKV(env);
+  if (!kv) return;
+  try {
+    const raw = await kv.get('SALUMBER_ELECTION_STATE_2026', 'json');
+    if (raw && typeof raw === 'object') {
+      if (raw.roundVotes) MASTER_DATA.roundVotes = raw.roundVotes;
+      if (raw.declaredRounds) MASTER_DATA.declaredRounds = raw.declaredRounds;
+      if (raw.system_mode) SYSTEM_MODE = raw.system_mode;
+      if (Array.isArray(raw.wards)) {
+        raw.wards.forEach(rw => {
+          const w = MASTER_DATA.wards.find(mw => mw.category === rw.category && mw.block_name === rw.block_name && mw.ward_no === rw.ward_no);
+          if (w && rw.status) w.status = rw.status;
+        });
+      }
+    }
+  } catch (e) {
+    console.error('KV read error:', e);
+  }
+}
+
+async function persistStateToKV(env) {
+  const kv = getKV(env);
+  if (!kv) return;
+  try {
+    const payload = {
+      roundVotes: MASTER_DATA.roundVotes,
+      declaredRounds: MASTER_DATA.declaredRounds || [],
+      wards: (MASTER_DATA.wards || []).map(w => ({ category: w.category, block_name: w.block_name, ward_no: w.ward_no, status: w.status })),
+      system_mode: SYSTEM_MODE,
+      updated_at: new Date().toISOString()
+    };
+    await kv.put('SALUMBER_ELECTION_STATE_2026', JSON.stringify(payload));
+  } catch (e) {
+    console.error('KV write error:', e);
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
+    await syncStateFromKV(env);
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -196,6 +246,7 @@ export default {
         if (!existing) {
           MASTER_DATA.declaredRounds.push({ category, block_name: block, round_key, status: 'DECLARED', declared_at: new Date().toISOString() });
         }
+        await persistStateToKV(env);
         return jsonResponse({ status: 'success', message: `Round ${round_key} declared successfully!` });
       } catch (e) {
         return jsonResponse({ detail: e.message }, 500);
@@ -209,6 +260,7 @@ export default {
         if (MASTER_DATA.declaredRounds) {
           MASTER_DATA.declaredRounds = MASTER_DATA.declaredRounds.filter(r => !(r.category === category && r.block_name === block && r.round_key === round_key));
         }
+        await persistStateToKV(env);
         return jsonResponse({ status: 'success', message: `Round ${round_key} reopened successfully!` });
       } catch (e) {
         return jsonResponse({ detail: e.message }, 500);
@@ -368,6 +420,7 @@ export default {
               w.status = 'COUNTING';
             });
           }
+          await persistStateToKV(env);
           return jsonResponse({
             status: 'success',
             system_mode: SYSTEM_MODE,
@@ -389,6 +442,7 @@ export default {
       MASTER_DATA.wards.forEach(w => {
         w.status = 'COUNTING';
       });
+      await persistStateToKV(env);
       return jsonResponse({
         status: 'success',
         message: 'All entered votes reset successfully. Master baseline preserved.'
@@ -523,6 +577,7 @@ export default {
           }
         }
 
+        await persistStateToKV(env);
         return jsonResponse({ status: 'success', message: `Votes saved for ${normalizedKey}` });
       } catch (e) {
         return jsonResponse({ status: 'error', detail: e.message }, 500);
@@ -536,6 +591,7 @@ export default {
         const ward = MASTER_DATA.wards.find(w => w.category === category && w.block_name === block && Number(w.ward_no) === Number(ward_no));
         if (ward) {
           ward.status = 'DECLARED';
+          await persistStateToKV(env);
           return jsonResponse({ status: 'success', message: `${category} Ward ${ward_no} declared!` });
         }
         return jsonResponse({ status: 'error', detail: 'Ward not found' }, 404);
@@ -551,6 +607,7 @@ export default {
         const ward = MASTER_DATA.wards.find(w => w.category === category && w.block_name === block && Number(w.ward_no) === Number(ward_no));
         if (ward) {
           ward.status = 'COUNTING';
+          await persistStateToKV(env);
           return jsonResponse({ status: 'success', message: `${category} Ward ${ward_no} reopened!` });
         }
         return jsonResponse({ status: 'error', detail: 'Ward not found' }, 404);
