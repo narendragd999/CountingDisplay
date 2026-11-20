@@ -1546,8 +1546,17 @@
 
     function initWebSocket() {
       const loc = window.location;
+      // Skip WebSocket on Cloudflare Workers to avoid unnecessary connection errors
+      if (loc.hostname.includes('workers.dev')) {
+        return;
+      }
       const wsUrl = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host + '/ws';
-      const ws = new WebSocket(wsUrl);
+      let ws;
+      try {
+        ws = new WebSocket(wsUrl);
+      } catch (e) {
+        return;
+      }
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
@@ -1556,7 +1565,8 @@
           }
         } catch (e) {}
       };
-      ws.onclose = () => { setTimeout(initWebSocket, 3000); };
+      ws.onerror = () => {};
+      ws.onclose = () => { setTimeout(initWebSocket, 5000); };
     }
 
     async function loadMasterData() {
@@ -4255,9 +4265,7 @@
       const file = input.files[0];
       const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       if (!isLocal && (file.name.toLowerCase().endsWith('.db') || file.name.toLowerCase().endsWith('.sqlite') || file.name.toLowerCase().endsWith('.sqlite3'))) {
-        alert('⚠️ ध्यान दें (Cloudflare Workers Error):
-
-Cloudflare Worker केवल Portable JSON Snapshot (.json) स्वीकार करता है।\n\nकृपया अपने लोकल कंप्यूटर से Export की गई ".json" Snapshot फ़ाइल चुनें (जैसे election_salumber_latest_snapshot.json)।\n\n.db फ़ाइल सिर्फ लोकल सर्वर के लिए होती है।');
+        alert("⚠️ ध्यान दें (Cloudflare Workers Alert):\n\nCloudflare Worker केवल Portable JSON Snapshot (.json) स्वीकार करता है।\n\nकृपया अपने लोकल कंप्यूटर से Export की गई '.json' Snapshot फ़ाइल चुनें (जैसे election_salumber_latest_snapshot.json)।\n\n.db फ़ाइल सिर्फ लोकल सर्वर के लिए होती है।");
         return;
       }
 
