@@ -606,6 +606,8 @@ export default {
           MASTER_DATA.system_mode = SYSTEM_MODE;
         }
 
+        await persistStateToKV(env);
+
         return jsonResponse({
           status: 'success',
           type: 'json',

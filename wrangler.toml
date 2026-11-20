@@ -6,4 +6,4 @@ compatibility_flags = ["nodejs_compat"]
 # Cloudflare KV Binding for Global Multi-System Real-Time Sync
 [[kv_namespaces]]
 binding = "ELECTION_KV"
-id = "election_kv_salumber"
+id = "efed51542b9f44e6b8322ad2fb1a64f7"
