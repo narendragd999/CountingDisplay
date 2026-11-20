@@ -363,8 +363,6 @@ def calculate_full_state():
         if cid not in round_votes_map: round_votes_map[cid] = {}
         round_votes_map[cid][r['round_key']] = r['votes_count']
 
-    conn.close()
-
     # Group candidates by (category, block_name, ward_no)
     cands_by_ward = {}
     for c in candidates_rows:
@@ -527,6 +525,7 @@ def calculate_full_state():
         if key not in declared_rounds_map:
             declared_rounds_map[key] = []
         declared_rounds_map[key].append(r['round_key'])
+    conn.close()
 
     if not ticker_items:
         ticker_items = [
