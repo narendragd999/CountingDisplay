@@ -382,66 +382,8 @@ export default {
       }
     }
 
-    // RESET TESTING DATA (Blocked in Production!)
-    if (path === '/api/seed_dummy_test_data' && request.method === 'POST') {
-      if (SYSTEM_MODE === 'PRODUCTION') {
-        return jsonResponse({ detail: 'CRITICAL: DUMMY TEST DATA GENERATION IS BLOCKED IN PRODUCTION MODE!' }, 403);
-      }
-      MASTER_DATA.roundVotes = {};
-      MASTER_DATA.declaredRounds = [
-        { category: 'ZP', block_name: 'Salumber ZP', round_key: 'R1', status: 'DECLARED' },
-        { category: 'ZP', block_name: 'Salumber ZP', round_key: 'R2', status: 'DECLARED' },
-        { category: 'ZP', block_name: 'Salumber ZP', round_key: 'R3', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Semari', round_key: 'R1', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Semari', round_key: 'R2', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Sarada', round_key: 'R1', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Sarada', round_key: 'R2', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Salumbar', round_key: 'R1', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Salumbar', round_key: 'R2', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Jaisamand', round_key: 'R1', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Jaisamand', round_key: 'R2', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Geengla', round_key: 'R1', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Geengla', round_key: 'R2', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Lasadiya', round_key: 'R1', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Lasadiya', round_key: 'R2', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Jhallara', round_key: 'R1', status: 'DECLARED' },
-        { category: 'PS', block_name: 'Jhallara', round_key: 'R2', status: 'DECLARED' }
-      ];
-      (MASTER_DATA.candidates || []).forEach((c, idx) => {
-        const vObj = {};
-        const isNota = (c.party === 'NOTA' || (c.name_hindi || '').includes('नोटा'));
-        const w = (MASTER_DATA.wards || []).find(wd => wd.category === c.category && wd.block_name === c.block_name && wd.ward_no === c.ward_no);
-        const maxR = (w && w.max_rounds) ? w.max_rounds : 5;
-
-        // PB
-        vObj['PB'] = isNota ? 5 : (12 + (idx % 18));
-        
-        // Fill ALL rounds up to max_rounds
-        for (let r = 1; r <= maxR; r++) {
-          vObj[`R${r}`] = isNota ? (8 + (r * 2)) : (220 + ((idx * 23 + r * 17) % 210));
-        }
-
-        MASTER_DATA.roundVotes[c.id] = vObj;
-      });
-      (MASTER_DATA.wards || []).forEach(w => {
-        if (w.category === 'ZP' && [1, 3, 5, 8, 11, 14, 18, 21].includes(w.ward_no)) {
-          w.status = 'DECLARED';
-        } else if (w.category === 'PS' && ([1, 3, 6, 9, 12, 15].includes(w.ward_no) || (w.ward_no % 3 === 0))) {
-          w.status = 'DECLARED';
-        } else {
-          w.status = 'COUNTING';
-        }
-      });
-      return jsonResponse({
-        status: 'success',
-        message: '🎲 Realistic multi-round test data (PB, R1 to R5) generated successfully on Cloudflare!'
-      });
-    }
-
-    if (path === '/api/reset_testing_data' && request.method === 'POST') {
-      if (SYSTEM_MODE === 'PRODUCTION') {
-        return jsonResponse({ detail: 'CRITICAL: DATA RESET IS BLOCKED IN PRODUCTION MODE!' }, 403);
-      }
+    // RESET DATA (Wipe all entered votes & reset declared status)
+    if ((path === '/api/reset_testing_data' || path === '/api/reset_data' || path === '/api/purge_votes') && request.method === 'POST') {
       MASTER_DATA.roundVotes = {};
       MASTER_DATA.declaredRounds = [];
       MASTER_DATA.wards.forEach(w => {
@@ -449,7 +391,7 @@ export default {
       });
       return jsonResponse({
         status: 'success',
-        message: 'All entered votes reset successfully. Master data preserved.'
+        message: 'All entered votes reset successfully. Master baseline preserved.'
       });
     }
 

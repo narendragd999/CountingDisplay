@@ -942,117 +942,23 @@ async def reopen_ward(payload: dict, request: Request):
     asyncio.create_task(broadcast_live_update())
     return {'status': 'success', 'message': f"{category} {block} Ward {ward_no} unlocked and reopened to COUNTING!"}
 
-@app.post("/api/seed_dummy_test_data")
-async def seed_dummy_test_data(request: Request):
-    """Fills realistic dummy mock votes across ZP and PS wards for testing."""
-    user = check_auth(request)
-    if user["role"] != "ADMIN":
-        raise HTTPException(status_code=403, detail="Unauthorized: Only District Super Admin can generate dummy test data.")
-
-    current_mode = get_system_mode()
-    if current_mode == "PRODUCTION":
-        raise HTTPException(status_code=403, detail="CRITICAL: DUMMY TEST DATA GENERATION IS BLOCKED IN PRODUCTION MODE! Switch to Test Mode first.")
-
-    conn = get_db()
-    cursor = conn.cursor()
-
-    # 1. Clear previous votes and declarations
-    cursor.execute("DELETE FROM votes")
-    cursor.execute("DELETE FROM round_declarations")
-    cursor.execute("UPDATE wards SET status = 'COUNTING'")
-
-    # 2. Fetch candidates
-    cursor.execute("SELECT id, category, block_name, ward_no, party, name_hindi FROM candidates WHERE is_active = 1")
-    candidates = [dict(r) for r in cursor.fetchall()]
-
-    import random
-    random.seed(101) # Consistent realistic results
-
-    wards_cands = {}
-    for c in candidates:
-        key = (c['category'], c['block_name'], c['ward_no'])
-        if key not in wards_cands:
-            wards_cands[key] = []
-        wards_cands[key].append(c)
-
-    # Helper to insert round votes
-    def insert_round_votes(c_list, r_key, is_pb=False):
-        for idx, c in enumerate(c_list):
-            is_nota = (c['party'] == 'NOTA' or 'नोटा' in (c.get('name_hindi') or ''))
-            if is_pb:
-                cnt = random.randint(1, 5) if is_nota else random.randint(8, 28)
-            else:
-                if is_nota:
-                    cnt = random.randint(4, 18)
-                elif idx == 0:
-                    cnt = random.randint(260, 420)
-                elif idx == 1:
-                    cnt = random.randint(200, 350)
-                else:
-                    cnt = random.randint(90, 240)
-            cursor.execute("INSERT OR REPLACE INTO votes (candidate_id, round_key, votes_count) VALUES (?, ?, ?)", (c['id'], r_key, cnt))
-
-    # 3. Generate realistic multi-round votes for ALL 126 wards (all rounds)
-    # Fetch all ward configurations (max_rounds per ward)
-    cursor.execute("SELECT category, block_name, ward_no, max_rounds FROM wards")
-    ward_max_rounds = {(r['category'], r['block_name'], r['ward_no']): (r['max_rounds'] or 5) for r in cursor.fetchall()}
-
-    for key, c_list in wards_cands.items():
-        cat, blk, w_no = key
-        max_r = ward_max_rounds.get(key, 5)
-
-        # 1. Postal Ballot (PB) for all wards
-        insert_round_votes(c_list, 'PB', is_pb=True)
-
-        # 2. Fill ALL rounds from R1 up to max_rounds
-        for r_num in range(1, max_r + 1):
-            insert_round_votes(c_list, f"R{r_num}")
-
-        # Declare winner on a realistic subset of wards (~30-40% declared, rest counting with all rounds entered)
-        if cat == 'ZP' and w_no in {1, 3, 5, 8, 11, 14, 18, 21}:
-            cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'ZP' AND ward_no = ?", (w_no,))
-        elif cat == 'PS' and (w_no in {1, 3, 6, 9, 12, 15} or (w_no % 3 == 0)):
-            cursor.execute("UPDATE wards SET status = 'DECLARED' WHERE category = 'PS' AND block_name = ? AND ward_no = ?", (blk, w_no))
-
-    # Add official round declarations for all blocks
-    for blk_name in PS_BLOCKS:
-        cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R1', 'DECLARED', 8500)", (blk_name,))
-        cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('PS', ?, 'R2', 'DECLARED', 8300)", (blk_name,))
-
-    cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R1', 'DECLARED', 12500)")
-    cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R2', 'DECLARED', 12380)")
-    cursor.execute("INSERT OR REPLACE INTO round_declarations (category, block_name, round_key, status, total_votes_counted) VALUES ('ZP', 'Salumber ZP', 'R3', 'DECLARED', 11950)")
-
-    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("SEED_DUMMY_DATA", f"Realistic multi-round test data (R1 to R5) seeded across ZP and PS by {user['username']}"))
-    conn.commit()
-    conn.close()
-
-    asyncio.create_task(broadcast_live_update())
-    return {
-        'status': 'success',
-        'message': '🎲 Realistic multi-round test data (PB, R1, R2, R3, R4, R5) generated successfully! Dynamic 3-round card views and declared winners populated.'
-    }
-
 @app.post("/api/reset_testing_data")
+@app.post("/api/reset_data")
 async def reset_testing_data(request: Request):
     user = check_auth(request)
     if user["role"] != "ADMIN":
-        raise HTTPException(status_code=403, detail="Unauthorized: Only District Super Admin can reset testing data.")
-
-    current_mode = get_system_mode()
-    if current_mode == "PRODUCTION":
-        raise HTTPException(status_code=403, detail="CRITICAL: DATA RESET IS BLOCKED IN PRODUCTION MODE! Switch to Test Mode first if you need to run mock tests.")
+        raise HTTPException(status_code=403, detail="Unauthorized: Only District Super Admin can reset election data.")
 
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM votes")
     cursor.execute("DELETE FROM round_declarations")
     cursor.execute("UPDATE wards SET status = 'COUNTING'")
-    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("RESET_TESTING_DATA", f"All votes and round declarations cleared for testing by {user['username']}"))
+    cursor.execute("INSERT INTO audit_log (action, details) VALUES (?, ?)", ("RESET_DATA", f"All votes and round declarations cleared to baseline by {user['username']}"))
     conn.commit()
     conn.close()
     asyncio.create_task(broadcast_live_update())
-    return {'status': 'success', 'message': 'All testing votes & round declarations cleared! System reset to baseline.'}
+    return {'status': 'success', 'message': 'All votes & round declarations cleared! System reset to baseline.'}
 
 @app.get("/api/all_candidates_master")
 def get_all_candidates_master():

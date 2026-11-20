@@ -767,9 +767,6 @@
         <button id="btnImportDb" onclick="openImportDbModal()" class="btn btn-outline" style="color:#6d28d9; border-color:#ddd6fe; background:#f5f3ff; font-weight:800; font-size:12px;" title="Import/Restore database from local backup (.db or .json file)">
           📥 Import DB
         </button>
-        <button id="btnSeedDummyData" onclick="seedDummyTestData()" class="btn btn-outline" style="display:none; color:#0369a1; border-color:#7dd3fc; background:#f0f9ff; font-weight:800; font-size:12px;">
-          🎲 Fill Test Data
-        </button>
         <button id="btnResetTesting" onclick="resetTestingData()" class="btn btn-outline" style="display:none; color:#b91c1c; border-color:#fca5a5; background:#fff1f2; font-weight:700; font-size:12px;">
           🧹 Reset Data
         </button>
@@ -1357,7 +1354,6 @@
       }
 
       const modeBadgeEl = document.getElementById('systemModeBadge');
-      const seedBtn = document.getElementById('btnSeedDummyData');
       const resetBtn = document.getElementById('btnResetTesting');
       const modeToggleBtn = document.getElementById('btnAdminModeToggle');
 
@@ -1368,7 +1364,6 @@
           modeBadgeEl.style.borderColor = '#86efac';
           modeBadgeEl.innerHTML = `🟢 <strong>PRODUCTION MODE (LIVE ELECTION)</strong>`;
         }
-        if (seedBtn) seedBtn.style.display = 'none';
         if (resetBtn) resetBtn.style.display = 'none';
         if (modeToggleBtn) {
           modeToggleBtn.innerText = '⚙️ Switch to Test Mode';
@@ -1381,7 +1376,6 @@
           modeBadgeEl.innerHTML = `🟠 <strong>TEST MODE (MOCK DATA)</strong>`;
         }
         const isAdmin = (currentUser.role === 'ADMIN');
-        if (seedBtn) seedBtn.style.display = isAdmin ? 'inline-flex' : 'none';
         if (resetBtn) resetBtn.style.display = isAdmin ? 'inline-flex' : 'none';
         if (modeToggleBtn) {
           modeToggleBtn.innerText = '⚙️ Switch to Production Mode';
@@ -2517,42 +2511,7 @@
       }
     }
 
-            async function seedDummyTestData() {
-      if (currentSystemMode === 'PRODUCTION') {
-        alert('⚠️ CRITICAL: Test data generation is strictly blocked in PRODUCTION mode!');
-        return;
-      }
-      if (!confirm('🎲 Generate realistic dummy test data across Zilla Parishad and all 7 Panchayat Samitis?\n\nThis will populate round votes and winners so you can test the TV display and cards.')) return;
-
-      const token = authToken || localStorage.getItem('salumber_auth_token') || '';
-      try {
-        const resp = await fetch('/api/seed_dummy_test_data', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-            'X-Auth-Token': token
-          }
-        });
-        let res = null;
-        try {
-          res = await resp.json();
-        } catch (parseErr) {
-          res = { detail: `Server returned HTTP ${resp.status}` };
-        }
-        if (resp.ok) {
-          showToast(res.message || '🎲 Dummy test data populated successfully!', 'success');
-          await loadMasterData();
-          renderRoundEntrySheet();
-        } else {
-          alert('❌ ' + (res.detail || 'Failed to generate test data'));
-        }
-      } catch (e) {
-        alert('❌ Network error while generating test data: ' + (e.message || e));
-      }
-    }
-
-    async function resetTestingData() {
+            async function resetTestingData() {
       if (!confirm("⚠️ RESET ALL TEST DATA?\n\nThis will permanently delete all entered votes and reset all declared wards back to 0 votes for testing.\n\nAre you sure you want to proceed?")) {
         return;
       }
