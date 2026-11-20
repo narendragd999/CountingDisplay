@@ -99,6 +99,30 @@ export default {
       return jsonResponse(MASTER_DATA);
     }
 
+    if (path === '/api/kv_status') {
+      const kv = getKV(env);
+      let kvState = null;
+      let kvError = null;
+      if (kv) {
+        try {
+          kvState = await kv.get('SALUMBER_ELECTION_STATE_2026', 'json');
+        } catch (err) {
+          kvError = err.message;
+        }
+      }
+      return jsonResponse({
+        status: 'ok',
+        worker_version: '2026-11-20-v2',
+        kv_detected: !!kv,
+        env_keys: Object.keys(env || {}),
+        has_election_kv_binding: !!(env && env.ELECTION_KV),
+        kv_state_found: !!kvState,
+        kv_error: kvError,
+        memory_votes_count: Object.keys(MASTER_DATA.roundVotes || {}).length,
+        system_mode: SYSTEM_MODE
+      });
+    }
+
     if (path === '/api/ward_configs') {
       return jsonResponse({ status: 'success', wards: MASTER_DATA.wards });
     }
