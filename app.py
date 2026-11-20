@@ -1360,6 +1360,16 @@ async def delete_candidate(payload: dict, request: Request):
 # ── DATABASE EXPORT / BACKUP & IMPORT / RESTORE (FAILSAFE RECOVERY) ───────────
 
 @app.get("/api/database/export")
+async def export_database_default(request: Request, format: str = "json"):
+    """
+    Default export endpoint. Defaults to portable JSON snapshot (compatible with Cloudflare Workers).
+    Pass ?format=sqlite for raw SQLite .db file.
+    """
+    if format in ("sqlite", "db"):
+        return await export_database_sqlite(request)
+    return await export_database_json(request)
+
+
 @app.get("/api/database/export_sqlite")
 async def export_database_sqlite(request: Request):
     """

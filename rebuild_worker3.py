@@ -37,13 +37,17 @@ u_rows = [dict(r) for r in cursor.fetchall()]
 
 cursor.execute("SELECT value FROM system_settings WHERE key = 'system_mode'")
 sm_row = cursor.fetchone()
-system_mode = sm_row[0] if sm_row else "TEST"
+system_mode = sm_row[0] if sm_row else "PRODUCTION"
+
+cursor.execute("SELECT category, block_name, round_key, status, declared_at FROM round_declarations")
+rd_rows = [dict(r) for r in cursor.fetchall()]
 
 master = {
     'candidates': c_rows,
     'wards': w_rows,
     'roundVotes': round_votes,
     'booths': b_rows,
+    'declaredRounds': rd_rows,
     'system_mode': system_mode
 }
 conn.close()
@@ -662,6 +666,12 @@ export default {
           const file = formData.get('file');
           if (file) {
             const text = await file.text();
+            if (text.startsWith('SQLite format 3') || (file.name && file.name.toLowerCase().endsWith('.db'))) {
+              return jsonResponse({
+                status: 'error',
+                detail: 'यह एक SQLite (.db) बाइनरी फ़ाइल है। Cloudflare Workers केवल Portable JSON Snapshot (.json) स्वीकार करता है। कृपया अपने लोकल कंप्यूटर (localhost) से Export की गई Portable JSON Snapshot (.json) फ़ाइल (जैसे election_salumber_latest_snapshot.json) चुनें।'
+              }, 400);
+            }
             importedData = JSON.parse(text);
           }
         } else {
@@ -675,11 +685,20 @@ export default {
         if (importedData.roundVotes) {
           MASTER_DATA.roundVotes = importedData.roundVotes;
         }
+        if (importedData.declaredRounds) {
+          MASTER_DATA.declaredRounds = importedData.declaredRounds;
+        }
         if (importedData.wards) {
           importedData.wards.forEach(w => {
             const target = MASTER_DATA.wards.find(mw => mw.category === w.category && mw.block_name === w.block_name && mw.ward_no === w.ward_no);
             if (target && w.status) target.status = w.status;
           });
+        }
+        if (Array.isArray(importedData.candidates) && importedData.candidates.length > 0) {
+          MASTER_DATA.candidates = importedData.candidates;
+        }
+        if (Array.isArray(importedData.booths) && importedData.booths.length > 0) {
+          MASTER_DATA.booths = importedData.booths;
         }
         if (importedData.system_mode) {
           SYSTEM_MODE = importedData.system_mode;
@@ -691,7 +710,7 @@ export default {
         return jsonResponse({
           status: 'success',
           type: 'json',
-          message: 'Data successfully restored into live worker memory!'
+          message: 'डेटा सफलतापूर्वक Live Worker मेमोरी और Cloudflare KV में रीस्टोर हो गया है!'
         });
       } catch (e) {
         return jsonResponse({ detail: 'Import failed: ' + e.message }, 400);
